@@ -1,0 +1,88 @@
+/*
+ul.ul_gojirasearch_search_term   -> search form label autosuggest
+ul.ul_field_location_vocabulary -> suggest & edit location labels autosuggest
+ul.ul.ul_inputnew_label -> add new label
+*/
+
+/* global autosuggest styles */
+.ui-widget-content{
+    font-size: 9px;
+    background-color: white !important;
+    border: none !important;
+    width: 246px !important;
+    border-style: outset ridge 1px #b7072a !important;
+}
+.ui-widget-content li a{
+    color: #dbdbdb !important;
+    text-decoration: none !important;
+    font-weight: bold !important;
+}
+.ui-widget-content li a.ui-state-focus{
+    background: none !important;
+    border: none !important;  
+    text-decoration: none !important;
+    margin: 0 !important;
+    color: #b7072a !important;
+}
+.ui-widget-content li a:hover{
+    color: #b7072a !important;
+    cursor: pointer !important;
+}
+.ui-widget-content {
+    background: white url(images/ui-bg_flat_75_grey_40x100.png) 50% 50% repeat !important;
+}
+
+// search input field
+ul.ul_gojirasearch_search_term, .ui-corner-top, .ui-corner-right, .ui-corner-tr, #ui-id-2.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+    border-top-right-radius: 0px;
+    border-top:0;
+}
+ul.ul_gojirasearch_search_term, .ui-corner-top, .ui-corner-left, .ui-corner-tl, #ui-id-2.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
+    border-top-left-radius: 0px;
+    border-top:0;
+}
+ul.ul_gojirasearch_search_term{
+    border-top:0;
+    width:240px;
+    top: 58px !important;
+    left:10px !important;    
+}
+
+/* edit location / suggest location labels*/
+ul.ul_field_location_vocabulary{
+    border-style: solid !important;
+    border-color: white !important;
+    border-width: 1px !important;
+    border-top: 0 none !important;
+    width: 361px !important;
+    left:150px !important;
+    border-top-right-radius: 0px !important;
+    border-top-left-radius: 0px !important;
+    border-top:0 !important;
+}
+
+/* add label in search result */
+ul.ul_inputnew_label{
+    border-style: solid !important;
+    border-color: #4d4d4d !important;
+    border-width: 1px !important;
+    border-top: 0 none !important;
+    width: 172px !important;
+    left:25px !important;
+    border-top-right-radius: 0px !important;
+    border-top-left-radius: 0px !important;
+    border-top:0 !important; 
+}
+
+/* change labels of location in change page */
+ul.ul_inputnamefield_location_vocabulary{
+    border-style: solid !important;
+    border-color: white !important;
+    border-width: 1px !important;
+    border-top: 0 none !important;
+    width: 361px !important;
+    left:150px !important;
+    border-top-right-radius: 0px !important;
+    border-top-left-radius: 0px !important;
+    border-top:0 !important;
+}

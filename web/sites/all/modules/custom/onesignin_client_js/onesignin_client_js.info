@@ -1,0 +1,5 @@
+name = One Sign-in (Client) JS Addon
+description = Addon to login from the client side without going to the One Sign-in server (only if javascript is enabled)
+core = 7.x
+version = 7.1.0
+package = One Shoe

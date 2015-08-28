@@ -1,0 +1,40 @@
+form#gojira-register-form div.form-item input[type="text"], form#gojira-register-form div.form-item input[type="password"] {
+    width: 210px !important;
+}
+#crud_holder form div.form-item input.form-text, #crud_holder form div.form-item div.form-radios {
+    width: 350px !important;
+}
+label span.tooltip{
+  display:none;
+}
+
+div#header{
+  font-size: 12px;
+}
+
+#header_options{
+    margin: 4px 0 auto 0 !important;
+}
+
+/*#search_form{
+  top:45px !important;
+}*/
+
+#add_wrapper{
+  top: 7% !important;
+}
+
+#search_results ul li {
+    padding-bottom: 10px !important;
+}
+
+#crud_holder form div.form-item input.form-text{
+    width:155px !important;
+}
+
+/*ul.ul_gojirasearch_search_term li{
+    height:30px;
+}
+ul.ul_gojirasearch_search_term li a{
+    line-height:30px;
+}*/

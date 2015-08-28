@@ -1,0 +1,56 @@
+<?php
+// $Id: $
+
+/**
+ * @file
+ * Install file for One Signin client.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function onesignin_client_schema() {
+  $schema['onesignin_client_uids'] = array(
+    'description' => 'Mapping for server UIDs to local UIDs.',
+    'fields' => array(
+      'uid_server' => array(
+        'type' => 'int',
+        'description' => 'Primary key: unique user identifier at server instance.',
+        'default' => 0,
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'description' => 'Local unique user identifier, linked to {users}.uid.',
+        'default' => 0,
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+      ),
+      'changed' => array(
+        'type' => 'int',
+        'description' => 'Timestamp for last changed date on server instance, used to synchronize between the local user object and the remote server object.',
+        'default' => 0,
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+      ),
+    ),
+    'primary key' => array('uid_server'),
+    'unique keys' => array(
+      'uid' => array('uid'),
+    ),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function onesignin_client_uninstall() {
+  variable_del('onesignin_client');
+  variable_del('onesignin_client_site_id');
+  variable_del('onesignin_client_server');
+  variable_del('onesignin_client_secret');
+  variable_del('onesignin_client_ignore_paths');
+}

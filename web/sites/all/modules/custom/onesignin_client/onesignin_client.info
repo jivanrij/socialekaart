@@ -1,0 +1,9 @@
+; $Id: $
+name = One Sign-in (Client)
+description = "Client component for Single-Sign-On functionality."
+version = "7.x-1.0"
+core = 7.x
+package = One Shoe
+
+files[] = tests/onesignin_client.unit.test
+files[] = onesignin_client.xmlrpc.class.inc

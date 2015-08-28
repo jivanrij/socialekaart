@@ -1,0 +1,13 @@
+name = Gojira theme
+
+description = Skin for gojira
+
+core = 7.x
+
+stylesheets[all][] = css/normalize.css
+stylesheets[all][] = css/gojiratheme.css
+stylesheets[all][] = css/font.css
+
+regions[content] = Content
+regions[header_left] = Header left
+regions[header_right] = Header right

@@ -1,0 +1,132 @@
+<?php
+/**
+ * Implements hook_init().
+ * Check if the page is a onesignin_response and then add javascript to close the popup
+ */
+function onesignin_client_js_init() {
+  // After completing a registration we redirect the user to a new page, instead
+  // of closing the window automaticly.
+  // If $_GET['popup'] is set to false, we're not in a popup, so we just redirect the user
+  // in stead of closing the popup.
+  if ($_GET['q'] == 'registration-complete') {
+    unset($_SESSION['onesignin_response']);
+    drupal_set_message(t("Registration complete, you're now logged in."));
+    $redirect = variable_get('nhg_xmlrpc_client_registration_redirect', '');
+    drupal_goto($redirect);
+  }
+
+  if (isset($_SESSION['onesignin_response'])) {
+    $path = explode('/', $_SERVER['HTTP_REFERER']);
+
+    // Unset session
+    unset($_SESSION['onesignin_response']);
+
+    // Password reset from HAweb
+    if (in_array('password', $path)) {
+      onesignin_client_js_auto_close_popup();
+    }
+    elseif (isset($_GET['popup']) && $_GET['popup'] == 'false') {
+      drupal_goto('');
+      exit;
+    }
+    elseif (isset($_COOKIE['has_js'])) {
+      $js = "<script type='text/javascript'>
+        // Close the popup
+        self.close();
+
+        // Refresh the parent page
+        if (window.opener && !window.opener.closed) {
+          window.opener.location.reload();
+        } else {
+          window.location.reload();
+        }</script>";
+      // Close the popup
+      print $js;
+
+      // If the user is logging in on the mobile domain, we need to redirect to
+      // the last page the user has visited.
+      if (isset($_SESSION['onesignin_client_redirect_to'])) {
+        $redirect_to = $_SESSION['onesignin_client_redirect_to'];
+        unset($_SESSION['onesignin_client_redirect_to']);
+
+        $current_domain = domain_resolve_host();
+        $mobile_domain = domain_resolve_host('m.lhv.nl');
+        if ($current_domain['domain_id'] == $mobile_domain['domain_id']) {
+          drupal_goto($redirect_to['path'], $redirect_to['options']);
+        }
+      }
+
+      // Call exit to prevent drupal messages from being printed without the user seeing them
+      exit;
+    }
+  }
+
+  // If an already logged in user clicks on the login button (logged in with another
+  // browser window) we should close the pop-up and refresh the parent.
+  if ($_GET['q'] == 'user') {
+    $js = "// Check if we have a parent page.
+      if (window.opener && !window.opener.closed) {
+        // Close the popup
+        self.close();
+        window.opener.location.reload();
+      }";
+    // Close the popup
+    drupal_add_js($js, 'inline');
+  }
+}
+
+/**
+ * Function to close automatically a popup after a few seconds
+ */
+function onesignin_client_js_auto_close_popup() {
+  drupal_set_message(t('This window should automatically close in a few seconds'));
+
+  $js = "<script type='text/javascript'>
+        // Close the popup/window
+        setTimeout('window.close()',10000);
+        </script>";
+  // Close the popup
+  print $js;
+}
+
+/**
+ * Implement hook_menu().
+ */
+function onesignin_client_js_menu() {
+  $items['login-message'] = array(
+    'title' => 'Login',
+    'page callback' => 'onesignin_client_js_show_link',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+/**
+ * Function that shows a link to the login form
+ * If javascript is enabled and a user click on the link it shows a popup with this form
+ */
+function onesignin_client_js_show_link() {
+  drupal_add_js(drupal_get_path('module', 'onesignin_client_js') . '/assets/onesignin_client_js_popup.js');
+  return l(t('Login'), 'user/login', array('attributes' => array('class' => 'popup-link'), 'absolute' => TRUE));
+}
+
+/**
+ * Implement hook_block_info().
+ */
+function onesignin_client_js_block_info() {
+  $blocks['login-js'] = array(
+    'info' => t('Login link block'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implement hook_block_view().
+ */
+function onesignin_client_js_block_view($delta = '') {
+  $block = array();
+  $block['subject'] = t('Login block');
+  $block['content'] = onesignin_client_js_show_link();
+  return $block;
+}

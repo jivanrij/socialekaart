@@ -1,0 +1,163 @@
+/**
+red
+#b7072a
+
+licht grijs
+#dbdbdb
+
+donker grijs
+#4d4d4d
+
+wit
+white
+**/
+body{
+    font-size: 12px;
+    color: #4d4d4d;
+    font-weight: bold;
+    font-family: Arial, Verdana, Sans-Serif;
+}
+.errormessage{
+    color:#b7072a;
+}
+#header a, #header a.active{
+    text-decoration:none;
+    color: white !important;
+}
+a, a.active{
+    color: #4d4d4d;
+}
+a:hover{
+    color: #b7072a;
+}
+a.gbutton:hover{
+    color:white;
+}
+.form-required {
+    color: #b7072a;
+}
+input, textarea, select{
+    color:#b7072a;
+}
+.error{
+    border: 1px solid #b7072a !important;
+}
+h1{
+    margin:0;
+    padding:0;
+    font-size: 16px;
+}
+h2{
+    margin:0;
+    padding:0;
+    /*font-weight: bold;*/
+    font-size: 14px;
+}
+h3{
+    margin:0;
+    padding:0;
+    /*font-weight: bold;*/
+    font-size: 12px;    
+}
+body.front h1, body.front h2{
+    font-weight: bold;
+}
+.self_popup_link{
+    color: #4d4d4d;
+    font-weight: bold;
+}
+
+#crud_holder h1{
+    margin-top:10px;
+}
+button, input, select, textarea {
+    padding-left:5px !important;
+}
+
+p.info_text{
+    font-size: 11px;
+}
+
+#questions_content section{
+    font-weight: normal;
+}
+#questions_content section h1{
+    font-weight: bold;
+}
+body.questions a.topic{
+    text-decoration: none !important;
+}
+body.questions a.topic:hover, body.questions a.active.topic{
+    text-decoration: underline !important;
+    color:#b7072a;
+}
+
+
+#crud_holder form div.form-item div.description{
+    font-weight: lighter;
+}
+
+#crud_holder p a {
+    text-decoration: underline;
+    cursor:pointer;
+}
+
+div#frontpage_footer{
+    font-size:10px;
+    margin-top: 5px;
+    text-align: right;
+}
+/*
+#frontpage_wrapper #frontpage_header a{
+    text-decoration: none;
+}*/
+
+div#search_results ul li.active a{
+    color: #b7072a;
+}
+
+div#search_results > p, div.results_paging{
+    font-weight: normal;
+}
+
+#ownlist_content a.location_category_list{
+    text-decoration: none;
+    font-style: italic;
+    font-size: 11px;
+}
+#ownlist_content a.location_category_list span{
+    text-decoration: none;
+    font-style: normal;
+    font-size: 12px;
+}
+#fav_switch_label{
+    color: #dbdbdb;
+    font-style: italic;
+}
+#search_result_info div.results_paging p.searchresult_note_max{
+    font-weight: normal;
+}
+.form-item .description {
+  font-size: 11px;
+}
+ul.ui-autocomplete li a{
+  font-size: 12px !important;
+}
+body.front div.header span.subtitle{
+    font-size:10px;
+}
+body.front a{
+    text-decoration: underline;
+}
+body.front{
+    font-weight: normal;
+}
+
+#cboxLoadedContent{
+    font-weight: normal;
+    font-size:12px;
+}
+#cboxLoadedContent h1{
+    font-weight: bold;
+    font-size:16px;
+}

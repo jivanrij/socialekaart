@@ -1,0 +1,373 @@
+<?php
+
+function gojira_configuration_form($form, &$form_state) {
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Submit'),
+    );
+
+    $form['algemene_instellingen'] = array(
+        '#title' => t('Algemene instellingen'),
+        '#type' => 'fieldset',
+        '#description' => t('Verschillende algemene instellingen van SocialeKaart.care.'),
+    );
+    $form['zoek_instellingen'] = array(
+        '#title' => t('Instellingen zoekfunctionaliteit'),
+        '#type' => 'fieldset',
+        '#description' => t('Instellingen met betrekking op de zoekfunctionaliteit.'),
+    );
+    $form['teksten'] = array(
+        '#title' => t('Teksten en vertalingen'),
+        '#type' => 'fieldset',
+        '#description' => t('Verschillende teksten en vertalingen die niet via de standaard van Drupal opgepakt zijn (of kunnen zijn).'),
+    );
+    $form['email'] = array(
+        '#title' => t('E-mail templates'),
+        '#type' => 'fieldset',
+        '#description' => t('Verschillende e-mail templates die door SocialeKaart.care gabruikt worden. Als je de templatie die je zoekt hier niet kan vinden moet je even kijken in de tabs onderaan de pagina <a href="/?q=admin/config/people/accounts">hier</a>.'),
+    );
+    $form['api'] = array(
+        '#title' => t('API gegevens'),
+        '#type' => 'fieldset',
+        '#description' => t('Keys, id\'s en tokens van verschillende APIs.'),
+    );
+
+    $form['algemene_instellingen']['gojira_subscribe_possible'] = array(
+        '#title' => t('Users can subscribe to the system.'),
+        '#type' => 'select',
+        '#options' => array(0 => 'no', 1 => 'yes'),
+        '#default_value' => variable_get('gojira_subscribe_possible', 1),
+    );
+    $form['algemene_instellingen']['gojira_haweb_sso_button_visible'] = array(
+        '#title' => t('Show HAweb login button'),
+        '#type' => 'select',
+        '#options' => array(0 => 'no', 1 => 'yes'),
+        '#default_value' => variable_get('gojira_haweb_sso_button_visible', 1),
+    );
+    $form['algemene_instellingen']['gojira_check_coordinates_on_update_node'] = array(
+        '#title' => t('Check coordinates on saving of nodes.'),
+        '#type' => 'select',
+        '#options' => array(0 => 'no', 1 => 'yes'),
+        '#default_value' => variable_get('gojira_check_coordinates_on_update_node', 1),
+        '#description' => 'If this is on the system will check the coordinates of each location on each save action. These coordinates are cached, so google will not be requested. This option is put in the system so you can disable this while importing locations. The import does this after a location is saved itself. For the system to work correct this needs to be put on ON, for the import to work correct, this needs to be put on OFF.'
+    );
+    $form['algemene_instellingen']['gojira_search_in'] = array(
+        '#title' => t('Search in'),
+        '#type' => 'select',
+        '#options' => array('all' => 'all', 'adhocdata' => 'adhocdata', 'spider' => 'spider', 'gojira' => 'user_input', 'adhocdata_gojira' => 'adhocdata & user_input', 'spider_gojira' => 'spider & user_input'),
+        '#default_value' => variable_get('gojira_search_in', 'both'),
+        '#description' => 'With this you can limit the search to only adhoc data, only spider data or both.'
+    );
+    $form['algemene_instellingen']['gojira_amount_calls_to_google'] = array(
+        '#title' => t('Amount of calls to google each day.'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('gojira_amount_calls_to_google', 1),
+        '#description' => 'This is the amount of calls the system can do to google to get coordinates for locations.'
+    );
+    $form['algemene_instellingen']['mailadres_information_bcc'] = array(
+        '#title' => t('User mails BCC E-mail address'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
+        '#description' => 'The BCC E-mailadres for all e-mails that get send to users. Keep this empty if you don\'t want this.'
+    );
+    $form['algemene_instellingen']['mailadres_information_inform_admin'] = array(
+        '#title' => t('Informative e-mails to Admin'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+        '#description' => 'E-mail address to send informative e-mails about users doing stuff like adding locations.'
+    );
+    $form['algemene_instellingen']['mailadres_helpdesk'] = array(
+        '#title' => t('Helpdesk e-mail address'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('mailadres_helpdesk', 'helpdesk@socialekaart.care')
+    );
+    $form['algemene_instellingen']['SUBSCRIPTION_PERIOD'] = array(
+        '#title' => t('Aantal dagen voor een abonnement'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('SUBSCRIPTION_PERIOD', 365),
+        '#description' => 'Het aantal dagen van de lengte van een abonnement.'
+    );
+    $form['algemene_instellingen']['SUBSCRIPTION_PRICE'] = array(
+        '#title' => t('Standaard prijs voor een abonnement'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('SUBSCRIPTION_PRICE', 65),
+        '#description' => 'Het standaard abonnement\'s bedrag.'
+    );
+    $form['algemene_instellingen']['SUBSCRIPTION_PRICE_DISCOUNT'] = array(
+        '#title' => t('Kortings prijs voor abonnement'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('SUBSCRIPTION_PRICE_DISCOUNT', 55),
+        '#description' => 'Het kortingsbedrag, zal optioneel afgetrokken worden van de prijs.'
+    );
+    $form['algemene_instellingen']['gojira_percentage_tax'] = array(
+        '#title' => t('The amount of tax in percentages the employee needs to pay.'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('gojira_percentage_tax', '21'),
+    );
+
+    $form['teksten']['meta_global_description'] = array(
+        '#title' => t('Meta description on the homepage'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('meta_global_description')
+    );
+    $form['teksten']['meta_global_tags'] = array(
+        '#title' => t('Meta tags on the homepage'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('meta_global_tags')
+    );
+    $form['teksten']['gojira_blacklist_search_words'] = array(
+        '#title' => t('Blacklist of words'),
+        '#type' => 'textarea',
+        '#default_value' => variable_get('gojira_blacklist_search_words', 'de,het,een'),
+        '#description' => 'Here you can save several words to be put on the blacklist for the searchindex.<br />The input should be: word1,word1,shit,bla,bloody,blacklist<br />When building the index of a location, these words will be left out. So new words in the blacklist will be removed from the searchindex after a reindex of the location(s).'
+    );
+
+    $form['api']['postocde_nl_key'] = array(
+        '#title' => t('Postcode.nl key'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('postocde_nl_key')
+    );
+    $form['api']['postocde_nl_secret'] = array(
+        '#title' => t('Postcode.nl secret'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('postocde_nl_secret')
+    );
+    $form['api']['gojira_mailchimp_list_key'] = array(
+        '#title' => t('Mailchimp list key.'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('gojira_mailchimp_list_key'),
+        '#description' => 'This is the key of the mailchimp list new users subscribe to.'
+    );
+    $form['api']['mandrill_api_key'] = array(
+        '#title' => t('Mandrill API key.'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('mandrill_api_key'),
+        '#description' => 'This is the API key used for sending mails with Mandrill.'
+    );
+    $form['api']['IDEAL_MERCHANT_ID'] = array(
+        '#title' => t('iDeal merchant ID'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('IDEAL_MERCHANT_ID', '2836'),
+    );
+    $form['api']['IDEAL_MERCHANT_KEY'] = array(
+        '#title' => t('iDeal merchant key'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('IDEAL_MERCHANT_KEY', 'aOEUoPH'),
+    );
+    $form['api']['IDEAL_MERCHANT_SECRET'] = array(
+        '#title' => t('iDeal merchant secret'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('IDEAL_MERCHANT_SECRET', 'wt0OZLRYHkZiln4dmftgker3k'),
+    );
+    $form['api']['mapbox_accesstoken'] = array(
+        '#title' => t('Mapbox access token'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('mapbox_accesstoken', ''),
+    );
+    $form['api']['mapbox_projectid'] = array(
+        '#title' => t('Mapbox project id'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('mapbox_projectid', ''),
+    );
+
+    $form['zoek_instellingen']['SEARCH_MAX_RESULT_AMOUNT'] = array(
+        '#title' => t('Maximum of searchresults to display'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('SEARCH_MAX_RESULT_AMOUNT', 500),
+    );
+    $form['zoek_instellingen']['CENTER_COUNTRY_LATITUDE'] = array(
+        '#title' => t('Default Latitude'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('CENTER_COUNTRY_LATITUDE', 52.3040498),
+        '#description' => 'Deze latitude wordt gebruikt als er geen bekend is. Voorbeeld: <i>52.3040498</i>.'
+    );
+    $form['zoek_instellingen']['CENTER_COUNTRY_LONGITUDE'] = array(
+        '#title' => t('Default Longitude'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('CENTER_COUNTRY_LONGITUDE', 5.6300203),
+        '#description' => 'Deze longitude wordt gebruikt als er geen bekend is. Voorbeeld: <i>5.6300203</i>.'
+    );
+
+    $form['email']['gojira_invoice_email'] = array(
+        '#title' => t('Invoice e-mail template'),
+        '#type' => 'textarea',
+        '#default_value' => variable_get('gojira_invoice_email'),
+        '#description' => 'TEXT e-mail<br />Invoice e-mail template.<br />
+  You can use the following replacement tags:<br />
+  %doctor% <- The name of the doctor.<br />
+  %invoice_id% <- Invoice id.'
+    );
+    $form['email']['gojira_new_employee_email'] = array(
+        '#title' => t('New Employee e-mail template'),
+        '#type' => 'textarea',
+        '#default_value' => variable_get('gojira_new_employee_email'),
+        '#description' => 'TEXT e-mail<br />You can use the following replacement tags:<br />
+  %url% <- login link for the passwordreset<br />
+  %doctor% <- name of the doctor<br />
+  %name% <- name of new user<br />'
+    );
+    $form['email']['gojira_subscription_expire_warning'] = array(
+        '#title' => t('Subscription is about to expire warning'),
+        '#type' => 'textarea',
+        '#default_value' => variable_get('gojira_subscription_expire_warning'),
+        '#description' => 'HTML e-mail<br />This is the template of the e-mail that get\'s send when the subscription is going to expire in 30 days from now. This template it HTML.<br />
+  %doctor% <- name of the doctor<br />
+  %url% <- url where the user can extend his subscription<br />'
+    );
+    $form['email']['gojira_subscription_ended'] = array(
+        '#title' => t('Subscription is ended'),
+        '#type' => 'textarea',
+        '#default_value' => variable_get('gojira_subscription_ended'),
+        '#description' => 'TEXT e-mail<br />This is the template of the e-mail that get\'s send to a doctor when the subscription ended. This template it HTML.<br />
+  %doctor% <- name of the doctor<br />'
+    );
+    $form['email']['gojira_new_employer_email'] = array(
+        '#title' => t('New Employer e-mail template'),
+        '#type' => 'textarea',
+        '#default_value' => variable_get('gojira_new_employer_email'),
+        '#description' => 'TEXT e-mail<br />You can use the following replacement tags:<br />
+  %url% <- login link for the passwordreset<br />
+  %doctor% <- name of the doctor<br />
+  %name% <- name of new user<br />'
+    );
+    $form['email']['gojira_unsubscribe_user'] = array(
+        '#title' => t('Unsbscribe user e-mail template'),
+        '#type' => 'textarea',
+        '#default_value' => variable_get('gojira_unsubscribe_user'),
+        '#description' => 'TEXT e-mail<br />E-mail template of the e-mail that get\'s send when a user get\'s unsubscribed.<br />
+  You can use the following replacement tags:<br />
+  %doctor% <- name of the doctor<br />
+  %name% <- name of new user<br />'
+    );
+    $form['email']['gojira_subscribe_activate_user'] = array(
+        '#title' => t('Activate subscribed user'),
+        '#type' => 'textarea',
+        '#default_value' => variable_get('gojira_subscribe_activate_user'),
+        '#description' => 'TEXT e-mail<br />E-mail template of the e-mail that get\'s send when a user get\'s activated after a subscription after the account got downgraded.<br />
+  You can use the following replacement tags:<br />
+  %doctor% <- name of the doctor<br />
+  %name% <- name of new user<br />'
+    );
+
+//    $sBody = <<<EOT
+//Beste,
+//
+//Deze e-mail ontvangt u omdat wij denken dat u zojuist heeft geprobeerd in te loggen op SocialeKaart.care vanuit uw Haweb.nl omgeving.
+//
+//We hebben alleen geconstateerd dat u voor beide omgevingen 2 losse accounts heeft met hetzelfde e-mailadres. Wilt u toch graag met 1 en hetzelfde account inloggen op beide omgevingen? Dan kunt u het volgende doen:
+//1. Pas uw e-mailadres aan van uw SocialeKaart.care account. 
+//2. Log daarna uit uit SocialeKaart.care en log in in Haweb.nl.
+//3. Klik nu in Haweb.nl op de link naar SocialeKaart.care, er zal nu een nieuwe gekoppelde account in SocialeKaart.care aangemaakt worden.
+//4. Wij kunnen dan als u wilt alle gegevens van uw originele SocialeKaart.care account overzetten naar uw nieuwe account. Als u ons een e-mail stuurd met dit verzoek zetten wij voor u graag deze gegevens over. U kunt ons met dit verzoek e-mailen op info@socialekaart.care.
+//
+//We hopen u hiermee voldoende te hebben ingelicht. Als u hier nog vragen over hebt horen wij dit graag.
+//
+//Met vriendelijke groet,
+//Het team van SocialeKaart.care
+//info@socialekaart.care
+//EOT;
+
+    $form['email']['gojira_double_account_login_warning'] = array(
+        '#title' => t('Double account warning'),
+        '#type' => 'textarea',
+        '#default_value' => variable_get('gojira_double_account_login_warning', ''),
+        '#description' => 'TEXT e-mail<br />This e-mail get\'s send to a user when he try\'s to login from Haweb and there is allready an account with that e-mailadres in SocialeKaart.care<br />'
+    );
+
+    $form['email']['account_activated_by_admin'] = array(
+        '#title' => t('Account activated by admin'),
+        '#type' => 'textarea',
+        '#default_value' => variable_get('account_activated_by_admin', 'Your account has been activated'),
+        '#description' => 'HTML e-mail<br />This mail is send to a user when the admin activates his/her account.<br />
+          You can use the following replacement tags:<br />
+          %url% <- the url of the password reset link.<br />'
+    );
+
+//            $sBody = <<<EOT
+//Welkom bij SocialeKaart.care!
+//                
+//U bent zojuist voor het eerst ingelogd in SocialeKaart.care via uw Haweb.nl account.
+//
+//Vanaf nu heeft u onbeperkt toegang tot een uniek bestand met contactgegevens van zorgaanbieders in uw regio.
+//
+//Dit betekent dat u voortaan vanuit uw praktijk:
+//- snel kunt zoeken op verwijsgegevens;
+//- medische contactgegevens altijd en overal online beschikbaar hebt;
+//- eenvoudig een 'eigen' bestand met verwijsgegevens kunt opbouwen;
+//- samen met andere huisartsen, zorgaanbieders kunt voorzien van eigenschappen waarop ze vindbaar zijn;
+//- voor het systeem onbekende zorgaanbieders kunt toevoegen.
+//
+//Voor onze gebruikers is het mogelijk een abonnement te nemen. Omdat u vanuit Haweb lid bent gewoorden kunt u voor de eerste 3 maanden gebruik maken van de extra functionaliteiten die behoren tot een abonnement. Ook krijgt u via uw lidmaatschap bij Haweb korting als u later besluit over te gaan op een abonnement.
+//    
+//Met een abonnement kunt u volledig reclame vrij gebruikmaken van de volgende functionaliteiten:
+//- zoeken naar verwijsgegevens in het gehele land;
+//- uw collega's en medewerkers laten werken met dezelfde informatie d.m.v. extra accounts;
+//- u kunt meerdere praktijken toevoegen zodat u vanuit een andere plaats/praktijk kunt zoeken naar zorginstellingen.
+//
+//Als laatste willen wij u op de hoogste stellen dat we standaard beschikken over 117.000 zorginstellingen verspreid over het gehele land. Verschillende hiervan zult u kennen en sommige niet, ook zult zorginstellingen kennen wie wij niet in ons systeem hebben staan. Deze kunt u makkelijk en snel toevoegen via ons 'Zorgverlener toevoegen' formulier. Op deze manier kunt u uw eigen zorgkaart compleet krijgen en kunnen uw collega's hier ook direct profijt van hebben.
+//                
+//Wij wensen u veel plezier in het werken met SocialeKaart.care.
+//Uw vragen en ideëen zijn meer dan welkom, stuur ze naar: info@socialekaart.care.
+//
+//Met vriendelijke groet,
+//Het team van SocialeKaart.care
+//EOT;
+    
+    $form['email']['new_account_through_sso'] = array(
+        '#title' => t('New account by SSO'),
+        '#type' => 'textarea',
+        '#default_value' => variable_get('new_account_through_sso', ''),
+        '#description' => 'TEXT e-mail<br />This e-mail is send to the user when he logs in to the system for the first time by sso.'
+    );
+
+
+    $form['submit_down_under'] = array(
+        '#type' => 'submit',
+        '#value' => t('Submit'),
+    );
+
+    return $form;
+}
+
+function gojira_configuration_form_submit($form, &$form_state) {
+    variable_set('gojira_subscribe_possible', $_POST['gojira_subscribe_possible']);
+    variable_set('gojira_unsubscribe_user', $_POST['gojira_unsubscribe_user']);
+    variable_set('gojira_subscribe_activate_user', $_POST['gojira_subscribe_activate_user']);
+    variable_set('gojira_new_employer_email', $_POST['gojira_new_employer_email']);
+    variable_set('gojira_new_employee_email', $_POST['gojira_new_employee_email']);
+    //variable_set('gojira_invoice_template', $_POST['gojira_invoice_template']);
+    variable_set('gojira_percentage_tax', $_POST['gojira_percentage_tax']);
+    variable_set('gojira_invoice_email', $_POST['gojira_invoice_email']);
+    variable_set('gojira_blacklist_search_words', $_POST['gojira_blacklist_search_words']);
+    variable_set('IDEAL_MERCHANT_ID', $_POST['IDEAL_MERCHANT_ID']);
+    variable_set('IDEAL_MERCHANT_KEY', $_POST['IDEAL_MERCHANT_KEY']);
+    variable_set('IDEAL_MERCHANT_SECRET', $_POST['IDEAL_MERCHANT_SECRET']);
+    variable_set('SUBSCRIPTION_PERIOD', $_POST['SUBSCRIPTION_PERIOD']);
+    variable_set('SUBSCRIPTION_PRICE', $_POST['SUBSCRIPTION_PRICE']);
+    variable_set('SUBSCRIPTION_PRICE_DISCOUNT', $_POST['SUBSCRIPTION_PRICE_DISCOUNT']);
+    variable_set('CENTER_COUNTRY_LATITUDE', $_POST['CENTER_COUNTRY_LATITUDE']);
+    variable_set('CENTER_COUNTRY_LONGITUDE', $_POST['CENTER_COUNTRY_LONGITUDE']);
+    variable_set('SEARCH_MAX_RESULT_AMOUNT', $_POST['SEARCH_MAX_RESULT_AMOUNT']);
+    variable_set('mailadres_information_bcc', $_POST['mailadres_information_bcc']);
+    variable_set('gojira_amount_calls_to_google', $_POST['gojira_amount_calls_to_google']);
+    variable_set('gojira_search_in', $_POST['gojira_search_in']);
+    variable_set('gojira_subscription_expire_warning', $_POST['gojira_subscription_expire_warning']);
+    variable_set('gojira_subscription_ended', $_POST['gojira_subscription_ended']);
+    variable_set('gojira_check_coordinates_on_update_node', $_POST['gojira_check_coordinates_on_update_node']);
+    variable_set('gojira_mailchimp_list_key', $_POST['gojira_mailchimp_list_key']);
+    variable_set('mandrill_api_key', $_POST['mandrill_api_key']);
+    variable_set('postocde_nl_secret', $_POST['postocde_nl_secret']);
+    variable_set('postocde_nl_key', $_POST['postocde_nl_key']);
+    variable_set('meta_global_description', $_POST['meta_global_description']);
+    variable_set('meta_global_tags', $_POST['meta_global_tags']);
+    variable_set('mapbox_accesstoken', $_POST['mapbox_accesstoken']);
+    variable_set('mapbox_projectid', $_POST['mapbox_projectid']);
+    variable_set('account_activated_by_admin', $_POST['account_activated_by_admin']);
+    variable_set('new_account_through_sso', $_POST['new_account_through_sso']);
+    variable_set('gojira_double_account_login_warning', $_POST['gojira_double_account_login_warning']);
+    variable_set('gojira_haweb_sso_button_visible', $_POST['gojira_haweb_sso_button_visible']);
+    variable_set('mailadres_information_inform_admin', $_POST['mailadres_information_inform_admin']);
+    variable_set('mailadres_helpdesk', $_POST['mailadres_helpdesk']);
+    drupal_set_message(t('Saved all the settings.'), 'status');
+}

@@ -1,0 +1,18 @@
+name = Gojira
+description = A glue module for creating the gojira system
+package = Other
+core = 7.x
+php = 5.2
+
+dependencies[] = geophp
+dependencies[] = geocoder
+dependencies[] = ctools
+dependencies[] = node_reference
+dependencies[] = menu_item_visibility
+dependencies[] = node_reference
+dependencies[] = references
+dependencies[] = date
+dependencies[] = phpmailer
+dependencies[] = user_reference
+dependencies[] = mailchimp
+dependencies[] = auto_login_url

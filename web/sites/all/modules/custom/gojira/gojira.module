@@ -1,0 +1,550 @@
+<?php
+
+/*
+ * STATUS DEMO
+Setting to change with new releases:
+25/07/2015 Enable the token & auto_login modules
+01/08/2015 ALTER TABLE `users` ADD COLUMN `haweb_sso_setup_done` INT(1) UNSIGNED NULL DEFAULT 0 COMMENT 'Flag if the welcome mail for haweb users is send and roles are given' AFTER `data`;
+01/08/2015 ALTER TABLE `users` ADD COLUMN `haweb_sso_dublicate_warning_send` INT(1) UNSIGNED NULL DEFAULT 0 COMMENT 'Flag if the dublicate warning is send.' AFTER `data`;
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * STATUS PROD
+ * STATUS DEV
+ */
+
+
+// todo make autoloader
+include ('inc/ClassQantani.php');
+include ('inc/Mandrill.php');
+
+include ('gojira_settings.php');
+include ('php/helper.php');
+include ('php/actions.php');
+include ('php/Postcode.class.php');
+include ('php/Subscriptions.class.php');
+include ('php/Template.class.php');
+include ('php/Category.class.php');
+include ('php/Labels.class.php');
+include ('php/Location.class.php');
+include ('php/Group.class.php');
+include ('php/Map.class.php');
+include ('php/Favorite.class.php');
+include ('php/Importer.class.php');
+include ('php/Search.class.php');
+include ('php/BIG.class.php');
+include ('php/Add.class.php');
+include ('php/Mailer.class.php');
+include ('php/Haweb.class.php');
+include ('php/Mobile_Detect.php');
+include ('php/Messages.class.php');
+include ('php/actions/checklocation.php');
+include ('php/actions/conditions.php');
+include ('php/actions/paymentconditions.php');
+include ('php/actions/tools.php');
+include ('php/actions/configuration.php');
+include ('php/actions/employeedelete.php');
+include ('php/actions/employeeedit.php');
+include ('php/actions/employeelist.php');
+include ('php/actions/questions.php');
+include ('php/actions/favorites.php');
+include ('php/actions/practicecheck.php');
+//include ('php/actions/gojirareport_double_locations.php');
+//include ('php/actions/gojirareport_location_by_category.php');
+//include ('php/actions/gojirareport_location_by_tag.php');
+//include ('php/actions/gojirareport_suggested_active_locations.php');
+//include ('php/actions/gojirareport_suggested_inactive_locations.php');
+include ('php/actions/gojirasearch.php');
+include ('php/actions/inform.php');
+include ('php/actions/informthanks.php');
+include ('php/actions/activateuser.php');
+include ('php/actions/showlocation.php');
+include ('php/actions/likelabel.php');
+include ('php/actions/locationcheck.php');
+include ('php/actions/locationdelete.php');
+include ('php/actions/locationedit.php');
+include ('php/actions/locationlist.php');
+include ('php/actions/locationtags.php');
+include ('php/actions/linkhaweb.php');
+include ('php/actions/passwordthanks.php');
+include ('php/actions/picklocation.php');
+include ('php/actions/postcodesuggest.php');
+include ('php/actions/register.php');
+include ('php/actions/registered.php');
+include ('php/actions/passwordmailsend.php');
+include ('php/actions/removelabel.php');
+include ('php/actions/savenewlabel.php');
+include ('php/actions/search.php');
+include ('php/actions/subscribe.php');
+include ('php/actions/idealreturn.php');
+include ('php/actions/idealpay.php');
+include ('php/actions/idealcallback.php');
+include ('php/actions/idealsuccess.php');
+include ('php/actions/idealfail.php');
+include ('php/actions/setfavorite.php');
+include ('php/actions/settings.php');
+include ('php/actions/settings_thanks.php');
+include ('php/actions/showtutorial.php');
+include ('php/actions/suggestlocation.php');
+include ('php/actions/suggestlocationthanks.php');
+include ('php/actions/switchfavorites.php');
+include ('php/actions/singlesearchresult.php');
+include ('php/actions/switchglobalsearch.php');
+include ('php/actions/unlikelabel.php');
+include ('php/actions/passwordreset.php');
+include ('php/actions/welcome.php');
+include ('php/actions/ownlist.php');
+include ('php/forms/employeeedit.php');
+include ('php/forms/settings.php');
+include ('php/forms/locationedit.php');
+include ('php/forms/terms_conditions.php');
+include ('php/forms/suggestlocation.php');
+include ('php/forms/idealpay.php');
+include ('php/forms/inform.php');
+include ('php/forms/login.php');
+include ('php/forms/help.php');
+include ('php/forms/passwordreset.php');
+include ('php/forms/configuration.php');
+include ('php/forms/register.php');
+include ('php/mails/mails.php');
+
+function gojira_permission() {
+  return array(
+    helper::PERMISSION_ACCESS_LOCATION_CONTENT => array(
+      'title' => t('Access Gojira data'),
+      'description' => t('Users with this permission can see all the locations, labels, etc..'),
+    ),
+    helper::PERMISSION_MODERATE_LOCATION_CONTENT => array(
+      'title' => t('Moderate Gojira data'),
+      'description' => t('Users with this permission can change and add labels, add to my list, etc.. '),
+    ),
+    helper::PERMISSION_GOJIRA_ADMIN => array(
+      'title' => t('Moderate Gojira as admin'),
+      'description' => t('This permission basicly gives a user admin rights on gojira.'),
+    ),
+    helper::PERMISSION_HIDE_ADDS => array(
+      'title' => t('No adds'),
+      'description' => t('The user with this permission does not get to see adds.'),
+    ),
+    helper::PERMISSION_MANAGE_USERS => array(
+      'title' => t('Manage users'),
+      'description' => t('The user with this permission can add/remove users for his group.'),
+    ),
+    helper::PERMISSION_DO_PAYMENTS => array(
+      'title' => t('Do payments'),
+      'description' => t('Is able to do payments for a group.'),
+    ),
+    helper::PERMISSION_MULTIPLE_LOCATIONS => array(
+      'title' => t('Can have multiple locations'),
+      'description' => t('The user can access multiple locations.'),
+    ),
+    helper::PERMISSION_MANAGE_MULTIPLE_LOCATIONS => array(
+      'title' => t('Can manage multiple locations'),
+      'description' => t('The user can manage multiple locations.'),
+    ),
+    helper::PERMISSION_SHOW_DEBUG => array(
+      'title' => t('Debug'),
+      'description' => t('Show debug information.'),
+    ),
+  );
+}
+
+// remove some javascripts that cause havoc on the frontend
+function gojira_js_alter(&$javascript) {
+    if (!path_is_admin(current_path())) {
+        unset(
+            $javascript['misc/textarea.js'],
+            $javascript['modules/system/system.js'],
+            $javascript['misc/jquery.cookie.js'],
+            $javascript['modules/toolbar/toolbar.js'], // <- gave error
+            $javascript['misc/form.js']
+        );
+    }
+}
+
+function gojira_css_alter(&$css) {
+    if (!path_is_admin(current_path())) {
+//        unset(
+            //$css['modules/system/system.theme.css']
+//        );
+    }
+}
+
+// boodstrap shizzle
+function gojira_init() {    
+  global $user;
+
+  if(!user_is_logged_in() && (helper::getIEVersion() == 8 OR helper::getIEVersion() == 9))
+  {
+    drupal_add_js(array('gojira' => array('browserwarning' => 1)), 'setting');
+  }
+
+  if(!user_is_logged_in()){
+    drupal_add_js(drupal_get_path('module', 'gojira') . '/js/frontpage.js');
+  }
+
+  if($_GET['q'] == 'welcome' && !user_is_logged_in()){
+    drupal_set_title('Welcome');
+  }
+
+  if (Template::shouldWeIncludeMapFrontendFiles()) {
+      
+    drupal_add_js(array('gojira' => array('mapbox_accesstoken' => variable_get('mapbox_accesstoken', ''))), 'setting');
+    drupal_add_js(array('gojira' => array('mapbox_projectid' => variable_get('mapbox_projectid', ''))), 'setting');
+      
+      
+    // collides with a backend include...
+    drupal_add_js(drupal_get_path('module', 'gojira') . '/js/jquery-1.8.3.js');
+    drupal_add_js(drupal_get_path('module', 'gojira') . '/js/jquery-ui-1.9.2.custom.min.js');
+    drupal_add_css(drupal_get_path('module', 'gojira') . '/css/smoothness/jquery-ui-1.9.2.custom.min.css', array('group' => CSS_DEFAULT,'every_page' => TRUE));
+    drupal_add_css(drupal_get_path('module', 'gojira') . '/css/smoothness/gojira.jquery-ui-1.9.2.custom.css', array('group' => CSS_DEFAULT,'every_page' => TRUE));
+
+    if(user_access('administer')) {
+      drupal_add_js(array('gojira' => array('admin_link' => '<a href="/admin/config" title="Backend">Backend</a> | ')), 'setting');
+    }else{
+      drupal_add_js(array('gojira' => array('admin_link' => '')), 'setting');
+    }
+
+    drupal_add_css(drupal_get_path('module', 'gojira') . '/css/leaflet.css', array('group' => CSS_DEFAULT,'every_page' => TRUE));
+    drupal_add_css(drupal_get_path('module', 'gojira') . '/css/colorbox.css', array('group' => CSS_DEFAULT,'every_page' => TRUE));
+
+    preg_match('/MSIE (.*?);/', $_SERVER['HTTP_USER_AGENT'], $matches);
+    if(count($matches)<2){
+      preg_match('/Trident\/\d{1,2}.\d{1,2}; rv:([0-9]*)/', $_SERVER['HTTP_USER_AGENT'], $matches);
+    }
+    if (count($matches)>1){
+      $version = $matches[1];
+
+      switch(true){
+        case ($version<=8):
+          drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/ie8_and_lower.css');
+          break;
+
+        case ($version==9):
+          drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/ie9.css');
+          break;
+
+        case ($version==10):
+          drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/ie10.css');
+          break;
+
+        case ($version==11):
+          drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/ie11.css');
+          break;
+      }
+    }
+
+    $mobileDetect = new Mobile_Detect();
+
+    if($mobileDetect->isTablet()){
+      drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/tablet.css');
+      drupal_add_js(array('gojira' => array('tablet' => '1')), 'setting');
+    }else{
+      drupal_add_js(array('gojira' => array('tablet' => '0')), 'setting');
+    }
+
+    if(preg_match('/(?i)msie [1-8]/',$_SERVER['HTTP_USER_AGENT']))
+    {
+      drupal_add_css(drupal_get_path('module', 'gojira') . '/css/leaflet.ie.css', array('group' => CSS_DEFAULT,'every_page' => TRUE));
+    }
+
+    drupal_add_js(drupal_get_path('module', 'gojira') . '/js/jquery.colorbox-min.js');
+
+  //  drupal_add_js(drupal_get_path('module', 'gojira') . '/js/google.maps.api.js');
+    drupal_add_js(drupal_get_path('module', 'gojira') . '/js/leaflet.js');
+    drupal_add_js(drupal_get_path('module', 'gojira') . '/js/leaflet.smoothmarkerbouncing.js');
+    drupal_add_js(drupal_get_path('module', 'gojira') . '/js/leaflet-google.js');
+    drupal_add_js(drupal_get_path('module', 'gojira') . '/js/functions.js');
+    drupal_add_js(drupal_get_path('module', 'gojira') . '/js/gojira.js');
+
+
+    // some redirects for specific situations, are not allowed if you are logging out
+    if(user_is_logged_in() && $_GET['q'] != 'user/logout' && !isset($_GET['pass-reset-token'])){
+
+      if(!helper::agreedToConditions()){
+        if($_GET['q'] != 'conditions' && $_GET['q'] != 'ajax/showtutorial'){
+          header('Location: /conditions');
+          exit;
+        }
+      }
+      if(!helper::hasSeenTutorial()){
+        if($_GET['q'] != 'conditions'){
+          drupal_add_js(array('gojira' => array('show_tutorial' => 1)), 'setting');
+        }
+      }
+
+
+      if(count(Location::getUsersLocations())==0){
+
+        // user is allowed to be in these routes without a location
+        $allowed_without_location = array(
+            'ajax/showtutorial',
+            'conditions',
+            'ajax/postcodesuggest',
+            'locationcheck',
+            'location/edit',
+            'passwordthanks',
+            'conditionscheck',
+            'settings'
+        );
+
+        if(!in_array($_GET['q'], $allowed_without_location) && !isset($_GET['pass-reset-token'])){
+          // A) we have a user
+          // B) he has no location
+          // C) not on the settings page
+          // D) not on the conditionscheck page
+          // E) we are no admin
+          // F) not on the pass_reset_page
+          header('Location: /locationcheck');
+          exit;
+        }
+      }
+    }
+
+    drupal_add_js(array('gojira' => array('doSearch' => 0)), 'setting');
+    if(isset($_GET['tags'])){
+      drupal_add_js(array('gojira' => array('doSearch' => $_GET['tags'])), 'setting');
+    }
+
+    drupal_add_js(array('gojira' => array('showLoc' => 0)), 'setting');
+    if(isset($_GET['loc']) && is_numeric($_GET['loc'])){
+      drupal_add_js(array('gojira' => array('showLoc' => $_GET['loc'])), 'setting');
+    }
+
+    Map::setMapInfo($_GET['q']);
+  }
+  
+  // add meta tags and description if it's a public page
+    if (arg(0) == 'node' && is_numeric(arg(1))) {
+      $oNode = node_load(arg(1));
+      if($oNode->type == GojiraSettings::CONTENT_TYPE_PAGE_PUBLIC){
+        $sDescription = helper::value($oNode, GojiraSettings::CONTENT_TYPE_META_DESCRIPTION_FIELD);
+        $sTags = helper::value($oNode, GojiraSettings::CONTENT_TYPE_META_TAGS_FIELD);
+        $data = array(
+          '#tag' => 'meta',
+          '#attributes' => array(
+             'name' => 'description',
+             'content' => $sDescription,
+          ),
+        );
+        drupal_add_html_head($data, 'description_meta');
+        $data = array(
+          '#tag' => 'meta',
+          '#attributes' => array(
+             'name' => 'tags',
+             'content' => $sTags,
+          ),
+        );
+        drupal_add_html_head($data, 'tags_meta');
+      }
+    }else if(isset($_GET['q']) && $_GET['q'] == 'welcome' && !user_is_logged_in()){
+        $data = array(
+          '#tag' => 'meta',
+          '#attributes' => array(
+             'name' => 'description',
+             'content' => variable_get('meta_global_description'),
+          ),
+        );
+        drupal_add_html_head($data, 'description_meta');
+        $data = array(
+          '#tag' => 'meta',
+          '#attributes' => array(
+             'name' => 'tags',
+             'content' => variable_get('meta_global_tags'),
+          ),
+        );
+        drupal_add_html_head($data, 'tags_meta');
+    }
+}
+
+// after update
+function gojira_entity_update($entity, $type) {
+  // after inserting a new location
+  if (isset($entity->type) && $type == 'node' && $entity->type == GojiraSettings::CONTENT_TYPE_LOCATION) {
+    Search::getInstance()->updateSearchIndex($entity->nid);
+    if(variable_get('gojira_check_coordinates_on_update_node', 1)){
+        Location::checkAndSaveLocation($entity); // TODO TURN ON turned off for import
+    }
+  }
+}
+
+// register the post save function
+function gojira_node_insert($node) {
+  // after inserting a new location
+  if (isset($node->type) && $node->type == GojiraSettings::CONTENT_TYPE_LOCATION) {
+    register_shutdown_function('_gojira_post_insert',$node->nid);
+  }
+}
+
+// created post save function
+function _gojira_post_insert($iNode) {
+    Search::getInstance()->updateSearchIndex($iNode);
+    if(variable_get('gojira_check_coordinates_on_update_node', 1)){
+        Location::checkAndSaveLocation(node_load($iNode)); // TODO TURN ON turned off for import
+    }
+}
+
+function gojira_user_login(&$edit, $account) {
+
+  if(!strstr($_GET['q'], 'user/reset')){
+
+    drupal_goto('/');
+  }
+}
+
+function gojira_cron() {
+  /** removes all the not linked taxonomy terms **/
+  $result = db_query("select tid, name from {taxonomy_term_data} where tid not in (select tid from group_location_term) and tid not in (select field_location_vocabulary_tid from field_data_field_location_vocabulary)");
+  foreach($result as $row){
+    taxonomy_term_delete($row->tid);
+  }
+
+  // max 250
+//Importer::AdhocdataGetCoordinates();
+  // max 250
+//Importer::AdhocdataImportLocations(250);
+//Importer::importLocations(250);
+
+//Importer::AdhocdataGetCoordinates(250, true, true, true);
+
+  // index all the nodes that need indexing for the search
+  Search::getInstance()->indexNeeded(250);
+
+  Subscriptions::checkSubscriptions();
+
+  Subscriptions::cleanupUnconditionalUsers();
+}
+
+function gojira_form_alter(&$form, &$form_state, $form_id){
+
+  if($form_id == 'user_pass_reset'){
+    $form['actions']['submit']['#prefix'] = '<span class="gbutton rounded noshadow left">';
+    $form['actions']['submit']['#suffix'] = '</span>';
+  }
+
+  if($form_id == 'user_login'){
+    unset($form['name']['#description']);
+
+    $form['pass']['#description'] = '<a href="/user/password" title="'.t('Click here if you forgot your password.').'">'.t('Click here if you forgot your password.').'</a>';
+
+    // with register
+    $form['actions']['submit']['#prefix'] = '<span class="gbutton rounded noshadow left gbutton_small">';
+    $form['actions']['submit']['#suffix'] = '</span>';
+
+    $form['#validate'][] = 'gojira_validate_login';
+  }
+
+  if (($form_id == 'user_profile_form') && (!user_access('administer')) && (current_path() != 'user/register')) {
+
+    $form['#prefix'] = '<p>'.t('Here you can set a password for your account. If you forget this password of fail to set one, you can use the password reset form from the login page.').'</p>';
+
+    unset($form['field_gojira_group']);
+    unset($form['field_big']);
+    unset($form['field_is_doctor']);
+    unset($form['field_show_hints']);
+    unset($form['field_address_streetnumber']);
+    unset($form['field_address_city']);
+    unset($form['field_address_street']);
+    unset($form['field_search_favorites']);
+    unset($form['field_has_multiple_locations']);
+    unset($form['field_user_validated']);
+    unset($form['field_agree_conditions']);
+    unset($form['field_search_global']);
+    unset($form['field_selected_location']);
+    unset($form['field_seen_tutorial']);
+    unset($form['field_user_not_imported']);
+    unset($form['field_user_title']);
+    $form['account']['mail']['#disabled'] = true; // is disabled because of the imported users who can't change there email, can't remove it
+    $form['account']['mail']['#description'] = '';
+    unset($form['account']['current_pass']);
+
+    $form['account']['pass']["#required"] = true;
+
+    $form['actions']['submit']['#prefix'] = '<span class="gbutton rounded noshadow right">';
+    $form['actions']['submit']['#suffix'] = '</span>';
+
+    $form['#submit'][] = '_password_recover_submit';
+  }
+
+  return $form;
+}
+
+// user form when logged in
+function _password_recover_submit($form, &$form_state){
+  $form_state['redirect'] = '/passwordthanks';
+}
+
+function gojira_custom_theme() {
+  if (arg(0) == 'gojirareport') {
+    return 'seven';
+  }
+}
+
+/**
+ * Extra validator for the login page
+ * added in the form alter hook
+ *
+ * @param array $form
+ * @param array $form_state
+ */
+function gojira_validate_login($form, &$form_state) {
+  $account = user_load_by_name($name);
+  $account = user_load_by_name(trim($form_state['values']['name']));
+  if ($account) {
+    // Allow alternate password hashing schemes.
+    require_once DRUPAL_ROOT . '/' . variable_get('password_inc', 'includes/password.inc');
+    if (user_check_password(trim($form_state['values']['pass']), $account)) {
+
+      global $user;
+      $user = user_load($account->uid);
+      $login_array = array ('name' => trim($form_state['values']['name']));
+      user_login_finalize($login_array);
+
+    }
+  }
+}
+
+
+    //SOCIALEKAART.CARE CHANGE START
+    // on creating a new master user, add a group and connect to it, and give the user the master role
+//    if($new_account && module_exists('gojira')){
+//        // make a group for the new user, and set it as payed group
+//        $group = Group::createNewGroup($account);
+//        $groupPayed = GojiraSettings::CONTENT_TYPE_PAYED_STATUS;
+//        $group->$groupPayed = array(LANGUAGE_NONE => array(0 => array('value' => 1)));
+//        node_save($group);
+//
+//        // save the group nid on the user
+//        $groupField = GojiraSettings::CONTENT_TYPE_GROUP_FIELD;
+//        $account->$groupField = array(LANGUAGE_NONE => array(0 => array('nid' => $group->nid)));
+//
+//        // give the user the correct roles for a subscribed user
+//        $roles = array();
+//        $activeRoles = user_roles(true);
+//        foreach($activeRoles as $key=>$role){
+//          if($role == helper::ROLE_AUTHENTICATED || $role == helper::ROLE_EMPLOYER_MASTER || $role == helper::ROLE_SUBSCRIBED_MASTER){
+//            $roles[$key] = $role;
+//          }
+//        }
+//        $account->roles = $roles;
+//        user_save($account);
+//
+//        //add a payment log with amount 0 and for a period of 60 days
+//        $info = Subscriptions::getNewPaymentInfo();
+//        $info['period_days'] = 60;
+//        $new_end = strtotime("+60 day", time());
+//        $info['new_end'] = $new_end;
+//        $info['new_start'] = time();
+//        $info['description'] = 'Original free period of AHWeb member.';
+//        $info['amount'] = 0;
+//        $info['discount'] = 0;
+//        $info['tax'] = 0;
+//        $info['total'] = 0;
+//        Subscriptions::addPaymentLog($account->uid, $info['amount'], $info['description'], 0, 0, $info['new_start'], $info['new_end'], $info['discount'], $info['tax'], $info['total']);
+//
+//        Mailer::subscribeToMailchimp($account->mail);
+//      }
+    //SOCIALEKAART.CARE CHANGE END

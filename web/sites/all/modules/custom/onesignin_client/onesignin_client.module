@@ -1,0 +1,415 @@
+<?php
+
+/**
+ * @file
+ * Client component for Single-Sign-On functionality.
+ *
+ * When enabled, redirects the user to the configured SSO server address with
+ * a request for authentication. Redirecting from client to server only happens
+ * on certain forms, see hook_form_alter(). The server then redirects the user
+ * back to the client (where this module should be installed) and initiates a
+ * valid session, and synchronize user account information via XML-RPC, see
+ * hook_onesignin_userdata_request() in this module.
+ *
+ * Has support for Domain Access module allowing you to enable/disable SSO
+ * functionality per (sub-) domain and allow every single domain to have a
+ * separate configuration.
+ */
+
+/**
+ * Implements hook_boot().
+ */
+function onesignin_client_boot() {
+  // Add P3P Compact Policy (necessary for IE thirdparty Cookies)
+  header('P3P: CP="NID DSP ALL COR"');
+}
+
+/**
+ * Implements hook_menu().
+ */
+function onesignin_client_menu() {
+  $items['admin/config/people/onesignin-client'] = array(
+    'title' => 'One Sign-in (client)',
+    'description' => 'Configuration for the One Sign-in client component of single sign-on functionality.',
+    'access arguments' => array('administer onesignin client'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('onesignin_client_admin_form'),
+    'file' => 'onesignin_client.admin.inc',
+  );
+
+  $items['admin/config/people/onesignin-client/settings'] = array(
+    'title' => 'Settings',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+
+  $items['admin/config/people/onesignin-client/mapping'] = array(
+    'title' => 'Field mapping',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('onesignin_client_mapping'),
+    'access arguments' => array('administer onesignin client'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1,
+    'file' => 'onesignin_client.admin.inc',
+  );
+
+  $items['admin/config/people/onesignin-client/redirects'] = array(
+    'title' => 'Redirects',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('onesignin_client_redirects'),
+    'access arguments' => array('administer onesignin client'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1,
+    'file' => 'onesignin_client.admin.inc',
+  );
+
+  $items['admin/config/people/onesignin-client/mapping/%/delete'] = array(
+    'title' => 'Delete Field mapping',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('onesignin_client_delete_mapping', 5),
+    'access arguments' => array('administer onesignin client'),
+    'type' => MENU_CALLBACK,
+    'file' => 'onesignin_client.admin.inc',
+  );
+
+  $items['onesignin/response'] = array(
+    'access callback' => TRUE,
+    'page callback' => 'onesignin_client_response',
+    'file' => 'onesignin_client.inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['user/blank'] = array(
+    'title' => 'Empty page for SSO in iframe',
+    'page callback' => 'onesignin_client_blank',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function onesignin_client_permission() {
+  return array(
+    'administer onesignin client' => array(
+      'title' => t('Administer Onesignin client'),
+      'description' => t('Perform administration tasks for the Onesignin client module.')
+    ),
+  );
+}
+
+/**d
+ * Implements hook_theme().
+ */
+function onesignin_client_theme($existing, $type, $theme, $path) {
+  return array(
+    'onesignin_client_mapping' => array(
+      'render element' => 'form',
+    ),
+  );
+}
+
+/**
+ * Implements hook_domain_batch().
+ */
+function onesignin_client_domain_batch() {
+  module_load_include('domainconf.inc', 'onesignin_client');
+  return _onesignin_client_domainbatch();
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function onesignin_client_form_domain_conf_form_alter(&$form, &$form_state) {
+  module_load_include('domainconf.inc', 'onesignin_client');
+  _onesignin_client_domain_conf_form_alter($form, $form_state);
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Forms user_register, user_login and user_pass require that a user is not logged in.
+ * Form user_profile form require that a user is logged in.
+ */
+function onesignin_client_form_alter(&$form, &$form_state, $form_id) {
+
+  $needs_login = TRUE;
+  switch ($form_id) {
+    case 'user_register_form':
+      // This form is also used when admins create a user. Since the registration
+      // form is only available for anon users, we can easily do a check here.
+      if (!user_is_anonymous()) {
+        break;
+      }
+    case 'user_pass':
+    case 'user_login':
+    case 'user_login_block':
+      $needs_login = FALSE;
+      // Intentional falltrough.
+    case 'user_profile_form':
+
+      $sso_bypass = variable_get('onesignin_client_allow_bypass', FALSE);
+      if ($sso_bypass) {
+        if (isset($_REQUEST['no-sso'])) {
+          $_SESSION['onesignin_disabled'] = TRUE;
+        }
+        $sso_bypass = isset($_SESSION['onesignin_disabled']);
+      }
+
+      // Only act if the conditions match.
+      if (!$sso_bypass
+          && variable_get('onesignin_client', FALSE)
+          && variable_get('onesignin_client_server', '')
+          && variable_get('onesignin_client_site_id', onesignin_client_site_id())
+          && !in_array(isset($_GET['q']) ? $_GET['q'] : '', array_map('trim', array_filter(explode("\n", trim(variable_get('onesignin_client_ignore_paths', ''))))))
+        ) {
+        // This site is SSO enabled, so don't allow user account editing in
+        // local site, but redirect to server.
+        module_load_include('inc', 'onesignin_client');
+        $goto = $_GET['q'];
+
+        // Don't do anything for bots.
+        if (onesignin_client_ignore_bot()) {
+          return;
+        }
+
+        if ($form_id == 'user_profile_form') {
+          // Retrieve the local user mapping for the current user.
+          if ($uid_server = onesignin_client_mapping_server($GLOBALS['user']->uid)) {
+            $goto = 'user/' . $uid_server . '/edit';
+            $needs_login = TRUE;
+          }
+          else {
+            // User is not mapped, so most likely is not an SSO user.
+            return;
+          }
+        }
+        elseif ($form_id == 'user_login') {
+          // The user_login form can be used on more than only user/login
+          // therefor we set it explicitly here.
+          $goto = 'user/login';
+
+          // Also add the current domain in a session, to close the popup
+          // More info: onesignin_client_response #167 // Add the full url, to .....
+          global $base_url;
+          $_SESSION['domain_url'] = $base_url . '/';
+        }
+        elseif ($form_id == 'user_login_block') {
+          // Bail if there has already been a negative response this session.
+          if (isset($_SESSION['onesignin_server_anonymous'])) {
+            // @todo check timestamp in that variable for expiry? How long should it live?
+            return;
+          }
+          // Leave server destination blank to be sent right back to the client.
+          $goto = '';
+        }
+        // Proceed with redirect to server.
+        onesignin_client_redirect($needs_login, $goto, $form_id);
+    
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_user_logout().
+ */
+function onesignin_client_user_logout($account) {
+  unset($_SESSION['onesignin_disabled']);
+  // When a user logs out locally, they should be logged out on the server
+  // instance too.
+  if ($uid_server = onesignin_client_mapping_server($account->uid)) {
+    module_load_include('inc', 'onesignin_client');
+    onesignin_client_user_logout_server($uid_server);
+  }
+}
+
+/**
+ * Implements hook_user_delete().
+ */
+function onesignin_client_user_delete($account) {
+  // Clean up mapping.
+  db_query("DELETE FROM {onesignin_client_uids} WHERE uid = :uid", array(':uid' => $account->uid));
+}
+
+/**
+ * Implements hook_user_cancel().
+ * @TODO: what happens on account cancellation?
+ */
+function onesignin_client_user_cancel($edit, $account, $method) {
+  switch ($method) {
+    case 'user_cancel_block_unpublish':
+
+      break;
+
+    case 'user_cancel_reassign':
+
+      break;
+  }
+}
+
+/**
+ * Build a default site ID from the hostname and base path.
+ */
+function onesignin_client_site_id() {
+  return $_SERVER['HTTP_HOST'] . rtrim($GLOBALS['base_path'], '/');
+}
+
+/**
+ * Get mapping from local UID to remote UID for current user account.
+ * @param int $uid_local User ID for SSO client instance.
+ */
+function onesignin_client_mapping_server($uid_local) {
+  // First, fetch the local user id from the mapping table.
+  return db_query("SELECT uid_server FROM {onesignin_client_uids} WHERE uid = :uid", array(':uid' => $uid_local))->fetchField();
+}
+
+/**
+ * Get mapping from remote UID to local UID.
+ * @param int $server_uid User ID for SSO server instance.
+ */
+function onesignin_client_mapping_client($server_uid) {
+  return db_query("SELECT uid FROM {onesignin_client_uids} WHERE uid_server = :uid", array(':uid' => $server_uid))->fetchField();
+}
+
+/**
+ * Implements hook_domain_lockdown().
+ */
+function onesignin_client_domain_lockdown() {
+  if (arg(0) == 'onesignin' && arg(1) == 'response') {
+    return FALSE;
+  }
+}
+
+/**
+ * Implements hook_xmlrpc().
+ */
+function onesignin_client_xmlrpc() {
+  return array(
+    array(
+      'onesignin.notify',
+      'onesignin_client_notify',
+      array('boolean', 'string', 'int', 'string'),
+      t('Notify.'),
+    ),
+  );
+}
+
+/**
+ * XML-RPC callback used by the server to let the client know about events happening to a user.
+ */
+function onesignin_client_notify($hash, $server_uid, $event) {
+  if (variable_get('onesignin_client', FALSE)) {  // Only act when client_signin is enabled.
+    module_load_include('inc', 'onesignin_client');
+    if ($hash == onesignin_client_hash(array(variable_get('onesignin_client_secret', ''), $server_uid, $event))) {  // Check hash.
+      $function = 'onesignin_client_handle_' . $event . '_notification';
+      if (function_exists($function)) {  // Check if there's a handler for this event.
+        $local_uid = onesignin_client_mapping_client($server_uid);
+        if ($local_uid !== FALSE) {  // Check if we know this user.
+          if ($local_uid > 1) {
+            $account = user_load($local_uid);
+            $account->server_uid = $server_uid;  // To be used for data sync on update.
+            if ($account) {
+              watchdog('onesignin', 'event: ' . $event);
+              $function($account);
+            }
+            else {
+              watchdog('onesignin', 'Local user table and onesignin_client_uids table not in sync for local uid @local_uid', array(
+                '@local_uid' => $local_uid,
+              ), WATCHDOG_ERROR);
+            }
+          }
+          else {
+            watchdog('onesignin', 'Ignoring %event notification for local uid @local_uid', array(
+              '%event' => $event,
+              '@local_uid' => $local_uid,
+            ), WATCHDOG_NOTICE);
+          }
+        }
+        else {
+          watchdog('onesignin', 'Ignoring %event notification for unknown user: %event %server_uid', array(
+            '%event' => $event,
+            '%server_uid' => $server_uid,
+          ), WATCHDOG_INFO);
+        }
+      }
+      else {
+        watchdog('onesignin', 'No notification handler found for "%event" event', array(
+          '%event' => $event,
+        ), WATCHDOG_NOTICE);
+      }
+    }
+    else {
+      watchdog('onesignin', 'Hash validation failed in notification request. Event: %event, User: %server_uid', array(
+        '%event' => $event,
+        '%server_uid' => $server_uid,
+      ), WATCHDOG_WARNING);
+    }
+  }
+}
+
+
+/**
+ * Implements hook_onesignin_userdata_request_alter().
+ *
+ * Fetches extra data from the server to include in the user object.
+ * @TODO the function below only does alteration for the FIRST item value in the server field data, it should loop trough them all
+ */
+function onesignin_client_onesignin_userdata_request_alter(&$edit, $data, $account) {
+  $mapping = variable_get('onesignin_client_mapping', array());
+
+  // Check if the mapping is empty, or the user has been deleted.
+  if (empty($mapping) || empty($data['uid'])) {
+    return;
+  }
+
+  $xmlrpc = new onesignin_client_xmlrpc();
+  $data = $xmlrpc->fetch_user($data['uid']);
+
+  foreach ($mapping as $server_field => $client_field) {
+    $lang = field_language('user', $account, $client_field);
+
+    if (!module_exists('email')) {
+      if (isset($data[$server_field][0]['email'])) {
+        $data[$server_field][0]['value'] = $data[$server_field][0]['email'];
+        unset($data[$server_field][0]['email']);
+      }
+    }
+
+    if (!module_exists('link')) {
+      if (isset($data[$server_field][0]['url'])) {
+        $data[$server_field][0]['value'] = $data[$server_field][0]['url'];
+        unset($data[$server_field][0]['url']);
+        unset($data[$server_field][0]['title']);
+        unset($data[$server_field][0]['attributes']);
+      }
+    }
+
+    if (isset($data[$server_field][0]['date_type']) && $data[$server_field][0]['value'] == '') {
+      $edit[$client_field] = array();
+    }
+
+    elseif (!empty($server_field)) {
+      // D6 to D7 field translation - empty fields should be NULL not ''
+      if (isset($data[$server_field])) {
+        if ($data[$server_field][0]['value'] === '') {
+          unset($data[$server_field][0]);
+        }
+        $edit[$client_field][$lang] = $data[$server_field];
+      }
+    }
+  }
+}
+
+/**
+ * Empty menu callback. Shows an empty page.
+ */
+function onesignin_client_blank() {
+  module_load_include('inc', 'onesignin_client');
+  if (user_is_anonymous()) {
+    $_SESSION['onesignin_destination'] = 'user/blank';
+    onesignin_client_redirect(FALSE, '');
+  }
+}
