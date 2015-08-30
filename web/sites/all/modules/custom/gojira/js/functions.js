@@ -322,7 +322,6 @@ function setupMapDefault() {
 
     // let's add self to the map, but not to the featuregroup, self will always be displayed
     if (Drupal.settings.gojira.show_self) {
-
         var marker = L.marker([Drupal.settings.gojira.latitude, Drupal.settings.gojira.longitude], {icon: window.blackIcon})
                 .setBouncingOptions({bounceHeight: 1, contractHeight:3, bounceSpeed: 20, contractSpeed: 150})
                 .on('click', function () {

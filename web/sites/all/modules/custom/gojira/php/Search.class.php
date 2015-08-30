@@ -14,8 +14,6 @@ SET `point`= GeomFromText(
 
 class Search {
 
-    const SEARCH_RADIUS = 10;
-
     public static $instance = null;
     public $toMuchResults = false;
 
@@ -411,8 +409,8 @@ EAT;
         $limit = variable_get('SEARCH_MAX_RESULT_AMOUNT') + 1; // let's add one to the result, so we can check if we have more results the the max, afterwards remove it
         // query get's all the nodes in radius, maybe only from favorites, but surly visible, and filters them on the nodes with the related tags
 
-$iMinLongitude = ($location->longitude-$distance);
-$iMaxLongitude = ($location->longitude+$distance);
+$iMinLongitude = ($location->longitude-($distance*2));
+$iMaxLongitude = ($location->longitude+($distance*2));
 $iMinLatitude = ($location->latitude-$distance);
 $iMaxLatitude = ($location->latitude+$distance);
 

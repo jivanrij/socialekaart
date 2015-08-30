@@ -15,12 +15,6 @@ function tools(){
     set_time_limit(99999999);
     
     
-//    if(isset($_GET['importcsv']) && $_GET['importcsv'] == '1'){
-//        Importer::AdhocdataImportCSV();
-//        drupal_set_message(t('Done importing'), 'status');
-//        //drupal_set_message(t('No need to import enything... '), 'status');
-//    }
-    
     if(isset($_GET['importadhocdata']) && $_GET['importadhocdata'] == '1'){
 //        Importer::AdhocdataImportLocations($_GET['importadhocdata_amount']);
 //        drupal_set_message(t('Done importing from adhocdata table'), 'status');
@@ -108,6 +102,29 @@ function tools(){
 //      drupal_set_message(t('Just set all the locations to be reindexed.'), 'status');
         drupal_set_message(t('This option is disabled.'), 'status');
     }
+
+    if(isset($_GET['backup_practices'])){
+      db_query("TRUNCATE `practices_backup`");
+      
+      $rResult = db_query("select nid, X(point) as longitude, Y(point) as latitude from node where type = 'location'");
+      foreach($rResult as $oLocation){
+          $oNode = node_load($oLocation->nid);
+          
+          
+          
+          $sql = <<<EOT
+INSERT INTO `practices_backup` 
+    (`title`, `email`, `city`, `street`, `number`, `postcode`, `telephone`, `fax`, `url`, `labels`, `category`, `note`, `latitude`, `longitude`, `group_id`, `visible`, `nid`, `source`) 
+        VALUES 
+    ('{$oNode->title}', 'email', 'city', 'street', 'number', 'post', 'tel', 'fax', 'url', 'labels', 'cat', 'note', 'lat', 'long', 'grouo', 'visi', '2','bron')
+EOT;
+        //db_query($sql);
+      }
+      
+      //drupal_set_message(t('Just set all the locations to be reindexed.'), 'status');
+      drupal_set_message(t('Made a backup to practices_backup.'), 'status');
+    }
+    
 
     if(isset($_POST['gojira_send_mail'])){
         global $user;

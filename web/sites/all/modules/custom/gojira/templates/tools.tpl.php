@@ -77,13 +77,20 @@ echo 'Not imported, because adhocdata had them: '.$spider_double.'<br />';
 </p>
 <hr />
 
-
+<?php // SET REINDEX FLAGS  ?>
+<p>
+  If you push this button backup all the location into the practices_backup table.
+</p>
+<form id="set_reindex_flags" method="POST" action="/?q=admin/config/system/gojiratools&set_reindex_all=on">
+  <input class="form-submit" type="submit" value="Set flags for reindexing" />
+</form>
+<hr />
 <?php // SET REINDEX FLAGS  ?>
 <p>
   If you push this button the howl site will be flagged for reindexing.
 </p>
-<form id="set_reindex_flags" method="POST" action="/?q=admin/config/system/gojiratools&set_reindex_all=on">
-  <input class="form-submit" type="submit" value="Set flags for reindexing" />
+<form id="backup_practices" method="POST" action="/?q=admin/config/system/gojiratools&backup_practices=on">
+  <input class="form-submit" type="submit" value="Make Backup" />
 </form>
 
 <hr />
