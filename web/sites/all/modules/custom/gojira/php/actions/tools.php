@@ -105,24 +105,53 @@ function tools(){
 
     if(isset($_GET['backup_practices'])){
       db_query("TRUNCATE `practices_backup`");
+      $rResult = db_query("select nid, X(point) as longitude, Y(point) as latitude, source from node where type = 'location'");
       
-      $rResult = db_query("select nid, X(point) as longitude, Y(point) as latitude from node where type = 'location'");
+//      $iCounter = 0;
+      
       foreach($rResult as $oLocation){
+          $iCounter++;
           $oNode = node_load($oLocation->nid);
+          $sCity = helper::value($oNode, GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD);
+          $sStreet = helper::value($oNode, GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD);
+          $sNumber = helper::value($oNode, GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD);
+          $sPostcode = helper::value($oNode, GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD);
+          $sTelephone = helper::value($oNode, GojiraSettings::CONTENT_TYPE_TELEPHONE_FIELD);
+          $sFax = helper::value($oNode, GojiraSettings::CONTENT_TYPE_FAX_FIELD);
+          $sUrl = helper::value($oNode, GojiraSettings::CONTENT_TYPE_URL_FIELD);
+          $sNote = helper::value($oNode, GojiraSettings::CONTENT_TYPE_NOTE_FIELD);
+          $sMail = helper::value($oNode, GojiraSettings::CONTENT_TYPE_EMAIL_FIELD);
+          $iGroup = helper::value($oNode, 'field_gojira_group', 'nid');
+          $sCategory = Category::getCategoryName($oNode);
           
-          
+          $aLabels = Labels::getLabels($oNode);
+          $aStoreLabels = array();
+          foreach($aLabels as $iTerm=>$sLabel){
+              $aStoreLabels[] = array(
+                  'term_id' => $iTerm,
+                  'label' => $sLabel,
+                  'score' => Labels::getLikes($iTerm, $oLocation->nid)
+              );
+          }
+         
+          $sLabels = serialize($aStoreLabels);
           
           $sql = <<<EOT
 INSERT INTO `practices_backup` 
     (`title`, `email`, `city`, `street`, `number`, `postcode`, `telephone`, `fax`, `url`, `labels`, `category`, `note`, `latitude`, `longitude`, `group_id`, `visible`, `nid`, `source`) 
         VALUES 
-    ('{$oNode->title}', 'email', 'city', 'street', 'number', 'post', 'tel', 'fax', 'url', 'labels', 'cat', 'note', 'lat', 'long', 'grouo', 'visi', '2','bron')
+    (:title, '{$sMail}', :city, :street, :number, '{$sPostcode}', '{$sTelephone}', '{$sFax}', '{$sUrl}', '{$sLabels}', :category, :note, '{$oLocation->latitude}', '{$oLocation->longitude}', '{$iGroup}', '{$oNode->status}', '{$oNode->nid}','{$oLocation->source}')
 EOT;
-        //db_query($sql);
+
+        db_query($sql, array(':title' => $oNode->title, ':city'=>$sCity, ':street'=>$sStreet, ':category'=>$sCategory, ':note'=>$sNote, ':number' => $sNumber));
+        
+//        if($iCounter >= 10000){
+//            break;
+//        }
       }
-      
-      //drupal_set_message(t('Just set all the locations to be reindexed.'), 'status');
       drupal_set_message(t('Made a backup to practices_backup.'), 'status');
+      header('Location: /?q=admin/config/system/gojiratools');
+      exit;
     }
     
 
@@ -244,8 +273,5 @@ EOT;
       'spider_notallowed' => $spider_notallowed,
       'spider_double' => $spider_double,
       'text_pages' => $text_pages,
-//      'found_by_dtb' => $found_by_dtb,
-//      'found_by_google' => $found_by_google,
-//      'found_by_postcodenl' => $found_by_postcodenl,
           ));
 }

@@ -92,6 +92,16 @@ echo 'Not imported, because adhocdata had them: '.$spider_double.'<br />';
 <form id="backup_practices" method="POST" action="/?q=admin/config/system/gojiratools&backup_practices=on">
   <input class="form-submit" type="submit" value="Make Backup" />
 </form>
+<script>
+  jQuery("#backup_practices").submit(function(e){
+    e.preventDefault();
+    if (confirm('Are you sure you want to BACKUP the system?')) {
+      window.location = '/?q=admin/config/system/gojiratools&backup_practices=on';
+    }else{
+      alert('pffff....');
+    }
+  });
+</script>
 
 <hr />
 <?php // EMPTY THE SYSTEM OPTIONS ?>
