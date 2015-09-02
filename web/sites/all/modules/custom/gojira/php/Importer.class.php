@@ -410,51 +410,66 @@ class Importer {
             return false;
         }
     }
+    
+    
+    public static function restoreLocationFromBackup($source, $title, $phone, $city, $street, $housenumber, $postcode, $category, $email, $latitude, $longitude, $url, $labels, $id) {
+        try {
+            // get needed data
+            global $user;
+            $user = user_load($user->uid);
+            $category_nid = Category::getCategoryNID($category);
 
-    /**
-     * Fill the database table `locations` with all the locations in in grojira
-     */
-//    public static function fillLocationsTableWithCurrentData() {
-//        exit;
-//        set_time_limit(999999999999999);
-//        $sql = "SELECT nid, cordinates_y, cordinates_x from node where type = 'location';";
-//
-//        $nodes = array();
-//        $results = db_query($sql);
-//        foreach ($results as $result) {
-//            $node = node_load($result->nid);
-//            $node->coordinates_x = $result->coordinates_x;
-//            $node->cordinates_y = $result->cordinates_y;
-//            $nodes[] = $node;
-//        }
-//
-//        foreach ($nodes as $loc) {
-//            $termsarray = helper::getTermsOfNode($loc->nid);
-//
-//            $terms = implode(',', $termsarray);
-//
-//            $city = addslashes($loc->field_address_city[LANGUAGE_NONE][0]['value']);
-//            $street = $loc->field_address_street[LANGUAGE_NONE][0]['value'];
-//            $streetnumber = $loc->field_address_streetnumber[LANGUAGE_NONE][0]['value'];
-//            $postcode = $loc->field_address_postcode[LANGUAGE_NONE][0]['value'];
-//            $telephone = $loc->field_telephone[LANGUAGE_NONE][0]['value'];
-//            $street = $loc->field_address_street[LANGUAGE_NONE][0]['value'];
-//            $fax = $loc->field_fax[LANGUAGE_NONE][0]['value'];
-//            $note = $loc->field_note[LANGUAGE_NONE][0]['value'];
-//            $email = $loc->field_email[LANGUAGE_NONE][0]['value'];
-//            $visible = $loc->field_visible_to_other_user[LANGUAGE_NONE][0]['value'];
-//            $title = addslashes($loc->title);
-//            $status = $loc->field_moderated_status[LANGUAGE_NONE][0]['value'];
-//            $url = $loc->field_url[LANGUAGE_NONE][0]['value'];
-//
-//
-//            db_query("INSERT INTO `locations` "
-//                    . "(`nid`, `titel`, `email`, `city`, `street`, `housnumber`, `properties`, `postcode`, `telephone`, `fax`, `note`, `status`, `visible`, `published`, `longitude`, `latitude`, `url`) VALUES "
-//                    . "('{$loc->nid}','{$title}', '{$email}', '{$city}', '{$street}', '{$streetnumber}', '{$terms}', '{$postcode}', '{$telephone}', '{$fax}', '{$note}', '{$status}', '{$visible}', '{$loc->status}', '{$loc->cordinates_y}', '{$loc->cordinates_x}', '{$url}');");
-//        }
-//        die('done');
-//    }
+            // create location node
+            $node = new stdClass();
+            $node->type = GojiraSettings::CONTENT_TYPE_LOCATION;
+            node_object_prepare($node);
+            $node->language = LANGUAGE_NONE;
+            $node->uid = $user->uid;
+            $node->promote = 0;
+            $node->comment = 0;
+            $node = node_submit($node); // Prepare node for saving
+            // fill fields
+            $node->field_moderated_status = array(LANGUAGE_NONE => array(0 => array('value' => 2)));
+            $node->status = 1;
+            $node->type = GojiraSettings::CONTENT_TYPE_LOCATION;
+            $node->uid = $user->uid;
+            $node->title = $title;
+            $node->field_email = array('und' => array(0 => array('value' => $email)));
+            $node->field_telephone = array('und' => array(0 => array('value' => $phone)));
+            $node->field_url = array('und' => array(0 => array('value' => $url)));
+            $node->field_address_city = array('und' => array(0 => array('value' => $city)));
+            $node->field_address_street = array('und' => array(0 => array('value' => $street)));
+            $node->field_address_streetnumber = array('und' => array(0 => array('value' => $housenumber)));
+            $node->field_address_postcode = array('und' => array(0 => array('value' => $postcode)));
+            $node->field_visible_to_other_user = array('und' => array(0 => array('value' => 1)));
+            $node->field_category[LANGUAGE_NONE][0]['nid'] = $category_nid;
+            //$node->field_location_vocabulary[LANGUAGE_NONE][0]['tid'] = $label_tid;
+            // save node
+            node_save($node);
 
+            if (!is_array($labels)) {
+                if (strstr($labels, ',')) {
+                    $labels_tmp = explode(',', $labels);
+                    $labels = array();
+                    foreach ($labels_tmp as $label_tmp) {
+                        $labels[] = trim($label_tmp);
+                    }
+                } else {
+                    $labels = array($labels);
+                }
+            }
+
+            // index node
+            //Search::getInstance()->updateSearchIndex($node);
+            Labels::saveArrayOfLabelsOnNode($labels, $node->nid); // this function does the updateSearchIndex
+            //save coordinates
+            db_query("UPDATE `node` SET `indexed` = 0, point = GeomFromText('POINT(" . $longitude . " " . $latitude . ")'), `source` = '" . $source . "'  WHERE  `nid`=" . $node->nid);
+            db_query("UPDATE `practices_backup` SET `import_it`=0 WHERE `id`=".$id);
+            return true;
+        } catch (Exception $ex) {
+            return false;
+        }
+    }
     /*
      * Get's the locations from the locations table and adds them to the system.
      */

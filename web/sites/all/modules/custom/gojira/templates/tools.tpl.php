@@ -23,18 +23,6 @@ echo 'Not imported, because adhocdata had them: '.$spider_double.'<br />';
   <input type="text" name="importadhocdata_amount" value="500" style="border:1px;border-color: #666; border-style:solid; " />
 </form>
 
-<hr />
-<br />
-<?php
-// IMPORT Locations
-?>
-<form method="get" id="importtolocations" accept-charset="UTF-8">
-  <input type="hidden" name="q" value="admin/config/system/gojiratools" />
-  <input type="hidden" name="importtolocations" value="1" />
-  <input type="submit" id="edit-submit--4" name="op" value="<?php echo t('Import the data from locations table into the system'); ?>" class="form-submit">
-  <input type="text" name="importtolocations_amount" value="10" style="border:1px;border-color: #666; border-style:solid; " />
-</form>
-
 
 <!--<hr />
 <br />-->
@@ -77,17 +65,38 @@ echo 'Not imported, because adhocdata had them: '.$spider_double.'<br />';
 </p>
 <hr />
 
+
+
+
+
+
+
+
+
 <?php // SET REINDEX FLAGS  ?>
 <p>
-  If you push this button backup all the location into the practices_backup table.
+    If you push this button the howl site will be flagged for reindexing.
 </p>
 <form id="set_reindex_flags" method="POST" action="/?q=admin/config/system/gojiratools&set_reindex_all=on">
   <input class="form-submit" type="submit" value="Set flags for reindexing" />
 </form>
 <hr />
-<?php // SET REINDEX FLAGS  ?>
+
+
+
+
+
+
+
+
+
+
+
+<?php // BACKUP SYSTEM  ?>
 <p>
-  If you push this button the howl site will be flagged for reindexing.
+  If you push this button backup all the location into the practices_backup table.<br />
+  It will backup max 10.000 locations a time. It backups all locations from the node table with a change & nid value not present in the backup table.<br />
+  This can take up to 15 minutes max.
 </p>
 <form id="backup_practices" method="POST" action="/?q=admin/config/system/gojiratools&backup_practices=on">
   <input class="form-submit" type="submit" value="Make Backup" />
@@ -102,6 +111,31 @@ echo 'Not imported, because adhocdata had them: '.$spider_double.'<br />';
     }
   });
 </script>
+<?php
+// IMPORT practice_backup locations
+?>
+<p>
+  If you push this button all locations in the practices_backup table with the import_it flag on 1 will be imported.<br />
+  It will import a maximum of 10.00 a time.<br />
+  These locations will be flagged for indexing.<br />
+</p>
+<form id="restore_backup" method="POST" action="/?q=admin/config/system/gojiratools&restore_backup=on">
+  <input class="form-submit" type="submit" value="Restore backup" />
+</form>
+<script>
+  jQuery("#restore_backup").submit(function(e){
+    e.preventDefault();
+    if (confirm('Are you sure you want to RESTORE all the flagged locations in the backup table')) {
+      window.location = '/?q=admin/config/system/gojiratools&restore_backup=on';
+    }else{
+      alert('pffff....');
+    }
+  });
+</script>
+
+
+
+
 
 <hr />
 <?php // EMPTY THE SYSTEM OPTIONS ?>
@@ -124,6 +158,17 @@ echo 'Not imported, because adhocdata had them: '.$spider_double.'<br />';
   });
 </script>
 <hr />
+
+
+
+
+
+
+
+
+
+
+
 
 <?php // RUN CRON  ?>
 <p>
@@ -172,7 +217,13 @@ You can find the cron url <a href="/admin/config/system/cron" title="cron page">
 <hr />
 <br />
 
-<?php // MERGE OR REMANE CATEGORIES  ?>
+
+
+
+
+
+
+<?php // MERGE OR RENAME CATEGORIES  ?>
 <?php if(isset($_GET['change_category'])): ?>
 <p>
     <?php if(!$changed_category_locations): ?>
@@ -228,6 +279,9 @@ You can find the cron url <a href="/admin/config/system/cron" title="cron page">
 
 
 
+
+
+
 <?php // REMOVE LOCATIONS OF SPECIFIC CATEGORY  ?>
 <p>
   Removes a category and all linked locations.
@@ -253,6 +307,12 @@ You can find the cron url <a href="/admin/config/system/cron" title="cron page">
 <br />
 <hr />
 
+
+
+
+
+
+
 <?php // SEND TEST MAIL ?>
 <p>
   Send some of the system e-mails to your account's e-mail.
@@ -275,6 +335,10 @@ You can find the cron url <a href="/admin/config/system/cron" title="cron page">
     <input type="text" id="email" value="<?php echo (isset($_POST['email']) ? $_POST['email'] : ''); ?>" name="email" style='border:1px; border-style: solid;' />
   <input class="form-submit" type="submit" />
 </form>
+
+
+
+
 
 
 <?php if(false): ?>
@@ -347,12 +411,3 @@ You can find the cron url <a href="/admin/config/system/cron" title="cron page">
   <input name="labels" value="" style='border:1px; border-style: solid;' />
   <input class="form-submit" type="submit" />
 </form>
-
-<hr />
-<p>
-    Several text pages that are used in the system. Click them to edit them.
-</p>
-<?php foreach($text_pages as $page): ?>
-    <?php $textNode = node_load($page->nid); ?>
-    <a href="/node/<?php echo $textNode->nid; ?>/edit&destination=admin/config/system/gojiratools"><?php echo helper::value($textNode, GojiraSettings::CONTENT_TYPE_CODE_FIELD); ?></a>&nbsp;&nbsp;&nbsp;
-<?php endforeach; ?>
