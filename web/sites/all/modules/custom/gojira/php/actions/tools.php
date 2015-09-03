@@ -10,43 +10,11 @@ function tools() {
     global $user;
     $user = user_load($user->uid);
     if (in_array('administrator', array_values($user->roles))) {
+        $groups = Group::getAllGroups();
 
         error_reporting(E_ALL);
         ini_set('display_errors', '1');
         set_time_limit(99999999);
-
-
-        if (isset($_GET['importadhocdata']) && $_GET['importadhocdata'] == '1') {
-//        Importer::AdhocdataImportLocations($_GET['importadhocdata_amount']);
-//        drupal_set_message(t('Done importing from adhocdata table'), 'status');
-            drupal_set_message(t('This option is disabled.'), 'status');
-        }
-
-        if (isset($_GET['importtolocations']) && $_GET['importtolocations'] == '1') {
-//        Importer::importLocations($_GET['importtolocations_amount']);
-//        drupal_set_message(t('Done importing from locations table'), 'status');
-            drupal_set_message(t('This option is disabled.'), 'status');
-        }
-
-
-//    if(isset($_GET['findimportedcoordinates']) && $_GET['findimportedcoordinates'] == '1'){
-//        Importer::AdhocdataGetCoordinates($_GET['findimportedcoordinates_amount'], true, true, true);
-//        drupal_set_message(t('Done finding some coordinates.'), 'status');
-//    }
-
-        $groups = Group::getAllGroups();
-
-        if (isset($_GET['index_some']) && $_GET['index_some'] != '') {
-            $result = Search::getInstance()->indexSomeNodes($_GET['index_some']);
-
-            drupal_set_message(t('Amount of nodes reindexed: ' . $result), 'status');
-
-            if (isset($_GET['redirect_to_view']) && is_numeric($_GET['index_some'])) {
-                //drupal_goto('/?loc='.$_GET['index_some']);
-                header('Location: /?q=showlocation&loc=' . $_GET['index_some']);
-                exit;
-            }
-        }
 
         //$results = db_query('select nid, title from node where type = \'location\' and indexed != changed order by title')->fetchAll();
         $results = db_query('select nid, title from node join field_data_field_visible_to_other_user on (node.nid = field_data_field_visible_to_other_user.entity_id) where type = \'location\' and indexed != changed AND field_data_field_visible_to_other_user.field_visible_to_other_user_value = 1 AND field_data_field_visible_to_other_user.bundle = \'location\' AND field_data_field_visible_to_other_user.delta = 0 order by title')->fetchAll();
@@ -54,74 +22,93 @@ function tools() {
             $need_indexing[$needs_index->nid] = $needs_index->title;
         }
 
+        if (isset($_GET['index_some']) && $_GET['index_some'] != '') {
+            $result = Search::getInstance()->indexSomeNodes($_GET['index_some']);
+            drupal_set_message(t('Amount of nodes reindexed: ' . $result), 'status');
+            if (isset($_GET['redirect_to_view']) && is_numeric($_GET['index_some'])) {
+                header('Location: /?q=showlocation&loc=' . $_GET['index_some']);
+                exit;
+            }
+        }
+
         if (isset($_GET['empty_all']) && $_GET['empty_all'] == 'shit!') {
 //      Importer::emptyLocations();
 //      drupal_set_message(t('Removed all the locations.'), 'status');
 //      $made_empty = true;
             drupal_set_message(t('This option is disabled.'), 'status');
+            header('Location: /?q=admin/config/system/gojiratools');
+            exit;
         }
 
         if (isset($_GET['change_category']) && $_GET['change_category'] == '1') {
-//      if(strlen($_GET['new_category_name']) > 0 && is_numeric($_GET['change_category_nid'])){
-//        $changed_category_locations = Category::moveCategory($_GET['change_category_nid'], $_GET['new_category_name']);
-//      }
-            drupal_set_message(t('This option is disabled.'), 'status');
+            if (strlen($_GET['new_category_name']) > 0 && is_numeric($_GET['change_category_nid'])) {
+                $changed_category_locations = Category::moveCategory($_GET['change_category_nid'], $_GET['new_category_name']);
+            }
+            drupal_set_message(t('Category is moved'), 'status');
+            header('Location: /?q=admin/config/system/gojiratools');
+            exit;
         }
 
         if (isset($_GET['remove_category']) && $_GET['remove_category'] == '1') {
-//      if(is_numeric($_GET['remove_category_locations_nid'])){
-//        Category::cleanupCategory($_GET['remove_category_locations_nid']);
-//      }
-            drupal_set_message(t('This option is disabled.'), 'status');
+            if (is_numeric($_GET['remove_category_locations_nid'])) {
+                Category::cleanupCategory($_GET['remove_category_locations_nid']);
+            }
+            drupal_set_message(t('Removed category.'), 'status');
+            header('Location: /?q=admin/config/system/gojiratools');
+            exit;
         }
 
-//    if(isset($_POST['employer_email'])){
-//      variable_set('gojira_new_employer_email', $_POST['employer_email']);
-//      drupal_set_message(t('New version of the employer e-mail saved.'), 'status');
-//    }
-//    
-//    if(isset($_POST['gojira_unsubscribe_user'])){
-//      variable_set('gojira_unsubscribe_user', $_POST['gojira_unsubscribe_user']);
-//      drupal_set_message(t('New version of the unsubscribe user e-mail saved.'), 'status');
-//    }
-
         if (isset($_GET['set_payed_group'])) {
-//      Subscriptions::subscribeByGroupId($_GET['set_payed_group']);
-//      drupal_set_message(t('Subscribed group '.$_GET['set_payed_group']), 'status');
-            drupal_set_message(t('This option is disabled.'), 'status');
+            Subscriptions::subscribeByGroupId($_GET['set_payed_group']);
+            drupal_set_message(t('Subscribed group ' . $_GET['set_payed_group']), 'status');
+            header('Location: /?q=admin/config/system/gojiratools');
+            exit;
         }
 
         if (isset($_GET['set_not_payed_group'])) {
-//      Subscriptions::unsubscribe($_GET['set_not_payed_group']);
-//      drupal_set_message(t('Unsubscribed group '.$_GET['set_not_payed_group']), 'status');
-            drupal_set_message(t('This option is disabled.'), 'status');
+            Subscriptions::unsubscribe($_GET['set_not_payed_group']);
+            drupal_set_message(t('Unsubscribed group ' . $_GET['set_not_payed_group']), 'status');
+            header('Location: /?q=admin/config/system/gojiratools');
+            exit;
         }
 
         if (isset($_GET['set_reindex_all'])) {
-//      db_query("UPDATE `node` SET `indexed`=0 WHERE  `type`='location'");
-//      drupal_set_message(t('Just set all the locations to be reindexed.'), 'status');
-            drupal_set_message(t('This option is disabled.'), 'status');
+            db_query("UPDATE `node` SET `indexed`=0 WHERE  `type`='location'");
+            drupal_set_message(t('Just set all the locations to be reindexed.'), 'status');
+            header('Location: /?q=admin/config/system/gojiratools');
+            exit;
         }
 
-        
-        
+        if (isset($_GET['set_backup_flags'])) {
+            db_query("UPDATE `node` SET `exported`=0");
+            drupal_set_message(t('All the locations can be backupped now.'), 'status');
+            header('Location: /?q=admin/config/system/gojiratools');
+            exit;
+        }
+
         if (isset($_GET['restore_backup'])) {
             $rLocations = db_query("select id, source, title, telephone, city, street, number, postcode, category, email, longitude, latitude, url, labels from practices_backup where import_it = 1 limit 10000");
-            foreach($rLocations as $o){
-                $aLabels = explode('|',$o->labels);
-                //Importer::restoreLocationFromBackup($o->source, $o->title, $o->telephone, $o->city, $o->street, $o->number, $o->postcode, $o->category, $o->email, $o->longitude, $o->latitude, $o->url, $aLabels, $o->id);
+            foreach ($rLocations as $o) {
+                $aLabels = explode('|', $o->labels);
+                Importer::restoreLocationFromBackup($o->source, $o->title, $o->telephone, $o->city, $o->street, $o->number, $o->postcode, $o->category, $o->email, $o->longitude, $o->latitude, $o->url, $aLabels, $o->id);
             }
             drupal_set_message(t('Restored some locations!'), 'status');
             header('Location: /?q=admin/config/system/gojiratools');
             exit;
         }
-        
+
+        if (isset($_GET['backup_truncate'])) {
+            db_query("TRUNCATE `practices_backup`");
+            drupal_set_message(t('You now have a empty backup table (practices_backup).'), 'status');
+            header('Location: /?q=admin/config/system/gojiratools');
+            exit;
+        }
+
         if (isset($_GET['backup_practices'])) {
             set_time_limit(999999999999999);
             ini_set('memory_limit', '50000M');
 
-            //db_query("TRUNCATE `practices_backup`");
-            $rResult = db_query("select node.nid, X(node.point) as longitude, Y(node.point) as latitude, node.source, node.changed from node where type = 'location' and (select count(practices_backup.nid) from practices_backup where node.nid = practices_backup.nid and node.changed = practices_backup.changed) = 0 limit 10000");
+            $rResult = db_query("select node.nid, X(node.point) as longitude, Y(node.point) as latitude, node.source, node.changed from node where type = 'location' and (exported is null or exported = 0) limit 20000");
 
             foreach ($rResult as $oLocation) {
                 $oNode = node_load($oLocation->nid);
@@ -140,15 +127,16 @@ function tools() {
 
                 $sql = <<<EOT
 INSERT INTO `practices_backup` 
-    (`import_it`, `title`, `email`, `city`, `street`, `number`, `postcode`, `telephone`, `fax`, `url`, `labels`, `category`, `note`, `latitude`, `longitude`, `group_id`, `visible`, `nid`, `source`, `changed`) 
+    (`import_it`, `title`, `email`, `city`, `street`, `number`, `postcode`, `telephone`, `fax`, `url`, `labels`, `category`, `note`, `latitude`, `longitude`, `group_id`, `visible`, `nid`, `source`) 
         VALUES 
-    (0, :title, '{$sMail}', :city, :street, :number, '{$sPostcode}', '{$sTelephone}', '{$sFax}', '{$sUrl}', '{$sLabels}', :category, :note, '{$oLocation->latitude}', '{$oLocation->longitude}', '{$iGroup}', '{$oNode->status}', '{$oNode->nid}','{$oLocation->source}',{$oLocation->changed})
+    (0, :title, '{$sMail}', :city, :street, :number, '{$sPostcode}', '{$sTelephone}', '{$sFax}', '{$sUrl}', '{$sLabels}', :category, :note, '{$oLocation->latitude}', '{$oLocation->longitude}', '{$iGroup}', '{$oNode->status}', '{$oNode->nid}','{$oLocation->source}')
 EOT;
 
                 db_query("DELETE FROM `practices_backup` WHERE  `nid`={$oLocation->nid}");
                 db_query($sql, array(':title' => $oNode->title, ':city' => $sCity, ':street' => $sStreet, ':category' => $sCategory, ':note' => $sNote, ':number' => $sNumber));
-
+                db_query('UPDATE `node` SET `exported`=1 WHERE  `nid`=' . $oLocation->nid);
             }
+
             drupal_set_message(t('Made a backup to practices_backup.'), 'status');
             header('Location: /?q=admin/config/system/gojiratools');
             exit;
@@ -221,39 +209,34 @@ EOT;
             }
         }
 
-        if (isset($_GET['replace_labels_cat_id'])) {
-//      $category_id = $_GET['replace_labels_cat_id'];
-//      $locations = Category::getAllLocationsFromCategory($category_id);
-//      $labels = explode(' ',trim($_GET['labels']));
-//      
-//      $labels_to_add = array();
-//      foreach($labels as $label){
-//        $clean_label = Labels::prepairLabel($label);
-//        $tid = Labels::saveLabel($clean_label);
-//        $labels_to_add[$tid] = $clean_label;
-//      }
-//      
-//      if(count($labels)>0){
-//        foreach($locations as $location){
-//          $location->field_location_vocabulary[LANGUAGE_NONE] = array();
-//          foreach($labels_to_add as $tid=>$clean_label){
-//            $location->field_location_vocabulary[LANGUAGE_NONE][count($location->field_location_vocabulary[LANGUAGE_NONE])]['tid'] = $tid;
-//          }
-//          node_save($location);
-//          Search::getInstance()->updateSearchIndex($location->nid);
+//        if (isset($_GET['replace_labels_cat_id'])) {
+//            $category_id = $_GET['replace_labels_cat_id'];
+//            $locations = Category::getAllLocationsFromCategory($category_id);
+//            $labels = explode(' ', trim($_GET['labels']));
+//
+//            $labels_to_add = array();
+//            foreach ($labels as $label) {
+//                $clean_label = Labels::prepairLabel($label);
+//                $tid = Labels::saveLabel($clean_label);
+//                $labels_to_add[$tid] = $clean_label;
+//            }
+//
+//            if (count($labels) > 0) {
+//                foreach ($locations as $location) {
+//                    $location->field_location_vocabulary[LANGUAGE_NONE] = array();
+//                    foreach ($labels_to_add as $tid => $clean_label) {
+//                        $location->field_location_vocabulary[LANGUAGE_NONE][count($location->field_location_vocabulary[LANGUAGE_NONE])]['tid'] = $tid;
+//                    }
+//                    node_save($location);
+//                    Search::getInstance()->updateSearchIndex($location->nid);
+//                }
+//            }
+//            drupal_set_message(t('Replaced the labels (<i>' . implode(',', $labels) . '</i>) of all the locations of the category ' . $_GET['replace_labels_cat_id'] . '.'), 'status');
+//            header('Location: /?q=admin/config/system/gojiratools');
+//            exit;
 //        }
-//      }
-//      drupal_set_message(t('Replaced the labels (<i>'.  implode(',', $labels).'</i>) of all the locations of the category '.$_GET['replace_labels_cat_id'].'.'), 'status');
-            drupal_set_message(t('This option is disabled.'), 'status');
-        }
     }
 
-    $adhoc_need_import = db_query("SELECT count(id) FROM adhocdata_addresses WHERE imported = 0 AND ready_to_import = 1")->fetchField(0);
-    $spider_need_import = db_query("SELECT count(id) FROM locations WHERE imported = 0")->fetchField(0);
-    $adhoc_imported = db_query("SELECT count(id) FROM adhocdata_addresses WHERE imported = 1")->fetchField(0);
-    $spider_imported = db_query("SELECT count(id) FROM locations WHERE imported = 1")->fetchField(0);
-    $spider_double = db_query("SELECT count(id) FROM locations WHERE `double` = 1")->fetchField(0);
-    $spider_notallowed = db_query("SELECT count(id) FROM locations WHERE `notallowed` = 1")->fetchField(0);
     $categories = db_query("select node.nid, node.title from {node} where type = '" . GojiraSettings::CONTENT_TYPE_CATEGORY . "'")->fetchAll();
 
     return theme('tools', array(
@@ -262,12 +245,6 @@ EOT;
         'categories' => $categories,
         'need_indexing' => $need_indexing,
         'made_empty' => $made_empty,
-        'filled_all' => $filled_all,
-        'adhoc_need_import' => $adhoc_need_import,
-        'spider_need_import' => $spider_need_import,
-        'adhoc_imported' => $adhoc_imported,
-        'spider_imported' => $spider_imported,
-        'spider_notallowed' => $spider_notallowed,
-        'spider_double' => $spider_double,
+        'filled_all' => $filled_all
     ));
 }

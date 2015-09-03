@@ -1,43 +1,4 @@
 <h1><?php echo drupal_get_title(); ?></h1>
-ADHOC DATA:<br />
-<?php 
-echo 'Need to be imported: '.$adhoc_need_import.'<br />';
-echo 'Are imported: '.$adhoc_imported.'<br />';  
-?>
-SPIDER:<br />
-<?php
-echo 'Need to be imported: '.$spider_need_import.'<br />';
-echo 'Are imported: '.$spider_imported.'<br />';
-echo 'Not allowed because they are from a specific category: '.$spider_notallowed.'<br />';
-echo 'Not imported, because adhocdata had them: '.$spider_double.'<br />';
-?>
-<hr />
-<br />
-<?php
-// IMPORT AdhocdataImportLocations
-?>
-<form method="get" id="importadhocdata" accept-charset="UTF-8">
-  <input type="hidden" name="q" value="admin/config/system/gojiratools" />
-  <input type="hidden" name="importadhocdata" value="1" />
-  <input type="submit" id="edit-submit--4" name="op" value="<?php echo t('Import the data from adhocdata table into the system'); ?>" class="form-submit">
-  <input type="text" name="importadhocdata_amount" value="500" style="border:1px;border-color: #666; border-style:solid; " />
-</form>
-
-
-<!--<hr />
-<br />-->
-<?php
-// find coordinates
-?>
-<!--<form method="get" id="findimportedcoordinates" accept-charset="UTF-8">
-  <input type="hidden" name="q" value="admin/config/system/gojiratools" />
-  <input type="hidden" name="findimportedcoordinates" value="1" />
-  <input type="submit" id="edit-submit--4" name="op" value="<?php echo t('find coordinates for imported csv for the given amount of items'); ?>" class="form-submit">
-  <input type="text" name="findimportedcoordinates_amount" value="250" style="border:1px;border-color: #666; border-style:solid; " />
-</form>-->
-
-
-
 
 <hr />
 <?php
@@ -65,37 +26,11 @@ echo 'Not imported, because adhocdata had them: '.$spider_double.'<br />';
 </p>
 <hr />
 
-
-
-
-
-
-
-
-
-<?php // SET REINDEX FLAGS  ?>
-<p>
-    If you push this button the howl site will be flagged for reindexing.
-</p>
-<form id="set_reindex_flags" method="POST" action="/?q=admin/config/system/gojiratools&set_reindex_all=on">
-  <input class="form-submit" type="submit" value="Set flags for reindexing" />
-</form>
-<hr />
-
-
-
-
-
-
-
-
-
-
-
+<h2>Backup</h2>
 <?php // BACKUP SYSTEM  ?>
 <p>
-  If you push this button backup all the location into the practices_backup table.<br />
-  It will backup max 10.000 locations a time. It backups all locations from the node table with a change & nid value not present in the backup table.<br />
+  If you push this button you will backup all the locations (with node.exported = 0) into the practices_backup table.<br />
+  It will backup max 20.000 locations a time.<br />
   This can take up to 15 minutes max.
 </p>
 <form id="backup_practices" method="POST" action="/?q=admin/config/system/gojiratools&backup_practices=on">
@@ -116,7 +51,7 @@ echo 'Not imported, because adhocdata had them: '.$spider_double.'<br />';
 ?>
 <p>
   If you push this button all locations in the practices_backup table with the import_it flag on 1 will be imported.<br />
-  It will import a maximum of 10.00 a time.<br />
+  It will import a maximum of 10.000 a time.<br />
   These locations will be flagged for indexing.<br />
 </p>
 <form id="restore_backup" method="POST" action="/?q=admin/config/system/gojiratools&restore_backup=on">
@@ -132,13 +67,52 @@ echo 'Not imported, because adhocdata had them: '.$spider_double.'<br />';
     }
   });
 </script>
+<?php
+// EMPTY BACKUP TABLE
+?>
+<p>
+  Truncate the backup table.
+</p>
+<form id="backup_truncate" method="POST" action="/?q=admin/config/system/gojiratools&backup_truncate=on">
+  <input class="form-submit" type="submit" value="Truncate" />
+</form>
+<script>
+  jQuery("#backup_truncate").submit(function(e){
+    e.preventDefault();
+    if (confirm('Are you sure you want to EMPTY/TRUNCATE all the locations in the backup table?')) {
+      window.location = '/?q=admin/config/system/gojiratools&backup_truncate=on';
+    }else{
+      alert('pffff....');
+    }
+  });
+</script>
+<?php
+// SET BACKUP FLAG
+?>
+<p>
+  Set all the backup flags on rdy-to-backup for ALL locations
+</p>
+<form id="set_backup_flags" method="POST" action="/?q=admin/config/system/gojiratools&set_backup_flags=on">
+  <input class="form-submit" type="submit" value="Set backup flags" />
+</form>
+<script>
+  jQuery("#set_backup_flags").submit(function(e){
+    e.preventDefault();
+    if (confirm('Are you sure you want to set all the blackup flags to go-for-it?')) {
+      window.location = '/?q=admin/config/system/gojiratools&set_backup_flags=on';
+    }else{
+      alert('pffff....');
+    }
+  });
+</script>
 
 
 
 
 
 <hr />
-<?php // EMPTY THE SYSTEM OPTIONS ?>
+<h2>Empty the system</h2>
+<?php // EMPTY THE SYSTEM ?>
 <p>
     This will remove all the locations from the system.
 </p>
@@ -228,7 +202,7 @@ You can find the cron url <a href="/admin/config/system/cron" title="cron page">
 <p>
     <?php if(!$changed_category_locations): ?>
       <span style="color:red;">
-        Tryed to change <?php echo $_GET['change_category_nid']; ?> into <?php echo $_GET['new_category_name']; ?> but there where to many location linked.
+        Tryed to change <?php echo $_GET['change_category_nid']; ?> into <?php echo $_GET['new_category_name']; ?> but there where to many locations linked.
         Only changed the first 500. Run the job a couple of times more, untill you don't get this message anymore. Check out the remaining locations on this category
         <a href="/?q=admin/reports/gojirareport_location_by_category&category=<?php echo $_GET['change_category_nid']; ?>" title="category linked locations report">here</a>.
       </span>
@@ -397,7 +371,7 @@ You can find the cron url <a href="/admin/config/system/cron" title="cron page">
 
 <hr />
 <?php // set tags on category  ?>
-<p>
+<!--<p>
   Replaces the given tags on all locations of the selected category
 </p>
 <form id="replace_categories_labels" action="">
@@ -410,4 +384,5 @@ You can find the cron url <a href="/admin/config/system/cron" title="cron page">
   </select>
   <input name="labels" value="" style='border:1px; border-style: solid;' />
   <input class="form-submit" type="submit" />
-</form>
+</form>-->
+
