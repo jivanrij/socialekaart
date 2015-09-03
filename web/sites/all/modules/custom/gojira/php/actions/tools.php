@@ -239,12 +239,19 @@ EOT;
 
     $categories = db_query("select node.nid, node.title from {node} where type = '" . GojiraSettings::CONTENT_TYPE_CATEGORY . "'")->fetchAll();
 
+    $amount_exported = db_query("select count(nid) from node where exported = 1 and type = 'location'")->fetchField();
+    $amount_not_exported = db_query("select count(nid) from node where exported = 0 and type = 'location'")->fetchField();
+    $amount_backupped = db_query("select count(id) from practices_backup")->fetchField();
+    
     return theme('tools', array(
         'groups' => $groups,
         'changed_category_locations' => $changed_category_locations,
         'categories' => $categories,
         'need_indexing' => $need_indexing,
         'made_empty' => $made_empty,
-        'filled_all' => $filled_all
+        'filled_all' => $filled_all,
+        'amount_exported' => $amount_exported,
+        'amount_not_exported' => $amount_not_exported,
+        'amount_backupped' => $amount_backupped
     ));
 }
