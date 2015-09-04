@@ -110,6 +110,16 @@
     }
   });
 </script>
+<?php
+// fill coordinates in backup table
+?>
+<p>
+  If the backup table locations don't have any coordinates, get them with this function.
+  <?php echo $backupped_no_coordinates; ?> have none.
+</p>
+<form id="get_coordinates" method="POST" action="/?q=admin/config/system/gojiratools&get_coordinates=on">
+  <input class="form-submit" type="submit" value="get_coordinates" />
+</form>
 
 
 

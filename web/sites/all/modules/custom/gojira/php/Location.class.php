@@ -77,7 +77,7 @@ class Location {
      * 
      * @return boolean
      */
-    public static function userHasMultipleLocationsStored(){
+    public static function userHasMultipleLocationsStored() {
         $aLocations = Location::getUsersLocations();
         $iAmount = count($aLocations);
         if ($iAmount > 1) { // we have multiple locations, let's check if there is a preference
@@ -107,9 +107,9 @@ class Location {
             // get selected location and return it.
             $oUser = helper::getUser();
             $iSelectedLocation = (int) helper::value($oUser, GojiraSettings::CONTENT_TYPE_USER_LAST_SELECTED_LOCATION, 'nid');
-            if(is_integer($iSelectedLocation)){
+            if (is_integer($iSelectedLocation)) {
                 $oSelectedLocation = Location::getLocationObjectOfNode($iSelectedLocation);
-                if($oSelectedLocation){
+                if ($oSelectedLocation) {
                     $oSelectedLocation->nid = $iSelectedLocation;
                     return $oSelectedLocation;
                 }
@@ -164,6 +164,19 @@ class Location {
         }
     }
 
+    public static function getCoordinatesCustom($address) {
+        $address = str_replace(" ", "+", $address); // replace all the white space with "+" sign to match with google search pattern
+        $url = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=$address";
+        $response = file_get_contents($url);
+        
+        $json = json_decode($response, TRUE); //generate array object from the response from the web
+        
+        if(($json['status'] !== 'ZERO_RESULTS') && isset($json['results'][0])){
+            return array('latitude'=>$json['results'][0]['geometry']['location']['lat'], 'longitude'=>$json['results'][0]['geometry']['location']['lng']);
+        }
+        return false;        
+    }
+
     /**
      * Gives you the 4 fields used for getting the location/geo information in gojira
      * 
@@ -196,7 +209,7 @@ class Location {
         //array(4) { [0]=> string(18) "field_address_city" [1]=> string(20) "field_address_street" [2]=> string(26) "field_address_streetnumber" [3]=> string(22) "field_address_postcode" }
 //        var_dump(self::getAddressFields(), $node);
 //        die;
-        
+
         foreach (self::getAddressFields() as $field) {
             $thisField = $node->$field;
             if (!array_key_exists('und', $thisField) || !array_key_exists(0, $thisField['und']) || !array_key_exists('value', $thisField['und'][0])) {
@@ -223,13 +236,15 @@ class Location {
      * @param stdClass $node
      */
     public static function checkAndSaveLocation($node) {
-        
+
         $location = self::GetLocationForAddress(
                         self::getAddressString($node)
         );
         if ($location) {
             self::StoreLocatioInNode($location, $node->nid);
+            return true;
         }
+        return false;
     }
 
     /**
@@ -262,12 +277,12 @@ class Location {
             $groupField = GojiraSettings::CONTENT_TYPE_GROUP_FIELD;
             $groupField = $user->$groupField;
 
-            if(isset($groupField[LANGUAGE_NONE]) && isset($groupField[LANGUAGE_NONE][0]) && isset($groupField[LANGUAGE_NONE][0]['nid'])){
+            if (isset($groupField[LANGUAGE_NONE]) && isset($groupField[LANGUAGE_NONE][0]) && isset($groupField[LANGUAGE_NONE][0]['nid'])) {
                 $gid = $groupField[LANGUAGE_NONE][0]['nid'];
-            }else{
+            } else {
                 $gid = 0;
             }
-            
+
             $query = new EntityFieldQuery();
             $query->entityCondition('entity_type', 'node')
                     ->entityCondition('bundle', GojiraSettings::CONTENT_TYPE_LOCATION)

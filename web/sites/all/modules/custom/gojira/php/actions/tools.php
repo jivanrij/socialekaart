@@ -143,6 +143,27 @@ EOT;
         }
 
 
+        if (isset($_GET['get_coordinates'])) {
+            $rEmptyLocations = db_query("select title, nid, street, number, city, postcode, id from practices_backup where latitude = ''");
+            foreach ($rEmptyLocations as $oEmptyLocation) {
+//              $sAdres = $oEmptyLocation->street . ' ' . $oEmptyLocation->number . ', ' . $oEmptyLocation->city . ', ' . str_replace(' ', '', strtolower($oEmptyLocation->postcode));
+                $sAdres = $oEmptyLocation->street . ' ' . $oEmptyLocation->number . ', ' . $oEmptyLocation->city;
+
+                //$oLocation = Location::GetLocationForAddress($sAdres);
+
+                $aCoordinates = Location::getCoordinatesCustom($sAdres);
+
+                if ($aCoordinates) {
+                    db_query("UPDATE `practices_backup` SET latitude = " . $aCoordinates['latitude'] . ", longitude = " . $aCoordinates['longitude'] . " WHERE  `id`=:id", array(':id' => $oEmptyLocation->id));
+                    drupal_set_message(t('Y ' . $oEmptyLocation->id . ' ' . $sAdres . ' ' . $aCoordinates['latitude'] . ',' . $aCoordinates['longitude']), 'status');
+                } else {
+                    drupal_set_message(t('N ' . $oEmptyLocation->id . ' ' . $sAdres), 'error');
+                }
+            }
+            header('Location: /?q=admin/config/system/gojiratools');
+            exit;
+        }
+
         if (isset($_POST['gojira_send_mail'])) {
             global $user;
             $user = user_load($user->uid);
@@ -242,7 +263,8 @@ EOT;
     $amount_exported = db_query("select count(nid) from node where exported = 1 and type = 'location'")->fetchField();
     $amount_not_exported = db_query("select count(nid) from node where exported = 0 and type = 'location'")->fetchField();
     $amount_backupped = db_query("select count(id) from practices_backup")->fetchField();
-    
+    $backupped_no_coordinates = db_query("select count(id) from practices_backup where latitude = ''")->fetchField();
+
     return theme('tools', array(
         'groups' => $groups,
         'changed_category_locations' => $changed_category_locations,
@@ -252,6 +274,7 @@ EOT;
         'filled_all' => $filled_all,
         'amount_exported' => $amount_exported,
         'amount_not_exported' => $amount_not_exported,
-        'amount_backupped' => $amount_backupped
+        'amount_backupped' => $amount_backupped,
+        'backupped_no_coordinates' => $backupped_no_coordinates
     ));
 }
