@@ -166,30 +166,18 @@ class Location {
     }
 
     public static function getCoordinatesCustom($address) {
-//        $address = str_replace(" ", "+", $address); // replace all the white space with "+" sign to match with google search pattern
-//        $url = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=$address";
-//        
-//        $response = file_get_contents($url);
-//        
-//        $json = json_decode($response, TRUE); //generate array object from the response from the web
-//        
-//        if(($json['status'] !== 'ZERO_RESULTS') && isset($json['results'][0])){
-//            return array('latitude'=>$json['results'][0]['geometry']['location']['lat'], 'longitude'=>$json['results'][0]['geometry']['location']['lng']);
-//        }
-//        return false;
-//         $url='https://www.google.com/maps/place/Space+Needle/@47.620506,-122.349277,17z/data=!4m6!1m3!3m2!1s0x5490151f4ed5b7f9:0xdb2ba8689ed0920d!2sSpace+Needle!3m1!1s0x5490151f4ed5b7f9:0xdb2ba8689ed0920d';
-        $url = 'https://www.google.com/maps/place/' . $address;
-        $result = file_get_contents($url);
+        $address = str_replace(" ", "+", $address); // replace all the white space with "+" sign to match with google search pattern
+        $url = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=$address";
+        
+        $response = file_get_contents($url);
+        
+        $json = json_decode($response, TRUE); //generate array object from the response from the web
+        
+        if(($json['status'] !== 'ZERO_RESULTS') && isset($json['results'][0])){
+            return array('latitude'=>$json['results'][0]['geometry']['location']['lat'], 'longitude'=>$json['results'][0]['geometry']['location']['lng']);
+        }
+        return false;
 
-        var_dump($url);
-        die;
-
-        $ll = explode(',', substr(strstr(strstr($result, '?ll='), '&', true), 4));
-        $long = $ll[0];
-        $lat = $ll[1];
-
-        var_dump($long, $lat);
-        die;
     }
 
     /**
