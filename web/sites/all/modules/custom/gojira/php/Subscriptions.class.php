@@ -361,9 +361,6 @@ EOT;
             $payment = self::getLatestPaymentPeriod($group->nid);
             $end = $payment->period_end;
 
-//            var_dump(date('Ymd',$end));
-//            var_dump(date('Ymd',helper::getTime()));
-            
             if (date('Ymd',$end) < date('Ymd',helper::getTime()) || !$end) {
                 self::unsubscribe($group->nid, $payment);
             } else {
@@ -617,12 +614,16 @@ EOT;
         $aUsers = db_query("select users.uid from users left join field_data_field_agree_conditions on (users.uid = field_data_field_agree_conditions.entity_id) where bundle = 'user' and field_data_field_agree_conditions.field_agree_conditions_value = 0")->fetchAll();
         foreach($aUsers as $oUser){
           $oUser = user_load($oUser->uid);
-          if (!in_array('administrator', array_values($oUser->roles))) {
-            user_delete($oUser->uid);
-            if(module_exists('onesignin_client')){
-                db_query("DELETE FROM {onesignin_client_uids} WHERE uid = ".$oUser->uid);
+          // only for users that are imported
+          $iNotImported = helper::value($oUser, GojiraSettings::CONTENT_TYPE_USER_NOT_IMPORTED);
+          if(!$iNotImported){
+            if (!in_array('administrator', array_values($oUser->roles))) {
+              user_delete($oUser->uid);
+              if(module_exists('onesignin_client')){
+                  db_query("DELETE FROM {onesignin_client_uids} WHERE uid = ".$oUser->uid);
+              }
+              watchdog('users','Removing user '.$oUser->uid.' '.$oUser->name.' because he/she did not agreed on the terms & conditions.');
             }
-            watchdog('users','Removing user '.$oUser->uid.' '.$oUser->name.' because he/she did not agreed on the terms & conditions.');
           }
         }
         

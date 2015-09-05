@@ -87,14 +87,15 @@ function tools() {
         }
 
         if (isset($_GET['restore_backup'])) {
-            $rLocations = db_query("select id, source, title, telephone, city, street, number, postcode, category, email, longitude, latitude, url, labels from practices_backup where import_it = 1 limit 10000");
-            foreach ($rLocations as $o) {
-                $aLabels = explode('|', $o->labels);
-                Importer::restoreLocationFromBackup($o->source, $o->title, $o->telephone, $o->city, $o->street, $o->number, $o->postcode, $o->category, $o->email, $o->longitude, $o->latitude, $o->url, $aLabels, $o->id);
-            }
-            drupal_set_message(t('Restored some locations!'), 'status');
-            header('Location: /?q=admin/config/system/gojiratools');
-            exit;
+            helper::restoreBackup(20000, false);
+//            $rLocations = db_query("select id, source, title, telephone, city, street, number, postcode, category, email, longitude, latitude, url, labels from practices_backup where import_it = 1 limit 20000");
+//            foreach ($rLocations as $o) {
+//                $aLabels = explode('|', $o->labels);
+//                Importer::restoreLocationFromBackup($o->source, $o->title, $o->telephone, $o->city, $o->street, $o->number, $o->postcode, $o->category, $o->email, $o->longitude, $o->latitude, $o->url, $aLabels, $o->id);
+//            }
+//            drupal_set_message(t('Restored some locations!'), 'status');
+//            header('Location: /?q=admin/config/system/gojiratools');
+//            exit;
         }
 
         if (isset($_GET['backup_truncate'])) {
@@ -143,26 +144,25 @@ EOT;
         }
 
 
-        if (isset($_GET['get_coordinates'])) {
-            $rEmptyLocations = db_query("select title, nid, street, number, city, postcode, id from practices_backup where latitude = ''");
-            foreach ($rEmptyLocations as $oEmptyLocation) {
-//              $sAdres = $oEmptyLocation->street . ' ' . $oEmptyLocation->number . ', ' . $oEmptyLocation->city . ', ' . str_replace(' ', '', strtolower($oEmptyLocation->postcode));
-                $sAdres = $oEmptyLocation->street . ' ' . $oEmptyLocation->number . ', ' . $oEmptyLocation->city;
-
-                //$oLocation = Location::GetLocationForAddress($sAdres);
-
-                $aCoordinates = Location::getCoordinatesCustom($sAdres);
-
-                if ($aCoordinates) {
-                    db_query("UPDATE `practices_backup` SET latitude = " . $aCoordinates['latitude'] . ", longitude = " . $aCoordinates['longitude'] . " WHERE  `id`=:id", array(':id' => $oEmptyLocation->id));
-                    drupal_set_message(t('Y ' . $oEmptyLocation->id . ' ' . $sAdres . ' ' . $aCoordinates['latitude'] . ',' . $aCoordinates['longitude']), 'status');
-                } else {
-                    drupal_set_message(t('N ' . $oEmptyLocation->id . ' ' . $sAdres), 'error');
-                }
-            }
-            header('Location: /?q=admin/config/system/gojiratools');
+        if (isset($_POST['add_coordinates'])) {
+            db_query("UPDATE `node` SET point = GeomFromText('POINT(" . $_POST['longitude'] . " " . $_POST['latitude'] . ")') WHERE  `nid`=:nid", array(':nid' => $_POST['location_id']));
+            drupal_set_message(t('Added coordinates on location, do NOT FORGET to publish this location if needed.'), 'status');
+            header('Location: /?q=admin/config/system/gojiratools&activate_id='.$_POST['location_id']);
             exit;
         }
+        
+        if (isset($_POST['activate_a_node_id'])) {
+            $oNode = node_load($_POST['activate_a_node_id']);
+            $oNode->status = 1;
+            node_save($oNode);
+            if($oNode->type == 'location'){
+                Search::getInstance()->updateSearchIndex($oNode);
+            }
+            drupal_set_message(t('Node activated:').' '.$_POST['activate_a_node_id'], 'status');
+            drupal_set_message(t('Node is indexed for search'), 'status');
+            header('Location: /?q=admin/config/system/gojiratools');
+            exit;
+        }        
 
         if (isset($_POST['gojira_send_mail'])) {
             global $user;

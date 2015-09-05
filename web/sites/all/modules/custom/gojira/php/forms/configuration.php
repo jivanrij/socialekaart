@@ -32,7 +32,43 @@ function gojira_configuration_form($form, &$form_state) {
         '#type' => 'fieldset',
         '#description' => t('Keys, id\'s en tokens van verschillende APIs.'),
     );
+    $form['cron'] = array(
+        '#title' => t('CRON'),
+        '#type' => 'fieldset',
+        '#description' => t('Schakel bepaalde CRON mogelijkheden aan of uit.'),
+    );
 
+    $form['cron']['cron_remove_unlinked_tax_terms'] = array(
+        '#title' => t('Remove all the unused taxonomy terms (labels).'),
+        '#type' => 'select',
+        '#options' => array(0 => 'no', 1 => 'yes'),
+        '#default_value' => variable_get('cron_remove_unlinked_tax_terms', 1),
+    );
+    $form['cron']['cron_update_search_index_where_needed'] = array(
+        '#title' => t('Updates the search index of changed nodes.'),
+        '#type' => 'select',
+        '#options' => array(0 => 'no', 1 => 'yes'),
+        '#default_value' => variable_get('cron_update_search_index_where_needed', 1),
+    );
+    $form['cron']['cron_check_subscriptions'] = array(
+        '#title' => t('Check subscriptions and disable account who are passed there payed period.'),
+        '#type' => 'select',
+        '#options' => array(0 => 'no', 1 => 'yes'),
+        '#default_value' => variable_get('cron_check_subscriptions', 1),
+    );
+    $form['cron']['cron_remove_unconditional_users'] = array(
+        '#title' => t('Remove users that are added by SSO & have not accepted the agreement'),
+        '#type' => 'select',
+        '#options' => array(0 => 'no', 1 => 'yes'),
+        '#default_value' => variable_get('cron_remove_unconditional_users', 1),
+    );
+    $form['cron']['cron_restore_backup_locations'] = array(
+        '#title' => t('Restores up to 200 locations from the backup table.'),
+        '#type' => 'select',
+        '#options' => array(0 => 'no', 1 => 'yes'),
+        '#default_value' => variable_get('cron_restore_backup_locations', 0),
+    );
+    
     $form['algemene_instellingen']['gojira_subscribe_possible'] = array(
         '#title' => t('Users can subscribe to the system.'),
         '#type' => 'select',
@@ -369,5 +405,12 @@ function gojira_configuration_form_submit($form, &$form_state) {
     variable_set('gojira_haweb_sso_button_visible', $_POST['gojira_haweb_sso_button_visible']);
     variable_set('mailadres_information_inform_admin', $_POST['mailadres_information_inform_admin']);
     variable_set('mailadres_helpdesk', $_POST['mailadres_helpdesk']);
+    variable_set('cron_remove_unlinked_tax_terms', $_POST['cron_remove_unlinked_tax_terms']);
+    variable_set('cron_update_search_index_where_needed', $_POST['cron_update_search_index_where_needed']);
+    variable_set('cron_check_subscriptions', $_POST['cron_check_subscriptions']);
+    variable_set('cron_remove_unconditional_users', $_POST['cron_remove_unconditional_users']);
+    variable_set('cron_restore_backup_locations', $_POST['cron_restore_backup_locations']);
+    
+    
     drupal_set_message(t('Saved all the settings.'), 'status');
 }

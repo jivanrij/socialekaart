@@ -788,11 +788,18 @@ function bindGlobal() {
 
 function bindLocationFinder() {
     jQuery('#edit-field-address-streetnumber, #edit-field-address-city, #edit-field-address-street, #edit-field-address-postcode').change(function () {
-        if ((jQuery('#edit-field-address-city').val().trim().length == 0) && (jQuery('#edit-field-address-street').val().trim().length == 0)) {
-            postcodeLookup()
-        } else {
+        
+        if((jQuery('#edit-field-address-city').val().trim().length != 0) && (jQuery('#edit-field-address-streetnumber').val().trim().length != 0)
+        && (jQuery('#edit-field-address-street').val().trim().length != 0) && (jQuery('#edit-field-address-postcode').val().trim().length != 0)){
             addressLookup();
         }
+        
+        
+//        if ((jQuery('#edit-field-address-city').val().trim().length == 0) && (jQuery('#edit-field-address-street').val().trim().length == 0)) {
+//            postcodeLookup()
+//        } else {
+//            addressLookup();
+//        }
     });
 }
 

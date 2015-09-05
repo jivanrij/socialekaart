@@ -13,6 +13,7 @@ class Location {
     public $street;
     public $nid;
     private static $_userLocations = null;
+    private static $_userLocationsWithCheck = null;
     private static $_knownLocations = null;
 
     /**
@@ -78,7 +79,7 @@ class Location {
      * @return boolean
      */
     public static function userHasMultipleLocationsStored() {
-        $aLocations = Location::getUsersLocations();
+        $aLocations = Location::getUsersLocations(true);
         $iAmount = count($aLocations);
         if ($iAmount > 1) { // we have multiple locations, let's check if there is a preference
             return true;
@@ -95,7 +96,7 @@ class Location {
      */
     public static function getCurrentLocationObjectOfUser($bFallback = false) {
 
-        $aLocations = Location::getUsersLocations();
+        $aLocations = Location::getUsersLocations(true);
         $iAmount = count($aLocations);
 
         if ($iAmount == 0) { // no location found, let's check fallback option
@@ -165,16 +166,30 @@ class Location {
     }
 
     public static function getCoordinatesCustom($address) {
-        $address = str_replace(" ", "+", $address); // replace all the white space with "+" sign to match with google search pattern
-        $url = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=$address";
-        $response = file_get_contents($url);
-        
-        $json = json_decode($response, TRUE); //generate array object from the response from the web
-        
-        if(($json['status'] !== 'ZERO_RESULTS') && isset($json['results'][0])){
-            return array('latitude'=>$json['results'][0]['geometry']['location']['lat'], 'longitude'=>$json['results'][0]['geometry']['location']['lng']);
-        }
-        return false;        
+//        $address = str_replace(" ", "+", $address); // replace all the white space with "+" sign to match with google search pattern
+//        $url = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=$address";
+//        
+//        $response = file_get_contents($url);
+//        
+//        $json = json_decode($response, TRUE); //generate array object from the response from the web
+//        
+//        if(($json['status'] !== 'ZERO_RESULTS') && isset($json['results'][0])){
+//            return array('latitude'=>$json['results'][0]['geometry']['location']['lat'], 'longitude'=>$json['results'][0]['geometry']['location']['lng']);
+//        }
+//        return false;
+//         $url='https://www.google.com/maps/place/Space+Needle/@47.620506,-122.349277,17z/data=!4m6!1m3!3m2!1s0x5490151f4ed5b7f9:0xdb2ba8689ed0920d!2sSpace+Needle!3m1!1s0x5490151f4ed5b7f9:0xdb2ba8689ed0920d';
+        $url = 'https://www.google.com/maps/place/' . $address;
+        $result = file_get_contents($url);
+
+        var_dump($url);
+        die;
+
+        $ll = explode(',', substr(strstr(strstr($result, '?ll='), '&', true), 4));
+        $long = $ll[0];
+        $lat = $ll[1];
+
+        var_dump($long, $lat);
+        die;
     }
 
     /**
@@ -258,17 +273,18 @@ class Location {
     }
 
     /**
-     * Return's all the linked location nodes from the given/current user
+     * Return's all the linked location nodes from the given/current user.
+     * By default without a status check. Use the boolean to change this.
      * 
-     * @global stdClass $user
-     * @param integer $uid
-     * @return array of stdClass
+     * @global type $user
+     * @param boolean $bCheckPublished
+     * @return array|Locations
      */
-    public static function getUsersLocations() {
-
-        if (self::$_userLocations === null) {
+    public static function getUsersLocations($bCheckPublished = true) {
+        if (self::$_userLocations === null && self::$_userLocationsWithCheck === null) {
 
             self::$_userLocations = array();
+            self::$_userLocationsWithCheck = array();
 
             global $user;
             $uid = $user->uid;
@@ -287,15 +303,22 @@ class Location {
             $query->entityCondition('entity_type', 'node')
                     ->entityCondition('bundle', GojiraSettings::CONTENT_TYPE_LOCATION)
                     ->fieldCondition('field_gojira_group', 'nid', $gid, '=');
-            //->fieldCondition(GojiraSettings::CONTENT_TYPE_MODERATED_STATUS_FIELD, 'value', array(1,4), 'in');
 
             $result = $query->execute();
 
             if (isset($result['node'])) {
                 foreach ($result['node'] as $node) {
-                    self::$_userLocations[$node->nid] = node_load($node->nid);
+                    $oNode = node_load($node->nid);
+                    self::$_userLocations[$node->nid] = $oNode;
+                    if ($oNode->status == 1) {
+                        self::$_userLocationsWithCheck[$node->nid] = $oNode;
+                    }
                 }
             }
+        }
+        
+        if ($bCheckPublished) {
+            return self::$_userLocationsWithCheck;
         }
         return self::$_userLocations;
     }

@@ -275,9 +275,8 @@ function gojira_init() {
           drupal_add_js(array('gojira' => array('show_tutorial' => 1)), 'setting');
         }
       }
-
-
-      if(count(Location::getUsersLocations())==0){
+      
+      if(count(Location::getUsersLocations(true))==0){
 
         // user is allowed to be in these routes without a location
         $allowed_without_location = array(
@@ -396,26 +395,30 @@ function gojira_user_login(&$edit, $account) {
 }
 
 function gojira_cron() {
-  /** removes all the not linked taxonomy terms **/
-  $result = db_query("select tid, name from {taxonomy_term_data} where tid not in (select tid from group_location_term) and tid not in (select field_location_vocabulary_tid from field_data_field_location_vocabulary)");
-  foreach($result as $row){
-    taxonomy_term_delete($row->tid);
+  if(variable_get('cron_remove_unlinked_tax_terms')){
+    /** removes all the not linked taxonomy terms **/
+    $result = db_query("select tid, name from {taxonomy_term_data} where tid not in (select tid from group_location_term) and tid not in (select field_location_vocabulary_tid from field_data_field_location_vocabulary)");
+    foreach($result as $row){
+      taxonomy_term_delete($row->tid);
+    }
+  }
+  if(variable_get('cron_update_search_index_where_needed')){
+    // index all the nodes that need indexing for the search
+    Search::getInstance()->indexNeeded(250);
   }
 
-  // max 250
-//Importer::AdhocdataGetCoordinates();
-  // max 250
-//Importer::AdhocdataImportLocations(250);
-//Importer::importLocations(250);
+  if(variable_get('cron_check_subscriptions')){
+    Subscriptions::checkSubscriptions();
+  }
 
-//Importer::AdhocdataGetCoordinates(250, true, true, true);
+  if(variable_get('cron_remove_unconditional_users')){
+    Subscriptions::cleanupUnconditionalUsers();
+  }
 
-  // index all the nodes that need indexing for the search
-  Search::getInstance()->indexNeeded(250);
-
-  Subscriptions::checkSubscriptions();
-
-  Subscriptions::cleanupUnconditionalUsers();
+  if(variable_get('cron_restore_backup_locations')){
+    helper::restoreBackup(200, true);
+  }
+  
 }
 
 function gojira_form_alter(&$form, &$form_state, $form_id){

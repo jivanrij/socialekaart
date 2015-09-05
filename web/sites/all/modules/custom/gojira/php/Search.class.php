@@ -289,6 +289,7 @@ EAT;
      * @param array $labels
      */
     public function doSearch($labels, $check_city = true, $force_global = false, $force_favorites = false) {
+        
         $found = array();
         $foundNodes = array();
 
@@ -414,19 +415,6 @@ $iMaxLongitude = ($location->longitude+($distance*2));
 $iMinLatitude = ($location->latitude-$distance);
 $iMaxLatitude = ($location->latitude+$distance);
 
-//if(true){
-//    $sql_max_distance = " AND (X(point) BETWEEN {$iMinLongitude} AND {$iMaxLongitude} AND Y(point) BETWEEN {$iMinLatitude} AND {$iMaxLatitude}) ";
-//    $sDistanceField = "((ACOS(SIN({$location->latitude} * PI() / 180) * SIN(Y(point) * PI() / 180) + COS({$location->latitude} * PI() / 180) * COS(Y(point) * PI() / 180) * COS(({$location->longitude} - (point)) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) as distance ";
-//    
-//    
-//    //$sDistanceField = " (POWER(ABS({$location->longitude} - X(point)),2) + POWER(ABS({$location->latitude} - Y(point)),2)) as distance ";
-//    
-//
-//}else{
-//    $sql_max_distance = " AND (`node`.`cordinates_x` BETWEEN {$iMinLongitude} AND {$iMaxLongitude} AND `node`.`cordinates_y` BETWEEN {$iMinLatitude} AND {$iMaxLatitude}) ";
-//    $sDistanceField = "((ACOS(SIN({$location->latitude} * PI() / 180) * SIN(`node`.`cordinates_y` * PI() / 180) + COS({$location->latitude} * PI() / 180) * COS(`node`.`cordinates_y` * PI() / 180) * COS(({$location->longitude} - `node`.`cordinates_x`) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) as distance ";    
-//}
-
     $sql_max_distance = " AND (X(point) BETWEEN {$iMinLongitude} AND {$iMaxLongitude} AND Y(point) BETWEEN {$iMinLatitude} AND {$iMaxLatitude}) ";
     $sDistanceField = "((ACOS(SIN({$location->latitude} * PI() / 180) * SIN(Y(point) * PI() / 180) + COS({$location->latitude} * PI() / 180) * COS(Y(point) * PI() / 180) * COS(({$location->longitude} - (point)) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) as distance ";
 
@@ -439,7 +427,7 @@ node.nid, node.title,
 FROM node 
 {$visible_join} 
 left join group_location_favorite on (group_location_favorite.nid = node.nid)
-WHERE {$relatedNids}
+WHERE status = 1 AND {$relatedNids}
 {$sql_max_distance}
 {$favoriteFilter} 
 {$visible_where} 
@@ -480,7 +468,7 @@ EOT;
     public function indexAll() {
         set_time_limit(10000000);
         ini_set('memory_limit', '128M');
-        $results = db_query("select node.nid from {node} where node.type = 'location'")->fetchAll();
+        $results = db_query("select node.nid from {node} where node.type = 'location' and status = 1")->fetchAll();
         $amount = 0;
         foreach ($results as $result) {
             $this->updateSearchIndex($result->nid);
@@ -500,7 +488,7 @@ EOT;
 
             set_time_limit(10000000);
             ini_set('memory_limit', '128M');
-            $results = db_query("select node.nid from {node} where node.type = 'location' and node.nid in ({$ids})")->fetchAll();
+            $results = db_query("select node.nid from {node} where status = 1 and node.type = 'location' and node.nid in ({$ids})")->fetchAll();
             $amount = 0;
             foreach ($results as $result) {
                 $this->updateSearchIndex($result->nid);

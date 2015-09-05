@@ -19,7 +19,8 @@
       <?php $oCurrentLocation = Location::getCurrentLocationObjectOfUser(); ?>
       <select id="location_selector" name="location_selector">
           <?php foreach(Location::getUsersLocations() as $oLocation): ?>
-          <option <?php echo ($oCurrentLocation->nid == $oLocation->nid ? 'selected="selected"' : ''); ?>value="<?php echo $oLocation->nid; ?>"><?php echo $oLocation->title; ?></option>
+          
+          <?php if($oLocation->status): ?><option <?php echo ($oCurrentLocation->nid == $oLocation->nid ? 'selected="selected"' : ''); ?>value="<?php echo $oLocation->nid; ?>"><?php echo $oLocation->title; ?></option><?php endif; ?>
           <?php endforeach; ?>
       </select>
       <?php endif; ?>

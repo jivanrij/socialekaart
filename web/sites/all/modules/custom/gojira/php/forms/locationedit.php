@@ -117,16 +117,6 @@ function gojira_get_core_location_form_validate($form, &$form_state, $id) {
     if ($knownTitle) {
         form_set_error('title', t('There is already a location with this title known in the system. Please pick another.'));
     }
-
-    $location = Location::getLocationForAddress(
-                    Location::formatAddress(
-                            $form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#value']
-                    )
-    );
-
-    if (!$location) {
-        form_set_error('no_location_found', t('Cannot find a location based on the given information. Please check if you have filled in the whole form with correct information and there are no missing fields.'));
-    }
 }
 
 function gojira_locationedit_form_submit($form, &$form_state) {
@@ -199,7 +189,19 @@ function gojira_locationedit_form_submit($form, &$form_state) {
         user_save($oUser);
     }
     
-    drupal_set_message(t('Location information successfully stored.'), 'status');
+    $location = Location::getLocationForAddress(
+                    Location::formatAddress(
+                            $form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#value']
+                    )
+    );
+    if (!$location) {
+        drupal_set_message(t('Practice information successfully stored. But we could not find the coordinates. We will also give it a try, for now the location is inactive.'), 'status');
+        $node->status = 0;
+        node_save($node);
+        Mailer::locationWithoutCoordinatesAdded($node);
+    }else{
+        drupal_set_message(t('Practice information successfully stored.'), 'status');
+    }
 
     drupal_goto('settings');
 }

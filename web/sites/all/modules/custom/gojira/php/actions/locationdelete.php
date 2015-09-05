@@ -4,7 +4,7 @@ function locationdelete() {
   global $user;
   $iDeleteLocation = $_GET['id'];
 
-  $aLocations = Location::getUsersLocations();
+  $aLocations = Location::getUsersLocations(false);
 
   foreach ($aLocations as $oLocation) {
     if ($oLocation->nid == $iDeleteLocation) {
@@ -15,7 +15,7 @@ function locationdelete() {
       // if the user had the location selected as default to view, set another one
       $iSelectedLocation = helper::value(helper::getUser(), GojiraSettings::CONTENT_TYPE_USER_LAST_SELECTED_LOCATION, 'nid');
       if($iSelectedLocation == $iDeleteLocation){
-        $aUsersLocations = Location::getUsersLocations();
+        $aUsersLocations = Location::getUsersLocations(false);
         $oNewDefaultLocation = array_pop($aUsersLocations);
         $oUser = helper::getUser();
         // get the group the user is linked to and link the new location to it

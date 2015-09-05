@@ -1,7 +1,6 @@
 <?php
 // ajax action that is called when searching
 function search(){
-    
   global $user;
   $user = user_load($user->uid);
 
@@ -22,7 +21,6 @@ function search(){
   $foundNodes = array();
   $output['has_tags'] = true;
   $output['by_id'] = false;
-  
   if (isset($_GET['tags']) && ($_GET['tags'] == 'favorites')) {
     $foundNodes = Favorite::getInstance()->getAllFavoriteLocations();
   }else if (isset($_GET['tags']) && ($_GET['tags'] == 'ownlist')) {

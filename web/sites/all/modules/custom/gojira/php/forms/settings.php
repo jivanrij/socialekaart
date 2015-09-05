@@ -33,7 +33,7 @@ function gojira_settings_form($form, &$form_state) {
       
     // the user has only one location to manage or no master/subscribed privileges
     if (!has_multiple_locations($user) || !helper::hasSubscribedMasterPrivileges()) {
-        $locations = Location::getUsersLocations();
+        $locations = Location::getUsersLocations(false);
         $locationNode = array_shift($locations);
         $form = gojira_get_core_location_form($form, $form_state, $locationNode, 'settings');
     }
@@ -41,7 +41,7 @@ function gojira_settings_form($form, &$form_state) {
     // user is allowed to manage multiple locations yes/no
     if (helper::hasSubscribedMasterPrivileges()) {
         
-        $disabled = ((count(Location::getUsersLocations()) > 1) ? true : false);
+        $disabled = ((count(Location::getUsersLocations(false)) > 1) ? true : false);
         
         $multiple = GojiraSettings::CONTENT_TYPE_HAS_MULTIPLE_LOCATIONS_FIELD;
         $multiple = $user->$multiple;
@@ -103,7 +103,7 @@ function gojira_settings_form_validate($form, &$form_state) {
   // to save location info, you need to be a master doctor, have the permission & not have multiple locations
   if (user_access(helper::PERMISSION_MODERATE_LOCATION_CONTENT) && in_array(helper::ROLE_EMPLOYER_MASTER, $user->roles)) {
     if (!has_multiple_locations($user)) { // if we do not have multiple locations, we need to validate the form values for one location
-      $locations = Location::getUsersLocations();
+      $locations = Location::getUsersLocations(false);
       if (count($locations) == 1) {
         $locationNode = array_pop($locations);
         gojira_get_core_location_form_validate($form, $form_state, $locationNode->nid);
@@ -149,7 +149,7 @@ function gojira_settings_form_submit($form, &$form_state) {
       // if we do not have multiple locations, we need to save the form values for one location
       // if we have multiple locations, we don't have a location form here
 
-      $locations = Location::getUsersLocations();
+      $locations = Location::getUsersLocations(false);
       if (count($locations) == 1) {
         $locationNode = array_pop($locations);
         $id = $locationNode->nid;

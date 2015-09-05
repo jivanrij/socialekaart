@@ -19,7 +19,8 @@ function settings() {
   }  
   
   $output['template'] = 'settings';
-  $output['user_locations'] = Location::getUsersLocations();
+  
+  $output['user_locations'] = Location::getUsersLocations(false);
   $output['gojira_settings_form'] = drupal_get_form('gojira_settings_form');
   
   $output['subscribed'] = in_array(helper::ROLE_SUBSCRIBED_MASTER, array_values($user->roles));

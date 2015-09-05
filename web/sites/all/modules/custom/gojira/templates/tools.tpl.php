@@ -26,6 +26,44 @@
 </p>
 <hr />
 
+
+
+
+<?php // SET COORDINATES ON LOCATIONS  ?>
+<p>
+  Set coordinates on location
+</p>
+<form id="add_coordinates" action="?q=admin/config/system/gojiratools" method="POST">
+    <input type="hidden" value="1" name="add_coordinates" />
+    <label for="location_id">Location NID</label><input style='border:1px; border-style: solid;' type="text" name="location_id" value="<?php echo (isset($_GET['location_id'])) ? $_GET['location_id'] : ''; ?>" />
+    <br />
+    <label for="longitude">Longitude</label><input style='border:1px; border-style: solid;' type="text" name="longitude" value="" />
+    Example: 4.3711756
+    <br />
+    <label for="latitude">Latitude</label><input style='border:1px; border-style: solid;' type="text" name="latitude" value="" />
+    Example: 51.9396172
+    <br />
+  <input class="form-submit" type="submit" />
+</form>
+<hr />
+
+
+
+<?php // PUBLISH  ?>
+<p>
+  Publish a node
+</p>
+<form id="activate_node" action="?q=admin/config/system/gojiratools" method="POST">
+    <label for="activate_a_node_id">Node NID</label><input style='border:1px; border-style: solid;' type="text" name="activate_a_node_id" value="<?php echo (isset($_GET['activate_id'])) ? $_GET['activate_id'] : ''; ?>" />
+    <br />
+  <input class="form-submit" type="submit" />
+</form>
+
+
+
+
+
+<hr />
 <h2>Backup</h2>
 <?php // BACKUP SYSTEM  ?>
 <p>
@@ -56,7 +94,7 @@
 ?>
 <p>
   If you push this button all locations in the practices_backup table with the import_it flag on 1 will be imported.<br />
-  It will import a maximum of 10.000 a time.<br />
+  It will import a maximum of 20.000 a time.<br />
   These locations will be flagged for indexing.<br />
 </p>
 <form id="restore_backup" method="POST" action="/?q=admin/config/system/gojiratools&restore_backup=on">
@@ -110,16 +148,7 @@
     }
   });
 </script>
-<?php
-// fill coordinates in backup table
-?>
-<p>
-  If the backup table locations don't have any coordinates, get them with this function.
-  <?php echo $backupped_no_coordinates; ?> have none.
-</p>
-<form id="get_coordinates" method="POST" action="/?q=admin/config/system/gojiratools&get_coordinates=on">
-  <input class="form-submit" type="submit" value="get_coordinates" />
-</form>
+
 
 
 
@@ -140,7 +169,7 @@
     e.preventDefault();
     if (confirm('Are you sure you want to EMPTY the system?!?!?!?!')) {
       //alert('Sorry, won\'t allow this...');
-      window.location = '/admin/config/system/gojiratools&empty_all=shit!';
+      window.location = '/?q=admin/config/system/gojiratools&empty_all=shit!';
     }else{
       alert('pffff....');
     }

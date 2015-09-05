@@ -21,7 +21,7 @@ class Map {
       $zoom = GojiraSettings::MAP_ZOOMLEVEL_REGION;
     }
 
-    if(count(Location::getUsersLocations())==0){
+    if(count(Location::getUsersLocations(true))==0){
       $zoom = GojiraSettings::MAP_ZOOMLEVEL_COUNTRY;
       $show_self = 0;
     }

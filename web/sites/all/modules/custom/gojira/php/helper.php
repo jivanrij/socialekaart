@@ -62,6 +62,19 @@ class helper {
         return false;
     }
 
+    public static function restoreBackup($amount, $cron = false){
+        $rLocations = db_query("select id, source, title, telephone, city, street, number, postcode, category, email, longitude, latitude, url, labels from practices_backup where import_it = 1 limit {$amount}");
+        foreach ($rLocations as $o) {
+            $aLabels = explode('|', $o->labels);
+            Importer::restoreLocationFromBackup($o->source, $o->title, $o->telephone, $o->city, $o->street, $o->number, $o->postcode, $o->category, $o->email, $o->longitude, $o->latitude, $o->url, $aLabels, $o->id);
+        }
+        if(!$cron){
+            drupal_set_message(t('Restored some locations!'), 'status');
+            header('Location: /?q=admin/config/system/gojiratools');
+            exit;
+        }
+    }
+    
     /**
      * Get's a array with words and removes all the blacklisted words
      * 
@@ -381,11 +394,11 @@ class helper {
      * @param stdClass $node
      */
     public static function addAddressFormPart(&$form, $node = false) {
-
-        $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD] = array(
-            '#title' => t('Postcode'),
+        
+        $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD] = array(
+            '#title' => t('Street'),
             '#type' => 'textfield',
-            '#default_value' => ($node ? helper::value($node, GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD) : ''),
+            '#default_value' => ($node ? helper::value($node, GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD) : ''),
             '#required' => TRUE,
         );
 
@@ -395,6 +408,13 @@ class helper {
             '#default_value' => ($node ? helper::value($node, GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD) : ''),
             '#required' => TRUE,
         );
+        
+        $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD] = array(
+            '#title' => t('Postcode'),
+            '#type' => 'textfield',
+            '#default_value' => ($node ? helper::value($node, GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD) : ''),
+            '#required' => TRUE,
+        );
 
         $form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD] = array(
             '#title' => t('City'),
@@ -402,14 +422,7 @@ class helper {
             '#default_value' => ($node ? helper::value($node, GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD) : ''),
             '#required' => TRUE,
         );
-
-        $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD] = array(
-            '#title' => t('Street'),
-            '#type' => 'textfield',
-            '#default_value' => ($node ? helper::value($node, GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD) : ''),
-            '#required' => TRUE,
-        );
-
+        
         // this field is used as an validation error wrapper for the location
         $form['location'] = array(
             '#type' => 'hidden'

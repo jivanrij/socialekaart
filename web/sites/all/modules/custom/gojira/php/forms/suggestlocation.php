@@ -80,16 +80,6 @@ function gojira_suggestlocation_form_validate($form, &$form_state) {
       form_set_error('title', t('There is already a location with this title known in the system. Please pick another.'));
     }
   }
-
-  $location = Location::getLocationForAddress(
-                  Location::formatAddress(
-                          $form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#value']
-                  )
-  );
-  
-  if (!$location) {
-    form_set_error('location', t('Cannot find a location based on the given information. Please check if you have filled in the whole form with correct information and there are no missing fields.'));
-  }
 }
 
 function gojira_suggestlocation_form_submit($form, &$form_state) {
@@ -146,9 +136,28 @@ function gojira_suggestlocation_form_submit($form, &$form_state) {
 
   node_save($node);
   
-  Mailer::sendLocationAddedByUserToAdmin($base_url.'/node/'.$node->nid.'/edit' . '<br /><br />Aangemaakt door: ' . $base_url.'/user/'.$user->uid.'/edit', $node->title);
+  $sBody = <<<EOT
+<a href="https://socialekaart.care/node/{$node->nid}/edit">Edit location</a>
+<br />
+Aangemaakt door gebruiker <a href="https://socialekaart.care/user/{$user->uid}/edit'">{$user->uid}</a>
+EOT;
+  Mailer::sendLocationAddedByUserToAdmin($sBody, $node->title);
   
-  drupal_set_message(t('Location successfully suggested.'), 'status');
   
-  drupal_goto('suggestlocationthanks',array('query'=>array('nid'=>$node->nid)));
+    $location = Location::getLocationForAddress(
+                    Location::formatAddress(
+                            $form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#value']
+                    )
+    );
+    $iNode = $node->nid;
+    if (!$location) {
+        $node->status = 0;
+        node_save($node);
+        Mailer::locationWithoutCoordinatesAdded($node);
+        $iNode = 0;
+    }else{
+        drupal_set_message(t('Location successfully suggested.'), 'status');
+    }
+  
+  drupal_goto('suggestlocationthanks',array('query'=>array('nid'=>$iNode)));
 }

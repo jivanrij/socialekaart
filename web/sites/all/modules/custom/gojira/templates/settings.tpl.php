@@ -37,7 +37,13 @@
       <tr><th><?php echo t('Practice'); ?></th><th><?php echo t('Actions'); ?></th></tr>
       <?php foreach($output['user_locations'] as $location): ?>
         <tr>
-          <td><?php echo $location->title; ?></td>
+          <td>
+              <?php if($location->status == 0): ?>
+                <label style="color:#d8d8d8;" class="has_help" title="<?php echo t('This practice is not usable because of incomplete data.'); ?>"><?php echo $location->title; ?><img style="height: 10px;margin-left:3px;" src="/sites/all/themes/gojiratheme/img/question_red.png" alt=""></label
+              <?php else: ?>
+                <?php echo $location->title; ?>
+              <?php endif; ?>
+          </td>
           <td>
             <a class="delete_location" href="/?q=location/delete&id=<?php echo $location->nid; ?>" title="<?php echo t('Remove location @title', array('@title'=>$location->title)); ?>"><?php echo t('remove'); ?></a>
             &nbsp;

@@ -445,7 +445,7 @@ EOT;
         $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
         $aInfo['from_name'] = 'SocialeKaart.care';
         $aInfo['subject'] = 'Locatie '.$sLocationTitle.' is door een gebruiker aangemaakt';
-        $aInfo['text'] = $sBody;
+        $aInfo['html'] = $sBody;
         $aInfo['to'][] = array(
             'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
@@ -621,6 +621,50 @@ EOT;
                 'type' => 'bcc'
             );
         }
+
+        $oMailer = new Mailer();
+        $oMailer->send($aInfo);
+
+    }
+    
+    /**
+     * Informs the admin that there is a location added without coordinates
+     * 
+     */
+    public static function locationWithoutCoordinatesAdded($oLocation) {
+        
+        $sUrl = user_pass_reset_url($oUser);
+        $sAddress = Location::getAddressString($oLocation);
+        
+        $sCategory = Category::getCategoryName($oLocation);
+        $iLocation = $oLocation->nid;
+        
+        $sBody = <<<EOT
+Voor de volgende locatie heeft google geen coordinaten gevonden.<br />
+Deze moeten opgezocht worden en toegevoegd worden.<br />
+Deze locatie is van het type <b>{$sCategory}</b>.<br />
+Let op! Praktijken van huisartsen moeten snel voorzien worden van coordinaten.<br />
+<br />
+<a href="https://socialekaart.care/?q=node/572388/edit&destination=admin/content">socialekaart.care/?q=node/572388/edit&destination=admin/content</a><br />
+<br />
+<a href="https://socialekaart.care/?q=admin/config/system/gojiratools&location_id={$iLocation}">socialekaart.care/?q=admin/config/system/gojiratools</a><br />
+Address:<br />
+{$sAddress}<br />
+<br />
+<br />
+<b>TODO: A) Zoek de coordinaten op via google maps & voeg ze toe via de tools page, B) publiceer daarna de praktijk/locatie.</b>
+EOT;
+
+        $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
+        $aInfo['from_name'] = 'SocialeKaart.care';
+        $aInfo['subject'] = t('SocialeKaart.care No Coordinates found! - '.$iLocation);
+        $aInfo['html'] = $sBody;
+            $aInfo['to'][] = array(
+                'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+                'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+                'type' => 'to'
+            );
+
 
         $oMailer = new Mailer();
         $oMailer->send($aInfo);
