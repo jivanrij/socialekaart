@@ -67,9 +67,11 @@
 <h2>Backup</h2>
 <?php // BACKUP SYSTEM  ?>
 <p>
-    <?php echo $amount_not_exported; ?> exported flag on 0<br />
-    <?php echo $amount_exported; ?> exported flag on 1<br />
+    <?php echo $amount_not_exported; ?> locations with the exported flag on 0<br />
+    <?php echo $amount_exported; ?> locations with the exported flag on 1<br />
     <?php echo $amount_backupped; ?> locations in the backup table<br />
+    <?php echo $backupped_not_to_import; ?> locations in the backup table with import_it flag on 0<br />
+    <?php echo $backupped_to_import; ?> locations in the backup table with import_it flag on 1<br />
 </p>
 <p>
   If you push this button you will backup all the locations (with node.exported = 0) into the practices_backup table.<br />

@@ -264,6 +264,10 @@ EOT;
     $amount_not_exported = db_query("select count(nid) from node where exported = 0 and type = 'location'")->fetchField();
     $amount_backupped = db_query("select count(id) from practices_backup")->fetchField();
     $backupped_no_coordinates = db_query("select count(id) from practices_backup where latitude = ''")->fetchField();
+    $backupped_to_import = db_query("select count(id) from practices_backup where import_it = 1")->fetchField();
+    $backupped_not_to_import = db_query("select count(id) from practices_backup where import_it = 0")->fetchField();
+    
+    
 
     return theme('tools', array(
         'groups' => $groups,
@@ -275,6 +279,8 @@ EOT;
         'amount_exported' => $amount_exported,
         'amount_not_exported' => $amount_not_exported,
         'amount_backupped' => $amount_backupped,
-        'backupped_no_coordinates' => $backupped_no_coordinates
+        'backupped_no_coordinates' => $backupped_no_coordinates,
+        'backupped_not_to_import' => $backupped_not_to_import,
+        'backupped_to_import' => $backupped_to_import,
     ));
 }
