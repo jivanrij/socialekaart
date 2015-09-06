@@ -136,12 +136,8 @@ function gojira_suggestlocation_form_submit($form, &$form_state) {
 
   node_save($node);
   
-  $sBody = <<<EOT
-<a href="https://socialekaart.care/node/{$node->nid}/edit">Edit location</a>
-<br />
-Aangemaakt door gebruiker <a href="https://socialekaart.care/user/{$user->uid}/edit'">{$user->uid}</a>
-EOT;
-  Mailer::sendLocationAddedByUserToAdmin($sBody, $node->title);
+
+  Mailer::sendLocationAddedByUserToAdmin($node, $user);
   
   
     $location = Location::getLocationForAddress(

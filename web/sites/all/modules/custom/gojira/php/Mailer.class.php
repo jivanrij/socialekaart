@@ -438,14 +438,20 @@ EOT;
      * 
      * @return boolean
      */
-    public static function sendLocationAddedByUserToAdmin($sBody, $sLocationTitle) {
+    public static function sendLocationAddedByUserToAdmin($oLocation, $oUser) {
 
-        $message['subject'] = 'Er is een nieuwe locatie suggestie aangemaakt op socialekaart.care met de titel ' . $params['title'];
+  $sBody = <<<EOT
+{$oLocation->title}
+https://socialekaart.care/node/{$oLocation->nid}/edit
 
+Aangemaakt door gebruiker {$oUser->name}
+https://socialekaart.care/user/{$oUser->uid}/edit
+EOT;
+        
         $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
         $aInfo['from_name'] = 'SocialeKaart.care';
-        $aInfo['subject'] = 'Locatie '.$sLocationTitle.' is door een gebruiker aangemaakt';
-        $aInfo['html'] = $sBody;
+        $aInfo['subject'] = 'Locatie '.$oLocation->title.' is door een gebruiker aangemaakt';
+        $aInfo['text'] = $sBody;
         $aInfo['to'][] = array(
             'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
