@@ -54,6 +54,14 @@ function gojira_suggestlocation_form($form, &$form_state) {
       '#type' => 'textfield',
       '#required' => false,
   );
+  
+$form['add_to_favorites'] = array(
+    '#title' => t('Add to favorites'),
+    '#type' => 'checkbox',
+    '#disabled' => false,
+    '#description' => t('Mark this checkbox to also add this location to your favorites.'),
+    '#default_value' => 1
+);
 
 
   $form['submit'] = array(
@@ -67,7 +75,7 @@ function gojira_suggestlocation_form($form, &$form_state) {
 }
 
 function gojira_suggestlocation_form_validate($form, &$form_state) {
-  
+   
   if($form[GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD]['#value'] == '0'){
     form_set_error(GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD, t('You must select a category to add the location.'));
   }
@@ -145,7 +153,14 @@ function gojira_suggestlocation_form_submit($form, &$form_state) {
                             $form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#value']
                     )
     );
+    
     $iNode = $node->nid;
+    
+    // if the user want's we add this location to his personal list
+    if($form['add_to_favorites']['#value'] == 1){
+        Favorite::getInstance()->setFavorite($iNode);
+    }
+    
     if (!$location) {
         $node->status = 0;
         node_save($node);

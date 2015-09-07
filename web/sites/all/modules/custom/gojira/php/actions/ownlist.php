@@ -15,6 +15,7 @@ function ownlist() {
     $favorite->category_name = $category_name;
     
     $ordered_categorys[$category_name] = $favorite;
+    
     $ordered_locations[$favorite->title] = $favorite;
   }
   
