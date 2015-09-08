@@ -52,6 +52,7 @@ include ('php/actions/employeelist.php');
 include ('php/actions/questions.php');
 include ('php/actions/favorites.php');
 include ('php/actions/practicecheck.php');
+include ('php/actions/locationinfo.php');
 //include ('php/actions/gojirareport_double_locations.php');
 //include ('php/actions/gojirareport_location_by_category.php');
 //include ('php/actions/gojirareport_location_by_tag.php');

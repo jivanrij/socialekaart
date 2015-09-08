@@ -323,7 +323,7 @@ function setupMapDefault() {
     // let's add self to the map, but not to the featuregroup, self will always be displayed
     if (Drupal.settings.gojira.show_self) {
         var marker = L.marker([Drupal.settings.gojira.latitude, Drupal.settings.gojira.longitude], {icon: window.blackIcon})
-                .setBouncingOptions({bounceHeight: 1, contractHeight:3, bounceSpeed: 20, contractSpeed: 150})
+                .setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150})
                 .on('click', function () {
                     this.toggleBouncing();
                 }).addTo(window.map);
@@ -382,7 +382,7 @@ function doSearchCall(searchFor, search_own_area) {
 
                 if (thisResult.x && thisResult.c > 0) {
                     // I am a merged marker with self as a part of my items
-                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.mixedIcon}).setBouncingOptions({bounceHeight: 1, contractHeight:3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.mixedIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
                     marker.bindPopup(thisResult.h).on('popupopen', function () {
                         window.map.setView(this._latlng, window.zoomlevel_street);
                     });
@@ -390,7 +390,7 @@ function doSearchCall(searchFor, search_own_area) {
                 }
                 if (thisResult.x && !thisResult.c) {
                     // I am just self, and not merged
-                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.blackIcon}).setBouncingOptions({bounceHeight: 1, contractHeight:3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.blackIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
                     marker.bindPopup('<span class="self_popup_link">' + data.your_location + '</span>').on('popupopen', function () {
                         jQuery('#selected_location_info > div').hide();
                     });
@@ -398,7 +398,7 @@ function doSearchCall(searchFor, search_own_area) {
                 }
                 if (!thisResult.x && thisResult.c > 0) {
                     // Not self, but i am a merged one
-                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight:3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
                     marker.bindPopup(thisResult.h).on('popupopen', function () {
                         window.map.setView(this._latlng, window.zoomlevel_street);
                         jQuery('#selected_location_info > div').hide();
@@ -407,7 +407,7 @@ function doSearchCall(searchFor, search_own_area) {
                 }
                 if (!thisResult.x && !thisResult.c) {
                     // Not self, and not a merged one
-                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight:3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
                     marker.bindPopup('<span class="hidden open_location_popup">' + thisResult.n + '</span>').on('popupopen', function () {
                         focusLocation();
                     });
@@ -495,15 +495,15 @@ function bindAfterSearch(bind_list, bind_details) {
 
 // get's the current active popup, retrieves the nid of the 
 // location and refers to that location, while hiding the popup
-function gotoLocation(nid) {
-    //alert('gotoLocation');
-    return;
-    if (typeof nid == 'undefined') {
-        var nid = jQuery("span.open_location_popup").text();
-    }
-    jQuery("div.leaflet-popup").css('display', 'none');
-    window.location = '/?loc=' + nid;
-}
+//function gotoLocation(nid) {
+//    //alert('gotoLocation');
+//    return;
+//    if (typeof nid == 'undefined') {
+//        var nid = jQuery("span.open_location_popup").text();
+//    }
+//    jQuery("div.leaflet-popup").css('display', 'none');
+//    window.location = '/?loc=' + nid;
+//}
 
 function focusLocation(nid) {
     L.Marker.stopAllBouncingMarkers();
@@ -544,8 +544,10 @@ function focusLocation(nid) {
             somethingWrongMessage();
         }
     });
-
 }
+
+
+
 
 function bindEmployeelist() {
     jQuery("a.delete_employee").click(function (e) {
@@ -578,13 +580,13 @@ function bindSettings() {
 }
 
 function bindFaq() {
-    
+
     jQuery("#faq_sections section h1").click(function () {
         jQuery('.accordion_content.open').hide('fast', function () {
             jQuery(this).removeClass('open');
             jQuery(window).trigger('resize');
         });
-        jQuery('.accordion_content',jQuery(this).closest('section')).show('fast', function () {
+        jQuery('.accordion_content', jQuery(this).closest('section')).show('fast', function () {
             jQuery(this).addClass('open');
             jQuery(window).trigger('resize');
         });
@@ -787,14 +789,31 @@ function bindGlobal() {
 }
 
 function bindLocationFinder() {
+    jQuery('a.double_locs').click(function () {
+        var nid = jQuery(this).attr('id').replace('double_loc_', '');
+        jQuery.ajax({
+            url: '/?q=ajax/locationinfo&nid=' + nid,
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                jQuery('#shot_double_info').html('<p>' + data['sTitle'] + '<a href="/?q=inform&nid=' + data['iNode'] + '" title="Gegevens aanpassen">Gegevens aanpassen</a></p>');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                somethingWrongMessage();
+            }
+        });
+    });
+
+
     jQuery('#edit-field-address-streetnumber, #edit-field-address-city, #edit-field-address-street, #edit-field-address-postcode').change(function () {
-        
-        if((jQuery('#edit-field-address-city').val().trim().length != 0) && (jQuery('#edit-field-address-streetnumber').val().trim().length != 0)
-        && (jQuery('#edit-field-address-street').val().trim().length != 0) && (jQuery('#edit-field-address-postcode').val().trim().length != 0)){
+
+        if ((jQuery('#edit-field-address-city').val().trim().length != 0) && (jQuery('#edit-field-address-streetnumber').val().trim().length != 0)
+                && (jQuery('#edit-field-address-street').val().trim().length != 0) && (jQuery('#edit-field-address-postcode').val().trim().length != 0)) {
             addressLookup();
         }
-        
-        
+
+
+
 //        if ((jQuery('#edit-field-address-city').val().trim().length == 0) && (jQuery('#edit-field-address-street').val().trim().length == 0)) {
 //            postcodeLookup()
 //        } else {

@@ -8,6 +8,13 @@ function gojira_suggestlocation_form($form, &$form_state) {
   $form['info'] = array(
     '#markup' => '<p>'.t('If you know a location that is not know in this system, you can use this form to add it.').'</p>',
   );
+
+  $form['coordinates'] = array(
+      '#title' => t('coordinates'),
+      '#type' => 'hidden',
+      '#default_value' => '0',
+      '#description' => t('Just a wrapper for the coordinates & double location validation.'),
+  );
   
   $form['title'] = array(
       '#title' => t('Title'),
@@ -88,6 +95,28 @@ function gojira_suggestlocation_form_validate($form, &$form_state) {
       form_set_error('title', t('There is already a location with this title known in the system. Please pick another.'));
     }
   }
+  
+    $location = Location::getLocationForAddress(
+                    Location::formatAddress(
+                            $form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#value']
+                    )
+    );
+  
+    $aPossibleDoubles = array();
+    if($location){
+        $rResults = db_query("select nid, title, X(point) as x, Y(point) as y from {node} where type = 'location' and status = 1 and X(point) = :longitude and Y(point) = :latitude", array(':longitude'=>$location->longitude, ':latitude'=>$location->latitude))->fetchAll();
+        foreach($rResults as $oResult){
+            $aPossibleDoubles[$oResult->nid] = $oResult->title;
+        }
+    }
+    
+    $_SESSION['bDoubleLocationWarning'] = false;
+    if(count($aPossibleDoubles)>0){
+        $_SESSION['bDoubleLocationWarning'] = true;
+        $_SESSION['aPossibleDoubles'] = $aPossibleDoubles;
+        form_set_error('coordinates', t('There allready is one or more location(s) on this address. Can one of these be the same one? Click on them to see sore information or decide to add/change information on an existing location.'));
+    }
+  
 }
 
 function gojira_suggestlocation_form_submit($form, &$form_state) {

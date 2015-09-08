@@ -387,5 +387,4 @@ class Location {
         }
         return false;
     }
-
 }
