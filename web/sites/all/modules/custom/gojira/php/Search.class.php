@@ -207,9 +207,9 @@ EAT;
             foreach ($index_info as $info) {
                 $search_index_info .= 'score:' . $info->score . ' word:' . $info->word . '<br />';
             }
-            $search_index_info = '<p>' . $search_index_info . '</p>';
+            $search_index_info = '<p class="admin_info">' . $search_index_info . '</p>';
 
-            $adminLink = $search_index_info . '<div class="admin_info"><a href="/admin/config/system/gojiratools&redirect_to_view=1&index_some=' . $foundNode->nid . '">Reindex location</a> <a href="/showlocation&loc=' . $foundNode->nid . '" title="weergeven in frontend">weergeven</a> <a href="/location/edit&id=' . $foundNode->nid . '" title="beheren in frontend">frontend</a> <a title="beheren in de backend" href="/node/' . $foundNode->nid . '/edit&destination=admin/content">backend</a> <!-- &nbsp; <a target="_blank" href="https://maps.google.com/maps?q=' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD) . '+' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD) . ',' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD) . ',' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD) . '" title="weergeven in google maps">google maps</a>--></div>';
+            $adminLink = $search_index_info . '<div class="admin_info"><a href="?q=/admin/config/system/gojiratools&redirect_to_view=1&index_some=' . $foundNode->nid . '">Reindex location</a> <a href="/showlocation&loc=' . $foundNode->nid . '" title="weergeven in frontend">weergeven</a> <a href="/location/edit&id=' . $foundNode->nid . '" title="beheren in frontend">frontend</a> <a title="beheren in de backend" href="/node/' . $foundNode->nid . '/edit&destination=admin/content">backend</a> <!-- &nbsp; <a target="_blank" href="https://maps.google.com/maps?q=' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD) . '+' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD) . ',' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD) . ',' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD) . '" title="weergeven in google maps">google maps</a>--></div>';
         }
 
         $url = helper::value($foundNode, GojiraSettings::CONTENT_TYPE_URL_FIELD);
@@ -587,54 +587,75 @@ EOT;
      * @param stClass $node
      * @return array
      */
-    public function getSearchNodeText($node) {
+    public function getSearchNodeText($oNode) {
 
-        if ($node->type != GojiraSettings::CONTENT_TYPE_LOCATION) {
+        if ($oNode->type != GojiraSettings::CONTENT_TYPE_LOCATION) {
             return array();
         }
 
-        $text_array = array();
-        $blacklist = explode(',', variable_get('gojira_blacklist_search_words'));
+        $aText = array();
+        $aBlacklist = explode(',', variable_get('gojira_blacklist_search_words'));
 
         // add the labels to the search, let the labels with more likes weight more
-        $field = GojiraSettings::CONTENT_TYPE_LOCATION_VOCABULARY_FIELD;
-        $field = $node->$field;
-        if (array_key_exists('und', $field)) {
-            foreach ($field[LANGUAGE_NONE] as $label) {
-                if (!in_array($label, $blacklist)) {
-                    $likes = Labels::getLikes($label['tid'], $node->nid);
-                    $termStd = taxonomy_term_load($label['tid']);
-                    $term = helper::cleanSearchTag($termStd->name);
-                    for ($i = 0; $i <= $likes; $i++) {
-                        $text_array[$term] = $likes + 1;
+        $sField = GojiraSettings::CONTENT_TYPE_LOCATION_VOCABULARY_FIELD;
+        $aField = $oNode->$sField;
+        if (array_key_exists(LANGUAGE_NONE, $aField)) {
+            foreach ($aField[LANGUAGE_NONE] as $aLabel) {
+                if (!in_array($aLabel, $aBlacklist)) {
+                    $iLikes = Labels::getLikes($aLabel['tid'], $oNode->nid);
+                    $oTerm = taxonomy_term_load($aLabel['tid']);
+                    $sTerm = helper::cleanSearchTag($oTerm->name);
+                    for ($i = 0; $i <= $iLikes; $i++) {
+                        $aText[$sTerm] = $iLikes + 1;
                     }
                 }
             }
         }
 
         // cut up the title based on spaces and add the words if they are not allready there from the labels
-        $titles = explode(' ', $node->title);
-        foreach ($titles as $title_part) {
-            $title = helper::cleanSearchTag($node->title);
-            if (!array_key_exists($title, $text_array)) {
-                if (!in_array($title, $blacklist)) {
-                    $text_array[$title_part] = 1;
+        $aTitles = explode(' ', $oNode->title);
+        foreach ($aTitles as $sTitlePart) {
+            $sTitle = helper::cleanSearchTag($oNode->title);
+            if (!array_key_exists($sTitle, $aText)) {
+                if (!in_array($sTitle, $aBlacklist)) {
+                    $aText[$sTitlePart] = 1;
                 }
             }
         }
 
         // cut up the category based on spaces and add the words if they are not allready there from the labels
-        $categories = explode(' ', Category::getCategoryName($node));
-        foreach ($categories as $category_part) {
-            $category_part = helper::cleanSearchTag($category_part);
-            if (!array_key_exists($category_part, $text_array)) {
-                if (!in_array($category_part, $blacklist)) {
-                    $text_array[$category_part] = 1;
+        $aCategories = explode(' ', Category::getCategoryName($oNode));
+        foreach ($aCategories as $sCategoryPart) {
+            $sCategoryPart = helper::cleanSearchTag($sCategoryPart);
+            if (!array_key_exists($sCategoryPart, $aText)) {
+                if (!in_array($sCategoryPart, $aBlacklist)) {
+                    $aText[$sCategoryPart] = 1;
                 }
             }
         }
+        
+        
+        // check if a label had a space, then it needs to be stored as 2 separate words with the score devided
+        foreach($aText as $sLabel => $iScore){
+            $iSpaces = substr_count($sLabel, ' ');
+            if($iSpaces == 1){
+                $iScore = $iScore / 2;
+                $aLabels = explode(' ',$sLabel);
+                $aKeys = array(0,1);
+                foreach($aKeys as $iKey){ // do the following for key 0 & 1
+                    if(isset($aLabels[$iKey])){
+                        if(array_key_exists($aLabels[$iKey], $aText)){
+                            $aText[$aLabels[$iKey]] = $aText[$aLabels[$iKey]] + $iScore;
+                        }else{
+                            $aText[$aLabels[$iKey]] = $iScore;
+                        }
+                    }                    
+                }
+                unset($aText[$sLabel]);
+            }
+        }
 
-        return $text_array;
+        return $aText;
     }
 
     /**

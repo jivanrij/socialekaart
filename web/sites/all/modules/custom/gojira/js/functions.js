@@ -167,6 +167,7 @@ function bindLabelButtons(selector) {
                 url: '/?q=ajax/unlikelabel&nid=' + nid + '&tid=' + tid,
                 type: 'POST',
                 success: function (data) {
+                    focusLocation(nid);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     somethingWrongMessage();
@@ -615,7 +616,9 @@ function bindAutocompleteAllTags(element_selector) {
                 // no space
                 if (event.keyCode == 32) {
                     if ('input.new_label' == element_selector) {
-                        event.preventDefault();
+                        if(hasWhiteSpace(this.value)){
+                            event.preventDefault();
+                        }
                     }
                 }
 
@@ -652,6 +655,11 @@ function bindAutocompleteAllTags(element_selector) {
             return false;
         }
     });
+}
+
+// check if the string has a whitespace
+function hasWhiteSpace(s) {
+  return /\s/g.test(s);
 }
 
 // gets the nid based on the lat & long in the search result
