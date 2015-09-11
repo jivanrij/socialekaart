@@ -45,6 +45,7 @@ include ('php/actions/checklocation.php');
 include ('php/actions/conditions.php');
 include ('php/actions/paymentconditions.php');
 include ('php/actions/tools.php');
+include ('php/actions/docu.php');
 include ('php/actions/configuration.php');
 include ('php/actions/employeedelete.php');
 include ('php/actions/employeeedit.php');

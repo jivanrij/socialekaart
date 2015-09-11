@@ -155,7 +155,7 @@ class Mailer {
         }
         $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
         $aInfo['from_name'] = 'SocialeKaart.care';
-        $aInfo['subject'] = t('Invoice SocialeKaart.care');
+        $aInfo['subject'] = t('Invoice SocialeKaart.care').$payment->increment;
         $aInfo['text'] = $sBody;
         $aInfo['to'][] = array(
             'email' => $send_to_address,
@@ -285,7 +285,7 @@ class Mailer {
     }
 
     /**
-     * Thie e-mail will be send when a user get's disabled due to a unsubscription
+     * Thie e-mail will be send when a user get's enabled due to a subscription
      * 
      * @param stdClass $user
      */
@@ -603,7 +603,7 @@ EOT;
     }
 
     /**
-     * Informs the user he has logged on to SocialeKaart for the first time through SSO from haweb 
+     * get's send to an account that has been activated by the admin through the backend tools page. Mosly used for users who register through the frontend, not HAweb.
      * 
      */
     public static function accountActivatedByAdmin($oUser) {
