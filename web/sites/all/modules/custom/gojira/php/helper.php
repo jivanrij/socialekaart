@@ -181,10 +181,6 @@ class helper {
         return $return;
     }
 
-    public static function cleanSearchTag($tag) {
-        return strtolower(preg_replace("/[^A-Za-z0-9 .]/", '', $tag));
-    }
-
     /**
      * Get's you the terms connected to the node
      * 

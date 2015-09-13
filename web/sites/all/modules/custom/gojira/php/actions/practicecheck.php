@@ -1,7 +1,6 @@
 <?php
 
 /**
- * This page generates a form to crud a employee
  *
  * @return string
  */

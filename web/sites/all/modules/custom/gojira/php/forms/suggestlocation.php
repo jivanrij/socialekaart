@@ -109,12 +109,19 @@ function gojira_suggestlocation_form_validate($form, &$form_state) {
             $aPossibleDoubles[$oResult->nid] = $oResult->title;
         }
     }
-
-    $_SESSION['bDoubleLocationWarning'] = false;
+    
+    
+    // todo: jri: has bugs
     if (count($aPossibleDoubles) > 0) {
-        $_SESSION['bDoubleLocationWarning'] = true;
-        $_SESSION['aPossibleDoubles'] = $aPossibleDoubles;
-        form_set_error('coordinates', t('There allready is one or more location(s) on this address. Can one of these be the same one? Click on them to see sore information or decide to add/change information on an existing location.'));
+        if(!isset($_SESSION['bDoubleLocationWarning']) || $_SESSION['bDoubleLocationWarning'] == 0){
+            $_SESSION['bDoubleLocationWarning'] = true;
+            $_SESSION['aPossibleDoubles'] = $aPossibleDoubles;
+            form_set_error('coordinates', t('There allready is one or more location(s) on this address. Can one of these be the same one? Click on them to see sore information or decide to add/change information on an existing location.'));
+        }else{
+            $_SESSION['bDoubleLocationWarning'] = 0;
+        }
+    }else{
+        $_SESSION['bDoubleLocationWarning'] = 0;
     }
 }
 

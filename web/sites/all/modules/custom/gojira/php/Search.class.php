@@ -17,6 +17,13 @@ class Search {
     public static $instance = null;
     public $toMuchResults = false;
 
+    /**
+     * Lists of characters thac will be replaced in the searchindex & search terms.
+     * We do this so a user can search with ë & e, and both will work
+     */
+    public static $aSpecialChars =             array('ë', 'ï', '\'', 'è', 'é', '-', 'û', '"', '&');
+    public static $aSpecialCharsReplacements = array('e', 'i', ''  , 'e', 'e', '' , 'u', '' , 'en');
+    
     public static function getInstance() {
         if (is_null(self::$instance)) {
             self::$instance = new Search();
@@ -312,7 +319,7 @@ EAT;
             // it's no city and checkcity is true add the label to the labels to search on
             // or checkcity is false, then always add the labels to search with
             if (($check_city && !Location::isKnownCity($label)) || !$check_city) {
-                $lowerlabels[] = helper::cleanSearchTag($label);
+                $lowerlabels[] = self::cleanSearchTag($label);
             }
         }
 
@@ -557,7 +564,7 @@ EOT;
      * @return id of the word row
      */
     private function addUpdateWordToindex($word) {
-        $word = strtolower(helper::cleanSearchTag($word));
+        $word = self::cleanSearchTag($word);
         if ($word != '') {
             $id = db_query("SELECT id FROM searchword WHERE word = '{$word}'")->fetchField();
             if (!$id) {
@@ -593,6 +600,7 @@ EOT;
             return array();
         }
 
+
         $aText = array();
         $aBlacklist = explode(',', variable_get('gojira_blacklist_search_words'));
 
@@ -604,7 +612,7 @@ EOT;
                 if (!in_array($aLabel, $aBlacklist)) {
                     $iLikes = Labels::getLikes($aLabel['tid'], $oNode->nid);
                     $oTerm = taxonomy_term_load($aLabel['tid']);
-                    $sTerm = helper::cleanSearchTag($oTerm->name);
+                    $sTerm = self::cleanSearchTag($oTerm->name);
                     for ($i = 0; $i <= $iLikes; $i++) {
                         $aText[$sTerm] = $iLikes + 1;
                     }
@@ -613,9 +621,10 @@ EOT;
         }
 
         // cut up the title based on spaces and add the words if they are not allready there from the labels
+        
         $aTitles = explode(' ', $oNode->title);
         foreach ($aTitles as $sTitlePart) {
-            $sTitle = helper::cleanSearchTag($oNode->title);
+            $sTitle = self::cleanSearchTag($oNode->title);
             if (!array_key_exists($sTitle, $aText)) {
                 if (!in_array($sTitle, $aBlacklist)) {
                     $aText[$sTitlePart] = 1;
@@ -626,7 +635,7 @@ EOT;
         // cut up the category based on spaces and add the words if they are not allready there from the labels
         $aCategories = explode(' ', Category::getCategoryName($oNode));
         foreach ($aCategories as $sCategoryPart) {
-            $sCategoryPart = helper::cleanSearchTag($sCategoryPart);
+            $sCategoryPart = self::cleanSearchTag($sCategoryPart);
             if (!array_key_exists($sCategoryPart, $aText)) {
                 if (!in_array($sCategoryPart, $aBlacklist)) {
                     $aText[$sCategoryPart] = 1;
@@ -654,56 +663,16 @@ EOT;
                 unset($aText[$sLabel]);
             }
         }
+        
+        // replace characters as ë with e
+//        foreach($aText as &$sText){
+//            str_replace(self::$aSpecialChars, self::$aSpecialCharsReplacements, $sText);
+//        }
 
         return $aText;
     }
 
-    /**
-     * Get's you all the location nodes
-     * 
-     * @return array of nodes
-     */
-//  public function getAllLocationNodes(){
-//
-//    set_time_limit(10000000);
-//    
-//    $location = $this->getCenterMap();
-//    $params[':x'] = $location->longitude;
-//    $params[':y'] = $location->latitude;
-//
-//    //$sql = "select nid from {node} where node.status = 1 and type = 'location'";
-//    
-//    $sql = "SELECT nid from {node} where type = 'location';";
-//    
-//    $nodes = array();
-//    $results = db_query($sql, $params);
-//    foreach($results as $result){
-//      $this->addLocationToResult($nodes, $result->nid);
-//    }
-//
-//    return $nodes;
-//  }
 
-    /**
-     * Get's all locations with a tag
-     * 
-     * @param string $tag
-     * @return locations
-     */
-//  public function getAllLocationsWithTag($tag) {
-//    set_time_limit(10000000);
-//
-//    $results = db_query("select node.nid from {node} join field_data_field_location_vocabulary on (field_data_field_location_vocabulary.entity_id = node.nid) join taxonomy_term_data on (taxonomy_term_data.tid = field_data_field_location_vocabulary.field_location_vocabulary_tid) where node.type = 'location' and taxonomy_term_data.name = '" . $tag . "'")->fetchAll();
-//    $nodes = array();
-//    foreach ($results as $result) {
-//      $result->score = 0;
-//      $result->distance = 0;
-//      $result->self = 0;
-//      $nodes[] = $result;
-//    }
-//    
-//    return $nodes;
-//  }
 
     /**
      * Gives you the correct Location object to base the center of the map on
@@ -755,34 +724,13 @@ EOT;
         }
         return false;
     }
-
-    /**
-     * Add a location to a result array with the related checks
-     * 
-     * @param array $nodes
-     * @param integer $nid
-     * @param boolean|null $personal
-     * @param integer|null $distance
-     */
-//  private function addLocationToResult(&$nodes, $nid, $distance = null) {
-//    $n = node_load($nid);
-//
-//    if(!is_null($distance)){
-//      $n->distance = $distance;
-//    }
-//    
-//    //if it's an imported location the visible field can be null, let's fill it with default
-//    $field = GojiraSettings::CONTENT_TYPE_SHOW_LOCATION_FIELD;
-//    $fieldData = $n->$field;
-//    if (count($fieldData) == 0) {
-//      $n->$field = array(LANGUAGE_NONE => array(0 => array('value' => 1)));
-//      node_save($n);
-//    }
-//    // check if the location is visible, TODO put in query
-//    $fieldData = $n->$field;
-//    if ($fieldData[LANGUAGE_NONE][0]['value'] == 1) {
-//      $n->distance = $result->distance; // TODO bug?
-//      $nodes[$nid] = $n;
-//    }
-//  }
+    
+    // cleans strings to be used as index words or search terms
+    private static function cleanSearchTag($tag) {
+        return strtolower(
+                preg_replace("/[^A-Za-z0-9 .]/", '', 
+                        str_replace(Search::$aSpecialChars, Search::$aSpecialCharsReplacements, $tag)
+                    )
+                );
+    }
 }
