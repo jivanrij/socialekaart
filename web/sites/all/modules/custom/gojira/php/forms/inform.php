@@ -8,6 +8,8 @@ function gojira_inform_form($form, &$form_state) {
     $options['wrong_coordinates'] = t('This location is shown on the wrong place.');
     $options['wrong_category'] = t('This location has the wrong category.');
     $options['incorrect_labels'] = t('I see some verry incorrect labels that need to be removed.');
+    $options['other_contact_adres'] = t('There is another contact adres.');
+    $options['other'] = t('A reason not listed here.');
     foreach ($options as $key => $option) {
         $select_options[$key] = $option;
     }
