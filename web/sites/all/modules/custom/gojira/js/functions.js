@@ -796,7 +796,7 @@ function bindGlobal() {
 
 }
 
-function bindLocationFinder() {
+function bindSuggestlocation(){
     jQuery('a.double_locs').click(function () {
         var nid = jQuery(this).attr('id').replace('double_loc_', '');
         jQuery.ajax({
@@ -804,15 +804,23 @@ function bindLocationFinder() {
             type: 'POST',
             dataType: 'json',
             success: function (data) {
-                jQuery('#shot_double_info').html('<p>' + data['sTitle'] + '<a href="/?q=inform&nid=' + data['iNode'] + '" title="Gegevens aanpassen">Gegevens aanpassen</a></p>');
+                jQuery('#show_double_info').html('<p><b>' + data['sTitle'] + '</b> uit ' + data['sCity'] + '<br /><i>Categorie:</i> ' + data['sCategory'] + '<br /><i>Labels:</i> ' + data['sLabels'] + '<br /><a href="/?loc=' + data['iNode'] + '" title="Locatie weergeven in ander window" target="_new">Weergeven</a><br /><br />' + data['sImproveLink'] + '</p>');
+                jQuery(window).trigger('resize');
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 somethingWrongMessage();
             }
         });
     });
+    
+    jQuery('#save_double_location').click(function(e){
+        e.preventDefault();
+        jQuery('input[name=save_double_location]').val('screwit');
+        jQuery('form#gojira-suggestlocation-form').submit();
+    });
+}
 
-
+function bindLocationFinder() {
     jQuery('#edit-field-address-streetnumber, #edit-field-address-city, #edit-field-address-street, #edit-field-address-postcode').change(function () {
 
         if ((jQuery('#edit-field-address-city').val().trim().length != 0) && (jQuery('#edit-field-address-streetnumber').val().trim().length != 0)

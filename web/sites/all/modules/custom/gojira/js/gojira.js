@@ -35,6 +35,7 @@ jQuery(function () {
 
         if (Drupal.settings.gojira.page == 'suggestlocation') {
             bindLocationFinder();
+            bindSuggestlocation();
         }
 
         if (Drupal.settings.gojira.page == 'locationedit' || Drupal.settings.gojira.page == 'unownedlocationedit') {

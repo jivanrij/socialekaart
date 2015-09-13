@@ -424,7 +424,6 @@ function gojira_cron() {
 }
 
 function gojira_form_alter(&$form, &$form_state, $form_id){
-
   if($form_id == 'user_pass_reset'){
     $form['actions']['submit']['#prefix'] = '<span class="gbutton rounded noshadow left">';
     $form['actions']['submit']['#suffix'] = '</span>';

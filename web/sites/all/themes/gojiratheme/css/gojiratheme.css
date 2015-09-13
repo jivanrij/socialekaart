@@ -1097,3 +1097,22 @@ input[type='text']{
 .admin_info, .admin_info a{
     color:red;
 }
+#doubles_wrapper{
+    width:100%;
+    overflow:hidden;
+}
+#doubles_wrapper #show_double_info{
+    width:50%;
+    float:left;
+}
+#doubles_wrapper #show_doubles{
+    width:50%;
+    float:left;
+}
+#doubles_wrapper #show_doubles a{
+    cursor: pointer;
+}
+#doubles_wrapper #show_doubles ul{
+    list-style: none;
+    padding-left:0px;
+}

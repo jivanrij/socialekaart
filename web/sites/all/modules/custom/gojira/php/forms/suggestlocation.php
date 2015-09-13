@@ -4,16 +4,15 @@
  * This form is the crud for the location nodes
  */
 function gojira_suggestlocation_form($form, &$form_state) {
-
     $form['info'] = array(
         '#markup' => '<p>' . t('If you know a location that is not know in this system, you can use this form to add it.') . '</p>',
     );
 
-    $form['coordinates'] = array(
-        '#title' => t('coordinates'),
+    // stores nothing, but is set to screwit if we allow the user to save a double location, then we can skip a validation part based on this value
+    $form['save_double_location'] = array(
+        '#title' => t('save_double_location'),
         '#type' => 'hidden',
-        '#default_value' => '0',
-        '#description' => t('Just a wrapper for the coordinates & double location validation.'),
+        '#default_value' => '0'
     );
 
     $form['title'] = array(
@@ -106,22 +105,21 @@ function gojira_suggestlocation_form_validate($form, &$form_state) {
     if ($location) {
         $rResults = db_query("select nid, title, X(point) as x, Y(point) as y from {node} where type = 'location' and status = 1 and X(point) = :longitude and Y(point) = :latitude", array(':longitude' => $location->longitude, ':latitude' => $location->latitude))->fetchAll();
         foreach ($rResults as $oResult) {
-            $aPossibleDoubles[$oResult->nid] = $oResult->title;
+            $oLocation = node_load($oResult->nid);
+            $sCategory = Category::getCategoryName($oLocation);
+            if ($sCategory != 'Huisarts') {
+                $aPossibleDoubles[$oResult->nid] = $oResult->title;
+            }
         }
     }
-    
-    
-    // todo: jri: has bugs
-    if (count($aPossibleDoubles) > 0) {
-        if(!isset($_SESSION['bDoubleLocationWarning']) || $_SESSION['bDoubleLocationWarning'] == 0){
-            $_SESSION['bDoubleLocationWarning'] = true;
-            $_SESSION['aPossibleDoubles'] = $aPossibleDoubles;
-            form_set_error('coordinates', t('There allready is one or more location(s) on this address. Can one of these be the same one? Click on them to see sore information or decide to add/change information on an existing location.'));
-        }else{
-            $_SESSION['bDoubleLocationWarning'] = 0;
+
+    if ($form['save_double_location']['#value'] !== 'screwit') {
+        if (!isset($_SESSION['messages']['error'])) {
+            if (count(DoubleLocationFormHelper::getInstance()->getDoubleLocations($form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#value'])) > 0) {
+                DoubleLocationFormHelper::getInstance()->bErrorShown = true;
+                form_set_error('coordinates', t('There allready is one or more location(s) on this address. Can one of these be the same one? Click on them to see sore information or decide to add/change information on an existing location.'));
+            }
         }
-    }else{
-        $_SESSION['bDoubleLocationWarning'] = 0;
     }
 }
 
@@ -206,4 +204,43 @@ function gojira_suggestlocation_form_submit($form, &$form_state) {
     }
 
     drupal_goto('suggestlocationthanks', array('query' => array('nid' => $iNode)));
+}
+
+class DoubleLocationFormHelper {
+
+    public static $instance = null;
+    public $aDoubleLocations = null;
+    public $bErrorShown = false;
+
+    public static function getInstance() {
+        if (is_null(self::$instance)) {
+            self::$instance = new DoubleLocationFormHelper();
+        }
+        return self::$instance;
+    }
+
+    public function getDoubleLocations($sCity, $sStreet, $sStreetnumber, $sPostcode) {
+
+        if (!is_array($this->aDoubleLocations)) {
+            $location = Location::getLocationForAddress(
+                            Location::formatAddress(
+                                    $sCity, $sStreet, $sStreetnumber, $sPostcode
+                            )
+            );
+
+            $this->aDoubleLocations = array();
+            if ($location) {
+                $rResults = db_query("select nid, title, X(point) as x, Y(point) as y from {node} where type = 'location' and status = 1 and X(point) = :longitude and Y(point) = :latitude", array(':longitude' => $location->longitude, ':latitude' => $location->latitude))->fetchAll();
+                foreach ($rResults as $oResult) {
+                    $oLocation = node_load($oResult->nid);
+                    $sCategory = Category::getCategoryName($oLocation);
+                    if ($sCategory != 'Huisarts') {
+                        $this->aDoubleLocations[$oResult->nid] = $oResult->title;
+                    }
+                }
+            }
+        }
+        return $this->aDoubleLocations;
+    }
+
 }

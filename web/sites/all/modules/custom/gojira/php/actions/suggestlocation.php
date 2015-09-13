@@ -18,15 +18,6 @@ function suggestlocation() {
   }
 
   drupal_add_js(array('gojira' => array('page' => 'suggestlocation')), 'setting');
-
-  // possible double locations on the one the user is saving, build up in the velidation of the form
-  $bDoubleLocationsWarning = false;
-  $aPossibleDoubles = array();
-  if($_SESSION['bDoubleLocationWarning'] == 1){
-      $_SESSION['bDoubleLocationWarning'] = 0;
-      $aPossibleDoubles = $_SESSION['aPossibleDoubles'];
-      $bDoubleLocationsWarning = true;
-  }
   
-  return theme('suggestlocation', array('fForm' => drupal_get_form('gojira_suggestlocation_form'), 'bDoubleLocationsWarning'=>$bDoubleLocationsWarning,'aPossibleDoubles'=>$aPossibleDoubles));
+  return theme('suggestlocation', array('fForm' => drupal_get_form('gojira_suggestlocation_form')));
 }
