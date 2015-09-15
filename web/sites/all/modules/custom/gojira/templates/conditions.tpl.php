@@ -1,7 +1,6 @@
-<h1><?php echo drupal_get_title(); ?></h1>
-<p>
+<div style="margin-top:5px;width:100%;height:500px;overflow-x:hidden; overflow-y: scroll;">
   <?php echo $output['txt']; ?>
-</p>
+</div>
 <?php if(array_key_exists('form', $output)): ?>
   <?php echo render($output['form']); ?>
 <?php endif; ?>

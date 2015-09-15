@@ -156,7 +156,7 @@ function gojira_register_form_submit($form, &$form_state) {
   
   Mailer::sendAccountNeedsValidation($user);
   
-  Mailer::subscribeToMailchimp($user->mail);
+//  Mailer::subscribeToMailchimp($user->mail);
   
   drupal_goto('registered');
 }

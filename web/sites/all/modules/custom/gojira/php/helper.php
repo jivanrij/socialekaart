@@ -166,14 +166,6 @@ class helper {
             $return[$result->term] = $result->term;
         }
 
-//    if(strlen($term) >= 3){
-//      $sql = "select field_address_city_value as city from {field_revision_field_address_city} where field_address_city_value like :term";
-//      $results = db_query($sql, array(':term'=>'%'.$term.'%'));
-//      foreach($results as $result){
-//        $return[$result->city] = strtolower($result->city);
-//      }
-//    }
-
         sort($return);
 
         $return = array_slice($return, 0, 15);
