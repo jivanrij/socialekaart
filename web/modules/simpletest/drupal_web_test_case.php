@@ -3755,7 +3755,8 @@ function simpletest_verbose($message, $original_file_directory = NULL, $test_cla
     $directory = $file_directory . '/simpletest/verbose';
     $writable = file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
     if ($writable && !file_exists($directory . '/.htaccess')) {
-      file_put_contents($directory . '/.htaccess', "<IfModule mod_expires.c>\nExpiresActive Off\n</IfModule>\n");
+        // GOJIRA SOCIALEKAART
+      //file_put_contents($directory . '/.htaccess', "<IfModule mod_expires.c>\nExpiresActive Off\n</IfModule>\n");
     }
     return $writable;
   }

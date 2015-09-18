@@ -455,11 +455,12 @@ function file_prepare_directory(&$directory, $options = FILE_MODIFY_PERMISSIONS)
  * Creates a .htaccess file in each Drupal files directory if it is missing.
  */
 function file_ensure_htaccess() {
-  file_create_htaccess('public://', FALSE);
-  if (variable_get('file_private_path', FALSE)) {
-    file_create_htaccess('private://', TRUE);
-  }
-  file_create_htaccess('temporary://', TRUE);
+    // GOJIRA SOCIALEKAART
+//  file_create_htaccess('public://', FALSE);
+//  if (variable_get('file_private_path', FALSE)) {
+//    file_create_htaccess('private://', TRUE);
+//  }
+//  file_create_htaccess('temporary://', TRUE);
 }
 
 /**
