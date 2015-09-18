@@ -1,5 +1,5 @@
 <?php
-if(user_access(helper::PERMISSION_HIDE_ADDS)){
+if(!user_access(helper::PERMISSION_HIDE_ADDS)){
 $node = Add::getRandomAdd();
 if($node){
   $url = helper::value($node, GojiraSettings::CONTENT_TYPE_ADD_URL_FIELD);

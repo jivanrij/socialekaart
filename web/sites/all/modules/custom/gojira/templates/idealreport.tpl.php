@@ -1,4 +1,4 @@
-<?php $aFields = array('id', 'uid', 'name', 'description', 'amount', 'gid', 'ideal_id', 'ideal_code', 'status', 'period_start', 'period_end', 'warning_send', 'warning_ended', 'increment', 'discount', 'tax', 'payed'); ?>
+<?php $aFields = array('id', 'uid', 'name', 'description', 'gid', 'ideal_id', 'ideal_code', 'status', 'period_start', 'period_end', 'warning_send', 'warning_ended', 'increment', 'discount', 'amount', 'tax', 'payed', 'callback_times', 'bank'); ?>
 <h1><?php echo drupal_get_title(); ?></h1>
 <table style="width:100%">
     <tr>

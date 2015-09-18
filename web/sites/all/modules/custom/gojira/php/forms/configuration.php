@@ -101,6 +101,12 @@ function gojira_configuration_form($form, &$form_state) {
         '#default_value' => variable_get('gojira_amount_calls_to_google', 1),
         '#description' => 'This is the amount of calls the system can do to google to get coordinates for locations.'
     );
+    $form['algemene_instellingen']['gojira_ideal_return_url'] = array(
+        '#title' => t('Return url of the iDeal payment'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('gojira_ideal_return_url', ''),
+        '#description' => 'Return url after a user has made a payment, must be absolute.'
+    );
     $form['algemene_instellingen']['mailadres_information_bcc'] = array(
         '#title' => t('User mails BCC E-mail address'),
         '#type' => 'textfield',
@@ -410,7 +416,7 @@ function gojira_configuration_form_submit($form, &$form_state) {
     variable_set('cron_check_subscriptions', $_POST['cron_check_subscriptions']);
     variable_set('cron_remove_unconditional_users', $_POST['cron_remove_unconditional_users']);
     variable_set('cron_restore_backup_locations', $_POST['cron_restore_backup_locations']);
-    
+    variable_set('gojira_ideal_return_url', $_POST['gojira_ideal_return_url']);
     
     drupal_set_message(t('Saved all the settings.'), 'status');
 }

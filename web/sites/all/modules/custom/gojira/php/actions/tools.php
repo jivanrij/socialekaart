@@ -66,8 +66,16 @@ function tools() {
         }
 
         if (isset($_GET['set_not_payed_group'])) {
-            Subscriptions::unsubscribe($_GET['set_not_payed_group']);
-            drupal_set_message(t('Unsubscribed group ' . $_GET['set_not_payed_group']), 'status');
+            
+            $payment = db_query("SELECT * FROM gojira_payments WHERE gid = ".$_GET['set_not_payed_group']." ORDER BY period_end DESC limit 1")->fetchObject();
+            
+            if($payment){
+                Subscriptions::unsubscribe($_GET['set_not_payed_group'], $payment);
+                drupal_set_message(t('Unsubscribed group ' . $_GET['set_not_payed_group']), 'status');
+            }else{
+                drupal_set_message('No payment info found for this group', 'status');
+            }
+            
             header('Location: /?q=admin/config/system/gojiratools');
             exit;
         }

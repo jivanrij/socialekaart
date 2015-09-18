@@ -84,6 +84,12 @@
             Als u een gebruiker aanmaakt moet u ook een e-mailadres opgeven zodat we deze gebruiker een login link kunnen sturen. Via deze link kan de gebruiker zijn/haar wachtwoord instellen. Ook als uw abonnement verloopt zal deze gebruiker een e-mail krijgen met de de boodschap dat hij/zij niet meer kan inloggen in het systeem.
         </p>
     </section>
+    <section>
+        <h1>Wat moet ik doen als er iets met de betaling van mijn abonnement verkeerd is gegaan?</h1>
+        <p class="accordion_content">
+            Heeft u nog wel een succesvolle betaling kunnen doen en ging er daarna iets mis? Zo ja, wacht nog 2 uur, binnen deze tijd zal uw betaling waarschijnlijk alsnog doorkomen. Als dit niet gebeurd of er ging iets anders mis neem dan contact met ons op via info@socialekaart.care.
+        </p>
+    </section>
     <p style="font-size:10px;">
         * = Deze functionaliteiten zijn door u te gebruiken als u beschikt over een abonnement.
     </p>

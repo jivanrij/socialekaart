@@ -13,11 +13,11 @@ class Haweb {
     public static function dublicateWarning($sMail) {
 
         $iUser = db_query("select uid from {users} where mail = '{$sMail}'")->fetchField();
-        
+
         $iDublicte = db_query("select haweb_sso_dublicate_warning_send from users where uid = " . $iUser)->fetchField();
-        
+
         if ($iDublicte == 0) {
-            watchdog('gojira', 'haweb_sso_dublicate_warning_send for user '.$iUser.' is 0 -> dublicateWarning(SENDING!)');
+            watchdog('gojira', 'haweb_sso_dublicate_warning_send for user ' . $iUser . ' is 0 -> dublicateWarning(SENDING!)');
             Mailer::sendDoubleAccountWarning($sMail);
             db_query("UPDATE `users` SET `haweb_sso_dublicate_warning_send`=1 WHERE uid=" . $iUser);
         }
@@ -31,6 +31,13 @@ class Haweb {
      * @param stdClass $account
      */
     public static function setNewSSOUser(&$account) {
+
+        $iFreePeriodeGiven = db_query("select count(id) from `gojira_payments` where uid = {$account->uid} and description = '" . GojiraSettings::IDEAL_FREE_PERIOD_DESCRIPTION . "'")->fetchField();
+        if ($iFreePeriodeGiven > 0) {
+            watchdog(GojiraSettings::WATCHDOG_HAWEB_SSO, 'user ' . $account->uid . ' allready has gotten a free period. Kill the setNewSSOUser rights/payments proces.');
+            return;
+        }
+
         $group = Group::createNewGroup($account, 1);
         $groupField = GojiraSettings::CONTENT_TYPE_GROUP_FIELD;
         $account->$groupField = array(LANGUAGE_NONE => array(0 => array('nid' => $group->nid)));
@@ -60,9 +67,8 @@ class Haweb {
         user_save($account);
 
         Subscriptions::setRolesForPayed($group, false);
-
         // add a payment log so the group will have a payed period of 3 months
-        $sql = "INSERT INTO `gojira_payments` (`uid`, `name`, `description`, `amount`, `gid`, `ideal_id`, `ideal_code`, `period_start`, `status`, `period_end`,`discount`,`tax`,`payed`) VALUES ({$account->uid}, '{$account->name}', 'Intro Period', 0, " . $group->nid . ", '0', '0', " . helper::getTime() . ", 1, " . strtotime("+3 months", helper::getTime()) . ",0,0,0)";
+        $sql = "INSERT INTO `gojira_payments` (`uid`, `name`, `description`, `amount`, `gid`, `ideal_id`, `ideal_code`, `period_start`, `status`, `period_end`,`discount`,`tax`,`payed`) VALUES ({$account->uid}, '{$account->name}', '" . GojiraSettings::IDEAL_FREE_PERIOD_DESCRIPTION . "', 0, " . $group->nid . ", '0', '0', " . helper::getTime() . ", 1, " . strtotime("+3 months", helper::getTime()) . ",0,0,0)";
         db_query($sql);
     }
 

@@ -12,6 +12,5 @@ function locationcheck(){
     drupal_add_js(array('gojira' => array('zoom' => GojiraSettings::MAP_ZOOMLEVEL_COUNTRY)), 'setting');
   }
   
-  $output['txt'] = t('You need to have a location to be able to use the system.');
-  return theme('locationcheck', array('output' => $output));
+  return theme('locationcheck', array());
 }

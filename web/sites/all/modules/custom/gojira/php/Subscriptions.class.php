@@ -67,7 +67,7 @@ class Subscriptions {
         $file_name = getcwd().'/../invoices/'.date('Ymdis') . '_' . $ideal_id . '.pdf';
 
         $info = self::getPaymentInfo($ideal_id);
-
+        
         $user = user_load($info->uid);
 
         $amount = $info->amount;
@@ -196,7 +196,7 @@ class Subscriptions {
                 %date%
             </div>
             <div id="about">
-                <b>Betreft:</b> Factuur voor Socialekaart.care abonnement
+                <b>Betreft:</b> Factuur voor Sociale Kaart abonnement
             </div>
             <div id="period">
                 <b>Periode:</b> %period_start% t/m %period_end%
@@ -207,7 +207,7 @@ class Subscriptions {
             <div class="table">
                 <table>
                     <tr>
-                        <td class="left">Jaarabonnement socialekaart.care</td>
+                        <td class="left">Jaarabonnement Sociale Kaart</td>
                         <td class="right">€ %amount%</td>
                     </tr>
                 </table>
@@ -294,6 +294,9 @@ EOT;
             $period_end,
             $invoice_number,
             $name), $html);
+        
+        echo $html;
+        
 
         $dompdf = new DOMPDF();
         $dompdf->load_html($html);
@@ -411,9 +414,17 @@ EOT;
     /**
      * Adds the payment to the payment log of gojira
      */
-    public static function addPaymentLog($uid, $amount, $description, $ideal_id, $ideal_code, $start_date, $end_date, $discount, $tax, $payed, $status = 0) {
+    public static function addPaymentLog($uid, $amount, $description, $ideal_id, $ideal_code, $start_date, $end_date, $discount, $tax, $payed, $status = 0, $bank) {
+        
+        foreach(func_get_args() as $sValue){
+            if(is_null($sValue)){
+                watchdog(WATCHDOG_CRITICAL,'addPaymentLog parameter missing. '.json_encode(func_get_args()));
+                throw new Exception('addPaymentLog parameter missing. '.json_encode(func_get_args()));
+            }
+        }
+        
         $user = user_load($uid);
-        $sql = "INSERT INTO `gojira_payments` (`uid`, `name`, `description`, `amount`, `gid`, `ideal_id`, `ideal_code`, `period_start`, `status`, `period_end`,`discount`,`tax`,`payed`) VALUES ({$uid}, '{$user->name}', '{$description}', " . str_replace(',', '.', $amount) . ", " . Group::getGroupId() . ", '{$ideal_id}', '{$ideal_code}', {$start_date}, $status, {$end_date},{$discount},{$tax},{$payed})";
+        $sql = "INSERT INTO `gojira_payments` (`uid`, `name`, `description`, `amount`, `gid`, `ideal_id`, `ideal_code`, `period_start`, `status`, `period_end`,`discount`,`tax`,`payed`,`bank`) VALUES ({$uid}, '{$user->name}', '{$description}', " . str_replace(',', '.', $amount) . ", " . Group::getGroupId($uid) . ", '{$ideal_id}', '{$ideal_code}', {$start_date}, $status, {$end_date},{$discount},{$tax},{$payed},'{$bank}')";
         db_query($sql);
     }
 
@@ -599,8 +610,8 @@ EOT;
         $aInfo['new_end'] = $tNewEnd;
         $aInfo['new_start'] = $tNewStart;
 
-        $sDescription = substr(helper::value($oUser, GojiraSettings::CONTENT_TYPE_USER_TITLE), 0, 40) . ' ' . Group::getGroupId() . ' ' . date('d-m', $tNewStart);
-
+        //$sDescription = substr(helper::value($oUser, GojiraSettings::CONTENT_TYPE_USER_TITLE), 0, 40) . ' ' . Group::getGroupId() . ' ' . date('d-m', $tNewStart);
+        $sDescription = 'SocialeKaartAbonnement';
         $aInfo['description'] = $sDescription;
 
         return $aInfo;

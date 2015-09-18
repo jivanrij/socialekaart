@@ -180,7 +180,7 @@ function gojira_css_alter(&$css) {
 }
 
 // boodstrap shizzle
-function gojira_init() {    
+function gojira_init() {
   global $user;
 
   if(!user_is_logged_in() && (helper::getIEVersion() == 8 OR helper::getIEVersion() == 9))
@@ -287,6 +287,7 @@ function gojira_init() {
         // user is allowed to be in these routes without a location
         $allowed_without_location = array(
             'ajax/showtutorial',
+            'ajax/checklocation',
             'conditions',
             'ajax/postcodesuggest',
             'locationcheck',

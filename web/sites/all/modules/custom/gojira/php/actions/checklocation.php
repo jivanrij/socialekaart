@@ -3,7 +3,7 @@
  * check is address exists via ajax
  */
 function checklocation() {
-   
+
   $location = Location::getLocationForAddress(Location::formatAddress($_POST['city'], $_POST['street'], $_POST['pcnumber'], $_POST['pc']));
   
   if ($location) {

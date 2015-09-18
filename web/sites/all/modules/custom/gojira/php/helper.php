@@ -113,9 +113,14 @@ class helper {
      * @return int
      */
     public static function getIEVersion() {
-        preg_match('/MSIE (.*?);/', $_SERVER['HTTP_USER_AGENT'], $matches);
+        $matches = 0;
+        if(isset($_SERVER['HTTP_USER_AGENT'])){
+            preg_match('/MSIE (.*?);/', $_SERVER['HTTP_USER_AGENT'], $matches);
+        }
         if (count($matches) < 2) {
-            preg_match('/Trident\/\d{1,2}.\d{1,2}; rv:([0-9]*)/', $_SERVER['HTTP_USER_AGENT'], $matches);
+            if(isset($_SERVER['HTTP_USER_AGENT'])){
+                preg_match('/Trident\/\d{1,2}.\d{1,2}; rv:([0-9]*)/', $_SERVER['HTTP_USER_AGENT'], $matches);
+            }
         }
         if (count($matches) > 1) {
             $version = $matches[1];

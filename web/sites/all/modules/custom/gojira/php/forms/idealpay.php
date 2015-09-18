@@ -27,7 +27,7 @@ function gojira_idealpay_form($form, &$form_state) {
         '#title' => t('Agree with payment conditions'),
         '#type' => 'checkbox',
         '#required' => true,
-        '#description' => t('You confirm that you are oke with the <a href="/paymentconditions" title="payment conditions" target="_new">payment conditions</a>.'),
+        '#description' => 'Ik ga akkoord met de <a href="/algemene-voorwaarden" title="algemene voorwaarden" target="_new">algemene voorwaarden</a>.',
     );
     
     $form['submit'] = array(
@@ -58,19 +58,19 @@ function gojira_idealpay_form_submit($form, &$form_state) {
         'Currency' => 'EUR',
         'Description' => $info['description'],
         'Bank' => $_POST['ideal_bank'],
-        'Return' => 'http://'.$_SERVER["SERVER_NAME"] . '/idealreturn'
+        'Return' => variable_get('gojira_ideal_return_url','no return url set')
     ));
     if ($url) {
         
         $transactionId = $qantani->GetLastTransactionId();
         $transactionCode = $qantani->GetLastTransactionCode();
 
-        Subscriptions::addPaymentLog($user->uid, $info['amount'], $info['description'], $transactionId, $transactionCode, $info['new_start'], $info['new_end'], $info['discount'], $info['tax'], $info['total']);
+        Subscriptions::addPaymentLog($user->uid, $info['amount'], $info['description'], $transactionId, $transactionCode, $info['new_start'], $info['new_end'], $info['discount'], $info['tax'], $info['total'], 0, $_POST['ideal_bank']);
         
         header('location: ' . $url);
         exit;
     } else {
-        watchdog(WATCHDOG_CRITICAL, 'ideal_id: '.$ideal_id.'<br /> lastError: '.$qantani->getLastError());
+        watchdog(GojiraSettings::WATCHDOG_IDEAL, 'failed to generate ideal url for '.$ideal_id.'<br /> lastError: '.$qantani->getLastError());
         drupal_goto('idealfail');
     }
 }

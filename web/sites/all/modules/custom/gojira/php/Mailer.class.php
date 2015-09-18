@@ -18,16 +18,16 @@ class Mailer {
 //            'html' => '<p>Example HTML content</p>',
 //            'text' => 'Example text content',
             'subject' => 'example subject',
-            'from_email' => 'jonathan@vanrij.org',
+//            'from_email' => 'jonathan@vanrij.org',
             'from_name' => 'Example Name',
-            'to' => array(
-                array(
-                    'email' => 'jonathan@vanrij.org',
-                    'name' => 'Recipient Name',
-                    'type' => 'to'
-                )
-            ),
-            'headers' => array('Reply-To' => 'jonathan@vanrij.org'),
+//            'to' => array(
+//                array(
+//                    'email' => 'jonathan@vanrij.org',
+//                    'name' => 'Recipient Name',
+//                    'type' => 'to'
+//                )
+//            ),
+            'headers' => array('Reply-To' => ''),
             'important' => false,
             'track_opens' => null,
             'track_clicks' => null,
@@ -37,7 +37,7 @@ class Mailer {
             'url_strip_qs' => null,
             'preserve_recipients' => null,
             'view_content_link' => null,
-            'bcc_address' => 'jonathan@vanrij.org',
+//            'bcc_address' => 'jonathan@vanrij.org',
             'tracking_domain' => null,
             'signing_domain' => null,
             'return_path_domain' => null,
@@ -49,28 +49,28 @@ class Mailer {
                     'content' => 'merge1 content'
                 )
             ),
-            'merge_vars' => array(
-                array(
-                    'rcpt' => 'jonathan@vanrij.org',
-                    'vars' => array(
-                        array(
-                            'name' => 'merge2',
-                            'content' => 'merge2 content'
-                        )
-                    )
-                )
-            ),
+//            'merge_vars' => array(
+//                array(
+//                    'rcpt' => 'jonathan@vanrij.org',
+//                    'vars' => array(
+//                        array(
+//                            'name' => 'merge2',
+//                            'content' => 'merge2 content'
+//                        )
+//                    )
+//                )
+//            ),
             'tags' => array('password-resets'),
 //            'subaccount' => 'customer-123',
-            'google_analytics_domains' => array('example.com'),
-            'google_analytics_campaign' => 'message.from_email@example.com',
-            'metadata' => array('website' => 'www.example.com'),
-            'recipient_metadata' => array(
-                array(
-                    'rcpt' => 'recipient.email@example.com',
-                    'values' => array('user_id' => 123456)
-                )
-            ),
+//            'google_analytics_domains' => array('example.com'),
+//            'google_analytics_campaign' => 'message.from_email@example.com',
+//            'metadata' => array('website' => 'www.example.com'),
+//            'recipient_metadata' => array(
+//                array(
+//                    'rcpt' => 'recipient.email@example.com',
+//                    'values' => array('user_id' => 123456)
+//                )
+//            ),
 //            'attachments' => array(
 //                array(
 //                    'type' => 'text/plain',
@@ -363,7 +363,7 @@ class Mailer {
         $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
         $aInfo['from_name'] = 'SocialeKaart.care';
         $aInfo['subject'] = t('Your subscription on SocialeKaart.care is expired');
-        $aInfo['text'] = $body;
+        $aInfo['html'] = $body;
         $aInfo['to'][] = array(
             'email' => $main_doctor->mail,
             'name' => $main_doctor->mail,
@@ -518,14 +518,17 @@ EOT;
         $sTitle = helper::value($oUser, GojiraSettings::CONTENT_TYPE_USER_TITLE);
         $sEmail = $oUser->mail;
         $sBig = helper::value($oUser, GojiraSettings::CONTENT_TYPE_BIG_FIELD);
-        $sAccount = 'http://socialekaart.care/user/' . $oUser->uid . '/edit';
+        $sAccount = 'https://socialekaart.care/user/' . $oUser->uid . '/edit';
+        
+        $sUrl = "https://socialekaart.care/admin/config/system/gojiraactivateuser";
         
         $sBody = <<<EOT
 Er is een account aangemaakt door {$sTitle}.<br />
-Van deze account moet het BIG nummer worden gecontrolleerd en dan kan hij geactiveerd worden.<br />
+Van deze account moet het BIG nummer worden gecontrolleerd en dan kan hij <a href="{$sUrl}">geactiveerd</a> worden.<br />
 De gebruiker heeft het BIG nummer: {$sBig}<br />
-Gebruikers backend: {$sAccount}<br />
-Accounts activeren pagina: <a href="https://socialekaart.care/admin/config/system/gojiraactivateuser">https://socialekaart.care/admin/config/system/gojiraactivateuser</a></br>
+<br />
+<a href="{$sAccount}">Gebruikers backend</a></br>
+<a href="{$sUrl}">Accounts activeren pagina</a></br>
 <a href="https://www.bigregister.nl/zoeken/zoekenopbignummer/default.aspx">BIG controle</a><br />
 EOT;
 

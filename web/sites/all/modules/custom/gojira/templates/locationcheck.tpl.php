@@ -1,6 +1,6 @@
 <p>
-  <?php echo $output['txt']; ?>
+  <?php if(count(Location::getUsersLocations(true))==0): ?>
+    <?php echo helper::getText('LOCATIONCHECK'); ?>
+  <?php endif; ?>
 </p>
-<p>
-  <?php if(count(Location::getUsersLocations(true))==0): echo t('To make use of the functionality you need to enter your own location.'); endif; ?>
-</p>
+

@@ -3,8 +3,9 @@ class GojiraSettings
 {
     // http://www.easy-ideal.com/api-implementeren/
     
-    // watchdog options
-    const WATCHDOG_IDEAL = 'ideal'; // a medical location of the location of the users
+    // watchdog options types
+    const WATCHDOG_IDEAL = 'iDeal';
+    const WATCHDOG_HAWEB_SSO = 'HAweb SSO';
     
     // CONTENT TYPES
     const CONTENT_TYPE_LOCATION = 'location'; // a medical location of the location of the users
@@ -70,12 +71,14 @@ class GojiraSettings
     const CONTENT_TYPE_GROUP_FIELD = 'field_gojira_group';
     
     // IMAGE STYLES
-    const IMAGE_STYLE_ADD_SMALL = 'add_small'; // 200 px wide
-    const IMAGE_STYLE_ADD_WIDE = 'add_wide'; // 300 px wide
+    const IMAGE_STYLE_ADD_SMALL = 'add_small';
+    const IMAGE_STYLE_ADD_WIDE = 'add_wide';
     
     const MAP_ZOOMLEVEL_REGION = 12;
     const MAP_ZOOMLEVEL_STREET = 16;
     const MAP_ZOOMLEVEL_COUNTRY = 8;
     
     const SYSTEM_WWW_ROOT_FOLDER = 'wwwroot';
+    
+    const IDEAL_FREE_PERIOD_DESCRIPTION = 'Free intro Period';
 }
