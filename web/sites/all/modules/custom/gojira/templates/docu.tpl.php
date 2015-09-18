@@ -66,6 +66,12 @@
 <p>
     Bij acceptatie van de algemene voorwaarden krijgt de gebruiker 3 maanden abonnements voordeel. In dit geval worden er geen activatie e-mails verstuurd naar de gebruikers van de groep.
 </p>
+<p>
+    Als iemand in zowel HAweb als in Sociale Kaart een account heeft met hetzelfde e-mailadres kan hij/zij niet inloggen via HAweb. In dit geval krijgt deze gebruiker op dit e-mailadres een e-mail met de uitleg wat de situatie is. Ook wordt er in de database een flag gezet op het veldje users.haweb_sso_dublicate_warning_send om aan te geven dat deze mail is verzonden. Met deze flag aan zal deze mail nooit meer verzonden worden.
+</p>
+<p>
+    Gebruikers krijgen via HAweb een account in Sociale Kaart. Deze account kan nog niet veel van zichzelf omdat deze nog niet de benodigde rechten heeft. Pas als de gebruiker akkoort gaat met de algemene voorwaarden wordt de account voorzien van alle benodigde rechten via rollen. Ook wordt er dan een flag gezet in de tabel users.haweb_sso_setup_done. Als deze flag gezet is zal het systeem nooit meer automatisch de user voorzien van deze rechten.
+</p>
 
 <h2>Verbetersuggesties & andere input van de gebruikers</h2>
 <p>
@@ -87,6 +93,16 @@
     <li>Wel een abonnement, met verlenging (kan geen extra jaar afsluiten).</li>
 </ul>
 Een doctor met abonnement zonder verlenging (een extra betaalde periode die nog niet is aangebroken maar wel betaald) kan 1x voor 1 extra jaar aan abonnement afsluiten. Hij kan dit maar 1x doen, dus voor maximaal 1 extra jaar. De teksten op de site die gerelateerd zijn aan de abonnementen verschillen ook per status van de groep/doctor.
+</p>
+<h2>
+    iDeal
+</h2>
+<p>
+    De gebruiker kan een abonnement afnemen door middel van een iDeal betaling. Deze betaling zal voltrokken worden zodra de gebruiker vanuit iDeal terugkomt op de idealreturn pagina. Als hier iets verkeerd gaat zal er nog vanuit iDeal een callback call gedaan worden. Hier schrijft Easy iDeal het volgende over: <i>Om er zeker van te zijn dat u de correcte betaalstatus ontvangt kunt u een callback URL (beginnend met http:// of https://) opgeven in de Qantani backoffice onder “Instellingen”. Deze URL wordt 5, 10, 30, 60, 120 en 300 minuten na het starten van de transactie aangeroepen. De Query string zal automatisch worden toegevoegd aan de door u opgegeven callback URL. De callback URL wordt alleen aangeroepen wanneer de betaalstatus definitief is.</i>. Er is een <a href='/?q=admin/config/system/idealreport' title="iDeal rapportage pagina">iDeal rapportage pagina</a> om de gegevens uit te lezen van alle transacties.
+</p>
+<h2>Nieuwsbrief</h2>
+<p>
+    Bij het akkoort gaan met de Algemene Voorwaarden krijgt de gebruiker ook de mogelijkheid om zich te abonneren op de Mailchimp nieuwsbrief. Daarnaast is er een registratie formulier op de /nieuwsbrief pagina. Verder zit alles in Mailchimp.
 </p>
 <style>
     h2{

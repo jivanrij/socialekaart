@@ -1,6 +1,9 @@
 <?php
 
 /*
+ * 
+ * ALTER TABLE `gojira_payments` ADD COLUMN `callback_times` INT(11) NOT NULL DEFAULT '0' COMMENT 'Amount of times the callback was used for this payment. Max is 6 times after 5, 10, 30, 60, 120 and 300 minutes.' AFTER `warning_send`;
+ * 
  * STATUS DEMO
 Setting to change with new releases:
 25/07/2015 Enable the token & auto_login modules
@@ -86,6 +89,7 @@ include ('php/actions/idealpay.php');
 include ('php/actions/idealcallback.php');
 include ('php/actions/idealsuccess.php');
 include ('php/actions/idealfail.php');
+include ('php/actions/idealreport.php');
 include ('php/actions/setfavorite.php');
 include ('php/actions/settings.php');
 include ('php/actions/settings_thanks.php');

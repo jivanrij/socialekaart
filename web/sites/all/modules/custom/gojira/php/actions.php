@@ -32,6 +32,7 @@ function gojira_theme() {
 //      'gojirareport_location_by_tag' => array('template' => 'templates/gojirareport_location_by_tag'),
 //      'gojirareport_location_by_category' => array('template' => 'templates/gojirareport_location_by_category'),
       'tools' => array('template' => 'templates/tools'),
+      'idealreport' => array('template' => 'templates/idealreport'),
       'docu' => array('template' => 'templates/docu'),
       'configuration' => array('template' => 'templates/configuration'),
       'ownlist' => array('template' => 'templates/ownlist'),
@@ -123,6 +124,7 @@ function gojira_menu() {
   
   // ADMIN
   $items['admin/config/system/docu'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'docu', 'title' => t('Gojira documentation'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Documentation of Gojira.'));
+  $items['admin/config/system/idealreport'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'idealreport', 'title' => t('Gojira ideal report'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Report of the payments'));
   $items['admin/config/system/gojiratools'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'tools', 'title' => t('Gojira tools'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Several tools for Gojira.'));
   $items['admin/config/system/gojiraconfiguration'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'configuration', 'title' => t('Gojira configuration'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Several configurations for Gojira.'));
   $items['admin/config/system/gojiraactivateuser'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'activateuser', 'title' => t('Gojira activate user'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Activate a user trough this form.'));

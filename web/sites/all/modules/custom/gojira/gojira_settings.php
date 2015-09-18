@@ -3,6 +3,9 @@ class GojiraSettings
 {
     // http://www.easy-ideal.com/api-implementeren/
     
+    // watchdog options
+    const WATCHDOG_IDEAL = 'ideal'; // a medical location of the location of the users
+    
     // CONTENT TYPES
     const CONTENT_TYPE_LOCATION = 'location'; // a medical location of the location of the users
     const CONTENT_TYPE_TEXT = 'text'; // node holding text usable by the system

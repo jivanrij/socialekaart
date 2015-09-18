@@ -11,51 +11,52 @@ function idealreturn() {
 //Een Salt. Dit is een willekeurig nummer tussen de 10000 en 999999
 //Een checksum. Deze bestaat uit Transactie ID + Transactie Code + Status + Salt
 
-
     if (isset($_GET['id']) && isset($_GET['status']) && isset($_GET['salt']) && isset($_GET['checksum'])) {
-        $status = false;
-        $details = false;
-        $info = false;
-        $qantani = Qantani::CreateInstance(variable_get('IDEAL_MERCHANT_ID'), variable_get('IDEAL_MERCHANT_KEY'), variable_get('IDEAL_MERCHANT_SECRET'));
-        
-        $info = db_query("SELECT ideal_id, ideal_code, gid, uid FROM {gojira_payments} WHERE ideal_id = :id", array(':id' => $_GET['id']))->fetchObject();
-        if ($info) {
-            
-            $status = $qantani->getPaymentStatus($info->ideal_code);
+        $bStatus = false;
+        $bDetails = false;
+        $oInfo = null;
+        $oQantani = Qantani::CreateInstance(variable_get('IDEAL_MERCHANT_ID'), variable_get('IDEAL_MERCHANT_KEY'), variable_get('IDEAL_MERCHANT_SECRET'));
 
-            $details = $qantani->getTransactionStatus(
+        $oInfo = db_query("SELECT ideal_id, ideal_code, gid, uid FROM {gojira_payments} WHERE ideal_id = :id", array(':id' => $_GET['id']))->fetchObject();
+        if ($oInfo) {
+            $bStatus = $oQantani->getPaymentStatus($oInfo->ideal_code);
+            $bDetails = $oQantani->getTransactionStatus(
                     array(
-                        'TransactionID' => $info->ideal_id,
-                        'TransactionCode' => $info->ideal_code
+                        'TransactionID' => $oInfo->ideal_id,
+                        'TransactionCode' => $oInfo->ideal_code
                     )
             );
-        }
-
-        if ($status && $details && $info) {
-//            201400005
             
-            $lowest_increment = date('Y').'00001'; // get the lowest possible increment for this year
-            
-            $increment = db_query("SELECT increment FROM gojira_payments ORDER BY increment DESC")->fetchField();
-            
-            if($lowest_increment > $increment){ // is the last increment is lower then the lowest possible this must be the first of the year, use the lowest possible
-                $increment = $lowest_increment;
-            }else{
-                $increment++; // increase the increment: 201500009 to 201500010
+            if(!$bStatus){
+                watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal return: payment status of gojira_payments.id ' . $_GET['id'] . 'is false');
+                drupal_goto('idealfail');
+                exit;
             }
             
-            db_query("UPDATE {gojira_payments} SET `status`=1, `increment`=:increment WHERE `ideal_id`=:id AND `ideal_code`=:code ", array(':id' => $info->ideal_id, ':code' => $info->ideal_code,'increment'=>$increment));
-            Subscriptions::subscribe($info->ideal_id);
-            header('Location: /?q=idealsuccess&id='.$_GET['id']);
-            exit;
+            if ($bStatus && $bDetails) {
+//            201400005
+                $iLowestIncrement = date('Y') . '00001'; // get the lowest possible increment for this year
+                $iIncrement = db_query("SELECT increment FROM gojira_payments ORDER BY increment DESC")->fetchField();
+                if ($iLowestIncrement > $iIncrement) { // is the last increment is lower then the lowest possible this must be the first of the year, use the lowest possible
+                    $iIncrement = $iLowestIncrement;
+                } else {
+                    $iIncrement++; // increase the increment: 201500009 to 201500010
+                }
+                db_query("UPDATE {gojira_payments} SET `status`=1, `increment`=:increment WHERE `ideal_id`=:id AND `ideal_code`=:code ", array(':id' => $oInfo->ideal_id, ':code' => $info->ideal_code, ':increment' => $iIncrement));
+                Subscriptions::subscribe($oInfo->ideal_id);
+                header('Location: /idealsuccess?id=' . $_GET['id']);
+                exit;
+            } else {
+                watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal callback: payment fail ideal_id: ' . $_GET['id'] . '<br /> lastError: ' . $oQantani->getLastError());
+                db_query("UPDATE {gojira_payments} SET `status`=2 WHERE `ideal_id`=:id ", array(':id' => $_GET['id']));
+                
+            }
         } else {
-            watchdog(WATCHDOG_CRITICAL, 'payment fail ideal_id: ' . $_GET['id'] . '<br /> lastError: ' . $qantani->getLastError());
-            db_query("UPDATE {gojira_payments} SET `status`=2 WHERE `ideal_id`=:id ", array(':id' => $_GET['id']));
-            drupal_goto('idealfail');
+            watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal return: unable to find payment info, no valid ideal_id given: ' . $_GET['id']);
+            exit;
         }
     }
-
-
-
-    return theme('idealreturn', array());
+    watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal return: missing ideal information');
+    drupal_goto('idealfail');
+    exit;
 }
