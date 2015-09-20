@@ -75,8 +75,7 @@
 </p>
 <p>
   If you push this button you will backup all the locations (with node.exported = 0) into the practices_backup table.<br />
-  It will backup max 20.000 locations a time.<br />
-  This can take up to 15 minutes max.
+  It will backup max 200 locations a time.<br />
 </p>
 <form id="backup_practices" method="POST" action="/?q=admin/config/system/gojiratools&backup_practices=on">
   <input class="form-submit" type="submit" value="Make Backup" />

@@ -7,7 +7,7 @@ function gojirareport_location_by_tag(){
     $tag = $_GET['tag'];
   }
   
-  $result = db_query("select node.nid, node.title from {node} join field_data_field_location_vocabulary on (field_data_field_location_vocabulary.entity_id = node.nid) join taxonomy_term_data on (taxonomy_term_data.tid = field_data_field_location_vocabulary.field_location_vocabulary_tid) where node.type = 'location' and taxonomy_term_data.name = '".$tag."'")->fetchAll();
+  $result = db_query("select node.nid, node.title from {node} join field_data_field_location_labels on (field_data_field_location_labels.entity_id = node.nid) join taxonomy_term_data on (taxonomy_term_data.tid = field_data_field_location_labels.field_location_labels_tid) where node.type = 'location' and taxonomy_term_data.name = '".$tag."'")->fetchAll();
   
   $nodes = array();
   foreach ($result as $node) {

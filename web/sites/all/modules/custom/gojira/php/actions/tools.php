@@ -95,7 +95,7 @@ function tools() {
         }
 
         if (isset($_GET['restore_backup'])) {
-            helper::restoreBackup(20000, false);
+            helper::restoreBackup(200, false);
 //            $rLocations = db_query("select id, source, title, telephone, city, street, number, postcode, category, email, longitude, latitude, url, labels from practices_backup where import_it = 1 limit 20000");
 //            foreach ($rLocations as $o) {
 //                $aLabels = explode('|', $o->labels);
@@ -252,9 +252,9 @@ EOT;
 //
 //            if (count($labels) > 0) {
 //                foreach ($locations as $location) {
-//                    $location->field_location_vocabulary[LANGUAGE_NONE] = array();
+//                    $location->field_location_labels[LANGUAGE_NONE] = array();
 //                    foreach ($labels_to_add as $tid => $clean_label) {
-//                        $location->field_location_vocabulary[LANGUAGE_NONE][count($location->field_location_vocabulary[LANGUAGE_NONE])]['tid'] = $tid;
+//                        $location->field_location_labels[LANGUAGE_NONE][count($location->field_location_labels[LANGUAGE_NONE])]['tid'] = $tid;
 //                    }
 //                    node_save($location);
 //                    Search::getInstance()->updateSearchIndex($location->nid);

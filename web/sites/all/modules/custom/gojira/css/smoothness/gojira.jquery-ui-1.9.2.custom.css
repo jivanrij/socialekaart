@@ -1,6 +1,6 @@
 /*
 ul.ul_gojirasearch_search_term   -> search form label autosuggest
-ul.ul_field_location_vocabulary -> suggest & edit location labels autosuggest
+ul.ul_field_location_labels -> suggest & edit location labels autosuggest
 ul.ul.ul_inputnew_label -> add new label
 */
 
@@ -49,7 +49,7 @@ ul.ul_gojirasearch_search_term{
 }
 
 /* edit location / suggest location labels*/
-ul.ul_field_location_vocabulary{
+ul.ul_field_location_labels{
     border-style: solid !important;
     border-color: white !important;
     border-width: 1px !important;
@@ -75,7 +75,7 @@ ul.ul_inputnew_label{
 }
 
 /* change labels of location in change page */
-ul.ul_inputnamefield_location_vocabulary{
+ul.ul_inputnamefield_location_labels{
     border-style: solid !important;
     border-color: white !important;
     border-width: 1px !important;

@@ -24,7 +24,7 @@ class Labels {
         // get the original terms of the object
         if (isset($term['#object'])) {
             $vocabulairyLoaded = $term['#object'];
-            $vocabulairyLoaded = $vocabulairyLoaded->field_location_vocabulary;
+            $vocabulairyLoaded = $vocabulairyLoaded->field_location_labels;
             foreach ($vocabulairyLoaded['und'] as $term) {
                 $terms[$term['taxonomy_term']->tid] = $term['taxonomy_term']->name;
             }
@@ -211,16 +211,16 @@ EAT;
                 $label = self::prepairLabel($label);
                 $tid = self::saveLabel($label);
 
-                if (!isset($node->field_location_vocabulary) || !isset($node->field_location_vocabulary[LANGUAGE_NONE])) {
-                    $node->field_location_vocabulary[LANGUAGE_NONE] = array();
+                if (!isset($node->field_location_labels) || !isset($node->field_location_labels[LANGUAGE_NONE])) {
+                    $node->field_location_labels[LANGUAGE_NONE] = array();
                 }
 
-                foreach ($node->field_location_vocabulary[LANGUAGE_NONE] as $node_label) {
+                foreach ($node->field_location_labels[LANGUAGE_NONE] as $node_label) {
                     if ($node_label['tid'] == $tid) {
                         continue 2;
                     }
                 }
-                $node->field_location_vocabulary[LANGUAGE_NONE][count($node->field_location_vocabulary[LANGUAGE_NONE])]['tid'] = $tid;
+                $node->field_location_labels[LANGUAGE_NONE][count($node->field_location_labels[LANGUAGE_NONE])]['tid'] = $tid;
                 node_save($node);
             }
         }
@@ -249,16 +249,16 @@ EAT;
             $sLabel = self::prepairLabel($sLabel);
             $iTid = self::saveLabel($sLabel);
 
-            if (!isset($oNode->field_location_vocabulary) || !isset($oNode->field_location_vocabulary[LANGUAGE_NONE])) {
-                $oNode->field_location_vocabulary[LANGUAGE_NONE] = array();
+            if (!isset($oNode->field_location_labels) || !isset($oNode->field_location_labels[LANGUAGE_NONE])) {
+                $oNode->field_location_labels[LANGUAGE_NONE] = array();
             }
 
-            foreach ($oNode->field_location_vocabulary[LANGUAGE_NONE] as $aNodeLabel) {
+            foreach ($oNode->field_location_labels[LANGUAGE_NONE] as $aNodeLabel) {
                 if ($aNodeLabel['tid'] == $iTid) {
                     continue 2;
                 }
             }
-            $oNode->field_location_vocabulary[LANGUAGE_NONE][count($oNode->field_location_vocabulary[LANGUAGE_NONE])]['tid'] = $iTid;
+            $oNode->field_location_labels[LANGUAGE_NONE][count($oNode->field_location_labels[LANGUAGE_NONE])]['tid'] = $iTid;
             node_save($oNode);
         }
 

@@ -66,6 +66,9 @@ class helper {
         $rLocations = db_query("select id, source, title, telephone, city, street, number, postcode, category, email, longitude, latitude, url, labels from practices_backup where import_it = 1 limit {$amount}");
         foreach ($rLocations as $o) {
             $aLabels = explode('|', $o->labels);
+            if(!$aLabels){
+                $aLabels = array();
+            }
             Importer::restoreLocationFromBackup($o->source, $o->title, $o->telephone, $o->city, $o->street, $o->number, $o->postcode, $o->category, $o->email, $o->longitude, $o->latitude, $o->url, $aLabels, $o->id);
         }
         if(!$cron){
@@ -185,7 +188,7 @@ class helper {
      * @return array
      */
     public static function getTermsOfNode($nid) {
-        $sql = "select taxonomy_term_data.name as name from taxonomy_term_data where tid in (select field_location_vocabulary_tid from field_data_field_location_vocabulary where bundle = '" . GojiraSettings::CONTENT_TYPE_LOCATION . "' and entity_id = :nid)";
+        $sql = "select taxonomy_term_data.name as name from taxonomy_term_data where tid in (select field_location_labels_tid from field_data_field_location_labels where bundle = '" . GojiraSettings::CONTENT_TYPE_LOCATION . "' and entity_id = :nid)";
 
         $results = db_query($sql, array(':nid' => $nid));
         $return = array();

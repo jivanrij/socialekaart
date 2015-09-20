@@ -30,7 +30,7 @@ class GojiraSettings
     const CONTENT_TYPE_FAX_FIELD = 'field_fax';
     const CONTENT_TYPE_NOTE_FIELD = 'field_note';
     const CONTENT_TYPE_SHOW_LOCATION_FIELD = 'field_visible_to_other_user'; // other users can't see this locations
-    const CONTENT_TYPE_LOCATION_VOCABULARY_FIELD = 'field_location_vocabulary';
+    const CONTENT_TYPE_LOCATION_VOCABULARY_FIELD = 'field_location_labels';
     const CONTENT_TYPE_MODERATED_STATUS_FIELD = 'field_moderated_status';
     const CONTENT_TYPE_URL_FIELD = 'field_url';
     const CONTENT_TYPE_CATEGORY_FIELD = 'field_category';

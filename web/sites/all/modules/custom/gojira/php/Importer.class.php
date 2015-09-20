@@ -384,7 +384,7 @@ class Importer {
             $node->field_address_postcode = array('und' => array(0 => array('value' => $postcode)));
             $node->field_visible_to_other_user = array('und' => array(0 => array('value' => 1)));
             $node->field_category[LANGUAGE_NONE][0]['nid'] = $category_nid;
-            //$node->field_location_vocabulary[LANGUAGE_NONE][0]['tid'] = $label_tid;
+            //$node->field_location_labels[LANGUAGE_NONE][0]['tid'] = $label_tid;
             // save node
             node_save($node);
 
@@ -443,7 +443,7 @@ class Importer {
             $node->field_address_postcode = array('und' => array(0 => array('value' => $postcode)));
             $node->field_visible_to_other_user = array('und' => array(0 => array('value' => 1)));
             $node->field_category[LANGUAGE_NONE][0]['nid'] = $category_nid;
-            //$node->field_location_vocabulary[LANGUAGE_NONE][0]['tid'] = $label_tid;
+            //$node->field_location_labels[LANGUAGE_NONE][0]['tid'] = $label_tid;
             // save node
             node_save($node);
 
@@ -557,7 +557,7 @@ class Importer {
             db_query('DELETE FROM `taxonomy_term_data` WHERE `tid`>0');
             db_query('DELETE FROM `taxonomy_term_hierarchy` WHERE  `tid`>0');
             // set all adhocdata locations to be imported again
-            db_query('UPDATE `adhocdata_addresses` SET `nid`=NULL, `imported`=0, `double`=0 WHERE  `id`>0');
+//            db_query('UPDATE `adhocdata_addresses` SET `nid`=NULL, `imported`=0, `double`=0 WHERE  `id`>0');
         }
     }
 

@@ -200,6 +200,7 @@ function gojira_suggestlocation_form_submit($form, &$form_state) {
         Mailer::locationWithoutCoordinatesAdded($node);
         $iNode = 0;
     } else {
+        Location::storeLocatioInNode($location, $iNode);
         drupal_set_message(t('Location successfully suggested.'), 'status');
     }
 

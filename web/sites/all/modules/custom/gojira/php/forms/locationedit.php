@@ -200,6 +200,7 @@ function gojira_locationedit_form_submit($form, &$form_state) {
         node_save($node);
         Mailer::locationWithoutCoordinatesAdded($node);
     }else{
+        Location::storeLocatioInNode($location, $node->nid);
         drupal_set_message(t('Practice information successfully stored.'), 'status');
     }
 

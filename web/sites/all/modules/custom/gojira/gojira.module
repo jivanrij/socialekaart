@@ -404,7 +404,7 @@ function gojira_user_login(&$edit, $account) {
 function gojira_cron() {
   if(variable_get('cron_remove_unlinked_tax_terms')){
     /** removes all the not linked taxonomy terms **/
-    $result = db_query("select tid, name from {taxonomy_term_data} where tid not in (select tid from group_location_term) and tid not in (select field_location_vocabulary_tid from field_data_field_location_vocabulary)");
+    $result = db_query("select tid, name from {taxonomy_term_data} where tid not in (select tid from group_location_term) and tid not in (select field_location_labels_tid from field_data_field_location_labels)");
     foreach($result as $row){
       taxonomy_term_delete($row->tid);
     }
