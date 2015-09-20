@@ -1,17 +1,17 @@
 <?php
+
 /**
-ALTER TABLE `node` ADD COLUMN `point` POINT NULL DEFAULT NULL COMMENT 'the coordinates of the location' AFTER `source`;
+  ALTER TABLE `node` ADD COLUMN `point` POINT NULL DEFAULT NULL COMMENT 'the coordinates of the location' AFTER `source`;
 
-UPDATE `node` 
-SET `point`= GeomFromText(
-	CONCAT(
-	CONCAT(
-	CONCAT(
-	CONCAT(
-	  'POINT(',
-	  node.coordinates_x),' '), node.coordinates_y), ')')) WHERE  `nid`>0 and node.type = 'location';
+  UPDATE `node`
+  SET `point`= GeomFromText(
+  CONCAT(
+  CONCAT(
+  CONCAT(
+  CONCAT(
+  'POINT(',
+  node.coordinates_x),' '), node.coordinates_y), ')')) WHERE  `nid`>0 and node.type = 'location';
  */
-
 class Search {
 
     public static $instance = null;
@@ -21,9 +21,9 @@ class Search {
      * Lists of characters thac will be replaced in the searchindex & search terms.
      * We do this so a user can search with ë & e, and both will work
      */
-    public static $aSpecialChars =             array('ë', 'ï', '\'', 'è', 'é', '-', 'û', '"', '&');
-    public static $aSpecialCharsReplacements = array('e', 'i', ''  , 'e', 'e', '' , 'u', '' , 'en');
-    
+    public static $aSpecialChars = array('ë', 'ï', '\'', 'è', 'é', '-', 'û', '"', '&');
+    public static $aSpecialCharsReplacements = array('e', 'i', '', 'e', 'e', '', 'u', '', 'en');
+
     public static function getInstance() {
         if (is_null(self::$instance)) {
             self::$instance = new Search();
@@ -66,19 +66,19 @@ class Search {
                 $h .= '</p>';
                 $h .= '<ul class="page_0 rl">';
                 foreach ($output['searchResults'] as $result) {
-                    
-  // used array keys, made them shorter for load speed
-  // d distance
-  // s score
-  // n nid
-  // x self
-  // t title
-  // lo longitude
-  // la latutude
-  // c count_merged
-  // m merged
-  // h merged_html
-                    
+
+                    // used array keys, made them shorter for load speed
+                    // d distance
+                    // s score
+                    // n nid
+                    // x self
+                    // t title
+                    // lo longitude
+                    // la latutude
+                    // c count_merged
+                    // m merged
+                    // h merged_html
+
                     if ($result['x']) {
                         continue;
                     }
@@ -231,7 +231,7 @@ EAT;
             $email = '<a mailto="' . $email . '" id="mailto">' . $email . '</a><br />';
         }
 
-        
+
         $oCurrentLocation = Location::getCurrentLocationObjectOfUser();
         $favorites = '';
         if (Favorite::getInstance()->isFavorite($foundNode->nid, $oCurrentLocation->nid)) {
@@ -296,7 +296,7 @@ EAT;
      * @param array $labels
      */
     public function doSearch($labels, $check_city = true, $force_global = false, $force_favorites = false) {
-        
+
         $found = array();
         $foundNodes = array();
 
@@ -413,19 +413,19 @@ EAT;
         } elseif (variable_get('gojira_search_in', 'all') == 'spider_gojira') {
             $filter = " AND (node.source = 'spider' OR node.source = 'gojira') ";
         }
-        
+
         $limit = variable_get('SEARCH_MAX_RESULT_AMOUNT') + 1; // let's add one to the result, so we can check if we have more results the the max, afterwards remove it
         // query get's all the nodes in radius, maybe only from favorites, but surly visible, and filters them on the nodes with the related tags
 
-$iMinLongitude = ($location->longitude-($distance*2));
-$iMaxLongitude = ($location->longitude+($distance*2));
-$iMinLatitude = ($location->latitude-$distance);
-$iMaxLatitude = ($location->latitude+$distance);
+        $iMinLongitude = ($location->longitude - ($distance * 2));
+        $iMaxLongitude = ($location->longitude + ($distance * 2));
+        $iMinLatitude = ($location->latitude - $distance);
+        $iMaxLatitude = ($location->latitude + $distance);
 
-    $sql_max_distance = " AND (X(point) BETWEEN {$iMinLongitude} AND {$iMaxLongitude} AND Y(point) BETWEEN {$iMinLatitude} AND {$iMaxLatitude}) ";
-    $sDistanceField = "((ACOS(SIN({$location->latitude} * PI() / 180) * SIN(Y(point) * PI() / 180) + COS({$location->latitude} * PI() / 180) * COS(Y(point) * PI() / 180) * COS(({$location->longitude} - (point)) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) as distance ";
+        $sql_max_distance = " AND (X(point) BETWEEN {$iMinLongitude} AND {$iMaxLongitude} AND Y(point) BETWEEN {$iMinLatitude} AND {$iMaxLatitude}) ";
+        $sDistanceField = "((ACOS(SIN({$location->latitude} * PI() / 180) * SIN(Y(point) * PI() / 180) + COS({$location->latitude} * PI() / 180) * COS(Y(point) * PI() / 180) * COS(({$location->longitude} - (point)) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) as distance ";
 
-        
+
         $sql = <<<EOT
 SELECT 
 node.nid, node.title,
@@ -448,7 +448,7 @@ EOT;
         $counter = 0;
         $resultNodes = array();
         foreach ($results as $result) {
-            
+
             $distance = $result->distance;
             $score = $result->score;
 
@@ -600,28 +600,28 @@ EOT;
             return array();
         }
 
-
         $aText = array();
         $aBlacklist = explode(',', variable_get('gojira_blacklist_search_words'));
 
         // add the labels to the search, let the labels with more likes weight more
-        $sField = GojiraSettings::CONTENT_TYPE_LOCATION_VOCABULARY_FIELD;
-        $aField = $oNode->$sField;
-        if (array_key_exists(LANGUAGE_NONE, $aField)) {
-            foreach ($aField[LANGUAGE_NONE] as $aLabel) {
-                if (!in_array($aLabel, $aBlacklist)) {
-                    $iLikes = Labels::getLikes($aLabel['tid'], $oNode->nid);
-                    $oTerm = taxonomy_term_load($aLabel['tid']);
-                    $sTerm = self::cleanSearchTag($oTerm->name);
-                    for ($i = 0; $i <= $iLikes; $i++) {
-                        $aText[$sTerm] = $iLikes + 1;
+        if (isset($oNode->field_location_labels)) {
+            $aField = $oNode->field_location_labels;
+            if (array_key_exists(LANGUAGE_NONE, $aField)) {
+                foreach ($aField[LANGUAGE_NONE] as $aLabel) {
+                    if (!in_array($aLabel, $aBlacklist)) {
+                        $iLikes = Labels::getLikes($aLabel['tid'], $oNode->nid);
+                        $oTerm = taxonomy_term_load($aLabel['tid']);
+                        $sTerm = self::cleanSearchTag($oTerm->name);
+                        for ($i = 0; $i <= $iLikes; $i++) {
+                            $aText[$sTerm] = $iLikes + 1;
+                        }
                     }
                 }
             }
         }
 
         // cut up the title based on spaces and add the words if they are not allready there from the labels
-        
+
         $aTitles = explode(' ', $oNode->title);
         foreach ($aTitles as $sTitlePart) {
             $sTitle = self::cleanSearchTag($oNode->title);
@@ -642,28 +642,28 @@ EOT;
                 }
             }
         }
-        
-        
+
+
         // check if a label had a space, then it needs to be stored as 2 separate words with the score devided
-        foreach($aText as $sLabel => $iScore){
+        foreach ($aText as $sLabel => $iScore) {
             $iSpaces = substr_count($sLabel, ' ');
-            if($iSpaces == 1){
+            if ($iSpaces == 1) {
                 $iScore = $iScore / 2;
-                $aLabels = explode(' ',$sLabel);
-                $aKeys = array(0,1);
-                foreach($aKeys as $iKey){ // do the following for key 0 & 1
-                    if(isset($aLabels[$iKey])){
-                        if(array_key_exists($aLabels[$iKey], $aText)){
+                $aLabels = explode(' ', $sLabel);
+                $aKeys = array(0, 1);
+                foreach ($aKeys as $iKey) { // do the following for key 0 & 1
+                    if (isset($aLabels[$iKey])) {
+                        if (array_key_exists($aLabels[$iKey], $aText)) {
                             $aText[$aLabels[$iKey]] = $aText[$aLabels[$iKey]] + $iScore;
-                        }else{
+                        } else {
                             $aText[$aLabels[$iKey]] = $iScore;
                         }
-                    }                    
+                    }
                 }
                 unset($aText[$sLabel]);
             }
         }
-        
+
         // replace characters as ë with e
 //        foreach($aText as &$sText){
 //            str_replace(self::$aSpecialChars, self::$aSpecialCharsReplacements, $sText);
@@ -671,8 +671,6 @@ EOT;
 
         return $aText;
     }
-
-
 
     /**
      * Gives you the correct Location object to base the center of the map on
@@ -724,13 +722,13 @@ EOT;
         }
         return false;
     }
-    
+
     // cleans strings to be used as index words or search terms
     private static function cleanSearchTag($tag) {
         return strtolower(
-                preg_replace("/[^A-Za-z0-9 .]/", '', 
-                        str_replace(Search::$aSpecialChars, Search::$aSpecialCharsReplacements, $tag)
-                    )
-                );
+                preg_replace("/[^A-Za-z0-9 .]/", '', str_replace(Search::$aSpecialChars, Search::$aSpecialCharsReplacements, $tag)
+                )
+        );
     }
+
 }

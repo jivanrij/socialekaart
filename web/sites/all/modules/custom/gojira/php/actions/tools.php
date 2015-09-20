@@ -95,7 +95,7 @@ function tools() {
         }
 
         if (isset($_GET['restore_backup'])) {
-            helper::restoreBackup(200, false);
+            helper::restoreBackup(20, false);
 //            $rLocations = db_query("select id, source, title, telephone, city, street, number, postcode, category, email, longitude, latitude, url, labels from practices_backup where import_it = 1 limit 20000");
 //            foreach ($rLocations as $o) {
 //                $aLabels = explode('|', $o->labels);

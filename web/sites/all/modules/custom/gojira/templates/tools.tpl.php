@@ -75,7 +75,7 @@
 </p>
 <p>
   If you push this button you will backup all the locations (with node.exported = 0) into the practices_backup table.<br />
-  It will backup max 200 locations a time.<br />
+  It will backup max 20.000 locations a time.<br />
 </p>
 <form id="backup_practices" method="POST" action="/?q=admin/config/system/gojiratools&backup_practices=on">
   <input class="form-submit" type="submit" value="Make Backup" />
@@ -95,7 +95,7 @@
 ?>
 <p>
   If you push this button all locations in the practices_backup table with the import_it flag on 1 will be imported.<br />
-  It will import a maximum of 20.000 a time.<br />
+  It will import a maximum of 200 a time.<br />
   These locations will be flagged for indexing.<br />
 </p>
 <form id="restore_backup" method="POST" action="/?q=admin/config/system/gojiratools&restore_backup=on">
