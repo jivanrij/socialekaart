@@ -463,7 +463,7 @@ class Importer {
             //Search::getInstance()->updateSearchIndex($node);
             Labels::saveArrayOfLabelsOnNode($labels, $node->nid); // this function does the updateSearchIndex
             //save coordinates
-            db_query("UPDATE `node` SET `indexed` = 0, point = GeomFromText('POINT(" . $longitude . " " . $latitude . ")'), `source` = '" . $source . "'  WHERE  `nid`=" . $node->nid);
+            db_query("UPDATE `node` SET `indexed` = 0, point = GeomFromText('POINT(" . $latitude . " " . $longitude . ")'), `source` = '" . $source . "'  WHERE  `nid`=" . $node->nid);
             db_query("UPDATE `practices_backup` SET `import_it`=0 WHERE `id`=".$id);
             
             Search::getInstance()->updateSearchIndex($node);

@@ -98,6 +98,8 @@ function search(){
   
   $output['city_in_tag'] = Search::getInstance()->getCityNameFromTags();
   $output['check_city'] = $check_city;
+  
+  
   $output['to_much_results_found'] = Search::getInstance()->toMuchResults;
   $output['user_is_admin'] = $user_is_admin;
   
@@ -124,12 +126,12 @@ function search(){
   $output['tags_not_changed_message'] = t('Failed to modify tags');
   $output['your_location'] = t('This is your location');
 
-  if(helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD) && !Search::getInstance()->getCityNameFromTags()){
+  if(helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD) && Search::getInstance()->getCityNameFromTags()){
     $output['longitude'] = variable_get('CENTER_COUNTRY_LONGITUDE');
     $output['latitude'] = variable_get('CENTER_COUNTRY_LATITUDE');
   }
   
-  if(helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD) && !Search::getInstance()->getCityNameFromTags()){
+  if(helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD) && Search::getInstance()->getCityNameFromTags()){
     if (isset($_GET['tags']) && ($_GET['tags'] == 'ownlist')){
         $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_REGION;
     }else{
@@ -146,7 +148,7 @@ function search(){
   $output['results_html'] = Search::getInstance()->getResultListHtml($output);
   
   $output['single_location'] = $single_location;
-  
+
   echo json_encode($output,true);
   exit;
 }

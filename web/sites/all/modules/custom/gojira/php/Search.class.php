@@ -297,6 +297,9 @@ EAT;
      */
     public function doSearch($labels, $check_city = true, $force_global = false, $force_favorites = false) {
 
+        global $user;
+        $oUser = user_load($user->uid);
+        
         $found = array();
         $foundNodes = array();
 
@@ -313,16 +316,16 @@ EAT;
         // make lowercase of all tags
         // remove all the city names
         // remove all the blacklisted words
-        $lowertags = array();
+        $lowerlabels = array();
         foreach ($labels as $label) {
             $label = strtolower($label);
             // it's no city and checkcity is true add the label to the labels to search on
             // or checkcity is false, then always add the labels to search with
-            if (($check_city && !Location::isKnownCity($label)) || !$check_city) {
+            if (($check_city && !Location::isKnownCity($label)) || !$check_city || helper::value($oUser, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) {
                 $lowerlabels[] = self::cleanSearchTag($label);
             }
         }
-
+        
         $lowerlabels = helper::cleanArrayWithBlacklist($lowerlabels);
 
         $labels = $lowerlabels;

@@ -12,7 +12,7 @@ class Map {
     $zoom = GojiraSettings::MAP_ZOOMLEVEL_COUNTRY;
     $show_self = 1;
     
-    // if we have a user with a selected location, forus on the region
+    // if we have a user with a selected location, focus on the region
     $location = Search::getInstance()->getCenterMap();
     
     if($location){

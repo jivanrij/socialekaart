@@ -96,14 +96,6 @@ function tools() {
 
         if (isset($_GET['restore_backup'])) {
             helper::restoreBackup(20, false);
-//            $rLocations = db_query("select id, source, title, telephone, city, street, number, postcode, category, email, longitude, latitude, url, labels from practices_backup where import_it = 1 limit 20000");
-//            foreach ($rLocations as $o) {
-//                $aLabels = explode('|', $o->labels);
-//                Importer::restoreLocationFromBackup($o->source, $o->title, $o->telephone, $o->city, $o->street, $o->number, $o->postcode, $o->category, $o->email, $o->longitude, $o->latitude, $o->url, $aLabels, $o->id);
-//            }
-//            drupal_set_message(t('Restored some locations!'), 'status');
-//            header('Location: /?q=admin/config/system/gojiratools');
-//            exit;
         }
 
         if (isset($_GET['backup_truncate'])) {

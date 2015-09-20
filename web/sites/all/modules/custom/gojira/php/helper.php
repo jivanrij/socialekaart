@@ -477,6 +477,15 @@ class helper {
         global $user;
         return user_load($user->uid);
     }
+    
+    /**
+     * Get's the tags from the query string
+     * 
+     * return Array
+     */
+    public static function getTagsFromQuery(){
+        return explode(' ', urldecode($_GET['tags']));
+    }
 }
 
 ?>
