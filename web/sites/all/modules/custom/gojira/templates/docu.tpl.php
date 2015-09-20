@@ -5,6 +5,32 @@
     <img src="/sites/all/themes/gojiratheme/img/datagojira.png" alt="/sites/all/themes/gojiratheme/img/datagojira.png">
 </p>
 <p>
+    Alle bovenstaande objecten zijn nodes.<br />
+    <b>Groep</b>, is het object wat gebruikers & praktijken aan elkaar verbind:
+    <ul>
+        <li>Titel, de titel van de groep - geen technische waarde</li>
+        <li>Master user - Een groep wordt aangemaakt bij registratie van een huisarts. Dit is een link naar deze huisarts.</li>
+        <li>Betaalde groep - Een flag die aangeeft dat een groep op dit moment een abonnement heeft. Als deze aan staat MOET de groep ook payment info hebben in de tabel gojira_payments.</li>
+    </ul>
+    <b>Gebruikers</b>, alle gebruikers in het systeem. Opgeslagen in de Users tabel. Users hebben naast de standaard informatie de volgende gegevens:
+    <ul>
+        <li>Is doctor-  of de gebruiker bij registratie heeft aangegeven dat hij huisarts is.</li>
+        <li>Search in favorites - gebruiker zijn zoeken is gelimiteerd op zijn kaart (kan gebruiker zelf aanpassen);</li>
+        <li>Multiple locations - gebruiker wil meerdere locaties hebben (kan gebruiker zelf aanpassen als hij een abonnement heeft);</li>
+        <li>Akkoord op conditions - gebruiker is akkoort gegaan op de condities na registratie;</li>
+        <li>Search global - gebruiker wil landelijk zoeken (kan hij zelf aanpassen);</li>
+        <li>User has seen Tutorial - gebruiker heeft tutorial gezien;</li>
+        <li>Gebruiker is niet geimporteerd - gebruiker heeft zich zelf geregistreerd, dus is niet binnengekomen via HAweb.</li>
+    </ul>
+    <b>Praktijken/Locaties/Zorgverleners</b>, representeerd een zorgverlener of huisarts in het systeem. Naast standaard adresgegevens bevat dit object de volgende velden:
+    <ul>
+        <li>Location group - link naar de groep die gebruikt wordt als het een huisartsenpraktijk is;</li>
+        <li>Visible - geeft aan of een locatie te vinden is in het systeem, huisartspraktijken hebben hier 0 staan;</li>
+        <li>Labels - de labels van een locatie, in de tabel <i>group_location_term</i> houden we bij hoeveel punten het label per groep heeft;</li>
+        <li>Category - de categorie van de locatie, als de catagorie Huisarts is zal visible op 0 gezet worden.</li>
+    </ul>
+</p>
+<p>
     Verschillende rollen (naast de standaard) zijn:
     <ul>
         <li>gojira employee (subscribed) - gebruiker aangemaakt door huisarts met weinig rechten;</li>
@@ -61,6 +87,9 @@
 <p>
     <b>locationWithoutCoordinatesAdded</b> wordt verstuurd naar de admin van het systeem als er een gebruiker is geweest die een locatie of praktijk heeft toegevoegd waar geen coordinaten van zijn gevonden.
 </p>
+<p>
+    <b>checkSubscriptionFail</b> wordt verstuurd naar de admin als blijkt dat er een group is waarop is aangegeven dat ze betaald zijn maar geen betaal informatie van te vinden is.
+</p>
 
 <h2>SSO registratie</h2>
 <p>
@@ -93,6 +122,9 @@
     <li>Wel een abonnement, met verlenging (kan geen extra jaar afsluiten).</li>
 </ul>
 Een doctor met abonnement zonder verlenging (een extra betaalde periode die nog niet is aangebroken maar wel betaald) kan 1x voor 1 extra jaar aan abonnement afsluiten. Hij kan dit maar 1x doen, dus voor maximaal 1 extra jaar. De teksten op de site die gerelateerd zijn aan de abonnementen verschillen ook per status van de groep/doctor.
+</p>
+<p>
+    Elke nacht wordt via de <a href="https://www.drupal.org/documentation/modules/system">cron</a> gecontrolleerd of abonnementen niet verlopen zijn of binnenkort gaan verlopen. In beide gevallen worden de gebruikers op de hoogte gesteld via een e-mail.
 </p>
 <h2>
     iDeal

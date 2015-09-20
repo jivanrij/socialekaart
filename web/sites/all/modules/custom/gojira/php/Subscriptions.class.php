@@ -362,6 +362,14 @@ EOT;
             
             // timestamp of subscription end date
             $payment = self::getLatestPaymentPeriod($group->nid);
+            
+            // check if we have a payment info object, if not, warn the admin, and do nothing
+            if($payment == false){
+                watchdog(GojiraSettings::WATCHDOG_SUBSCRIPTIONS,'checkSubscriptions: group '. $group->nid .' is flaged as payed group but has no payment information');
+                Mailer::checkSubscriptionFail($group->nid);
+                continue;
+            }
+            
             $end = $payment->period_end;
 
             if (date('Ymd',$end) < date('Ymd',helper::getTime()) || !$end) {

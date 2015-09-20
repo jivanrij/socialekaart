@@ -155,7 +155,7 @@ class Mailer {
         }
         $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
         $aInfo['from_name'] = 'SocialeKaart.care';
-        $aInfo['subject'] = t('Invoice SocialeKaart.care').$payment->increment;
+        $aInfo['subject'] = t('Invoice SocialeKaart.care').' '.$payment->increment;
         $aInfo['text'] = $sBody;
         $aInfo['to'][] = array(
             'email' => $send_to_address,
@@ -389,7 +389,7 @@ class Mailer {
     public static function sendQuestion($oUser, $sQuestion, $sTopic) {
         $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
         $aInfo['from_name'] = 'SocialeKaart.care';
-        $aInfo['subject'] = t('A question from SocialeKaart.care from user ' . $oUser->name . ' about ' . $sTopic);
+        $aInfo['subject'] = 'Vraag van gebruiker ' . $oUser->name . ' over ' . $sTopic;
         $aInfo['text'] = 'User: ' . helper::value($oUser, GojiraSettings::CONTENT_TYPE_USER_TITLE) . ' with uid: ' . $oUser->uid . '<br /><br />' . $sQuestion;
         $aInfo['html'] = 'User: ' . helper::value($oUser, GojiraSettings::CONTENT_TYPE_USER_TITLE) . ' with uid: ' . $oUser->uid . '<br /><br />' . $sQuestion;
         $aInfo['to'][] = array(
@@ -469,27 +469,6 @@ EOT;
      */
     public static function sendDoubleAccountWarning($sEmail) {
 
-//        $sBody = <<<EOT
-//Beste,
-//
-//Deze e-mail ontvangt u omdat wij denken dat u zojuist heeft geprobeerd in te loggen op SocialeKaart.care vanuit uw Haweb.nl omgeving.
-//
-//We hebben alleen geconstateerd dat u voor beide omgevingen 2 losse accounts heeft met hetzelfde e-mailadres. Wilt u toch graag met 1 en hetzelfde account inloggen op beide omgevingen? Dan kunt u het volgende doen:
-//1. Pas uw e-mailadres aan van uw SocialeKaart.care account. 
-//2. Log daarna uit uit SocialeKaart.care en log in in Haweb.nl.
-//3. Klik nu in Haweb.nl op de link naar SocialeKaart.care, er zal nu een nieuwe gekoppelde account in SocialeKaart.care aangemaakt worden.
-//4. Wij kunnen dan als u wilt alle gegevens van uw originele SocialeKaart.care account overzetten naar uw nieuwe account. Als u ons een e-mail stuurd met dit verzoek zetten wij voor u graag deze gegevens over. U kunt ons met dit verzoek e-mailen op info@socialekaart.care.
-//
-//We hopen u hiermee voldoende te hebben ingelicht. Als u hier nog vragen over hebt horen wij dit graag.
-//
-//Met vriendelijke groet,
-//Het team van SocialeKaart.care
-//info@socialekaart.care
-//EOT;
-        
-//        $sBody = variable_get('gojira_double_account_login_warning', '');
-        
-
         $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
         $aInfo['from_name'] = 'SocialeKaart.care';
         $aInfo['subject'] = 'Inloggen op SocialeKaart.care vanuit HAweb?';
@@ -552,37 +531,6 @@ EOT;
     public static function newAccountThroughSSO($oUser) {
         
             $sEmail = $oUser->mail;
-//            $sBody = <<<EOT
-//Welkom bij SocialeKaart.care!
-//                
-//U bent zojuist voor het eerst ingelogd in SocialeKaart.care via uw Haweb.nl account.
-//
-//Vanaf nu heeft u onbeperkt toegang tot een uniek bestand met contactgegevens van zorgaanbieders in uw regio.
-//
-//Dit betekent dat u voortaan vanuit uw praktijk:
-//- snel kunt zoeken op verwijsgegevens;
-//- medische contactgegevens altijd en overal online beschikbaar hebt;
-//- eenvoudig een 'eigen' bestand met verwijsgegevens kunt opbouwen;
-//- samen met andere huisartsen, zorgaanbieders kunt voorzien van eigenschappen waarop ze vindbaar zijn;
-//- voor het systeem onbekende zorgaanbieders kunt toevoegen.
-//
-//Voor onze gebruikers is het mogelijk een abonnement te nemen. Omdat u vanuit Haweb lid bent gewoorden kunt u voor de eerste 3 maanden gebruik maken van de extra functionaliteiten die behoren tot een abonnement. Ook krijgt u via uw lidmaatschap bij Haweb korting als u later besluit over te gaan op een abonnement.
-//    
-//Met een abonnement kunt u volledig reclame vrij gebruikmaken van de volgende functionaliteiten:
-//- zoeken naar verwijsgegevens in het gehele land;
-//- uw collega's en medewerkers laten werken met dezelfde informatie d.m.v. extra accounts;
-//- u kunt meerdere praktijken toevoegen zodat u vanuit een andere plaats/praktijk kunt zoeken naar zorginstellingen.
-//
-//Als laatste willen wij u op de hoogste stellen dat we standaard beschikken over 117.000 zorginstellingen verspreid over het gehele land. Verschillende hiervan zult u kennen en sommige niet, ook zult zorginstellingen kennen wie wij niet in ons systeem hebben staan. Deze kunt u makkelijk en snel toevoegen via ons 'Zorgverlener toevoegen' formulier. Op deze manier kunt u uw eigen zorgkaart compleet krijgen en kunnen uw collega's hier ook direct profijt van hebben.
-//                
-//Wij wensen u veel plezier in het werken met SocialeKaart.care.
-//Uw vragen en ideëen zijn meer dan welkom, stuur ze naar: info@socialekaart.care.
-//
-//Met vriendelijke groet,
-//Het team van SocialeKaart.care
-//EOT;
-//            
-//            $sBody = variable_get('new_account_through_sso', $sBody);
 
             $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
             $aInfo['from_name'] = 'SocialeKaart.care';
@@ -666,7 +614,7 @@ EOT;
 
         $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
         $aInfo['from_name'] = 'SocialeKaart.care';
-        $aInfo['subject'] = t('SocialeKaart.care No Coordinates found! - '.$iLocation);
+        $aInfo['subject'] = 'SocialeKaart.care No Coordinates found! - '.$iLocation;
         $aInfo['html'] = $sBody;
             $aInfo['to'][] = array(
                 'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
@@ -680,6 +628,26 @@ EOT;
 
     }
     
+    /**
+     * Informs the admin that there is a group flagged as payed without payment info
+     * 
+     */
+    public static function checkSubscriptionFail($iGroup) {
+        $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
+        $aInfo['from_name'] = 'SocialeKaart.care';
+        $aInfo['subject'] = 'SocialeKaart.care ISSUE - group ' . $iGroup . ' has no payment information';
+        $aInfo['text'] = 'SocialeKaart.care ISSUE - group ' . $iGroup . ' has no payment information, but is flagged as a group with a payed account.';
+        $aInfo['to'][] = array(
+            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'type' => 'to'
+        );
+
+
+        $oMailer = new Mailer();
+        $oMailer->send($aInfo);
+    }
+
     /**
      * Add given e-mail to the mailchimp list
      * 

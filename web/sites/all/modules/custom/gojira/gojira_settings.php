@@ -4,8 +4,9 @@ class GojiraSettings
     // http://www.easy-ideal.com/api-implementeren/
     
     // watchdog options types
-    const WATCHDOG_IDEAL = 'iDeal';
-    const WATCHDOG_HAWEB_SSO = 'HAweb SSO';
+    const WATCHDOG_IDEAL = 'iDeal issue';
+    const WATCHDOG_HAWEB_SSO = 'HAweb SSO issue';
+    const WATCHDOG_SUBSCRIPTIONS = 'Sunbscription issue';
     
     // CONTENT TYPES
     const CONTENT_TYPE_LOCATION = 'location'; // a medical location of the location of the users
