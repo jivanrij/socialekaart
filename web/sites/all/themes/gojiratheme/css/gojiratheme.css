@@ -142,12 +142,14 @@ div.add_label span.tooltip{
 #header ul.menu li ul.menu{
     display: none;
     position: absolute;
-    visibility: hidden;
+    visibility: none;
     opacity: 1;
     padding: 0;
     top: 23px;
     z-index: 150;
     background-color: #b7072a;
+    width:170px;
+    right:0;
     /*    border-bottom: #4d4d4d solid 1px;
         border-left: #4d4d4d solid 1px;
         border-right: #4d4d4d solid 1px;*/
@@ -263,7 +265,7 @@ div.results_paging span.first_page{
     height: 25px;
     left: 10px;
     position: absolute;
-    top: 65px;
+    top: 40px;
     width: 300px;
     z-index: 100;
     overflow:hidden;
@@ -510,7 +512,7 @@ div.search_result_wrapper div.inform{
 #crud_holder{
     left: 10px;
     position: absolute;
-    top: 97px;
+    top: 76px;
     width: 300px;
     z-index: 100;
     background-color: white;
@@ -903,8 +905,22 @@ div#search_result_info span.result_txt{
     display:none;
 }
 
+span.wide_label_favorites_button{
+    display:none;
+}
+span.small_label_favorites_button{
+    display:block;
+}
+
+
 /* Wide screen */
 @media all and (min-width: 1224px) {
+    span.wide_label_favorites_button{
+        display:block;
+    }
+    span.small_label_favorites_button{
+        display:none;
+    }
 
     #location_selector{
         width: auto;
@@ -957,15 +973,8 @@ div#search_result_info span.result_txt{
     #crud_holder form div.form-item textarea{
         width: 367px;
     }
-    #search_form{
-        top: 35px;
-    }
     #add_wrapper{
         top: 5%;
-    }
-
-    #crud_holder{
-        top: 76px;
     }
 }
 
