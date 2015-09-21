@@ -647,6 +647,48 @@ EOT;
         $oMailer = new Mailer();
         $oMailer->send($aInfo);
     }
+    
+    /**
+     * Informs the admin that a user thinks there are double locations
+     */
+    public static function informAdminAboutDoubleLocations($sLocationIds) {
+        
+        $aLocations = explode(',',$sLocationIds);
+        
+        $sHtmlLinks = '';
+        foreach($aLocations as $iLocation){
+            if(is_numeric($iLocation)){
+                $oLocation = node_load($iLocation);
+                $sHtmlLinks .= '<a href="https://socialekaart.care/?loc='.$iLocation.'">'.$oLocation->title.' '.$oLocation->nid.'</a><br />';
+            }
+        }
+        
+        //auto_login_url_create($user->uid, '/?q=loginlink/but/fake', true)
+        
+        if($sHtmlLinks == ''){
+            $sHtmlLinks = 'mmm... no numeric ids or nodes found...';
+        }
+        
+        global $user;
+        $oUser = user_load($user->uid);
+        $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
+        $aInfo['from_name'] = 'SocialeKaart.care';
+        $aInfo['subject'] = 'SocialeKaart.care ISSUE - double locations reported by user '.$oUser->name;
+        $aInfo['html'] = <<<EOT
+User {$oUser->name} ({$oUser->uid}) thinks the following locations are double.<br />
+{$sHtmlLinks}<br />
+TODO: check them out and if they are double, merge them.
+EOT;
+        $aInfo['to'][] = array(
+            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'type' => 'to'
+        );
+
+
+        $oMailer = new Mailer();
+        $oMailer->send($aInfo);
+    }
 
     /**
      * Add given e-mail to the mailchimp list

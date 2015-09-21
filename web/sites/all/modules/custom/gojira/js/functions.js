@@ -307,6 +307,8 @@ function setupMapDefault() {
 
     window.map = new L.Map('map', {zoomControl: false, center: new L.LatLng(Drupal.settings.gojira.latitude, Drupal.settings.gojira.longitude), zoom: Drupal.settings.gojira.zoom});
 
+    new L.Control.Zoom({position: 'bottomleft'}).addTo(window.map);
+
     //L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(window.map);
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -496,15 +498,13 @@ function bindAfterSearch(bind_list, bind_details) {
 
 // get's the current active popup, retrieves the nid of the 
 // location and refers to that location, while hiding the popup
-//function gotoLocation(nid) {
-//    //alert('gotoLocation');
-//    return;
-//    if (typeof nid == 'undefined') {
-//        var nid = jQuery("span.open_location_popup").text();
-//    }
-//    jQuery("div.leaflet-popup").css('display', 'none');
-//    window.location = '/?loc=' + nid;
-//}
+function gotoLocation(nid) {
+    if (typeof nid == 'undefined') {
+        var nid = jQuery("span.open_location_popup").text();
+    }
+    jQuery("div.leaflet-popup").css('display', 'none');
+    window.location = '/?loc=' + nid;
+}
 
 function focusLocation(nid) {
     L.Marker.stopAllBouncingMarkers();
@@ -616,7 +616,7 @@ function bindAutocompleteAllTags(element_selector) {
                 // no space
                 if (event.keyCode == 32) {
                     if ('input.new_label' == element_selector) {
-                        if(hasWhiteSpace(this.value)){
+                        if (hasWhiteSpace(this.value)) {
                             event.preventDefault();
                         }
                     }
@@ -659,7 +659,7 @@ function bindAutocompleteAllTags(element_selector) {
 
 // check if the string has a whitespace
 function hasWhiteSpace(s) {
-  return /\s/g.test(s);
+    return /\s/g.test(s);
 }
 
 // gets the nid based on the lat & long in the search result
@@ -796,7 +796,7 @@ function bindGlobal() {
 
 }
 
-function bindSuggestlocation(){
+function bindSuggestlocation() {
     jQuery('a.double_locs').click(function () {
         var nid = jQuery(this).attr('id').replace('double_loc_', '');
         jQuery.ajax({
@@ -812,8 +812,8 @@ function bindSuggestlocation(){
             }
         });
     });
-    
-    jQuery('#save_double_location').click(function(e){
+
+    jQuery('#save_double_location').click(function (e) {
         e.preventDefault();
         jQuery('input[name=save_double_location]').val('screwit');
         jQuery('form#gojira-suggestlocation-form').submit();
@@ -986,4 +986,23 @@ function openOverlay() {
 }
 function closeOverlay() {
     jQuery('.overlay_wait').css('display', 'none');
+}
+
+/**
+ * This function is used to inform the admins that a user thinks 
+ * that there are double locations in the system.
+ * 
+ * @param string nids
+ * @returns null
+ */
+function reportDoublePractices(nids, uid) {
+    openOverlay();
+    jQuery.ajax({
+        url: "/?q=ajax/reportdouble&nids=" + nids,
+        type: 'POST',
+        success: function (data) {
+            jQuery('#report_double_'+uid).html('<p>Thanks!</p>');
+            closeOverlay();
+        }
+    });
 }

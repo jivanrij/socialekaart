@@ -64,6 +64,7 @@ include ('php/actions/locationinfo.php');
 //include ('php/actions/gojirareport_suggested_inactive_locations.php');
 include ('php/actions/gojirasearch.php');
 include ('php/actions/inform.php');
+include ('php/actions/reportdouble.php');
 include ('php/actions/informthanks.php');
 include ('php/actions/activateuser.php');
 include ('php/actions/showlocation.php');

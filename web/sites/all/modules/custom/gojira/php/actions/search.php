@@ -31,7 +31,7 @@ function search(){
   } else if($single_location){
     // we have been given a nid as a tag, let's show a single location
     $output['by_id'] = $_GET['tags'];
-    $foundNodes[$_GET['loc']] = node_load($_GET['tags']);
+    $foundNodes[$_GET['tags']] = node_load($_GET['tags']);
   }else if(isset($_GET['tags']) && $_GET['tags'] != ''){
     $tags = explode(' ', urldecode($_GET['tags']));
 
@@ -241,6 +241,8 @@ function _merge_and_strip_searchresults_for_js($searchResults, $hasTags) {
   
   
   foreach ($returnArray as $key => $return) {
+    $iCounter = 0;
+    $aNodes = array();
     $selfHtml = null;
     if ($return['c'] > 1) {
       $mergedHtml = '';
@@ -249,18 +251,29 @@ function _merge_and_strip_searchresults_for_js($searchResults, $hasTags) {
           $selfHtml = '<li class="self_popup_link">'.t('Your own location is also on this spot').'</li>';
           $returnArray[$key]['x'] = '1';
         }else if ($hasTags) {
+          $iCounter++;
           $mergedHtml .= '<li id="map_link_to_' . $mergedOne['n'] . '" class="map_link_to "><a onClick="focusLocation(' . $mergedOne['n'] . ');return false;" href="#' . $mergedOne['n'] . '" title="' . $mergedOne['t'] . '">' . $mergedOne['t'] . '</a></li>';
+          $aNodes[] = $mergedOne['n'];
         } else {
+          $iCounter++;
           $mergedHtml .= '<li id="map_link_to_' . $mergedOne['n'] . '" class="map_link_to "><a onClick="gotoLocation(' . $mergedOne['n'] . ');return false;" href="#' . $mergedOne['n'] . '" title="' . $mergedOne['t'] . '">' . $mergedOne['t'] . '</a></li>';
+          $aNodes[] = $mergedOne['n'];
         }
-        
       }
+      
+      $sNodes = implode(',',$aNodes);
       
       if($selfHtml !== null){
           $mergedHtml = $selfHtml.$mergedHtml;
       }
       
       $mergedHtml = '<ul>' . $mergedHtml . '</ul>';
+      
+      $sUid = uniqid();
+      
+      if($iCounter > 1){
+          $mergedHtml .= '<span id="report_double_' . $sUid . '"><a href="#" onClick="reportDoublePractices(\'' . $sNodes . '\',\'' . $sUid . '\');return false;">'.t('Click here if you think these practices are double').'</a></span>';
+      }
       
       $returnArray[$key]['h'] = $mergedHtml;
       

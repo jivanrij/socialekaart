@@ -121,6 +121,7 @@ function gojira_menu() {
   $items['ajax/switchglobalsearch'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'switchglobalsearch', 'title' => t('Switch global search'), 'type' => MENU_NORMAL_ITEM);
   $items['ajax/singlesearchresult'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'singlesearchresult', 'title' => t('A single search result'), 'type' => MENU_NORMAL_ITEM);
   $items['ajax/locationinfo'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'locationinfo', 'title' => t('Get basic location info'), 'type' => MENU_NORMAL_ITEM);
+  $items['ajax/reportdouble'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'reportdouble', 'title' => t('Report double locations'), 'type' => MENU_NORMAL_ITEM);
   
   // ADMIN
   $items['admin/config/system/docu'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'docu', 'title' => t('Gojira documentation'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Documentation of Gojira.'));
