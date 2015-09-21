@@ -11,12 +11,18 @@ class Subscriptions {
         if ($info) {
             $group = node_load($info->gid);
 
-            // subscribe the group
-            $group->field_payed_status[LANGUAGE_NONE][0]['value'] = 1;
-            node_save($group);
-            self::sendSubscribeEmail($info->uid, $info->ideal_id);
-            self::setRolesForPayed($group);
-            return true;
+            if ($group->field_payed_status[LANGUAGE_NONE][0]['value'] != 1) {
+                // subscribe the group
+                $group->field_payed_status[LANGUAGE_NONE][0]['value'] = 1;
+                node_save($group);
+                self::sendSubscribeEmail($info->uid, $info->ideal_id);
+                self::setRolesForPayed($group);
+                return true;
+            }else{
+                // group is allready subscribed, no need to do enything except for the invoice mail to the admin
+                self::sendSubscribeEmail($info->uid, $info->ideal_id);
+                return true;
+            }
         }
         return false;
     }
@@ -59,15 +65,15 @@ class Subscriptions {
     public static function generateSubscribePDF($ideal_id) {
         require_once(getcwd() . "/sites/all/libraries/dompdf/dompdf_config.inc.php");
 
-        if(!file_exists (getcwd().'/../invoices/')){
-            watchdog('gojira','Missing invoice folder for generateSubscribePDF');
+        if (!file_exists(getcwd() . '/../invoices/')) {
+            watchdog('gojira', 'Missing invoice folder for generateSubscribePDF');
             throw new Exception('unable to generate invoice, please contact site administrator');
         }
-        
-        $file_name = getcwd().'/../invoices/'.date('Ymdis') . '_' . $ideal_id . '.pdf';
+
+        $file_name = getcwd() . '/../invoices/' . date('Ymdis') . '_' . $ideal_id . '.pdf';
 
         $info = self::getPaymentInfo($ideal_id);
-        
+
         $user = user_load($info->uid);
 
         $amount = $info->amount;
@@ -269,8 +275,8 @@ class Subscriptions {
         </body>
     </html>
 EOT;
-                
-               
+
+
 
         $html = str_replace(
                 array(
@@ -294,9 +300,9 @@ EOT;
             $period_end,
             $invoice_number,
             $name), $html);
-        
+
         echo $html;
-        
+
 
         $dompdf = new DOMPDF();
         $dompdf->load_html($html);
@@ -332,7 +338,7 @@ EOT;
                         self::removeRoleFromUser($groupuser->uid, helper::ROLE_SUBSCRIBED_MASTER);
 
                         // only send this mail if it has never been send for this payment
-                        if($payment->warning_ended !== 0){
+                        if ($payment->warning_ended !== 0) {
                             Mailer::sendSubscriptionEnded($groupuser);
                             db_query("UPDATE `gojira_payments` SET `warning_ended`=1 WHERE  `id`={$payment->id}");
                         }
@@ -355,36 +361,36 @@ EOT;
         // get all the group nodes with the payed status
         $group_nodes = db_query("select node.nid, node.title from node join field_data_field_payed_status on (node.nid = field_data_field_payed_status.entity_id) where node.type = 'gojira_group' and field_data_field_payed_status.field_payed_status_value = 1 group by node.nid")->fetchAll();
         foreach ($group_nodes as $group) {
-            
-            if(strtolower($group->title) == 'admin'){
+
+            if (strtolower($group->title) == 'admin') {
                 continue;
             }
-            
+
             // timestamp of subscription end date
             $payment = self::getLatestPaymentPeriod($group->nid);
-            
+
             // check if we have a payment info object, if not, warn the admin, and do nothing
-            if($payment == false){
-                watchdog(GojiraSettings::WATCHDOG_SUBSCRIPTIONS,'checkSubscriptions: group '. $group->nid .' is flaged as payed group but has no payment information');
+            if ($payment == false) {
+                watchdog(GojiraSettings::WATCHDOG_SUBSCRIPTIONS, 'checkSubscriptions: group ' . $group->nid . ' is flaged as payed group but has no payment information');
                 Mailer::checkSubscriptionFail($group->nid);
                 continue;
             }
-            
+
             $end = $payment->period_end;
 
-            if (date('Ymd',$end) < date('Ymd',helper::getTime()) || !$end) {
+            if (date('Ymd', $end) < date('Ymd', helper::getTime()) || !$end) {
                 self::unsubscribe($group->nid, $payment);
             } else {
                 // if we are 30 days before the day the subscription ends, let's send them a reminder.
                 $estimated_end_date = strtotime("+30 day", helper::getTime());
 
-                if (date('Ymd', $estimated_end_date) >= date('Ymd', $end) && date('Ymd', $end) > date('Ymd', helper::getTime())) { 
+                if (date('Ymd', $estimated_end_date) >= date('Ymd', $end) && date('Ymd', $end) > date('Ymd', helper::getTime())) {
                     // todo send a reminder that the subscription is going to end in 30 days
                     if ($payment->warning_send == 0) { // only send when it's never been send for this payment
                         $group = node_load($group->nid);
                         $groups_main_doctor_uid = helper::value($group, GojiraSettings::CONTENT_TYPE_ORIGINAL_DOCTOR, 'uid');
                         $main_doctor = user_load($groups_main_doctor_uid);
-                        
+
                         Mailer::sendSubscriptionEndWarning($main_doctor);
                         db_query("UPDATE `gojira_payments` SET `warning_send`=1 WHERE  `id`={$payment->id}");
                     }
@@ -411,7 +417,7 @@ EOT;
                     self::addRoleToUser($groupuser->uid, helper::ROLE_SUBSCRIBED_MASTER);
                 } else {
                     // is not the master user
-                    if($bSendMails){
+                    if ($bSendMails) {
                         Mailer::sendSubscribeActivationMail($groupuser);
                     }
                 }
@@ -423,14 +429,14 @@ EOT;
      * Adds the payment to the payment log of gojira
      */
     public static function addPaymentLog($uid, $amount, $description, $ideal_id, $ideal_code, $start_date, $end_date, $discount, $tax, $payed, $status = 0, $bank) {
-        
-        foreach(func_get_args() as $sValue){
-            if(is_null($sValue)){
-                watchdog(WATCHDOG_CRITICAL,'addPaymentLog parameter missing. '.json_encode(func_get_args()));
-                throw new Exception('addPaymentLog parameter missing. '.json_encode(func_get_args()));
+
+        foreach (func_get_args() as $sValue) {
+            if (is_null($sValue)) {
+                watchdog(WATCHDOG_CRITICAL, 'addPaymentLog parameter missing. ' . json_encode(func_get_args()));
+                throw new Exception('addPaymentLog parameter missing. ' . json_encode(func_get_args()));
             }
         }
-        
+
         $user = user_load($uid);
         $sql = "INSERT INTO `gojira_payments` (`uid`, `name`, `description`, `amount`, `gid`, `ideal_id`, `ideal_code`, `period_start`, `status`, `period_end`,`discount`,`tax`,`payed`,`bank`) VALUES ({$uid}, '{$user->name}', '{$description}', " . str_replace(',', '.', $amount) . ", " . Group::getGroupId($uid) . ", '{$ideal_id}', '{$ideal_code}', {$start_date}, $status, {$end_date},{$discount},{$tax},{$payed},'{$bank}')";
         db_query($sql);
@@ -594,15 +600,15 @@ EOT;
 
         $aInfo['total'] = $fTotal;
 
-        
+
         $tCurrentEnd = Subscriptions::getEndCurrentPeriod();
         if (!$tCurrentEnd) {
             // no current or past or future end date of running abonnee
             $tNewStart = helper::getTime();
-        }else{
-            if(date('Ymd', $tCurrentEnd) < date('Ymd', helper::getTime())){
+        } else {
+            if (date('Ymd', $tCurrentEnd) < date('Ymd', helper::getTime())) {
                 $tNewStart = helper::getTime();
-            }else{
+            } else {
                 $tNewStart = $tCurrentEnd;
             }
         }
@@ -612,7 +618,7 @@ EOT;
         $iPeriodDays = variable_get('SUBSCRIPTION_PERIOD');
 
         $aInfo['period_days'] = $iPeriodDays;
-        
+
         $tNewEnd = strtotime("+{$iPeriodDays} days", $tNewStart);
 
         $aInfo['new_end'] = $tNewEnd;
@@ -625,26 +631,25 @@ EOT;
         return $aInfo;
     }
 
-    
     /**
      * Cleanup all the users that have not agreed to the conditions
      */
-    public static function cleanupUnconditionalUsers(){
+    public static function cleanupUnconditionalUsers() {
         $aUsers = db_query("select users.uid from users left join field_data_field_agree_conditions on (users.uid = field_data_field_agree_conditions.entity_id) where bundle = 'user' and field_data_field_agree_conditions.field_agree_conditions_value = 0")->fetchAll();
-        foreach($aUsers as $oUser){
-          $oUser = user_load($oUser->uid);
-          // only for users that are imported
-          $iNotImported = helper::value($oUser, GojiraSettings::CONTENT_TYPE_USER_NOT_IMPORTED);
-          if(!$iNotImported){
-            if (!in_array('administrator', array_values($oUser->roles))) {
-              user_delete($oUser->uid);
-              if(module_exists('onesignin_client')){
-                  db_query("DELETE FROM {onesignin_client_uids} WHERE uid = ".$oUser->uid);
-              }
-              watchdog('users','Removing user '.$oUser->uid.' '.$oUser->name.' because he/she did not agreed on the terms & conditions.');
+        foreach ($aUsers as $oUser) {
+            $oUser = user_load($oUser->uid);
+            // only for users that are imported
+            $iNotImported = helper::value($oUser, GojiraSettings::CONTENT_TYPE_USER_NOT_IMPORTED);
+            if (!$iNotImported) {
+                if (!in_array('administrator', array_values($oUser->roles))) {
+                    user_delete($oUser->uid);
+                    if (module_exists('onesignin_client')) {
+                        db_query("DELETE FROM {onesignin_client_uids} WHERE uid = " . $oUser->uid);
+                    }
+                    watchdog('users', 'Removing user ' . $oUser->uid . ' ' . $oUser->name . ' because he/she did not agreed on the terms & conditions.');
+                }
             }
-          }
         }
-        
     }
+
 }

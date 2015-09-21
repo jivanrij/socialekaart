@@ -90,6 +90,9 @@
 <p>
     <b>checkSubscriptionFail</b> wordt verstuurd naar de admin als blijkt dat er een group is waarop is aangegeven dat ze betaald zijn maar geen betaal informatie van te vinden is.
 </p>
+<p>
+    <b>informAdminAboutDoubleLocations</b> wordt verstuurd naar de admin als een gebruiker ergens dubbele locaties ziet. De admin krijgt dan hier het lijstje van.
+</p>
 
 <h2>SSO registratie</h2>
 <p>
