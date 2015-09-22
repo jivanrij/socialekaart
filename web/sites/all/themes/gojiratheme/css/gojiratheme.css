@@ -116,6 +116,10 @@ div.add_label span.tooltip{
     float:right;
     padding:0;
 }
+#header > ul.menu > li{
+    width:180px;
+    text-align: right;
+}
 #header ul.menu li{
     display:block;
     float:left;
@@ -912,9 +916,16 @@ span.small_label_favorites_button{
     display:block;
 }
 
+#conditions_holder{
+    width: 530px;
+    margin-top:5px;height:500px;overflow-x:hidden; overflow-y: scroll; border-style:solid; border-width: 1px; border-color: #b5b5b5; padding:10px;
+}
 
 /* Wide screen */
 @media all and (min-width: 1224px) {
+    #conditions_holder{
+        width: 678px;
+    }
     span.wide_label_favorites_button{
         display:block;
     }
@@ -982,6 +993,9 @@ span.small_label_favorites_button{
 @media all and (min-width: 1700px) {
     #content_holder.big #crud_holder{
         width: 1024px;
+    }
+    #conditions_holder{
+        width: 1004px;
     }
 }
 

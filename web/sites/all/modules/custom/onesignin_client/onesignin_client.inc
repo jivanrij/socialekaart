@@ -304,7 +304,7 @@ function onesignin_client_userdata_synchronize($uid_server, $last_change = 0) {
     // Check for existing user with conflicting name or email.
     $sql = "SELECT 1 FROM {users} u WHERE (u.name = :name OR u.mail = :mail) AND u.uid <> :uid";
     
-    watchdog('',"SELECT 1 FROM {users} u WHERE (u.name = :name OR u.mail = :mail) AND u.uid <> :uid", 'error');
+    //watchdog('onesignin_client',"SELECT 1 FROM {users} u WHERE (u.name = :name OR u.mail = :mail) AND u.uid <> :uid", 'error');
     
     $conflict = db_query($sql, array(':name' => $edit['name'], ':mail' => $edit['mail'], ':uid' => $uid_local))->fetchField();
     if ($conflict) {

@@ -7,6 +7,7 @@ class GojiraSettings
     const WATCHDOG_IDEAL = 'iDeal issue';
     const WATCHDOG_HAWEB_SSO = 'HAweb SSO issue';
     const WATCHDOG_SUBSCRIPTIONS = 'Sunbscription issue';
+    const WATCHDOG_LOCATION = 'Location related';
     
     // CONTENT TYPES
     const CONTENT_TYPE_LOCATION = 'location'; // a medical location of the location of the users

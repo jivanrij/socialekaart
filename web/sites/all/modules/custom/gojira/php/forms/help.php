@@ -10,12 +10,6 @@ function gojira_help_form($form, &$form_state) {
         $form['#attributes']['class'][] = 'post';
     }
     
-    $form['topic'] = array(
-        '#type' => 'hidden',
-        '#value' => $_GET['topic'],
-        '#required' => true,
-    );
-    
     $form['question'] = array(
         '#title' => t('Your question'),
         '#type' => 'textarea',

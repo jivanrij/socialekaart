@@ -215,6 +215,8 @@ function gojira_settings_form_submit($form, &$form_state) {
             node_save($node);
         }
     }
+    
+    // saving the coordinates is done in gojira_entity_update
 
     if (helper::getSystemnameRole() == helper::ROLE_EMPLOYEE) {
         drupal_set_message(t('Your settings are succesfully changed.'), 'status');

@@ -1,6 +1,6 @@
 <h1><?php echo t('FAQ'); ?></h1>
 <p>
-    Welkom op onze FAQ pagina. Wij hopen hier zoveel mogelijk vragen van u te kunnen beantwoorden. Als u geen antwoord kunt vinden op uw vraag kunt u ons uw vraag e-mailen. Onder de pagina is een formulier te vinden waarmee u dit kunt doen. Wij proberen u dan zo snel mogelijk te helpen.
+    Welkom op onze FAQ pagina. Als u klikt op één van de vragen verschijnt het antwoord eronder. Als u geen antwoord kunt vinden op uw vraag kunt u ons uw vraag e-mailen. Onder de pagina is een formulier te vinden waarmee u dit kunt doen. Wij proberen u dan zo snel mogelijk te helpen.
 </p>
 <hr />
 <div id="faq_sections">
@@ -87,7 +87,7 @@
     <section>
         <h1>Wat moet ik doen als er iets met de betaling van mijn abonnement verkeerd is gegaan?</h1>
         <p class="accordion_content">
-            Heeft u nog wel een succesvolle betaling kunnen doen en ging er daarna iets mis? Zo ja, wacht nog 2 uur, binnen deze tijd zal uw betaling waarschijnlijk alsnog doorkomen. Als dit niet gebeurd of er ging iets anders mis neem dan contact met ons op via info@socialekaart.care.
+            Heeft u nog wel een succesvolle betaling kunnen doen en ging er daarna iets mis? Zo ja, wacht nog 2 uur, binnen deze tijd zal uw betaling waarschijnlijk alsnog worden afgerond binnen socialekaart.care. Als dit niet gebeurd of er ging iets anders mis neem dan contact met ons op via <a href="mailto:info@socialekaart.care">info@socialekaart.care</a>.
         </p>
     </section>
     <p style="font-size:10px;">

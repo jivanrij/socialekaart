@@ -67,7 +67,7 @@ class Location {
         $locationInfo = db_query("select X(point) as x, Y(point) as y from {node} where nid = :nid", array(':nid' => $nid))->fetchObject();
 
         if (!$locationInfo || is_null($locationInfo->x) || is_null($locationInfo->y)) {
-            watchdog('location', "Location {$nid} has no coordinates.");
+            watchdog(GojiraSettings::WATCHDOG_LOCATION, "Location {$nid} has no coordinates.");
             return false;
         }
         return new Location($locationInfo->x, $locationInfo->y);
