@@ -420,8 +420,8 @@ EAT;
         $limit = variable_get('SEARCH_MAX_RESULT_AMOUNT') + 1; // let's add one to the result, so we can check if we have more results the the max, afterwards remove it
         // query get's all the nodes in radius, maybe only from favorites, but surly visible, and filters them on the nodes with the related tags
 
-        $iMinLongitude = ($location->longitude - ($distance * 2));
-        $iMaxLongitude = ($location->longitude + ($distance * 2));
+        $iMinLongitude = ($location->longitude - ($distance * 2)); // JRI TODO check dit voor bug waar daan mee kwam
+        $iMaxLongitude = ($location->longitude + ($distance * 2)); // JRI TODO check dit voor bug waar daan mee kwam
         $iMinLatitude = ($location->latitude - $distance);
         $iMaxLatitude = ($location->latitude + $distance);
 
@@ -702,7 +702,7 @@ EOT;
     }
 
     /**
-     * Checks all the given tag's in the $_GET for city names, if one if found, returns if. Else returns false.
+     * Checks all the given tag's in the $_GET for city names, if one if found, returns it. Else returns false.
      * 
      * @return boolean|string
      */

@@ -396,8 +396,14 @@ function _gojira_post_insert($iNode) {
 
 function gojira_user_login(&$edit, $account) {
 
-  if(!strstr($_GET['q'], 'user/reset')){
+  // reset the search global & search favorites field @ login
+  $searchGlobalField = GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD;
+  $account->$searchGlobalField = array(LANGUAGE_NONE => array(0 => array('value' => 0)));
+  $searchFavoritesField = GojiraSettings::CONTENT_TYPE_SEARCH_FAVORITES_FIELD;
+  $account->$searchFavoritesField = array(LANGUAGE_NONE => array(0 => array('value' => 0)));
+  user_save($account);
 
+  if(!strstr($_GET['q'], 'user/reset')){
     drupal_goto('/');
   }
 }

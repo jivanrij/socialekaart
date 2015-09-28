@@ -21,6 +21,7 @@ class Map {
       $zoom = GojiraSettings::MAP_ZOOMLEVEL_REGION;
     }
 
+    // user has no locations
     if(count(Location::getUsersLocations(true))==0){
       $zoom = GojiraSettings::MAP_ZOOMLEVEL_COUNTRY;
       $show_self = 0;

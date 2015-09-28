@@ -9,8 +9,6 @@ function gojirasearch() {
   if (in_array('administrator', array_values($user->roles))) {
     $user_is_admin = true;
   }
-
-  $location = Search::getInstance()->getCenterMap();
   
   return theme('gojirasearch');
 }
