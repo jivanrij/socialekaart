@@ -44,6 +44,7 @@ function search() {
             }
         }
 
+
         // get all the nodes based on the normal tags
         $foundNodes = Search::getInstance()->doSearch($filteredTags, $check_city);
 
@@ -111,8 +112,14 @@ function search() {
     }
 
     if ($location) {
-        $output['longitude'] = $location->longitude;
-        $output['latitude'] = $location->latitude;
+        // search global && i do NOT have a city name, let's focus on center country
+        if (helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD) && !Search::getInstance()->getCityNameFromTags()) {
+            $output['longitude'] = variable_get('CENTER_COUNTRY_LONGITUDE');
+            $output['latitude'] = variable_get('CENTER_COUNTRY_LATITUDE');
+        }else{
+            $output['longitude'] = $location->longitude;
+            $output['latitude'] = $location->latitude;
+        }
     }
 
     $output['mapSearchResults'] = array_values($searchResultsJavascript);
@@ -128,11 +135,6 @@ function search() {
     $output['tags_changed_message'] = t('Tags successfully changed');
     $output['tags_not_changed_message'] = t('Failed to modify tags');
     $output['your_location'] = t('This is your location');
-
-    if (helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD) && Search::getInstance()->getCityNameFromTags()) {
-        $output['longitude'] = variable_get('CENTER_COUNTRY_LONGITUDE');
-        $output['latitude'] = variable_get('CENTER_COUNTRY_LATITUDE');
-    }
 
     // determ the zoom level that is shown after a search result
     if(helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)){ // user searches on a country level

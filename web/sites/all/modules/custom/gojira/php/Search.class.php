@@ -11,6 +11,11 @@
   CONCAT(
   'POINT(',
   node.coordinates_x),' '), node.coordinates_y), ')')) WHERE  `nid`>0 and node.type = 'location';
+
+X - low value - Horizontal - Longitude
+Y - high value - vertical - latitude
+
+
  */
 class Search {
 
@@ -84,13 +89,15 @@ class Search {
                     }
                     $lastEntry = ($counter == $output['resultcounttotal']);
                     $admin_info = '';
+                    $title = $result['t'];
                     if ($output['user_is_admin']) {
                         $admin_info = 'nid' . $result['n'] . 'score' . $result['s'] . 'd' . $result['d'];
+                        $title = $result['s'].' '.substr($result['d'],0,8).' '.$result['t'];
                     }
 
                     $h .= '<li class="' . $admin_info . '">';
-                    $h .= '<a id="loc_' . $result['n'] . '" href="' . $result['n'] . '" rel="' . $result['lo'] . ',' . $result['la'] . '">';
-                    $h .= $result['t'];
+                    $h .= '<a title="'.$title.'" id="loc_' . $result['n'] . '" href="' . $result['n'] . '" rel="' . $result['lo'] . ',' . $result['la'] . '">';
+                    $h .= $title;
                     $h .= '</a>';
                     $h .= '</li>';
                     if ($counter % $pageLength == 0) {
@@ -426,8 +433,18 @@ EAT;
         $iMaxLatitude = ($location->latitude + $distance);
 
         $sql_max_distance = " AND (X(point) BETWEEN {$iMinLongitude} AND {$iMaxLongitude} AND Y(point) BETWEEN {$iMinLatitude} AND {$iMaxLatitude}) ";
-        $sDistanceField = "((ACOS(SIN({$location->latitude} * PI() / 180) * SIN(Y(point) * PI() / 180) + COS({$location->latitude} * PI() / 180) * COS(Y(point) * PI() / 180) * COS(({$location->longitude} - (point)) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) as distance ";
+        //$sDistanceField = "((ACOS(SIN({$location->latitude} * PI() / 180) * SIN(Y(point) * PI() / 180) + COS({$location->latitude} * PI() / 180) * COS(Y(point) * PI() / 180) * COS(({$location->longitude} - (point)) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) as distance ";
 
+$lat1 = 'Y(point)';
+$lon1 = 'X(point)';
+$lat2 = $location->latitude;
+$lon2 = $location->longitude;
+$sDistanceField = <<<EOT
+        (100000 * acos( cos( radians($lat1) )
+      * cos( radians($lat2) )
+      * cos( radians($lon2) - radians($lon1)) + sin(radians($lat1))
+      * sin( radians($lat2) )))  as distance
+EOT;
 
         $sql = <<<EOT
 SELECT 
@@ -685,14 +702,12 @@ EOT;
      * @return Location
      */
     public function getCenterMap($checkForCity = true) {
-
         if ($checkForCity) {
             $city = $this->getCityNameFromTags();
             if ($city) {
                 $location = Location::getLocationForAddress($city . ',the netherlands');
                 if ($location) {
-                    $this->mapCenter = $location;
-                    return $this->mapCenter;
+                    return $location;
                 }
             }
         }
