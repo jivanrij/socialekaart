@@ -254,8 +254,7 @@ function gojira_configuration_form($form, &$form_state) {
         '#type' => 'textarea',
         '#default_value' => variable_get('gojira_subscription_expire_warning'),
         '#description' => 'HTML e-mail<br />This is the template of the e-mail that get\'s send when the subscription is going to expire in 30 days from now. This template it HTML.<br />
-  %doctor% <- name of the doctor<br />
-  %url% <- url where the user can extend his subscription<br />'
+  %doctor% <- name of the doctor'
     );
     $form['email']['gojira_subscription_ended'] = array(
         '#title' => t('Subscription is ended'),

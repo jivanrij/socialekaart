@@ -318,7 +318,7 @@ function setupMapDefault() {
         accessToken: Drupal.settings.gojira.mapbox_accesstoken
     }).addTo(window.map);
 
-    window.map.attributionControl.setPrefix("SocialeKaart.care");
+    window.map.attributionControl.setPrefix("<a href='/algemene-voorwaarden'>Algemene Voorwaarden</a> <a href='/user/logout'>Uitloggen</a>");
 
     window.markers = new L.FeatureGroup();
     window.map.addLayer(window.markers);
@@ -804,7 +804,7 @@ function bindSuggestlocation() {
             type: 'POST',
             dataType: 'json',
             success: function (data) {
-                jQuery('#show_double_info').html('<p><b>' + data['sTitle'] + '</b> uit ' + data['sCity'] + '<br /><i>Categorie:</i> ' + data['sCategory'] + '<br /><i>Labels:</i> ' + data['sLabels'] + '<br /><a href="/?loc=' + data['iNode'] + '" title="Locatie weergeven in ander window" target="_new">Weergeven</a><br /><br />' + data['sImproveLink'] + '</p>');
+                jQuery('#show_double_info').html('<p><b>' + data['sTitle'] + '</b> uit ' + data['sCity'] + '<br /><i>Categorie:</i> ' + data['sCategory'] + '<br /><i>Labels:</i> ' + data['sLabels'] + '<br /><a href="/?loc=' + data['iNode'] + '" title="Locatie weergeven in ander window" target="_new">Weergeven in nieuw window</a><br /><br />' + data['sImproveLink'] + '</p>');
                 jQuery(window).trigger('resize');
             },
             error: function (jqXHR, textStatus, errorThrown) {

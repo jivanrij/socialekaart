@@ -328,7 +328,7 @@ class Mailer {
     public static function sendSubscriptionEndWarning($main_doctor) {
 
         $body = variable_get('gojira_subscription_expire_warning', '');
-        $body = str_replace(array('%doctor%', '%url%'), array(helper::value($main_doctor, GojiraSettings::CONTENT_TYPE_USER_TITLE), '<a href="https://socialekaart.care/idealpay" title="Verleng uw abonnement.">Verleng uw abonnement.</a>'), $body);
+        $body = str_replace(array('%doctor%'), array(helper::value($main_doctor, GojiraSettings::CONTENT_TYPE_USER_TITLE)), $body);
 
         $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
         $aInfo['from_name'] = 'SocialeKaart.care';
