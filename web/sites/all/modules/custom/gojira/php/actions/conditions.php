@@ -7,7 +7,6 @@
 function conditions(){
 
   drupal_add_js(array('gojira' => array('page' => 'content_big')), 'setting');
-  $output['button'] = '';
   if(!helper::agreedToConditions()){
     $output['form'] = drupal_get_form('gojira_terms_conditions_form');
   }
