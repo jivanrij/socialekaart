@@ -139,6 +139,15 @@ Een doctor met abonnement zonder verlenging (een extra betaalde periode die nog 
 <p>
     Bij het akkoort gaan met de Algemene Voorwaarden krijgt de gebruiker ook de mogelijkheid om zich te abonneren op de Mailchimp nieuwsbrief. Daarnaast is er een registratie formulier op de /nieuwsbrief pagina. Verder zit alles in Mailchimp.
 </p>
+<h2>
+    Lokaal, Regionaal & Landelijk zoeken
+</h2>
+<p>
+    Gebruikers zonder abonnement kunnen alleen in een radius van hun praktijk zoeken. Als zij dan bijvoorbeeld zoeken op 'tandarts zwolle' krijgen ze de resultaten vanuit hun eigen omgeving. Wel krijgen ze dan de tekst 'Alleen met een abonnement is het mogelijk specifiek in andere dorpen en steden te zoeken.' te zien.
+</p>
+<p>
+    Gebruikers met abonnement kunnen altijd een naam van een stad of dorp megeven in de zoektermen. Het zoekresultaat zal zich dan altijd limiteren op de zorgverleners in het betreffende stadje/dorp. Wel krijgt de gebruiker alsnog de mogelijkheid om lokaal te zoeken met de op gegeven zoektermen. Het is dus nog mogelijk om in oud-beijerland te zoeken op 'zwolle tandarts'.
+</p>
 <style>
     h2{
         font-size:14px;

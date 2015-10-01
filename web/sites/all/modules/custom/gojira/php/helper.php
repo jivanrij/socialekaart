@@ -486,6 +486,21 @@ class helper {
     public static function getTagsFromQuery(){
         return explode(' ', urldecode($_GET['tags']));
     }
+    
+    /**
+     * Tells you if a user has subscribed based on his/her role
+     * 
+     * @global stdClass $user
+     * @return boolean
+     */
+    public static function userHasSubscribedRole(){
+        global $user;
+        $user = user_load($user->uid);
+        if(in_array(helper::ROLE_SUBSCRIBED_MASTER, array_values($user->roles)) || in_array(helper::ROLE_EMPLOYEE, array_values($user->roles)) || in_array(helper::ROLE_EMPLOYER, array_values($user->roles))){
+            return true;
+        }
+        return false;
+    }
 }
 
 ?>

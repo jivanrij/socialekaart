@@ -55,10 +55,14 @@ class Search {
         $h .= '<div id="search_result_info">';
         if ($output['has_tags'] || isset($output['loc'])) {
             $h .= '<div id="search_results" class="rounded">';
-            if ($output['city_in_tag'] && $output['check_city'] == true && !helper::value($oUser, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) {
+            if ($output['city_in_tag'] && $output['check_city'] == true && helper::userHasSubscribedRole()) {
                 $h .= '<p class="info_text">';
                 $h .= t('You are searching in the area of %city%.', array('%city%' => $output['city_in_tag'])) . '<br />';
                 $h .= '<a id="search_own_area" href="/?tags=' . str_replace(' ', '', $_GET['tags']) . '&check_city=0" title="' . t('Search in your own area') . '">' . t('Search in your own area') . '</a>';
+                $h .= '</p>';
+            }else if ($output['city_in_tag'] && $output['check_city'] == true && !helper::userHasSubscribedRole()) {
+                $h .= '<p class="info_text">';
+                $h .= t('You cannot search in other places unless you have a payed account.');
                 $h .= '</p>';
             }
             if ($output['resultcounttotal'] >= 1) {
@@ -334,7 +338,7 @@ EAT;
             // or checkcity is false, then always add the labels to search with
             if (($check_city && !$bIsCity) || !$check_city) {
                 $lowerlabels[] = self::cleanSearchTag($label);
-            }else if($bIsCity){
+            }else if($check_city && $bIsCity && helper::userHasSubscribedRole()){
                 $sCityLabel = $label;
             }
         }
@@ -421,8 +425,10 @@ EAT;
 
         $sFilterCity = '';
         if ($sCityLabel) {
-            $aParams[':city'] = $sCityLabel;
-            $sFilterCity = " AND field_data_field_address_city.field_address_city_value = :city ";
+            if(helper::userHasSubscribedRole()){
+                $aParams[':city'] = $sCityLabel;
+                $sFilterCity = " AND field_data_field_address_city.field_address_city_value = :city ";
+            }
         }
         
         
@@ -720,7 +726,7 @@ EOT;
     public function getCenterMap($checkForCity = true) {
         if ($checkForCity) {
             $city = $this->getCityNameFromTags();
-            if ($city) {
+            if ($city && helper::userHasSubscribedRole()) {
                 $location = Location::getLocationForAddress($city . ',the netherlands');
                 if ($location) {
                     return $location;
