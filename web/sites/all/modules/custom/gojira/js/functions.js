@@ -1001,7 +1001,7 @@ function reportDoublePractices(nids, uid) {
         url: "/?q=ajax/reportdouble&nids=" + nids,
         type: 'POST',
         success: function (data) {
-            jQuery('#report_double_'+uid).html('<p>Thanks!</p>');
+            jQuery('#report_double_'+uid).html('<p>Bedankt!</p>');
             closeOverlay();
         }
     });

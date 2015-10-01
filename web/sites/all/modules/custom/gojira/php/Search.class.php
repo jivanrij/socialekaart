@@ -309,6 +309,7 @@ EAT;
         
         $found = array();
         $foundNodes = array();
+        $sCityLabel = null;
 
         global $user;
         $user = user_load($user->uid);
@@ -317,6 +318,8 @@ EAT;
             return array();
         }
 
+        $aParams = array();
+        
         // make from jantje, piet en klaas -=> jantje, piet, en, klaas
         $labels = explode(' ', implode(' ', $labels));
 
@@ -326,13 +329,16 @@ EAT;
         $lowerlabels = array();
         foreach ($labels as $label) {
             $label = strtolower($label);
+            $bIsCity = Location::isKnownCity($label);
             // it's no city and checkcity is true add the label to the labels to search on
             // or checkcity is false, then always add the labels to search with
-            if (($check_city && !Location::isKnownCity($label)) || !$check_city || helper::value($oUser, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) {
+            if (($check_city && !$bIsCity) || !$check_city) {
                 $lowerlabels[] = self::cleanSearchTag($label);
+            }else if($bIsCity){
+                $sCityLabel = $label;
             }
         }
-        
+       
         $lowerlabels = helper::cleanArrayWithBlacklist($lowerlabels);
 
         $labels = $lowerlabels;
@@ -400,7 +406,7 @@ EAT;
         $distance = 0.09;
         if ($force_global || helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) {
             $distance = 20.0;
-            if (!$this->getCityNameFromTags()) {
+            if (!$sCityLabel) {
                 // only remove the distance order (this one retrieves all the search results in a radius) when we search global && don't search a city
                 $order_by_sql = 'ORDER BY score desc';
             }
@@ -408,9 +414,18 @@ EAT;
 
 
         // add admin link to the result if you are admin
-        $visible_join = ' join field_data_field_visible_to_other_user on (node.nid = field_data_field_visible_to_other_user.entity_id) ';
+        
+        
+        $visible_join = ' join field_data_field_visible_to_other_user on (node.nid = field_data_field_visible_to_other_user.entity_id) join field_data_field_address_city on (node.nid = field_data_field_address_city.entity_id) ';
         $visible_where = " AND field_data_field_visible_to_other_user.field_visible_to_other_user_value = 1 AND field_data_field_visible_to_other_user.bundle = 'location' AND field_data_field_visible_to_other_user.delta = 0 ";
 
+        $sFilterCity = '';
+        if ($sCityLabel) {
+            $aParams[':city'] = $sCityLabel;
+            $sFilterCity = " AND field_data_field_address_city.field_address_city_value = :city ";
+        }
+        
+        
         $filter = '';
         if (variable_get('gojira_search_in', 'all') == 'adhocdata') {
             $filter = " AND node.source = 'adhocdata' ";
@@ -458,12 +473,13 @@ WHERE status = 1 AND {$relatedNids}
 {$sql_max_distance}
 {$favoriteFilter} 
 {$visible_where} 
+{$sFilterCity} 
 {$filter} 
 GROUP BY node.nid {$order_by_sql} LIMIT {$limit} 
 EOT;
 
 
-        $results = db_query($sql);
+        $results = db_query($sql, $aParams);
 
         $counter = 0;
         $resultNodes = array();
