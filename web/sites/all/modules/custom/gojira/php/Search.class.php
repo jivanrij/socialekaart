@@ -96,7 +96,7 @@ class Search {
                     $title = $result['t'];
                     if ($output['user_is_admin']) {
                         $admin_info = ($result['s']-$result['d']) . ' s:' . $result['s'] .' d:'.$result['d'];
-                        $title = $admin_info.' '.$result['t'];
+                        $title = $result['t'];
                     }
 
                     $h .= '<li class="' . $admin_info . '">';
@@ -322,6 +322,8 @@ EAT;
             return array();
         }
 
+        $limit = variable_get('SEARCH_MAX_RESULT_AMOUNT') + 1; // let's add one to the result, so we can check if we have more results the the max, afterwards remove it
+
         $aParams = array();
         
         // make from jantje, piet en klaas -=> jantje, piet, en, klaas
@@ -374,6 +376,18 @@ EAT;
             }
         }
 
+//        $aSortedFoundNodes = usort($foundNodes, 'sortFoundKeywords');
+//        $aSortedLimitedFoundNodes = array();
+//        $iCounter = 1;
+//        foreach($aSortedFoundNodes as $aSortedNode){
+//            if($iCounter > 500){
+//                break;
+//            }
+//            $aSortedLimitedFoundNodes[$aSortedFoundNodes['nid']] = $aSortedFoundNodes['score'];
+//            $iCounter++;
+//        }
+
+
         // build the case to add the score field to the query
         if (count($foundNodes)) {
             $score_sql = ' (CASE ';
@@ -402,10 +416,11 @@ EAT;
         $distance = 0.09;
         if ($force_global || helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) {
             $distance = 20.0;
-            if (!$sCityLabel) {
+//            $order_by_sql = 'ORDER BY score desc';
+//            if (!$sCityLabel) {
                 // only remove the distance order (this one retrieves all the search results in a radius) when we search global && don't search a city
 //                $order_by_sql = 'ORDER BY score desc';
-            }
+//            }
         }
 
 
@@ -437,7 +452,6 @@ EAT;
             $filter = " AND (node.source = 'spider' OR node.source = 'gojira') ";
         }
 
-        $limit = variable_get('SEARCH_MAX_RESULT_AMOUNT') + 1; // let's add one to the result, so we can check if we have more results the the max, afterwards remove it
         // query get's all the nodes in radius, maybe only from favorites, but surly visible, and filters them on the nodes with the related tags
 
         $iMinLongitude = ($location->longitude - ($distance * 2)); // JRI TODO check dit voor bug waar daan mee kwam
@@ -448,16 +462,24 @@ EAT;
         $sql_max_distance = " AND (X(point) BETWEEN {$iMinLongitude} AND {$iMaxLongitude} AND Y(point) BETWEEN {$iMinLatitude} AND {$iMaxLatitude}) ";
         //$sDistanceField = "((ACOS(SIN({$location->latitude} * PI() / 180) * SIN(Y(point) * PI() / 180) + COS({$location->latitude} * PI() / 180) * COS(Y(point) * PI() / 180) * COS(({$location->longitude} - (point)) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) as distance ";
 
+$fDistanceFactor = 1200; // determs the weight of the distance to lower the score that determs the sort of the results
+if ($force_global || helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) {
+    // if we search global, the distance must weight less then normal
+    $fDistanceFactor = 800;
+}
+
 $lat1 = 'Y(point)';
 $lon1 = 'X(point)';
 $lat2 = $location->latitude;
 $lon2 = $location->longitude;
 $sDistanceField = <<<EOT
-        (1000 * acos( cos( radians($lat1) )
+        (1200 * acos( cos( radians($lat1) )
       * cos( radians($lat2) )
       * cos( radians($lon2) - radians($lon1)) + sin(radians($lat1))
       * sin( radians($lat2) )))  as distance
 EOT;
+
+
 
         $sql = <<<EOT
 SELECT 
@@ -475,6 +497,7 @@ WHERE status = 1 AND {$relatedNids}
 {$filter} 
 GROUP BY node.nid {$order_by_sql} LIMIT {$limit} 
 EOT;
+
 
         $results = db_query($sql, $aParams);
 
@@ -763,3 +786,13 @@ EOT;
     }
 
 }
+
+//function sortFoundKeywords ( $aOne, $bTwo ){
+//    if($aOne['score'] < $bOne['score']){
+//        return -1;
+//    }else if($aOne['score'] == $bOne['score']){
+//        return 0;
+//    }
+//    return 1;
+//
+//}

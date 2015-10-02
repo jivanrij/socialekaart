@@ -507,7 +507,7 @@ function gotoLocation(nid) {
 }
 
 function focusLocation(nid) {
-//    L.Marker.stopAllBouncingMarkers();
+    L.Marker.stopAllBouncingMarkers();
 
     if (typeof nid == 'undefined') {
         var nid = jQuery("span.open_location_popup").text();
@@ -540,7 +540,9 @@ function focusLocation(nid) {
             jQuery(window).trigger('resize');
             jQuery('#selected_location_info').removeClass('hidden');
 //            closeOverlay();
-//            window.markers._layers[window.markerMapping[nid]].toggleBouncing();
+            if((window.markerMapping[nid] !== undefined) && (window.markers._layers[window.markerMapping[nid]] !== undefined)) {
+                window.markers._layers[window.markerMapping[nid]].toggleBouncing();
+            }
         },
         error: function (jqXHR, textStatus, errorThrown) {
             somethingWrongMessage();

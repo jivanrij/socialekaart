@@ -55,8 +55,6 @@ function search() {
 
     $popupHtml = '';
 
-    usort($foundNodes, "sort_search_results_on_score");
-
     // format the results
     foreach ($foundNodes as $key => $foundNode) {
         if ($foundNode) {
@@ -282,27 +280,5 @@ function _merge_and_strip_searchresults_for_js($searchResults, $hasTags) {
             $returnArray[$key]['h'] = $mergedHtml;
         }
     }
-
     return $returnArray;
-}
-
-function sort_search_results_on_score($a, $b) {
-    if ($a->self) {
-        return 1;
-    }
-    if ($a->self) {
-        return -1;
-    }
-
-    if ($a->score == $b->score) {
-
-        if ($a->distance > $b->distance) {
-            return 1;
-        } else if ($a->distance > $b->distance) {
-            return -1;
-        } else {
-            return 0;
-        }
-    }
-    return ($a->score > $b->score) ? -1 : 1;
 }
