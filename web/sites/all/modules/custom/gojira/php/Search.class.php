@@ -95,8 +95,8 @@ class Search {
                     $admin_info = '';
                     $title = $result['t'];
                     if ($output['user_is_admin']) {
-                        $admin_info = 'nid' . $result['n'] . 'score' . $result['s'] . 'd' . $result['d'];
-                        $title = $result['s'].' '.substr($result['d'],0,8).' '.$result['t'];
+                        $admin_info = ($result['s']-$result['d']) . ' s:' . $result['s'] .' d:'.$result['d'];
+                        $title = $admin_info.' '.$result['t'];
                     }
 
                     $h .= '<li class="' . $admin_info . '">';
@@ -368,17 +368,9 @@ EAT;
                     $foundNodes[$found->nid] = (int) $found->score;
                     $nidsSql .= ',' . $found->nid;
                 }
-                if ($found->word == $label) {
-                    $foundNodes[$found->nid] = $foundNodes[$found->nid] + 0.5;
-                }
-            }
-        }
-
-        // get the highest score
-        $highest_score = 0;
-        foreach ($foundNodes as $sid => $score) {
-            if ($highest_score < $score) {
-                $highest_score = $score;
+//                if ($found->word == $label) {
+//                    $foundNodes[$found->nid] = $foundNodes[$found->nid] + 0.5;
+//                }
             }
         }
 
@@ -406,13 +398,13 @@ EAT;
             $relatedNids = ' 1=1 ';
         }
 
-        $order_by_sql = 'ORDER BY score desc, distance asc';
+        $order_by_sql = 'ORDER BY (score-distance) desc';
         $distance = 0.09;
         if ($force_global || helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) {
             $distance = 20.0;
             if (!$sCityLabel) {
                 // only remove the distance order (this one retrieves all the search results in a radius) when we search global && don't search a city
-                $order_by_sql = 'ORDER BY score desc';
+//                $order_by_sql = 'ORDER BY score desc';
             }
         }
 
@@ -461,7 +453,7 @@ $lon1 = 'X(point)';
 $lat2 = $location->latitude;
 $lon2 = $location->longitude;
 $sDistanceField = <<<EOT
-        (100000 * acos( cos( radians($lat1) )
+        (1000 * acos( cos( radians($lat1) )
       * cos( radians($lat2) )
       * cos( radians($lon2) - radians($lon1)) + sin(radians($lat1))
       * sin( radians($lat2) )))  as distance
@@ -483,7 +475,6 @@ WHERE status = 1 AND {$relatedNids}
 {$filter} 
 GROUP BY node.nid {$order_by_sql} LIMIT {$limit} 
 EOT;
-
 
         $results = db_query($sql, $aParams);
 

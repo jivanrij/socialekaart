@@ -387,7 +387,7 @@ function doSearchCall(searchFor, search_own_area) {
                     // I am a merged marker with self as a part of my items
                     var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.mixedIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
                     marker.bindPopup(thisResult.h).on('popupopen', function () {
-                        window.map.setView(this._latlng, window.zoomlevel_street);
+                        window.map.panTo(this._latlng);
                     });
                     window.markers.addLayer(marker);
                 }
@@ -403,7 +403,7 @@ function doSearchCall(searchFor, search_own_area) {
                     // Not self, but i am a merged one
                     var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
                     marker.bindPopup(thisResult.h).on('popupopen', function () {
-                        window.map.setView(this._latlng, window.zoomlevel_street);
+                        window.map.panTo(this._latlng);
                         jQuery('#selected_location_info > div').hide();
                     });
                     window.markers.addLayer(marker);
@@ -507,14 +507,14 @@ function gotoLocation(nid) {
 }
 
 function focusLocation(nid) {
-    L.Marker.stopAllBouncingMarkers();
+//    L.Marker.stopAllBouncingMarkers();
 
     if (typeof nid == 'undefined') {
         var nid = jQuery("span.open_location_popup").text();
         jQuery("div.leaflet-popup").css('display', 'none');
     }
 
-    openOverlay();
+//    openOverlay();
 
     if (Drupal.settings.gojira.page != 'ownlist' && Drupal.settings.gojira.page != 'showlocation') {
         jQuery('li.active').removeClass('active');
@@ -532,14 +532,15 @@ function focusLocation(nid) {
             jQuery("#selected_location_info").html(data.html);
 
             // move to it
-            window.map.setView([data.latitude, data.longitude], data.zoom);
+            //window.map.setView([data.latitude, data.longitude], data.zoom);
+            window.map.panTo([data.latitude, data.longitude]);
 
             bindAfterSearch(false, true);
 
             jQuery(window).trigger('resize');
             jQuery('#selected_location_info').removeClass('hidden');
-            closeOverlay();
-            window.markers._layers[window.markerMapping[nid]].toggleBouncing();
+//            closeOverlay();
+//            window.markers._layers[window.markerMapping[nid]].toggleBouncing();
         },
         error: function (jqXHR, textStatus, errorThrown) {
             somethingWrongMessage();
