@@ -439,19 +439,21 @@ EAT;
         }
         
         
-        $filter = '';
-        if (variable_get('gojira_search_in', 'all') == 'adhocdata') {
-            $filter = " AND node.source = 'adhocdata' ";
-        } elseif (variable_get('gojira_search_in', 'all') == 'spider') {
-            $filter = " AND node.source = 'spider' ";
-        } elseif (variable_get('gojira_search_in', 'all') == 'gojira') {
-            $filter = " AND node.source = 'gojira' ";
-        } elseif (variable_get('gojira_search_in', 'all') == 'adhocdata_gojira') {
-            $filter = " AND (node.source = 'adhocdata' OR node.source = 'gojira') ";
-        } elseif (variable_get('gojira_search_in', 'all') == 'spider_gojira') {
-            $filter = " AND (node.source = 'spider' OR node.source = 'gojira') ";
-        }
+//        $filter = '';
+//        if (variable_get('gojira_search_in', 'all') == 'adhocdata') {
+//            $filter = " AND node.source = 'adhocdata' ";
+//        } elseif (variable_get('gojira_search_in', 'all') == 'spider') {
+//            $filter = " AND node.source = 'spider' ";
+//        } elseif (variable_get('gojira_search_in', 'all') == 'gojira') {
+//            $filter = " AND node.source = 'gojira' ";
+//        } elseif (variable_get('gojira_search_in', 'all') == 'adhocdata_gojira') {
+//            $filter = " AND (node.source = 'adhocdata' OR node.source = 'gojira') ";
+//        } elseif (variable_get('gojira_search_in', 'all') == 'spider_gojira') {
+//            $filter = " AND (node.source = 'spider' OR node.source = 'gojira') ";
+//        }
 
+        $filter = " AND node.source != 'spider' ";
+        
         // query get's all the nodes in radius, maybe only from favorites, but surly visible, and filters them on the nodes with the related tags
 
         $iMinLongitude = ($location->longitude - ($distance * 2)); // JRI TODO check dit voor bug waar daan mee kwam

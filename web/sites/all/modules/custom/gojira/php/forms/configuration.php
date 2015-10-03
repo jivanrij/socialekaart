@@ -88,13 +88,6 @@ function gojira_configuration_form($form, &$form_state) {
         '#default_value' => variable_get('gojira_check_coordinates_on_update_node', 1),
         '#description' => 'If this is on the system will check the coordinates of each location on each save action. These coordinates are cached, so google will not be requested. This option is put in the system so you can disable this while importing locations. The import does this after a location is saved itself. For the system to work correct this needs to be put on ON, for the import to work correct, this needs to be put on OFF.'
     );
-    $form['algemene_instellingen']['gojira_search_in'] = array(
-        '#title' => t('Search in'),
-        '#type' => 'select',
-        '#options' => array('all' => 'all', 'adhocdata' => 'adhocdata', 'spider' => 'spider', 'gojira' => 'user_input', 'adhocdata_gojira' => 'adhocdata & user_input', 'spider_gojira' => 'spider & user_input'),
-        '#default_value' => variable_get('gojira_search_in', 'both'),
-        '#description' => 'With this you can limit the search to only adhoc data, only spider data or both.'
-    );
     $form['algemene_instellingen']['gojira_amount_calls_to_google'] = array(
         '#title' => t('Amount of calls to google each day.'),
         '#type' => 'textfield',
