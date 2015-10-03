@@ -327,8 +327,10 @@ class Mailer {
      */
     public static function sendSubscriptionEndWarning($main_doctor) {
 
+        $title = helper::value($main_doctor, GojiraSettings::CONTENT_TYPE_USER_TITLE);
+        
         $body = variable_get('gojira_subscription_expire_warning', '');
-        $body = str_replace(array('%doctor%'), array(helper::value($main_doctor, GojiraSettings::CONTENT_TYPE_USER_TITLE)), $body);
+        $body = str_replace(array('%title%'), array($title), $body);
 
         $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
         $aInfo['from_name'] = 'SocialeKaart.care';
@@ -336,7 +338,7 @@ class Mailer {
         $aInfo['html'] = $body;
         $aInfo['to'][] = array(
             'email' => $main_doctor->mail,
-            'name' => $main_doctor->mail,
+            'name' => $title,
             'type' => 'to'
         );
         if(trim(variable_get('mailadres_information_bcc', 'blijnder@gmail.com')) != ''){

@@ -390,7 +390,7 @@ EOT;
                         $group = node_load($group->nid);
                         $groups_main_doctor_uid = helper::value($group, GojiraSettings::CONTENT_TYPE_ORIGINAL_DOCTOR, 'uid');
                         $main_doctor = user_load($groups_main_doctor_uid);
-
+                        
                         Mailer::sendSubscriptionEndWarning($main_doctor);
                         db_query("UPDATE `gojira_payments` SET `warning_send`=1 WHERE  `id`={$payment->id}");
                     }
