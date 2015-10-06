@@ -161,6 +161,7 @@ Een doctor met abonnement zonder verlenging (een extra betaalde periode die nog 
     <li>info@socialekaart.care<i>(catch all) mailbox</i></li>
     <li>daan@blijnder.nl<i>(mailbox)</i></li>
     <li>jonathan@blijnder.nl<i>(mailbox)</i></li>
+    <li>blijnder@gmail.com<i>(gmail)</i></li>
 </ul>
 <style>
     h2{

@@ -24,11 +24,12 @@ function gojira_theme() {
       'settings_thanks' => array('template' => 'templates/settings_thanks'),
       'gojirasearch' => array('template' => 'templates/gojirasearch'),
       'showlocation' => array('template' => 'templates/showlocation'),
+      'list_double' => array('template' => 'templates/list_double'),
       'favorites' => array('template' => 'templates/favorites'),
       'passwordthanks' => array('template' => 'templates/passwordthanks'),
 //      'gojirareport_suggested_inactive_locations' => array('template' => 'templates/gojirareport_suggested_inactive_locations'),
 //      'gojirareport_suggested_active_locations' => array('template' => 'templates/gojirareport_suggested_active_locations'),
-      'gojirareport_double_locations' => array('template' => 'templates/gojirareport_double_locations'),
+//      'gojirareport_double_locations' => array('template' => 'templates/gojirareport_double_locations'),
 //      'gojirareport_location_by_tag' => array('template' => 'templates/gojirareport_location_by_tag'),
 //      'gojirareport_location_by_category' => array('template' => 'templates/gojirareport_location_by_category'),
       'tools' => array('template' => 'templates/tools'),
@@ -61,7 +62,7 @@ function gojira_menu() {
 
   //$items['admin/reports/gojirareport_suggested_inactive_locations'] = array('access arguments' => array(helper::PERMISSION_GOJIRA_ADMIN), 'page callback' => 'gojirareport_suggested_inactive_locations', 'title' => t('Gojira suggested inactive locations'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Suggested inactive locations.'));
   //$items['admin/reports/gojirareport_suggested_active_locations'] = array('access arguments' => array(helper::PERMISSION_GOJIRA_ADMIN), 'page callback' => 'gojirareport_suggested_active_locations', 'title' => t('Gojira suggested active locations'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Suggested active locations.'));
-  $items['admin/reports/gojirareport_double_locations'] = array('access arguments' => array(helper::PERMISSION_GOJIRA_ADMIN), 'page callback' => 'gojirareport_double_locations', 'title' => t('Gojira double locations'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Generate a list of locations that have exactly the same coordinates.'));
+//  $items['admin/reports/gojirareport_double_locations'] = array('access arguments' => array(helper::PERMISSION_GOJIRA_ADMIN), 'page callback' => 'gojirareport_double_locations', 'title' => t('Gojira double locations'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Generate a list of locations that have exactly the same coordinates.'));
   //$items['admin/reports/gojirareport_location_by_tag'] = array('access arguments' => array(helper::PERMISSION_GOJIRA_ADMIN), 'page callback' => 'gojirareport_location_by_tag', 'title' => t('Gojira locations by label'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Gat all locations that have a specific tag.'));
   //$items['admin/reports/gojirareport_location_by_category'] = array('access arguments' => array(helper::PERMISSION_GOJIRA_ADMIN), 'page callback' => 'gojirareport_location_by_category', 'title' => t('Gojira locations by category'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Gat all locations that belong to a specific category.'));
   
@@ -125,6 +126,7 @@ function gojira_menu() {
   
   // ADMIN
   $items['admin/config/system/docu'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'docu', 'title' => t('Gojira documentation'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Documentation of Gojira.'));
+  $items['admin/config/system/list_double'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'list_double', 'title' => t('Double locations in the system'), 'type' => MENU_NORMAL_ITEM);
   $items['admin/config/system/idealreport'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'idealreport', 'title' => t('Gojira ideal report'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Report of the payments'));
   $items['admin/config/system/gojiratools'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'tools', 'title' => t('Gojira tools'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Several tools for Gojira.'));
   $items['admin/config/system/gojiraconfiguration'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'configuration', 'title' => t('Gojira configuration'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Several configurations for Gojira.'));
