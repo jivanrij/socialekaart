@@ -1,25 +1,5 @@
 <?php
 
-/*
- * 
- * ALTER TABLE `gojira_payments` ADD COLUMN `callback_times` INT(11) NOT NULL DEFAULT '0' COMMENT 'Amount of times the callback was used for this payment. Max is 6 times after 5, 10, 30, 60, 120 and 300 minutes.' AFTER `warning_send`;
- * 
- * STATUS DEMO
-Setting to change with new releases:
-25/07/2015 Enable the token & auto_login modules
-01/08/2015 ALTER TABLE `users` ADD COLUMN `haweb_sso_setup_done` INT(1) UNSIGNED NULL DEFAULT 0 COMMENT 'Flag if the welcome mail for haweb users is send and roles are given' AFTER `data`;
-01/08/2015 ALTER TABLE `users` ADD COLUMN `haweb_sso_dublicate_warning_send` INT(1) UNSIGNED NULL DEFAULT 0 COMMENT 'Flag if the dublicate warning is send.' AFTER `data`;
- * 
- * 
- * 
- * 
- * 
- * 
- * STATUS PROD
- * STATUS DEV
- */
-
-
 // todo make autoloader
 include ('inc/ClassQantani.php');
 include ('inc/Mandrill.php');
@@ -57,7 +37,7 @@ include ('php/actions/questions.php');
 include ('php/actions/favorites.php');
 include ('php/actions/practicecheck.php');
 include ('php/actions/locationinfo.php');
-//include ('php/actions/gojirareport_double_locations.php');
+include ('php/actions/gojirareport_double_locations.php');
 //include ('php/actions/gojirareport_location_by_category.php');
 //include ('php/actions/gojirareport_location_by_tag.php');
 //include ('php/actions/gojirareport_suggested_active_locations.php');
@@ -397,6 +377,7 @@ function _gojira_post_insert($iNode) {
 function gojira_user_login(&$edit, $account) {
 
   // reset the search global & search favorites field @ login
+  // by remiving this, remember! -> put it to 0 when unsubscribing..
   $searchGlobalField = GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD;
   $account->$searchGlobalField = array(LANGUAGE_NONE => array(0 => array('value' => 0)));
   $searchFavoritesField = GojiraSettings::CONTENT_TYPE_SEARCH_FAVORITES_FIELD;

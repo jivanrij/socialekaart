@@ -325,18 +325,12 @@ EOT;
         if ($group && $group->type == GojiraSettings::CONTENT_TYPE_GROUP) {
             $group->field_payed_status[LANGUAGE_NONE][0]['value'] = 0;
             node_save($group);
-
             $users = Group::getAllUsers($group->nid);
             foreach ($users as $groupuser) { // through the users
                 if ($groupuser->uid != 1) {
-                    $field = GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD;
-                    $fieldValue = $groupuser->$field;
-                    $fieldValue[LANGUAGE_NONE][0]['value'] = 0;
-
                     if (helper::value($group, GojiraSettings::CONTENT_TYPE_ORIGINAL_DOCTOR, 'uid') == $groupuser->uid) {
                         // master user
                         self::removeRoleFromUser($groupuser->uid, helper::ROLE_SUBSCRIBED_MASTER);
-
                         // only send this mail if it has never been send for this payment
                         if ($payment->warning_ended !== 0) {
                             Mailer::sendSubscriptionEnded($groupuser);

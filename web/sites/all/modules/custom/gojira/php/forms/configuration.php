@@ -385,7 +385,7 @@ function gojira_configuration_form_submit($form, &$form_state) {
     variable_set('SEARCH_MAX_RESULT_AMOUNT', $_POST['SEARCH_MAX_RESULT_AMOUNT']);
     variable_set('mailadres_information_bcc', $_POST['mailadres_information_bcc']);
     variable_set('gojira_amount_calls_to_google', $_POST['gojira_amount_calls_to_google']);
-    variable_set('gojira_search_in', $_POST['gojira_search_in']);
+//    variable_set('gojira_search_in', $_POST['gojira_search_in']);
     variable_set('gojira_subscription_expire_warning', $_POST['gojira_subscription_expire_warning']);
     variable_set('gojira_subscription_ended', $_POST['gojira_subscription_ended']);
     variable_set('gojira_check_coordinates_on_update_node', $_POST['gojira_check_coordinates_on_update_node']);

@@ -148,6 +148,20 @@ Een doctor met abonnement zonder verlenging (een extra betaalde periode die nog 
 <p>
     Gebruikers met abonnement kunnen altijd een naam van een stad of dorp megeven in de zoektermen. Het zoekresultaat zal zich dan altijd limiteren op de zorgverleners in het betreffende stadje/dorp. Wel krijgt de gebruiker alsnog de mogelijkheid om lokaal te zoeken met de op gegeven zoektermen. Het is dus nog mogelijk om in oud-beijerland te zoeken op 'zwolle tandarts'.
 </p>
+<h2>
+    E-mailadressen
+</h2>
+<ul>
+    <li>info@blijnder.nl<i>(catch all) forward daan@blijnder.nl & jonathan@blijnder.nl</i></li>
+    <li>beheer@socialekaart.care<i> forward info@socialekaart.care</i></li>
+    <li>helpdesk@socialekaart.care<i> forward info@socialekaart.care</i></li>
+    <li>jonathan@socialekaart.care<i> forward jonathan@blijnder.nl</i></li>
+    <li>daan@socialekaart.care<i> forward daan@socialekaart.care</i></li>
+    <li>mail@socialekaart.care<i> forward info@socialekaart.care</i></li>
+    <li>info@socialekaart.care<i>(catch all) mailbox</i></li>
+    <li>daan@blijnder.nl<i>(mailbox)</i></li>
+    <li>jonathan@blijnder.nl<i>(mailbox)</i></li>
+</ul>
 <style>
     h2{
         font-size:14px;

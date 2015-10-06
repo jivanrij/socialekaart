@@ -223,6 +223,10 @@ function gojira_settings_form_submit($form, &$form_state) {
     } else {
         drupal_set_message(t('Your settings and location information is succesfully changed.'), 'status');
     }
+    
+    if(variable_get('gojira_check_coordinates_on_update_node', 1) == 0 && user_access('administer')){
+        drupal_set_message('gojira_check_coordinates_on_update_node is turned off', 'status');
+    }
 
     drupal_goto($redirect);
 }
