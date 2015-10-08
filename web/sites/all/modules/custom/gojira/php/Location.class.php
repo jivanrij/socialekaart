@@ -335,25 +335,26 @@ class Location {
      */
     public static function locationsAreClose($a_long, $a_lat, $b_long, $b_lat) {
 
-        $differance = 0.0001;
-
-        $diff_long = abs($a_long - $b_long);
-        $diff_lat = abs($a_lat - $b_lat);
-
-//    if($a_long == $b_long && $a_lat == $b_lat){
-//      return true;
-//    }
-
-        if ($diff_long == 0 && $diff_lat == 0) {
+        if(($a_long == $b_long) && ($a_lat == $b_lat)){
             return true;
         }
-
-        if (is_numeric($diff_lat) && is_numeric($diff_long) && $diff_lat != 0 && $diff_long != 0) {
-            if (($diff_long < $differance) && ($diff_lat < $differance)) {
-                return true;
-            }
-        }
         return false;
+
+//        $differance = 0.0001;
+//
+//        $diff_long = abs($a_long - $b_long);
+//        $diff_lat = abs($a_lat - $b_lat);
+//
+//        if ($diff_long == 0 && $diff_lat == 0) {
+//            return true;
+//        }
+//
+//        if (is_numeric($diff_lat) && is_numeric($diff_long) && $diff_lat != 0 && $diff_long != 0) {
+//            if (($diff_long < $differance) && ($diff_lat < $differance)) {
+//                return true;
+//            }
+//        }
+//        return false;
     }
 
     /**

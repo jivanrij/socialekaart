@@ -1,5 +1,30 @@
 <h1>Documentatie</h1>
 
+<h2>Support</h2>
+<p>
+    Er zijn verschillende dingen die gedaan moeten worden of in de gaten gehouden moeten worden om een goede support te kunnen leveren op Sociale Kaart. De meeste taken zullen het resultaat zijn van e-mails die binnen komen op de gerelateerde e-mailadressen.<br />
+    Dit in de gaten houden is iets wat dagelijks gedaan moet worden door ons. Hier moeten afspraken over komen.
+</p>
+<h3>Support e-mailadressen</h3>
+<p>
+    <i>info@socialekaart.care</i><br />
+    Dit e-mailadres wordt gebruikt als algemeen support e-mailadres. Hierop zullen dus ook de meeste issues binnenkomen. Voor dit e-mailadres is een mailbox beschikbaar op webmail.socialekaart.care. Een e-mail mag pas/moet uit de inbox gehaald worden als het issue is afgehandeld! Hier is een aparte folder voor. Verder is het van belang dat er <u>elke dag</u> even naar dit e-mailadres gekeken wordt.<br />
+    <b>Verbeter suggestie</b> - een gebruiker heeft in dit geval via een zorgverlener een verbetersuggestie ingevoerd. Afhankelijk van de suggestie moeten we hierop handelen. Wat er als suggestie is opgegeven staat in de e-mail. In deze e-mail staan dan ook linkjes naar de gebruiker en zorgverlener in kwestie.<br />
+    <b>Zorgverlener zonder coordinaten</b> -  een gebruiker heeft een zorgverlener aangemaakt maar deze is niet door google voorzien van coordinaten. In dit geval moeten wij deze zorgverlener even voorzien van coordinaten & weer actief zetten & publiceren.<br />
+    <b>Vraag vanuit de FAQ</b> - Vragen van uit de FAQ komen ook op dit e-mailadres binnen. Per vraag moet hier aandacht aan besteed worden.<br />
+    <b>Nieuwe account</b> - Bij het aanmaken van een nieuwe account moet deze account geactiveerd worden. Hier krijgen we ook een e-mail van met alle benodigde linkjes in de e-mail. De account moet gecontroleerd worden (BIG) en geactiveerd worden. Voor het makkelijk activeren is een aparte pagina gemaakt in de backend. De e-mail bevat hier ook een link van.<br />
+    <b>Geen betalings informatie</b> gevonden bij een groep terwijl de groep wel een abonnement heeft? Dan krijgen we ook een e-mailtje op dit adres.<br />
+    <b>Dubbele zorgverleners gevonden</b> - In dit geval krijgen we hier ook een e-mail van met alle benodigde informatie waarmee we kunnen handelen.<br /><br />
+    <i>blijnder@gmail.com</i><br />
+    Dit is het Blijnder spam adres. Hier komen alle informatieve e-mails uit. Denk aan het 'iemand heeft locatie aangemaakt' of 'iemand zijn abonnement is verlopen'. Ook is het mogelijk om <u>alle</u> e-mails die naar de gebruikers gestuurd worden ook naar dit e-mailadres (bcc) te sturen. Dit in een instelling, bij livegang staat dit aan.<br />
+</p>
+<h3>Log</h3>
+<p>
+    Het is van belang om om de bepaale tijd de drupal log's door te nemen. Foutmeldingen en andere noemenswaardigheden zijn hierin terug te vinden. Dit is te doen op <a href="/admin/reports/dblog">deze</a> pagina.
+</p>
+<h3>Betalingsverkeer</h3>
+<p>Op <a href="/admin/config/system/idealreport">deze</a> pagina is een weergave te vinden van alle gedane transacties binnen sociale kaart.</p>
+<hr/>
 <h2>Gebruikers, Rollen Groepen & Praktijken</h2>
 <p>
     <img src="/sites/all/themes/gojiratheme/img/datagojira.png" alt="/sites/all/themes/gojiratheme/img/datagojira.png">
@@ -42,7 +67,7 @@
 <p>
     <img src="/sites/all/themes/gojiratheme/img/rechten.png" alt="/sites/all/themes/gojiratheme/img/rechten.png">
 </p>
-
+<hr/>
 <h2>E-mails die verzonden worden</h2>
 <p>
     <b>sendInvoiceOfNewSubscription</b> heeft de titel 'Invoice SocialeKaart.care - [INVOICE_NUMBER]'. Bij het aanmaken van een nieuwe abonnementsperiode door een huisarts 
@@ -93,7 +118,7 @@
 <p>
     <b>informAdminAboutDoubleLocations</b> wordt verstuurd naar de admin als een gebruiker ergens dubbele locaties ziet. De admin krijgt dan hier het lijstje van.
 </p>
-
+<hr/>
 <h2>SSO registratie</h2>
 <p>
     Bij acceptatie van de algemene voorwaarden krijgt de gebruiker 3 maanden abonnements voordeel. In dit geval worden er geen activatie e-mails verstuurd naar de gebruikers van de groep.
@@ -104,7 +129,7 @@
 <p>
     Gebruikers krijgen via HAweb een account in Sociale Kaart. Deze account kan nog niet veel van zichzelf omdat deze nog niet de benodigde rechten heeft. Pas als de gebruiker akkoort gaat met de algemene voorwaarden wordt de account voorzien van alle benodigde rechten via rollen. Ook wordt er dan een flag gezet in de tabel users.haweb_sso_setup_done. Als deze flag gezet is zal het systeem nooit meer automatisch de user voorzien van deze rechten.
 </p>
-
+<hr/>
 <h2>Verbetersuggesties & andere input van de gebruikers</h2>
 <p>
     Vanuit een zoekresultaat kan een gebruiker ervoor kiezen om naar het 'verbetersuggestie' formulier te gaan. Vanaf dit formulier kan de gebruiker een verbetersuggestie sturen naar de admin's van het systeem. Deze suggesties kunnen van verschillende soorten zijn, een daarvan is het corrigeren van de titel van een locatie. Als de gebruiker hiervoor kiest zal de titel ook direct vervangen worden.
@@ -112,7 +137,7 @@
 <p>
     Via het formulier 'Voeg een zorgverlener toe' kan een gebruiker met genoeg rechten (doctor & employee) een locatie van een zorgverlener toevoegen. Er wordt dan wel een check gedaan of er niets wordt toegevoegd op een bekende plaats (gebaseerd op de coordinaten). Als dit het geval is wordt er gevraagd of de gebruiker het zeker weet en wordt de locatie(s) die al bekend zijn weergegeven. Daarbij krijgt de gebruiker ook een directe link naar het verbetersuggestie formulier van de al bestaande locaties.
 </p>
-
+<hr/>
 <h2>Abonnement</h2>
 <p>
     Een abonnement duurt 1 jaar, deze periode is wel instelbaar in de configuratie pagina. 30 dagen voor het vervallen van de abonnementsperiode krijgt de huisarts een waarschuwingsmail. Tijdens een abonnementsperiode kan een huisarts alvast een volgende periode kopen. Bij het vervallen van een abonnement worden de accounts van de (niet huisarts) gebruikers gedeactiveerd. Bij heractivering worden deze weer geactiveerd.
@@ -129,12 +154,14 @@ Een doctor met abonnement zonder verlenging (een extra betaalde periode die nog 
 <p>
     Elke nacht wordt via de <a href="https://www.drupal.org/documentation/modules/system">cron</a> gecontrolleerd of abonnementen niet verlopen zijn of binnenkort gaan verlopen. In beide gevallen worden de gebruikers op de hoogte gesteld via een e-mail.
 </p>
+<hr/>
 <h2>
     iDeal
 </h2>
 <p>
     De gebruiker kan een abonnement afnemen door middel van een iDeal betaling. Deze betaling zal voltrokken worden zodra de gebruiker vanuit iDeal terugkomt op de idealreturn pagina. Als hier iets verkeerd gaat zal er nog vanuit iDeal een callback call gedaan worden. Hier schrijft Easy iDeal het volgende over: <i>Om er zeker van te zijn dat u de correcte betaalstatus ontvangt kunt u een callback URL (beginnend met http:// of https://) opgeven in de Qantani backoffice onder “Instellingen”. Deze URL wordt 5, 10, 30, 60, 120 en 300 minuten na het starten van de transactie aangeroepen. De Query string zal automatisch worden toegevoegd aan de door u opgegeven callback URL. De callback URL wordt alleen aangeroepen wanneer de betaalstatus definitief is.</i>. Er is een <a href='/?q=admin/config/system/idealreport' title="iDeal rapportage pagina">iDeal rapportage pagina</a> om de gegevens uit te lezen van alle transacties.
 </p>
+<hr/>
 <h2>Nieuwsbrief</h2>
 <p>
     Bij het akkoort gaan met de Algemene Voorwaarden krijgt de gebruiker ook de mogelijkheid om zich te abonneren op de Mailchimp nieuwsbrief. Daarnaast is er een registratie formulier op de /nieuwsbrief pagina. Verder zit alles in Mailchimp.
@@ -148,6 +175,7 @@ Een doctor met abonnement zonder verlenging (een extra betaalde periode die nog 
 <p>
     Gebruikers met abonnement kunnen altijd een naam van een stad of dorp megeven in de zoektermen. Het zoekresultaat zal zich dan altijd limiteren op de zorgverleners in het betreffende stadje/dorp. Wel krijgt de gebruiker alsnog de mogelijkheid om lokaal te zoeken met de op gegeven zoektermen. Het is dus nog mogelijk om in oud-beijerland te zoeken op 'zwolle tandarts'.
 </p>
+<hr/>
 <h2>
     E-mailadressen
 </h2>
@@ -163,9 +191,26 @@ Een doctor met abonnement zonder verlenging (een extra betaalde periode die nog 
     <li>jonathan@blijnder.nl<i>(mailbox)</i></li>
     <li>blijnder@gmail.com<i>(gmail)</i></li>
 </ul>
+<hr/>
+<h2>
+    Cron
+</h2>
+<p>
+    De cron is een proces wat om de bepaalde tijd vanaf de server gedraaid wordt. Sociale kaart heeft ook een cron die 1x per nacht draait deze voert de volgende taken uit:
+</p>
+<ul>
+    <li>Verwijderen van ongebruikte labels</li>
+    <li>Update zoekindex waar nodig</li>
+    <li>Controle op abonnementen, trekt abonnementen in & stuurt waarschuwingen voor het bijna verlopen van abonnementen</li>
+    <li>Verwijder SSO gebruikers die niet akkoort zijn met de algemene voorwaarden</li>
+</ul>
 <style>
     h2{
         font-size:14px;
         margin-top:25px;
+    }
+    h3{
+        font-size:12px;
+        margin-top:20px;
     }
 </style>

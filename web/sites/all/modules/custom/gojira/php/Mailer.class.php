@@ -389,14 +389,14 @@ class Mailer {
      * @return boolean
      */
     public static function sendQuestion($oUser, $sQuestion, $sTopic) {
-        $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
+        $aInfo['from_email'] = 'no-reply@socialekaart.care';
         $aInfo['from_name'] = 'SocialeKaart.care';
         $aInfo['subject'] = 'Vraag van gebruiker ' . $oUser->name . ' over ' . $sTopic;
         $aInfo['text'] = 'User: ' . helper::value($oUser, GojiraSettings::CONTENT_TYPE_USER_TITLE) . ' with uid: ' . $oUser->uid . '<br /><br />' . $sQuestion;
         $aInfo['html'] = 'User: ' . helper::value($oUser, GojiraSettings::CONTENT_TYPE_USER_TITLE) . ' with uid: ' . $oUser->uid . '<br /><br />' . $sQuestion;
         $aInfo['to'][] = array(
-            'email' => variable_get('mailadres_helpdesk', 'helpdesk@socialekaart.care'),
-            'name' => variable_get('mailadres_helpdesk', 'helpdesk@socialekaart.care'),
+            'email' => variable_get('site_mail', 'info@socialekaart.care'),
+            'name' => variable_get('site_mail', 'info@socialekaart.care'),
             'type' => 'to'
         );
         $oMailer = new Mailer();
@@ -422,13 +422,13 @@ Extra informatie: {$info}
 Better title: {$better_title}
 EOT;
 
-        $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
+        $aInfo['from_email'] = 'no-reply@socialekaart.care';
         $aInfo['from_name'] = 'SocialeKaart.care';
         $aInfo['subject'] = '[' . $title . '] - Verbetersuggestie voor locatie - ' . $type_of_problem;
         $aInfo['text'] = $body;
         $aInfo['to'][] = array(
-            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'email' => variable_get('site_mail', 'info@socialekaart.care'),
+            'name' => variable_get('site_mail', 'info@socialekaart.care'),
             'type' => 'to'
         );
         $oMailer = new Mailer();
@@ -513,13 +513,13 @@ De gebruiker heeft het BIG nummer: {$sBig}<br />
 <a href="https://www.bigregister.nl/zoeken/zoekenopbignummer/default.aspx">BIG controle</a><br />
 EOT;
 
-        $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
+        $aInfo['from_email'] = 'no-reply@socialekaart.care';
         $aInfo['from_name'] = 'SocialeKaart.care';
         $aInfo['subject'] = 'Account moet gevalideerd worden van '.$sTitle;
         $aInfo['html'] = $sBody;
         $aInfo['to'][] = array(
-            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'email' => variable_get('site_mail', 'info@socialekaart.care'),
+            'name' => variable_get('site_mail', 'info@socialekaart.care'),
             'type' => 'to'
         );
         $oMailer = new Mailer();
@@ -614,13 +614,13 @@ Address:<br />
 <b>TODO: A) Zoek de coordinaten op via google maps & voeg ze toe via de tools page, B) publiceer daarna de praktijk/locatie.</b>
 EOT;
 
-        $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
+        $aInfo['from_email'] = 'no-reply@socialekaart.care';
         $aInfo['from_name'] = 'SocialeKaart.care';
         $aInfo['subject'] = 'SocialeKaart.care No Coordinates found! - '.$iLocation;
         $aInfo['html'] = $sBody;
             $aInfo['to'][] = array(
-                'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-                'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+                'email' => variable_get('site_mail', 'info@socialekaart.care'),
+                'name' => variable_get('site_mail', 'info@socialekaart.care'),
                 'type' => 'to'
             );
 
@@ -635,13 +635,13 @@ EOT;
      * 
      */
     public static function checkSubscriptionFail($iGroup) {
-        $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
+        $aInfo['from_email'] = 'no-reply@socialekaart.care';
         $aInfo['from_name'] = 'SocialeKaart.care';
         $aInfo['subject'] = 'SocialeKaart.care ISSUE - group ' . $iGroup . ' has no payment information';
         $aInfo['text'] = 'SocialeKaart.care ISSUE - group ' . $iGroup . ' has no payment information, but is flagged as a group with a payed account.';
         $aInfo['to'][] = array(
-            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'email' => variable_get('site_mail', 'info@socialekaart.care'),
+            'name' => variable_get('site_mail', 'info@socialekaart.care'),
             'type' => 'to'
         );
 
@@ -673,7 +673,7 @@ EOT;
         
         global $user;
         $oUser = user_load($user->uid);
-        $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
+        $aInfo['from_email'] = 'no-reply@socialekaart.care';
         $aInfo['from_name'] = 'SocialeKaart.care';
         $aInfo['subject'] = 'SocialeKaart.care ISSUE - double locations reported by user '.$oUser->name;
         $aInfo['html'] = <<<EOT
@@ -682,8 +682,8 @@ User {$oUser->name} ({$oUser->uid}) thinks the following locations are double.<b
 TODO: check them out and if they are double, merge them.
 EOT;
         $aInfo['to'][] = array(
-            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'email' => variable_get('site_mail', 'info@socialekaart.care'),
+            'name' => variable_get('site_mail', 'info@socialekaart.care'),
             'type' => 'to'
         );
 
