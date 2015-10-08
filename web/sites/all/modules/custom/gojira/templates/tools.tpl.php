@@ -380,7 +380,7 @@ You can find the cron url <a href="/admin/config/system/cron" title="cron page">
 
 
 
-<hr />
+<!--<hr />
 <?php // SET GROUP NOT PAYED ?>
 <p>
   Unsubscribe this group.<br />
@@ -395,9 +395,9 @@ You can find the cron url <a href="/admin/config/system/cron" title="cron page">
   <?php endforeach; ?>
   </select>
   <input class="form-submit" type="submit" />
-</form>
+</form>-->
 
-<hr />
+<!--<hr />
 <?php // SET GROUP  PAYED ?>
 <p>
   Subscribe this group.<br />
@@ -411,7 +411,7 @@ You can find the cron url <a href="/admin/config/system/cron" title="cron page">
   <?php endforeach; ?>
   </select>
   <input class="form-submit" type="submit" />
-</form>
+</form>-->
 
 
 <hr />

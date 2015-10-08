@@ -162,13 +162,11 @@ class Mailer {
             'name' => $send_to_address,
             'type' => 'to'
         );
-        if(trim(variable_get('mailadres_information_bcc', 'blijnder@gmail.com')) != ''){
-            $aInfo['to'][] = array(
-                'email' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                'name' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                'type' => 'bcc'
-            );
-        }
+        $aInfo['to'][] = array(
+            'email' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
+            'name' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
+            'type' => 'bcc'
+        );
         $oMailer = new Mailer();
         $oMailer->send($aInfo);
     }
@@ -360,7 +358,7 @@ class Mailer {
      */
     public static function sendSubscriptionEnded($main_doctor) {
         $body = variable_get('gojira_subscription_ended', '');
-        $body = str_replace(array('%doctor%', '%url%'), array(helper::value($main_doctor, GojiraSettings::CONTENT_TYPE_USER_TITLE), '<a href="https://socialekaart.care/idealpay" title="Verleng uw abonnement.">Verleng uw abonnement.</a>'), $body);
+        $body = str_replace(array('%doctor%', '%url%'), array(helper::value($main_doctor, GojiraSettings::CONTENT_TYPE_USER_TITLE), '<a href="https://www.socialekaart.care/idealpay" title="Verleng uw abonnement.">Verleng uw abonnement.</a>'), $body);
 
         $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
         $aInfo['from_name'] = 'SocialeKaart.care';
@@ -444,10 +442,10 @@ EOT;
 
   $sBody = <<<EOT
 {$oLocation->title}
-https://socialekaart.care/node/{$oLocation->nid}/edit
+https://www.socialekaart.care/node/{$oLocation->nid}/edit
 
 Aangemaakt door gebruiker {$oUser->name}
-https://socialekaart.care/user/{$oUser->uid}/edit
+https://www.socialekaart.care/user/{$oUser->uid}/edit
 EOT;
         
         $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
@@ -499,9 +497,9 @@ EOT;
         $sTitle = helper::value($oUser, GojiraSettings::CONTENT_TYPE_USER_TITLE);
         $sEmail = $oUser->mail;
         $sBig = helper::value($oUser, GojiraSettings::CONTENT_TYPE_BIG_FIELD);
-        $sAccount = 'https://socialekaart.care/user/' . $oUser->uid . '/edit';
+        $sAccount = 'https://www.socialekaart.care/user/' . $oUser->uid . '/edit';
         
-        $sUrl = "https://socialekaart.care/admin/config/system/gojiraactivateuser";
+        $sUrl = "https://www.socialekaart.care/admin/config/system/gojiraactivateuser";
         
         $sBody = <<<EOT
 Er is een account aangemaakt door {$sTitle}.<br />
@@ -604,9 +602,9 @@ Deze moeten opgezocht worden en toegevoegd worden.<br />
 Deze locatie is van het type <b>{$sCategory}</b>.<br />
 Let op! Praktijken van huisartsen moeten snel voorzien worden van coordinaten.<br />
 <br />
-<a href="https://socialekaart.care/?q=node/572388/edit&destination=admin/content">socialekaart.care/?q=node/572388/edit&destination=admin/content</a><br />
+<a href="https://www.socialekaart.care/?q=node/572388/edit&destination=admin/content">socialekaart.care/?q=node/572388/edit&destination=admin/content</a><br />
 <br />
-<a href="https://socialekaart.care/?q=admin/config/system/gojiratools&location_id={$iLocation}">socialekaart.care/?q=admin/config/system/gojiratools</a><br />
+<a href="https://www.socialekaart.care/?q=admin/config/system/gojiratools&location_id={$iLocation}">socialekaart.care/?q=admin/config/system/gojiratools</a><br />
 Address:<br />
 {$sAddress}<br />
 <br />
@@ -661,7 +659,7 @@ EOT;
         foreach($aLocations as $iLocation){
             if(is_numeric($iLocation)){
                 $oLocation = node_load($iLocation);
-                $sHtmlLinks .= '<a href="https://socialekaart.care/?loc='.$iLocation.'">'.$oLocation->title.' '.$oLocation->nid.'</a><br />';
+                $sHtmlLinks .= '<a href="https://www.socialekaart.care/?loc='.$iLocation.'">'.$oLocation->title.' '.$oLocation->nid.'</a><br />';
             }
         }
         

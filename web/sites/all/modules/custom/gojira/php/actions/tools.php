@@ -58,27 +58,27 @@ function tools() {
             exit;
         }
 
-        if (isset($_GET['set_payed_group'])) {
-            Subscriptions::subscribeByGroupId($_GET['set_payed_group']);
-            drupal_set_message(t('Subscribed group ' . $_GET['set_payed_group']), 'status');
-            header('Location: /?q=admin/config/system/gojiratools');
-            exit;
-        }
+//        if (isset($_GET['set_payed_group'])) {
+//            Subscriptions::subscribeByGroupId($_GET['set_payed_group']);
+//            drupal_set_message(t('Subscribed group ' . $_GET['set_payed_group']), 'status');
+//            header('Location: /?q=admin/config/system/gojiratools');
+//            exit;
+//        }
 
-        if (isset($_GET['set_not_payed_group'])) {
-            
-            $payment = db_query("SELECT * FROM gojira_payments WHERE gid = ".$_GET['set_not_payed_group']." ORDER BY period_end DESC limit 1")->fetchObject();
-            
-            if($payment){
-                Subscriptions::unsubscribe($_GET['set_not_payed_group'], $payment);
-                drupal_set_message(t('Unsubscribed group ' . $_GET['set_not_payed_group']), 'status');
-            }else{
-                drupal_set_message('No payment info found for this group', 'status');
-            }
-            
-            header('Location: /?q=admin/config/system/gojiratools');
-            exit;
-        }
+//        if (isset($_GET['set_not_payed_group'])) {
+//            
+//            $payment = db_query("SELECT * FROM gojira_payments WHERE gid = ".$_GET['set_not_payed_group']." ORDER BY period_end DESC limit 1")->fetchObject();
+//            
+//            if($payment){
+//                Subscriptions::unsubscribe($_GET['set_not_payed_group'], $payment);
+//                drupal_set_message(t('Unsubscribed group ' . $_GET['set_not_payed_group']), 'status');
+//            }else{
+//                drupal_set_message('No payment info found for this group', 'status');
+//            }
+//            
+//            header('Location: /?q=admin/config/system/gojiratools');
+//            exit;
+//        }
 
         if (isset($_GET['set_reindex_all'])) {
             db_query("UPDATE `node` SET `indexed`=0 WHERE  `type`='location'");
