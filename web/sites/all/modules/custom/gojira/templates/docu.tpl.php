@@ -22,6 +22,10 @@
 <p>
     Het is van belang om om de bepaale tijd de drupal log's door te nemen. Foutmeldingen en andere noemenswaardigheden zijn hierin terug te vinden. Dit is te doen op <a href="/admin/reports/dblog">deze</a> pagina.
 </p>
+<h3>Mandril e-mails</h3>
+<p>
+    Het versturen van e-mails gaat via <a href="https://www.mandrill.com/about/">Mandril</a>. Hier zijn minimale kosten aan verbonden. Wel moet er om de maand of 2 gekeken worden of hier wat budget naar overgeschreven moet worden.
+</p>
 <h3>Betalingsverkeer</h3>
 <p>Op <a href="/admin/config/system/idealreport">deze</a> pagina is een weergave te vinden van alle gedane transacties binnen sociale kaart. De invoices worden naar de gebruikers gemailed. Deze mail wordt ook via bcc naar blijnder@gmail.com gemailed. Hier zijn dus alle invoices terug te vinden.</p>
 <hr/>

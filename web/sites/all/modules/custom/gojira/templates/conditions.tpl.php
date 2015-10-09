@@ -175,8 +175,8 @@
 <p>Op alle rechtsbetrekkingen waarbij Blijnder partij is, is uitsluitend het Nederlandse recht van toepassing. Dit geldt ook indien een verbintenis geheel of gedeeltelijk in het buitenland wordt uitgevoerd of indien de Gebruiker zijn woonplaats in het buitenland heeft.</p>
 <p>De toepasselijkheid van het Weens Koopverdrag wordt uitgesloten.</p>
 <p>Geschillen tussen Blijnder en de Gebruiker zullen uitsluitend worden voorgelegd aan de bevoegde rechter in het arrondissement Rotterdam, tenzij de wet dwingend anders voorschrijft.</p>
-<h2>Artikel 23 - Vindplaats</h2>
-<p>Deze Algemene Voorwaarden zijn gedeponeerd bij de KvK onder nummer 63090732.</p>
+<!--<h2>Artikel 23 - Vindplaats</h2>
+<p>Deze Algemene Voorwaarden zijn gedeponeerd bij de KvK onder nummer 63090732.</p>-->
 </div>
 <?php if (!helper::agreedToConditions() && array_key_exists('form', $output)): ?>
     <?php echo render($output['form']); ?>

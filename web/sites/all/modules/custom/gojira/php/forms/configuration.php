@@ -126,13 +126,13 @@ function gojira_configuration_form($form, &$form_state) {
     $form['algemene_instellingen']['SUBSCRIPTION_PRICE'] = array(
         '#title' => t('Standaard prijs voor een abonnement'),
         '#type' => 'textfield',
-        '#default_value' => variable_get('SUBSCRIPTION_PRICE', 65),
+        '#default_value' => variable_get('SUBSCRIPTION_PRICE', 24),
         '#description' => 'Het standaard abonnement\'s bedrag.'
     );
     $form['algemene_instellingen']['SUBSCRIPTION_PRICE_DISCOUNT'] = array(
-        '#title' => t('Kortings prijs voor abonnement'),
+        '#title' => t('Kortingsbedrag'),
         '#type' => 'textfield',
-        '#default_value' => variable_get('SUBSCRIPTION_PRICE_DISCOUNT', 55),
+        '#default_value' => variable_get('SUBSCRIPTION_PRICE_DISCOUNT', 10),
         '#description' => 'Het kortingsbedrag, zal optioneel afgetrokken worden van de prijs.'
     );
     $form['algemene_instellingen']['gojira_percentage_tax'] = array(

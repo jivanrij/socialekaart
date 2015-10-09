@@ -212,7 +212,8 @@ class helper {
 //    }
         return (bool) helper::value($user, GojiraSettings::CONTENT_TYPE_CONDITIONS_AGREE_FIELD);
     }
-
+    
+    
     /**
      * Tell's you if the current user has seen the tutorial
      * 
