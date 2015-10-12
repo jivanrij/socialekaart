@@ -85,7 +85,7 @@ function gojira_menu() {
   $items['informthanks'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'informthanks', 'title' => t('Thank you for informing us.'), 'type' => MENU_NORMAL_ITEM);
   $items['gojirasearch'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'gojirasearch', 'title' => t('Search page'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Search page'));
   $items['showlocation'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'showlocation', 'title' => t('Show location'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Show one location'));
-  $items['ownlist'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'ownlist', 'title' => t('Own list'), 'type' => MENU_NORMAL_ITEM, 'description' => t('The personal list of the docter'));
+  $items['ownlist'] = array('access arguments' => array(helper::PERMISSION_PERSONAL_LIST), 'page callback' => 'ownlist', 'title' => t('Own list'), 'type' => MENU_NORMAL_ITEM, 'description' => t('The personal list of the docter'));
   $items['favorites'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'favorites', 'title' => t('Favorites'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Shows all the favorites'));
   $items['register'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'register', 'title' => t('Register'), 'description' => t('Register an account.'));
   //$items['practicecheck'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'practicecheck', 'title' => t('Practice check'), 'description' => t('Check if your practice is known in socialekaart.care.'));
@@ -109,12 +109,12 @@ function gojira_menu() {
   // AJAX 
   $items['ajax/search'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'search', 'title' => t('Search'), 'type' => MENU_NORMAL_ITEM);
   $items['ajax/locationtags'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'locationtags', 'title' => t('Set tags'), 'type' => MENU_NORMAL_ITEM);
-  $items['ajax/switchfavorites'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'switchfavorites', 'title' => t('Switch only show favorites'), 'type' => MENU_NORMAL_ITEM);
+  $items['ajax/switchfavorites'] = array('access arguments' => array(helper::PERMISSION_PERSONAL_LIST), 'page callback' => 'switchfavorites', 'title' => t('Switch only show favorites'), 'type' => MENU_NORMAL_ITEM);
   $items['ajax/postcodesuggest'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'postcodesuggest', 'title' => t('Postcode suggest'), 'type' => MENU_NORMAL_ITEM);
   $items['ajax/checklocation'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'checklocation', 'title' => t('Check location info'), 'type' => MENU_NORMAL_ITEM);
   $items['ajax/showtutorial'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'showtutorial', 'title' => t('Show the tutorial'), 'type' => MENU_NORMAL_ITEM);
   $items['ajax/picklocation'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'picklocation', 'title' => t('Pick a default location'), 'type' => MENU_NORMAL_ITEM);
-  $items['ajax/setfavorite'] = array('access arguments' => array(helper::PERMISSION_MODERATE_LOCATION_CONTENT), 'page callback' => 'setfavorite', 'title' => t('Switch favorite.'), 'type' => MENU_NORMAL_ITEM);
+  $items['ajax/setfavorite'] = array('access arguments' => array(helper::PERMISSION_PERSONAL_LIST), 'page callback' => 'setfavorite', 'title' => t('Switch favorite.'), 'type' => MENU_NORMAL_ITEM);
   $items['ajax/likelabel'] = array('access arguments' => array(helper::PERMISSION_MODERATE_LOCATION_CONTENT), 'page callback' => 'likelabel', 'title' => t('Likelabel'), 'type' => MENU_NORMAL_ITEM);
   $items['ajax/unlikelabel'] = array('access arguments' => array(helper::PERMISSION_MODERATE_LOCATION_CONTENT), 'page callback' => 'unlikelabel', 'title' => t('Unlikelabel'), 'type' => MENU_NORMAL_ITEM);
   $items['ajax/savenewlabel'] = array('access arguments' => array(helper::PERMISSION_MODERATE_LOCATION_CONTENT), 'page callback' => 'savenewlabel', 'title' => t('Save new label'), 'type' => MENU_NORMAL_ITEM);

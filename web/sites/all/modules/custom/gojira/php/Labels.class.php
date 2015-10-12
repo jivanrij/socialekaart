@@ -21,6 +21,7 @@ class Labels {
     public static function getLabels($node) {
         $terms = array();
         $term = field_view_field('node', $node, GojiraSettings::CONTENT_TYPE_LOCATION_VOCABULARY_FIELD);
+        
         // get the original terms of the object
         if (isset($term['#object'])) {
             $vocabulairyLoaded = $term['#object'];
@@ -42,7 +43,7 @@ class Labels {
         $returnHtml = '';
 
         $terms = self::getLabels($node);
-
+        
         $label_button = '';
         $remove_label = '';
         if (user_access(helper::PERMISSION_MODERATE_LOCATION_CONTENT)) {
@@ -78,9 +79,6 @@ EAT;
             $term = $termInfo['label'];
 
             $hasLiked = self::groupHasLiked($tid, $node->nid, Group::getGroupId());
-
-//      var_dump($hasLiked);
-//      die;
 
             if ($hasLiked) {
                 $button = '-';

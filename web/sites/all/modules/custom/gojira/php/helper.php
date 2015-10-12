@@ -17,6 +17,7 @@ class helper {
     const PERMISSION_MULTIPLE_LOCATIONS = 'multiple locations';
     const PERMISSION_MANAGE_MULTIPLE_LOCATIONS = 'manage multiple locations';
     const PERMISSION_SHOW_DEBUG = 'show debug data';
+    const PERMISSION_PERSONAL_LIST = 'has personal list';
     // we have 3 types of users:
     // 1. the original master of the group, the practitioner
     // 2. a user added by the practitioner that can change data

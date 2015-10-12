@@ -242,22 +242,24 @@ EAT;
             $email = '<a mailto="' . $email . '" id="mailto">' . $email . '</a><br />';
         }
 
-
         $oCurrentLocation = Location::getCurrentLocationObjectOfUser();
+        
         $favorites = '';
-        if (Favorite::getInstance()->isFavorite($foundNode->nid, $oCurrentLocation->nid)) {
-            $fav_class = 'yes';
-        } else {
-            $fav_class = 'no';
-        }
-        $favorites = '';
-        if (user_access(helper::PERMISSION_MODERATE_LOCATION_CONTENT)) {
-            $favorites = '<div class="favorites"><span class="fav_row ' . $fav_class . '"><span id="fav_switch_label">' . t('Put on my list:') . ' </span><button class="fav_yes rounded noshadow">' . t('Yes') . '</button> / <button class="fav_no rounded noshadow">' . t('No') . '</button></span></div>';
-        } else {
-            if ($fav_class == 'yes') {
-                $favorites = '<div class="favorites"><span>' . t('Is part of your favorites.') . '</span></div>';
+//        if (user_access(helper::PERMISSION_PERSONAL_LIST)) {
+            if (Favorite::getInstance()->isFavorite($foundNode->nid, $oCurrentLocation->nid)) {
+                $fav_class = 'yes';
+            } else {
+                $fav_class = 'no';
             }
-        }
+            $favorites = '';
+            if (user_access(helper::PERMISSION_MODERATE_LOCATION_CONTENT)) {
+                $favorites = '<div class="favorites"><span class="fav_row ' . $fav_class . '"><span id="fav_switch_label">' . t('Put on my list:') . ' </span><button class="fav_yes rounded noshadow">' . t('Yes') . '</button> / <button class="fav_no rounded noshadow">' . t('No') . '</button></span></div>';
+            } else {
+                if ($fav_class == 'yes') {
+                    $favorites = '<div class="favorites"><span>' . t('Is part of your favorites.') . '</span></div>';
+                }
+            }
+//        }
 
         $category_txt = '';
         $category_nid = helper::value($foundNode, GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD, 'nid');
@@ -270,7 +272,7 @@ EAT;
         }
 
         $labels = Labels::draw($foundNode);
-
+        
         $html = str_replace(
                 array('%title%',
             '%street%',

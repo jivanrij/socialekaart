@@ -60,14 +60,16 @@ function gojira_suggestlocation_form($form, &$form_state) {
         '#type' => 'textfield',
         '#required' => false,
     );
-
-    $form['add_to_favorites'] = array(
-        '#title' => t('Add to favorites'),
-        '#type' => 'checkbox',
-        '#disabled' => false,
-        '#description' => t('Mark this checkbox to also add this location to your favorites.'),
-        '#default_value' => 1
-    );
+    
+    if (user_access(helper::PERMISSION_PERSONAL_LIST)){
+        $form['add_to_favorites'] = array(
+            '#title' => t('Add to favorites'),
+            '#type' => 'checkbox',
+            '#disabled' => false,
+            '#description' => t('Mark this checkbox to also add this location to your favorites.'),
+            '#default_value' => 1
+        );
+    }
 
 
     $form['submit'] = array(
@@ -190,7 +192,7 @@ function gojira_suggestlocation_form_submit($form, &$form_state) {
     $iNode = $node->nid;
 
     // if the user want's we add this location to his personal list
-    if ($form['add_to_favorites']['#value'] == 1) {
+    if (user_access(helper::PERMISSION_PERSONAL_LIST) && $form['add_to_favorites']['#value'] == 1) {
         Favorite::getInstance()->setFavorite($iNode);
     }
 
