@@ -6,7 +6,7 @@
                 <p><?php echo helper::getText('FRONTPAGE_LOGIN'); ?></p>
                 <?php //print render($page['content']); ?>
                 <?php if (variable_get('gojira_subscribe_possible')): ?>
-                    <p><a class="gbutton rounded noshadow left gbutton_widest" title="<?php echo t('Register'); ?>" href="/register" id="splash_register"><span><?php echo t('Register a new account'); ?></span></a></p>
+                    <p><a class="register gbutton rounded noshadow left gbutton_widest" title="<?php echo t('Register'); ?>" href="/register" id="splash_register"><span><?php echo t('Register a new account'); ?></span></a></p>
                 <?php endif; ?>
             </div>
         </div>
