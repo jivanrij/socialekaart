@@ -6,7 +6,7 @@
                 <p><?php echo helper::getText('FRONTPAGE_REGISTER'); ?></p>
             </div>
         </div>
-        <div class="col-sm-3 frontpage_block">
+        <div class="col-sm-3 frontpage_block form-block">
             <div>
                 <h1><?php echo t('Register'); ?></h1>
                 <?php print @drupal_render(drupal_get_form('gojira_register_form')); ?>        
