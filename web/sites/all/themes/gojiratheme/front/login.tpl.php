@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <div class="col-sm-9 frontpage_block">
+        <div class="col-sm-8 frontpage_block text">
             <div>
                 <h1><?php echo helper::getText('FRONTPAGE_LOGIN', true); ?></h1> 
                 <p><?php echo helper::getText('FRONTPAGE_LOGIN'); ?></p>
@@ -11,7 +11,7 @@
             </div>
         </div>
 
-        <div class="col-sm-3 frontpage_block hidden-xs form-block">
+        <div class="col-sm-4 frontpage_block hidden-xs form-block">
             <div>
                 <?php if (variable_get('gojira_haweb_sso_button_visible')): ?>
                     <a class="haweb_link hidden-sm hidden-md" href="<?php echo $base_url; ?>/user/login" title="socialekaart.care"><img src="/<?php echo drupal_get_path('theme', 'gojiratheme') . '/img/inloggen_haweb.png'; ?>" alt="Logo HAweb" /></a>
@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <div class="col-sm-3 frontpage_block hidden-md hidden-sm hidden-lg">
+        <div class="col-sm-4 frontpage_block hidden-md hidden-sm hidden-lg">
             <div>
 
                 <h1><?php echo t('Unfortunately!'); ?></h1>

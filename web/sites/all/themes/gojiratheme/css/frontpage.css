@@ -19,19 +19,19 @@ body.front #frontpage_footer {
   font-size: 12px;
 }
 body.front .frontpage_block > div {
-  padding: 10px;
+  padding: 30px;
   overflow: hidden;
-  background-color: #f7e6e9;
+  background-color: #f8f8f8;
 }
 body.front .frontpage_block p {
-  padding: 0 30px 0 30px;
+  padding: 0;
 }
 body.front .frontpage_block h1 {
-  padding: 20px 30px 0 30px;
+  padding: 0;
   font-size: 20px;
 }
 body.front .frontpage_block h2 {
-  padding: 10px 30px 0 30px;
+  padding: 0;
   font-size: 16px;
 }
 body.front .frontpage_block a.register {
@@ -84,6 +84,19 @@ body.front .form-block form input[type=checkbox] {
 body.front .form-block form input[type=submit] {
   font-size: 12px;
 }
+body.front .form-block form div.form-type-checkbox {
+  overflow: hidden;
+  width: 100%;
+}
+body.front .form-block form div.form-type-checkbox input {
+  float: left;
+  width: 10%;
+  margin-top: 2px;
+}
+body.front .form-block form div.form-type-checkbox label {
+  float: right;
+  width: 90%;
+}
 body.front .col-sm-9.frontpage_block {
   padding-right: 10px;
 }
@@ -95,7 +108,7 @@ body.front .col-sm-3.frontpage_block.hidden-sm {
   padding-right: 10px;
 }
 body.front div.errormessage {
-  font-size: 10px;
+  font-size: 12px;
   margin: 0 0 10px 10px;
 }
 body.front div.header {
@@ -103,6 +116,7 @@ body.front div.header {
   height: 80px;
   position: relative;
   margin-top: 10px;
+  margin-bottom: 20px;
 }
 body.front div.header span.subtitle {
   position: absolute;
