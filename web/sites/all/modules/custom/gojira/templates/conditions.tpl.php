@@ -1,5 +1,5 @@
 <?php if (!helper::agreedToConditions()): ?>
-<p><?php echo t('You need to agree to the terms & conditions to start to work with the system.'); ?></p>
+    <p><?php echo t('You need to agree to the terms & conditions to start to work with the system.'); ?></p>
 <?php endif; ?>
 
 <div id="conditions_holder">
@@ -8,87 +8,81 @@
     <p>Algemene Voorwaarden Blijnder, gevestigd aan Admiraal de Ruyterstraat 18, 3282XE, te Oud beijerland, ingeschreven bij de KvK onder nummer 63090732.</p>
     <h2>Definities</h2>
     <p>In deze Algemene Voorwaarden worden de hiernavolgende termen in de navolgende betekenis gebruikt, tenzij uitdrukkelijk anders is aangegeven.</p>
-
     <table>
         <tr>
             <td>Algemene Voorwaarden:</td>
             <td>De algemene voorwaarden als hierna vermeld.</td>
-            </hr>
         </tr>
         <tr>
             <td>Blijnder:</td>
             <td>Blijnder, ingeschreven bij de KvK onder nummer 63090732.</td>
-            </hr>
         </tr>
         <tr>
             <td>Dienst:</td>
             <td>Alle werkzaamheden, in welke vorm dan ook, die Blijnder voor of ten behoeve van de gebruiker heeft verricht.</td>
-            </hr>
         </tr>
         <tr>
             <td>Vergoeding:</td>
             <td>De financiële vergoeding die de gebruiker voor het gebruik van de software applicatie met Blijnder is overeengekomen. </td>
-            </hr>
         </tr>
         <tr>
             <td>Overeenkomst:</td>
             <td>De overeenkomst tussen Blijnder en de gebruiker op grond waarvan de gebruiker gebruikrecht voor de software applicatie verkrijgt. </td>
-            </hr>
         </tr>
         <tr>
             <td>Gebruiker:</td>
             <td>Degene die deze algemene voorwaarden heeft aanvaard en wenst te beschikken over het gebruik van de software applicatie. </td>
-            </hr>
         </tr>
         <tr>
             <td>Gebrek:</td>
-            <td>Een fout in de software applicatie of een gebeurtenis die ertoe leidt dat de software applicatie niet adequaat functioneert, dan wel er tot toe leidt dat de software applicatie niet beschikbaar is voor gebruik. </td>
-            </hr>
+            <td>Een fout in de software applicatie of een gebeurtenis die ertoe leidt dat de software applicatie niet adequaat functioneert, dan wel er tot toe leidt dat de software applicatie niet beschikbaar is voor gebruik.</td>
         </tr>
         <tr>
             <td>Updates:</td>
-            <td>Een nieuwe release van de software applicatie, waarin tot dan toe bekende gebreken zijn verwijderd en/of een beperkte verbetering of uitbreiding van de bestaande functionaliteit heeft plaatsgevonden. </td>
-            </hr>
+            <td>Een nieuwe release van de software applicatie, waarin tot dan toe bekende gebreken zijn verwijderd en/of een beperkte verbetering of uitbreiding van de bestaande functionaliteit heeft plaatsgevonden.</td>
         </tr>
     </table>
     <h2>Artikel 1 - Werkingssfeer</h2>
-    <p>Deze Algemene Voorwaarden gelden voor de Overeenkomst gesloten tussen Blijnder en de Gebruiker, tenzij van deze Algemene Voorwaarden door partijen uitdrukkelijk en schriftelijk is afgeweken.</p>
-    <p>Deze Algemene Voorwaarden zijn eveneens van toepassing op overeenkomsten met Blijnder, voor de uitvoering waarbij derden dienen te worden betrokken.</p>
-    <p>De toepasselijkheid van eventuele inkoop- of andere Algemene Voorwaarden van de Gebruiker wordt uitdrukkelijk van de hand gewezen.</p>
-    <p>Indien gebleken is dat één of meer bepalingen in deze Algemene Voorwaarden nietig of vernietigbaar zijn, dan blijven de Algemene Voorwaarden voor al het overige in stand. In geval van deze situatie treden Blijnder en de Gebruiker in overleg met het doel nieuwe bepalingen ter vervanging van de nietige of vernietigde bepalingen overeen te komen.</p>
-    <p>Afwijkingen van de Overeenkomst en Algemene Voorwaarden zijn slechts geldig indien deze schriftelijk en uitdrukkelijk met Blijnder zijn overeengekomen.</p>
+    <p>Deze Algemene Voorwaarden gelden voor de Overeenkomst gesloten tussen Blijnder en de Gebruiker, tenzij van deze Algemene Voorwaarden door partijen uitdrukkelijk en schriftelijk is afgeweken.
+    <p>Deze Algemene Voorwaarden zijn eveneens van toepassing op overeenkomsten met Blijnder, voor de uitvoering waarbij derden dienen te worden betrokken.
+    <p>De toepasselijkheid van eventuele inkoop- of andere Algemene Voorwaarden van de Gebruiker wordt uitdrukkelijk van de hand gewezen.
+    <p>Indien gebleken is dat één of meer bepalingen in deze Algemene Voorwaarden nietig of vernietigbaar zijn, dan blijven de Algemene Voorwaarden voor al het overige in stand. In geval van deze situatie treden Blijnder en de Gebruiker in overleg met het doel nieuwe bepalingen ter vervanging van de nietige of vernietigde bepalingen overeen te komen.
+    <p>Afwijkingen van de Overeenkomst en Algemene Voorwaarden zijn slechts geldig indien deze schriftelijk en uitdrukkelijk met Blijnder zijn overeengekomen.
     <h2>Artikel 2 - Duur en beëindiging abonnement</h2>
     <p>Gebruik van de software applicatie is kosteloos. In dit geval aanvaardt de Gebruiker de mogelijkheid dat er reclame wordt getoond bij het gebruik van de software applicatie.</p>
-    <p>De Gebruiker heeft te allen tijde de keuze om een betaald abonnement af te sluiten. Het abonnement is geldig voor de duur van één jaar. </p>
-    <p>Indien de Gebruiker een betaald abonnement afsluit, verkrijgt de Gebruiker toegang tot het gebruik van extra functionaliteiten van de software applicatie . Daarnaast zal er bij het gebruik van de software applicatie geen reclame worden getoond. </p>
-    <p>Het abonnement van de Gebruiker wordt na het aflopen van het abonnement niet verlengd en eindigt van rechtswege. </p>
-    <p>Blijnder zal alvorens het abonnement afloopt de Gebruiker op de hoogte stellen en de mogelijkheid geven om het abonnement te verlengen. De Gebruiker heeft de keuze om het abonnement te verlengen. Blijnder kan het abonnement niet voor de Gebruiker verlengen. </p>
-    <p>Indien de Gebruiker het abonnement verlengt, zal het abonnement voor één jaar worden verlengd. </p>
-    <p>De Gebruiker kan het abonnement niet tussentijds opzeggen. De Gebruiker heeft op grond hiervan nimmer recht op restitutie van de vergoeding voor het gebruik van de software applicatie.  </p>
+    <p>De Gebruiker heeft te allen tijde de keuze om een betaald abonnement af te sluiten. Het abonnement is geldig voor de duur van één jaar.</p>
+    <p>Indien de Gebruiker een betaald abonnement afsluit, verkrijgt de Gebruiker toegang tot het gebruik van extra functionaliteiten van de software applicatie . Daarnaast zal er bij het gebruik van de software applicatie geen reclame worden getoond.</p>
+    <p>Het abonnement van de Gebruiker wordt na het aflopen van het abonnement niet verlengd en eindigt van rechtswege.</p>
+    <p>Blijnder zal alvorens het abonnement afloopt de Gebruiker op de hoogte stellen en de mogelijkheid geven om het abonnement te verlengen. De Gebruiker heeft de keuze om het abonnement te verlengen. Blijnder kan het abonnement niet voor de Gebruiker verlengen.</p>
+    <p>Indien de Gebruiker het abonnement verlengt, zal het abonnement voor één jaar worden verlengd.</p>
+    <p>De Gebruiker kan het abonnement niet tussentijds opzeggen. De Gebruiker heeft op grond hiervan nimmer recht op restitutie van de vergoeding voor het gebruik van de software applicatie.</p>
     <h2>Artikel 3 - NHG en LHV</h2>
-    <p>De Gebruiker heeft de mogelijkheid om via de website van de NHG of LHV in te loggen in socialekaart.care. De Gebruiker krijgt door het inloggen via de portaalwebsite van NHG of LHV toegang tot de software applicatie van Blijnder.  </p>
-    <p>Indien de Gebruiker via de website NHG of LHV toegang tot de software applicatie krijgt, verstrekt Blijnder de toegang tot het gebruik van de software applicatie en/of de extra functionaliteiten voor de software applicatie. </p>
-    <p>Blijnder beheert en beschikt over de inloggegevens van de Gebruikers. Blijnder krijgt beschikking over de inloggegevens wanneer de Gebruiker zich inschrijft en inlogt. Blijnder bewaart de gegevens zodra de Gebruiker de algemene voorwaarden accepteert. </p>
+    <p>De Gebruiker heeft de mogelijkheid om via de website van de NHG of LHV in te loggen in socialekaart.care. De Gebruiker krijgt door het inloggen via de portaalwebsite van NHG of LHV toegang tot de software applicatie van Blijnder.</p>
+    <p>Indien de Gebruiker via de website NHG of LHV toegang tot de software applicatie krijgt, verstrekt Blijnder de toegang tot het gebruik van de software applicatie en/of de extra functionaliteiten voor de software applicatie.</p>
+    <p>Blijnder beheert en beschikt over de inloggegevens van de Gebruikers. Blijnder krijgt beschikking over de inloggegevens wanneer de Gebruiker zich inschrijft en inlogt. Blijnder bewaart de gegevens zodra de Gebruiker de algemene voorwaarden accepteert.</p>
     <p>NHG of LHV fungeert slechts in de hoedanigheid als tussenpersoon. Indien de Gebruiker via de website van HAWEB toegang krijgt tot de software applicatie en akkoord gaat met deze algemene voorwaarden, komt er een overeenkomst tussen Blijnder en de Gebruiker tot stand. NHG en LHV is nimmer bij de totstandkoming van deze overeenkomst betrokken en/of het verschaffen van de toegang tot het gebruik van de software applicatie.</p>
     <h2>Artikel 4 - Toegang tot gebruik software applicatie en functionaliteiten</h2>
     <p>De Gebruiker krijgt na inschrijving de inloggegevens van Blijnder waarmee de Gebruiker toegang heeft tot het gebruik van de software applicatie.</p>
-    <p>De Gebruiker krijgt per direct toegang tot het gebruik van de extra functionaliteiten voor de software applicatie nadat de Gebruiker de betaling heeft voldaan. </p>
-    <p>Blijnder zal de Gebruiker via een internetverbinding de software applicatie beschikbaar stellen en beschikbaar houden voor gebruik. </p>
-    <p>Indien de Gebruiker ondanks het verstrekken van de nodige gegevens en het voldoen van de betaling geen toegang heeft gekregen tot het gebruik van de software applicatie en/of de extra functionaliteiten voor de software applicatie , dient de Gebruiker Blijnder een redelijk termijn te bieden om de Gebruiker alsnog toegang te verschaffen tot het gebruik van de software applicatie en/of de extra functionaliteiten voor de software applicatie. </p>
+    <p>De Gebruiker krijgt per direct toegang tot het gebruik van de extra functionaliteiten voor de software applicatie nadat de Gebruiker de betaling heeft voldaan.</p>
+    <p>Blijnder zal de Gebruiker via een internetverbinding de software applicatie beschikbaar stellen en beschikbaar houden voor gebruik.</p>
+    <p>Indien de Gebruiker ondanks het verstrekken van de nodige gegevens en het voldoen van de betaling geen toegang heeft gekregen tot het gebruik van de software applicatie en/of de extra functionaliteiten voor de software applicatie , dient de Gebruiker Blijnder een redelijk termijn te bieden om de Gebruiker alsnog toegang te verschaffen tot het gebruik van de software applicatie en/of de extra functionaliteiten voor de software applicatie.</p>
     <h2>Artikel 5 - Intellectuele eigendom software applicatie</h2>
     <p>Blijnder behoudt zich de rechten en bevoegdheden voor die hem toekomen op grond van de Auteurswet en andere intellectuele wet- en regelgeving.</p>
     <p>De intellectuele eigendomsrechten voor de software applicatie en de Updates van de software applicatie komen toe aan Blijnder.</p>
-    <p>De intellectuele eigendomsrechten van de gegevens, informatie en data die de Gebruiker heeft ingevoerd in de software applicatie komen toe aan Blijnder. </p>
-    <p>Blijnder behoudt het recht de eventueel door de uitvoering van de werkzaamheden toegenomen kennis voor andere doeleinden te gebruiken, voor zover hierbij geen vertrouwelijk informatie ter kennis van derden wordt gebracht. </p>
+    <p>De intellectuele eigendomsrechten van de gegevens, informatie en data die de Gebruiker heeft ingevoerd in de software applicatie komen toe aan Blijnder.</p>
+    <p>Blijnder behoudt het recht de eventueel door de uitvoering van de werkzaamheden toegenomen kennis voor andere doeleinden te gebruiken, voor zover hierbij geen vertrouwelijk informatie ter kennis van derden wordt gebracht.</p>
     <h2>Artikel 6 - Gebruiksvoorwaarden software applicatie</h2>
     <p>Blijnder verschaft de Gebruiker het volledige en niet-overdraagbare gebruik van de software applicatie.</p>
-    <p>Het gebruiksrecht kent onder meer de volgende beperkingen:
+    <p>
+        Het gebruiksrecht kent onder meer de volgende beperkingen:
+        </p>
+
     <ul>
         <li>het is Gebruiker niet toegestaan de software applicatie en de documentatie in gebruik te geven aan derden of deze ten behoeve van derden te gebruiken;</li>
-        <li>het is Gebruiker niet toegestaan de software applicatie en de documentatie te wijzigen, of aan te passen.</li>
+        <li>het is Gebruiker niet toegestaan de software applicatie en de documentatie te wijzigen, of aan te passen;</li>
+        <li>het is Gebruiker niet toegestaan enige aanduiding omtrent auteursrechten, merken, handelsnamen of andere rechten van (intellectuele) eigendom uit de software applicatie en de documentatie te verwijderen;</li>
+        <li>het is de Gebruiker niet toegestaan de gebruiksrechten voor de software applicatie aan een derde over te dragen of inzicht hierin te verlenen.</li>
     </ul>
-    Het is Gebruiker niet toegestaan enige aanduiding omtrent auteursrechten, merken, handelsnamen of andere rechten van (intellectuele) eigendom uit de software applicatie en de documentatie te verwijderen.</p>
-<p>Het is de Gebruiker niet toegestaan de gebruiksrechten voor de software applicatie aan een derde over te dragen of inzicht hierin te verlenen.</p>
 <h2>Artikel 7 - Gebreken software applicatie</h2>
 <p>De Gebruiker is gehouden de software applicatie binnen één week nadat hij toegang heeft tot het gebruik van de software applicatie en de extra functionaliteiten voor de software applicatie te onderzoeken of de applicatie conform de eisen die daaraan in het normale handelsverkeer gelden, functioneert.</p>
 <p>Gebreken behoort de Gebruiker binnen drie werkdagen na ontdekking ervan aan Blijnder te melden.</p>
@@ -106,12 +100,12 @@
 <p>Gebruiker zal ervoor zorgdragen dat zijn personeel op adequate wijze zal zijn opgeleid en geïnformeerd over de werking van de software applicatie.</p>
 <p>Gebruiker zal in het bijzonder zorgdragen voor adequate informatie aan en contractuele afspraken met externe gebruikers die, via het internet, zonder feitelijke tussenkomst van de Gebruiker, handelingen verrichten waarbij tevens gebruik wordt gemaakt van de software applicatie, over de risico's verbonden aan het gebruik van een geautomatiseerd systeem voor het uitvoeren van transacties en daarmee samenhangende diensten.</p>
 <h2>Artikel 10 - Gegevens en informatie</h2>
-<p>Het verzenden en opslaan van (verwijzings)gegevens en informatie via datacommunicatielijnen zoals telefoonlijnen, kabel of draadloze verbindingen, geschiedt onder verantwoordelijkheid en voor risico van de Gebruiker die zich van die communicatiemethode bedient.</p>
+<p>Het verzenden en opslaan van (verwijzings) gegevens en informatie via datacommunicatielijnen zoals telefoonlijnen, kabel of draadloze verbindingen, geschiedt onder verantwoordelijkheid en voor risico van de Gebruiker die zich van die communicatiemethode bedient.</p>
 <p>Indien de Gebruiker gebruikt maakt van internetverbindingen, is haar verantwoordelijkheid en risico op schade beperkt tot de garanties en aansprakelijkheden die de (netwerk)leverancier verstrekt en dekt, tenzij de aansprakelijkheid bij een andere partij ligt door foutief handelen.</p>
 <p>Gebruiker dient zorg te dragen voor de naleving van de voorwaarden die op grond van de Wet bescherming persoonsgegevens en andere regelgeving worden gesteld aan het verwerken van persoonsgegevens.</p>
 <p>Tevens dient de Gebruiker er zorg voor te dragen dat het gebruik van de gegevens die zijn opgeslagen in socialekaart.care geschiedt overeenkomstig de Wet bescherming persoonsgegevens en dat de Gebruiker zorg draagt voor de naleving van de Wet beschermingpersoonsgegevens.</p>
 <p>Gebruiker verschaft enkel toegang tot de persoonsgegevens aan haar werknemers voor zover dit nodig is voor het verrichten van haar werkzaamheden.</p>
-<p>Gebruiker is aansprakelijk voor alle schade voortvloeiende uit of verband houdend met het handelen in strijd met de Wet bescherming persoonsgegevens.</p>
+<p>Gebruiker is aansprakelijk voor alle schade voortvloeiende uit of verband houdend met het handelen in strijd met de Wet bescherming persoonsgegevens.</p>  
 <h2>Artikel 11 - Weigering, blokkering of verwijdering account</h2>
 <p>Blijnder heeft het recht zonder opgave van redenen een account te weigeren, blokkeren en/of te verwijderen van de Website. Derden kunnen Blijnder verzoeken om een account te verwijderen.</p>
 <p>De Gebruiker aanvaardt de mogelijkheid dat een account kan worden geweigerd, geblokkeerd, verwijderd.</p>
@@ -138,12 +132,13 @@
 <p>Blijnder is nimmer aansprakelijk voor indirecte schade, daaronder in ieder geval begrepen gevolgschade, gederfde winst, gemiste besparingen, bedrijfsstagnatie of immateriële schade van de Gebruiker.</p>
 <p>
     De aansprakelijkheidsbeperking vervalt wanneer:
+    </p>
 <ul>
     <li>De schade is veroorzaakt door schending van de intellectuele eigendomsrechten;</li>
     <li>De schade is veroorzaakt door opzet of schuld van de nalatige/onrechtmatige handelende partij;</li>
     <li>De schade voortvloeit uit aanspraken van derden ten gevolgen van dood of letsel.</li>
 </ul>
-</p>
+
 <p>Indien de Gebruiker ten gevolge van een Gebrek of direct gerelateerd aan een Gebrek schade lijdt, is Blijnder nimmer aansprakelijk voor deze schade, tenzij deze schade is ontstaan door grove schuld of opzet van Blijnder.</p>
 <p>Blijnder is niet aansprakelijk voor schade, van welke aard dan ook, doordat Blijnder is uitgegaan van door de Gebruiker verstrekte onjuiste en/of onvolledige gegevens, tenzij deze onjuistheid of onvolledigheid voor Blijnder kenbaar behoorde te zijn.</p>
 <p>Indien Blijnder aansprakelijk mocht zijn voor enigerlei schade, dan is de aansprakelijkheid van Blijnder beperkt tot maximaal € 10.000 of tot het bedrag waarop de door Blijnder aangesloten verzekering aanspraak geeft, vermeerderd met het eigen risico dat Blijnder overeenkomstig de verzekering draagt.</p>
@@ -175,8 +170,6 @@
 <p>Op alle rechtsbetrekkingen waarbij Blijnder partij is, is uitsluitend het Nederlandse recht van toepassing. Dit geldt ook indien een verbintenis geheel of gedeeltelijk in het buitenland wordt uitgevoerd of indien de Gebruiker zijn woonplaats in het buitenland heeft.</p>
 <p>De toepasselijkheid van het Weens Koopverdrag wordt uitgesloten.</p>
 <p>Geschillen tussen Blijnder en de Gebruiker zullen uitsluitend worden voorgelegd aan de bevoegde rechter in het arrondissement Rotterdam, tenzij de wet dwingend anders voorschrijft.</p>
-<!--<h2>Artikel 23 - Vindplaats</h2>
-<p>Deze Algemene Voorwaarden zijn gedeponeerd bij de KvK onder nummer 63090732.</p>-->
 </div>
 <?php if (!helper::agreedToConditions() && array_key_exists('form', $output)): ?>
     <?php echo render($output['form']); ?>
@@ -184,7 +177,7 @@
 
 <style>
     #conditions_holder{
-        
+
     }
     #conditions_holder table{
         margin-bottom: 10px;
@@ -196,5 +189,7 @@
     #conditions_holder table tbody tr td{
         vertical-align: top;
     }
-
+    #conditions_holder ul li {
+        font-weight: normal;
+    }
 </style>
