@@ -18,9 +18,7 @@ html, body{
     width:100%;
     color: #4d4d4d;
 }
-body.front{
-    height:auto;
-}
+
 hr{
     border-color: #dbdbdb;
 }
@@ -1005,62 +1003,6 @@ span.small_label_favorites_button{
 @media all and (max-height: 720px) {
 }
 
-
-body.front .frontpage_block{
-    overflow:hidden;
-    /*padding:0; !important*/
-}
-body.front .frontpage_block > div{
-    border:#dbdbdb;
-    border-width: 1px;
-    border-style: solid;
-    padding:10px;
-    overflow:hidden;
-}
-body.front .col-sm-9.frontpage_block{
-    padding-right:10px;
-}
-body.front .col-sm-3.frontpage_block.hidden-xs{
-    padding-left:0px;
-}
-body.front .col-sm-3.frontpage_block.hidden-sm{
-    padding-left:15px;
-    padding-right:10px;
-}
-body.front input {
-    width:80%;
-}
-body.front input[type=checkbox]{
-    width:auto;
-}
-body.front div.errormessage{
-    font-size:10px;
-    margin:0 0 10px 10px;
-}
-body.front form{
-    overflow:hidden;
-    margin-bottom:5px;
-}
-body.front div.form-item label{
-    margin-bottom: 0;
-}
-body.front div.form-item div.description{
-    margin-left:0;
-    margin-top:5px;
-}
-body.front div.header{
-    height:80px;
-    position:relative;
-    margin-top:10px;
-}
-body.front div.header span.subtitle{
-    position:absolute;
-    bottom:0;
-    right:15px;
-}
-body.front div.header_small{
-    height:45px !important;
-}
 
 #header_subtitle{
     display:block;
