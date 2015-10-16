@@ -182,9 +182,7 @@ div.add_label span.tooltip{
     float: left;
 }
 #header_options a{
-    color:#4d4d4d;
     display:inline-block;
-    color: #b7072a;
     cursor: pointer;
     height:19px;
     line-height: 19px;

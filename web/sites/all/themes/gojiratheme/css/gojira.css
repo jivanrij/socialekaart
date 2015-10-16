@@ -1,0 +1,108 @@
+body {
+  font-size: 12px;
+  color: #4d4d4d;
+  font-weight: bold;
+  font-family: Arial, Verdana, Sans-Serif;
+}
+body .errormessage {
+  color: #b7072a;
+}
+body a,
+body a.active {
+  color: #4d4d4d;
+}
+body a:hover {
+  color: #b7072a;
+}
+body h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+}
+body h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+}
+body h3 {
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+}
+body #cboxLoadedContent {
+  font-weight: normal;
+  font-size: 12px;
+}
+body #cboxLoadedContent h1 {
+  font-weight: bold;
+  font-size: 16px;
+}
+#header a,
+#header a.active {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: bold;
+}
+#header #header_options a {
+  font-weight: bold;
+}
+a.gbutton:hover {
+  color: #ffffff;
+}
+.self_popup_link {
+  color: #4d4d4d;
+  font-weight: bold;
+}
+#crud_holder h1 {
+  margin-top: 10px;
+}
+#crud_holder form div.form-item div.description {
+  font-weight: lighter;
+}
+#crud_holder p a {
+  text-decoration: underline;
+  cursor: pointer;
+}
+#search_result_info #search_results p.info_text {
+  font-size: 11px;
+}
+#search_result_info #search_results ul li.active a {
+  color: #b7072a;
+}
+#search_result_info #search_results > p div.results_paging {
+  font-weight: normal;
+}
+body.questions #questions_content section {
+  font-weight: normal;
+}
+body.questions #questions_content section h1 {
+  font-weight: bold;
+}
+body.questions a.topic {
+  text-decoration: none !important;
+}
+body.questions a.topic:hover,
+body.questions a.active.topic {
+  text-decoration: underline !important;
+  color: #b7072a;
+}
+#ownlist_content a.location_category_list {
+  text-decoration: none;
+  font-style: italic;
+  font-size: 11px;
+}
+#ownlist_content a.location_category_list spam {
+  text-decoration: none;
+  font-style: normal;
+  font-size: 12px;
+}
+#selected_location_info #fav_switch_label {
+  color: #dbdbdb;
+  font-style: italic;
+}
+#selected_location_info div.results_paging p.searchresult_note_max {
+  font-weight: normal;
+}
+ul.ui-autocomplete li a {
+  font-size: 12px !important;
+}

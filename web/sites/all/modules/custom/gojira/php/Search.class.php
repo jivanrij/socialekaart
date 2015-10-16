@@ -245,7 +245,7 @@ EAT;
         $oCurrentLocation = Location::getCurrentLocationObjectOfUser();
         
         $favorites = '';
-//        if (user_access(helper::PERMISSION_PERSONAL_LIST)) {
+        if (user_access(helper::PERMISSION_PERSONAL_LIST)) {
             if (Favorite::getInstance()->isFavorite($foundNode->nid, $oCurrentLocation->nid)) {
                 $fav_class = 'yes';
             } else {
@@ -259,7 +259,7 @@ EAT;
                     $favorites = '<div class="favorites"><span>' . t('Is part of your favorites.') . '</span></div>';
                 }
             }
-//        }
+        }
 
         $category_txt = '';
         $category_nid = helper::value($foundNode, GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD, 'nid');
