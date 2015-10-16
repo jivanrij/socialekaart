@@ -59,9 +59,7 @@ h3{
     /*font-weight: bold;*/
     font-size: 12px;    
 }
-body.front h1, body.front h2{
-    font-weight: bold;
-}
+
 .self_popup_link{
     color: #4d4d4d;
     font-weight: bold;
@@ -102,16 +100,6 @@ body.questions a.topic:hover, body.questions a.active.topic{
     cursor:pointer;
 }
 
-div#frontpage_footer{
-    font-size:10px;
-    margin-top: 5px;
-    text-align: right;
-}
-/*
-#frontpage_wrapper #frontpage_header a{
-    text-decoration: none;
-}*/
-
 div#search_results ul li.active a{
     color: #b7072a;
 }
@@ -143,15 +131,7 @@ div#search_results > p, div.results_paging{
 ul.ui-autocomplete li a{
   font-size: 12px !important;
 }
-body.front div.header span.subtitle{
-    font-size:10px;
-}
-body.front a{
-    text-decoration: underline;
-}
-body.front{
-    font-weight: normal;
-}
+
 
 #cboxLoadedContent{
     font-weight: normal;
