@@ -2,7 +2,8 @@ form{
     .form-required {
         color: @color-main;
     }
-    input, textarea, select{
+    
+    input, textarea, select{  
         color:@color-main;
     }
     .error{
@@ -15,5 +16,18 @@ form{
         .description {
             font-size: 11px;
         }  
-    } 
-}
+    }
+    input[type=text], textarea, input[type=password], select{
+        border-color: #dbdbdb;
+        border-style: solid; 
+        border-width: 1px;
+    }
+    textarea {
+        resize: none;
+    }
+
+    label{
+        height:15px; 
+        line-height: 18px;
+    }
+} 

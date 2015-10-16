@@ -1,3 +1,9 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  color: #4d4d4d;
+}
 body {
   font-size: 12px;
   color: #4d4d4d;
@@ -29,6 +35,9 @@ body h3 {
   padding: 0;
   font-size: 12px;
 }
+body hr {
+  border-color: #dbdbdb;
+}
 body #cboxLoadedContent {
   font-weight: normal;
   font-size: 12px;
@@ -37,14 +46,146 @@ body #cboxLoadedContent h1 {
   font-weight: bold;
   font-size: 16px;
 }
+body #content_holder {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
+}
+body button:focus,
+body input:focus {
+  outline: 0;
+}
+#header {
+  background-color: #b7072a;
+  overflow: hidden;
+  color: #ffffff !important;
+  border-bottom: #4d4d4d solid 1px;
+}
 #header a,
 #header a.active {
   text-decoration: none;
   color: #ffffff;
   font-weight: bold;
 }
+#header #header_options {
+  margin: 5px 0 auto 0;
+  float: left;
+}
 #header #header_options a {
   font-weight: bold;
+  display: inline-block;
+  cursor: pointer;
+  height: 19px;
+  line-height: 19px;
+  overflow: hidden;
+  padding-right: 50px;
+}
+#header #header_options a.on {
+  background: url(../img/button_on.png) no-repeat right 7px center;
+}
+#header #header_options a.off {
+  background: url(../img/button_off.png) no-repeat right 7px center;
+}
+#header label[for=location_selector] {
+  margin-left: 15px;
+  width: 100px;
+  display: inline;
+  height: 19px;
+  line-height: 19px;
+  overflow: hidden;
+  vertical-align: super;
+}
+#header ul.menu {
+  margin: 0;
+  float: right;
+  padding: 0;
+}
+#header ul.menu li {
+  display: block;
+  float: left;
+  padding: 0;
+  margin: 0;
+  height: 27px;
+}
+#header ul.menu li a {
+  line-height: 27px;
+  margin: 0;
+  padding: 0 8px 0 8px;
+  height: 27px;
+  display: block;
+}
+#header ul.menu li a.active,
+#header ul.menu li a:hover {
+  text-decoration: underline;
+}
+#header ul.menu li ul.menu {
+  display: none;
+  position: absolute;
+  visibility: none;
+  opacity: 1;
+  padding: 0;
+  top: 23px;
+  z-index: 150;
+  background-color: #b7072a;
+  width: 170px;
+  right: 0;
+}
+#header ul.menu li ul.menu li {
+  display: block;
+  clear: both;
+}
+#header ul.menu li ul.menu li a {
+  margin: 0;
+  display: block;
+  padding: 2px 5px 2px 5px;
+}
+#header ul.menu li:hover ul.menu {
+  visibility: visible;
+  display: block;
+}
+#header ul.menu li.active-trail > a {
+  text-decoration: underline;
+}
+#header > ul.menu > li {
+  width: 100px;
+  text-align: right;
+}
+form .form-required {
+  color: #b7072a;
+}
+form input,
+form textarea,
+form select {
+  color: #b7072a;
+}
+form .error {
+  border: 1px solid #b7072a !important;
+}
+form button,
+form input,
+form select,
+form textarea {
+  padding-left: 5px !important;
+}
+form .form-item .description {
+  font-size: 11px;
+}
+form input[type=text],
+form textarea,
+form input[type=password],
+form select {
+  border-color: #dbdbdb;
+  border-style: solid;
+  border-width: 1px;
+}
+form textarea {
+  resize: none;
+}
+form label {
+  height: 15px;
+  line-height: 18px;
 }
 a.gbutton:hover {
   color: #ffffff;
@@ -103,6 +244,46 @@ body.questions a.active.topic {
 #selected_location_info div.results_paging p.searchresult_note_max {
   font-weight: normal;
 }
+#selected_location_info .new_label {
+  padding-left: 5px;
+}
+#selected_location_info div.add_label {
+  height: 22px;
+  line-height: 22px;
+}
+#selected_location_info div.add_label label {
+  line-height: 22px;
+  float: left !important;
+  margin-right: 3px;
+}
+#selected_location_info div.add_label span.tooltip {
+  margin-top: 4px;
+}
 ul.ui-autocomplete li a {
   font-size: 12px !important;
+}
+/* buttons */
+.rounded {
+  display: block;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0px 0px 8px #000000;
+  -moz-box-shadow: 0px 0px 8px #000000;
+  box-shadow: 0px 0px 8px #000000;
+  overflow: hidden;
+}
+.noshadow {
+  display: block;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  overflow: hidden;
+}
+/* hide something */
+.hidden {
+  display: none;
 }
