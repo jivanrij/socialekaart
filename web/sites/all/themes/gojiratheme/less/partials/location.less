@@ -1,26 +1,227 @@
 #selected_location_info{
-    #fav_switch_label{
-        color: #dbdbdb;
-        font-style: italic;
-    }
-    div.results_paging p.searchresult_note_max{
-        font-weight: normal;
-    }
-    .new_label {
-        padding-left: 5px;
+    background-color: white;
+    width: 300px;
+    overflow:hidden;
+    margin-top:10px;
+
+    a#mailto{
+        text-decoration: underline;
+        cursor: pointer;
+        padding-top: 5px;
+        display:block;
     }
 
-    div.add_label{
-        height:22px;
-        line-height:22px;
-    }
-    div.add_label label{
-        line-height:22px;
-        float:left !important;
-        margin-right:3px;
+    div.grouped{
+        width:50%;
+        margin:0;
+        padding:0 5% 0 0;
+        float:left;
+        div{
+            margin:0 0 5px 0;
+        }
+        div.adres{   
+            width:45%;
+            float:left;
+            font-weight: normal;
+        }
     }
 
-    div.add_label span.tooltip{
-        margin-top:4px;
+    > div{
+        margin:15px;
+    }
+
+    .search_result_wrapper{
+
+        br{
+            clear:both;
+        }
+
+        > div {
+            margin-bottom: 10px;
+        }
+        div.gbutton_wrapper{
+            clear:both;
+        }
+
+        p{
+            margin:0;
+        }
+
+        div.inform{
+            padding-top:5px;
+            font-size:10px;
+        }
+
+        .favorites{
+            display:block;
+        }
+        span.fav_row {
+            button {
+                border:none;
+                display:inline;
+                color:@color-white;
+                background-color: @color-light; 
+            }
+            button.fav_yes { 
+                font-weight: bold; 
+                background-color: @color-main;
+            }
+            button.fav_no { 
+                font-weight: normal; 
+            }
+            button.fav_no:hover { 
+                background-color: @color-light; 
+            }
+            button.fav_yes {
+                font-weight: normal;
+            }
+            button.fav_yes:hover { 
+                background-color: @color-light;
+            }
+            button.fav_no { 
+                font-weight: bold; background-color: @color-main; 
+            }
+        }
+        #fav_switch_label{
+            color: @color-light;
+            font-style: italic;
+        }
+        div.results_paging p.searchresult_note_max{
+            font-weight: normal;
+        }
+        .new_label {
+            padding-left: 5px;
+        }
+
+        div.add_label{
+            height:22px;
+            line-height:22px;
+            label{
+                line-height:22px;
+                float:left !important;
+                margin-right:3px;
+            }
+            form{
+                .new_label_wrapper{
+                    display:block;
+                    -moz-border-radius: 3px;
+                    -webkit-border-radius: 3px;
+                    border-radius:  3px;
+                    -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+                    -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+                    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+                    overflow:hidden;
+                    border-color:#4d4d4d;
+                    border-style: solid;
+                    border-width: 1px;
+                    height:20px;
+                    width:176px;
+                    float:left;
+
+                    input.new_label{
+                        border:none;
+                        line-height: 18px;
+                        color: #dbdbdb;
+                    }
+                    button.add_new_label{
+                        background:none;
+                        border:none;
+                        padding: 0 !important;
+                        height:20px;
+                        width:25px;
+                        background-color:#b7072a;
+                        float:right;
+                        span{
+                            font-weight: bold;
+                            text-align: center;
+                            line-height: 18px;
+                            cursor: pointer;
+                            color: white;
+                        }
+                        span:hover{
+                            color: white;
+                        }
+                    }
+                }
+            }
+        }
+
+        div.labels{
+            overflow:hidden;
+
+            p {
+                color: @color-light;
+                font-style: italic;
+            }
+            div.label_wrapper{
+                margin-bottom:3px;
+            }
+            div.label{
+                background-color:@color-dark;
+                color:@color-dark;
+                height:25px;
+                display: table-cell;
+
+                div.labelnumber{
+                    color:white;
+                    height:25px;
+                    width:28px;
+                    text-align: center;
+                    float:left;
+                    line-height: 25px;
+                    background-color:@color-main;
+                }
+                .labeltxt{
+                    height:25px;
+                    float:left;
+                    text-align: center;
+                    line-height: 25px;
+                    padding: 0 10px 0 10px;
+                }
+                .labelbutton{
+                    height:25px;
+                    border:0;  
+                    float:left;
+                    padding: 0 5px 0 5px;
+                    text-align: center;
+                    line-height: 25px;
+                    cursor:pointer;
+                    span{
+                        background-image:none !important;
+                    }
+                }
+                .labelbutton:focus {
+                    outline:0;
+                }
+                .labelbutton:hover{
+                    color:@color-main;
+                }
+                .labelremovebutton{
+                    height:25px;
+                    border:0;  
+                    float:left;
+                    padding: 0 5px 0 5px;
+                    text-align: center;
+                    line-height: 25px;
+                    cursor:pointer;
+                    color: @color-white;
+                    background-color: @color-main !important;
+                    span{
+                        background-image:none !important;
+                    }
+                }
+                button.labelremovebutton:focus {
+                    outline:0;
+                }
+            }
+
+            div.minus,
+            div.minus button{
+                background-color: @color-light;
+            }
+        }
     }
 }
+
+
+

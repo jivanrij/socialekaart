@@ -235,7 +235,6 @@ function gojira_init() {
     $mobileDetect = new Mobile_Detect();
 
     if($mobileDetect->isTablet()){
-      drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/tablet.css');
       drupal_add_js(array('gojira' => array('tablet' => '1')), 'setting');
     }else{
       drupal_add_js(array('gojira' => array('tablet' => '0')), 'setting');

@@ -57,4 +57,171 @@ body{
     button:focus, input:focus {
         outline:0;
     }
+    div.errormessage{
+        margin:7px 0 0 0;
+    }
+    .statusmessage{
+        color:#4d4d4d;
+        font-style: italic;
+        margin-top:10px;
+    }
+
+    .left, span.left > input{
+        float:left;
+    }
+    .right, span.right > input{
+        float:right;
+    }
+}
+
+/** Hacking into drupal.... of gewoon uitgummen #biteme **/
+body.page-user-edit #content div.tabs{
+    display:none;
+}
+
+/** leaflet changes **/
+.leaflet-container a {
+    color: #4d4d4d;
+    font-weight: bold;
+}
+div.leaflet-popup-content ul{
+    list-style: none;
+    padding-left:0;
+}
+div.leaflet-popup-content ul a:hover{
+    color:#b7072a;
+}
+
+/* Buttons */
+.gbutton, 
+span.gbutton > input{
+    cursor: pointer;
+    padding:0;
+    margin-top:4px;
+    display:block;
+    float:left;
+    background-color: #b7072a;
+    width:100px;
+    color: white;
+    text-align: center;
+}
+span.gbutton > input{ /* drupal form submit buttons */
+    border: medium none;
+    font-weight: bold;
+    height: 20px;
+    line-height: 16px;
+    margin: 0;
+}
+span.gbutton{
+    height: 20px;
+}
+.gbutton span{
+    padding:4px;
+    display:inline-block;
+    line-height: 12px;
+}
+.gbutton_small, span.gbutton_small > input{
+    width:75px;
+}
+.gbutton_wide, span.gbutton_wide > input{
+    width:150px;
+}
+.gbutton_widest, span.gbutton_widest > input{
+    width:200px;
+}
+.gbutton_wrapper{
+    display:block;
+    overflow:hidden;
+}
+
+#overlay_wait{
+    width:100%;
+    height:100%;
+    position:fixed;
+    background-color: white;
+    opacity: 0.4;
+    filter: alpha(opacity=40); /* For IE8 and earlier */
+    z-index:210;
+    display:none;
+    background-image: url(../img/wait.gif);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+}
+#overlay_wait_txt{
+    width:100%;
+    height:100%;
+    position:fixed;
+    z-index:200;
+    display:none;
+    background-image: url(../img/wait_text.png);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+
+
+
+a.help_link_content{
+    position:absolute;
+    height:9px;
+    right:10px;
+    bottom: 6px;
+    width:6px;
+    background: url(../img/question.png) no-repeat right;
+}
+a.help_link_content:hover{
+    background: url(../img/question_hover.png) no-repeat right;
+}
+#ajax_search_results a.help_link_content{
+    bottom: 16px;
+}
+
+#settings_payment_info{
+    display:none;
+}
+#settings_payment_info_switch{
+    text-decoration: none !important;
+    font-size: 10px;
+    color: #b7072a;
+}
+
+
+#conditions_holder{
+    width: 530px;
+    margin-top:5px;
+    height:500px;
+    overflow-x:hidden;
+    overflow-y: scroll;
+    border-style:solid;
+    border-width: 1px;
+    border-color: @color-light;
+    padding:10px;
+}
+
+
+#doubles_wrapper{
+    width:100%;
+    overflow:hidden;
+    #show_double_info{
+        width:50%;
+        float:left;
+        p{
+            border-style: solid;
+            border-width: 1px;
+            padding:5px;
+        }
+    }
+    #show_doubles{
+        width:50%;
+        float:left;
+        a{
+            cursor: pointer;
+        }
+        ul{
+            list-style: none;
+            padding-left:0px;
+        }
+    }
 }

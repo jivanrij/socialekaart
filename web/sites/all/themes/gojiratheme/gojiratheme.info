@@ -4,7 +4,6 @@ description = Skin for gojira
 
 core = 7.x
 
-stylesheets[all][] = css/gojiratheme.css
 stylesheets[all][] = css/gojira.css
 
 regions[content] = Content
