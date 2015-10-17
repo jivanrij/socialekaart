@@ -11,30 +11,25 @@ switch(Template::getView()){
     echo $overlay;
     include(drupal_get_path('theme', 'gojiratheme') . '/_page_crud.tpl.php');
     include(drupal_get_path('theme', 'gojiratheme') . '/_add.tpl.php');
-    echo $sLowResWarning;
     break;
   case Template::VIEWTYPE_CRUD_TITLE:
     echo $overlay;
     include(drupal_get_path('theme', 'gojiratheme') . '/_page_crud_title.tpl.php');
     include(drupal_get_path('theme', 'gojiratheme') . '/_add.tpl.php');
-    echo $sLowResWarning;
     break;
   case Template::VIEWTYPE_SEARCH:
     echo $overlay;
     include(drupal_get_path('theme', 'gojiratheme') . '/_page_content.tpl.php');
     include(drupal_get_path('theme', 'gojiratheme') . '/_add.tpl.php');
-    echo $sLowResWarning;
     break;
   case Template::VIEWTYPE_BIG:
     echo $overlay;
     include(drupal_get_path('theme', 'gojiratheme') . '/_page_big.tpl.php');
     include(drupal_get_path('theme', 'gojiratheme') . '/_add.tpl.php');
-    echo $sLowResWarning;
     break;
   case Template::VIEWTYPE_BIG_TITLE:
     echo $overlay;
     include(drupal_get_path('theme', 'gojiratheme') . '/_page_big_title.tpl.php');
     include(drupal_get_path('theme', 'gojiratheme') . '/_add.tpl.php');
-    echo $sLowResWarning;
     break;
 }

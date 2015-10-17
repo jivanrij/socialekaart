@@ -2,9 +2,11 @@
     left: 10px;
     position: absolute;
     top: 76px;
-    width: 300px;
+    width: @block-width-md;
     z-index: 100;
-    
+    @media (max-width: @screen-md-max) {
+        width: @block-width-sm;
+    }
     span.result_txt{
         display:none;
     }

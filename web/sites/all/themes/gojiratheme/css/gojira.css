@@ -1,3 +1,4 @@
+/* handle 3 stages, xs/md/lg */
 html,
 body {
   height: 100%;
@@ -57,11 +58,189 @@ body button:focus,
 body input:focus {
   outline: 0;
 }
+body div.errormessage {
+  margin: 7px 0 0 0;
+}
+body .statusmessage {
+  color: #4d4d4d;
+  font-style: italic;
+  margin-top: 10px;
+}
+body .left,
+body span.left > input {
+  float: left;
+}
+body .right,
+body span.right > input {
+  float: right;
+}
+/** Hacking into drupal.... of gewoon uitgummen #biteme **/
+body.page-user-edit #content div.tabs {
+  display: none;
+}
+/** leaflet changes **/
+.leaflet-container a {
+  color: #4d4d4d;
+  font-weight: bold;
+}
+div.leaflet-popup-content ul {
+  list-style: none;
+  padding-left: 0;
+}
+div.leaflet-popup-content ul a:hover {
+  color: #b7072a;
+}
+/* Buttons */
+.gbutton,
+span.gbutton > input {
+  cursor: pointer;
+  padding: 0;
+  margin-top: 4px;
+  display: block;
+  float: left;
+  background-color: #b7072a;
+  width: 100px;
+  color: white;
+  text-align: center;
+}
+span.gbutton > input {
+  /* drupal form submit buttons */
+  border: medium none;
+  font-weight: bold;
+  height: 20px;
+  line-height: 16px;
+  margin: 0;
+}
+span.gbutton {
+  height: 20px;
+}
+.gbutton span {
+  padding: 4px;
+  display: inline-block;
+  line-height: 12px;
+}
+.gbutton_small,
+span.gbutton_small > input {
+  width: 75px;
+}
+.gbutton_wide,
+span.gbutton_wide > input {
+  width: 150px;
+}
+.gbutton_widest,
+span.gbutton_widest > input {
+  width: 200px;
+}
+.gbutton_wrapper {
+  display: block;
+  overflow: hidden;
+}
+#overlay_wait {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-color: white;
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+  /* For IE8 and earlier */
+  z-index: 210;
+  display: none;
+  background-image: url(../img/wait.gif);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+}
+#overlay_wait_txt {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 200;
+  display: none;
+  background-image: url(../img/wait_text.png);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+}
+a.help_link_content {
+  position: absolute;
+  height: 9px;
+  right: 10px;
+  bottom: 6px;
+  width: 6px;
+  background: url(../img/question.png) no-repeat right;
+}
+a.help_link_content:hover {
+  background: url(../img/question_hover.png) no-repeat right;
+}
+#ajax_search_results a.help_link_content {
+  bottom: 16px;
+}
+#settings_payment_info {
+  display: none;
+}
+#settings_payment_info_switch {
+  text-decoration: none !important;
+  font-size: 10px;
+  color: #b7072a;
+}
+#conditions_holder {
+  width: 530px;
+  margin-top: 5px;
+  height: 500px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdbdb;
+  padding: 10px;
+}
+@media (max-width: 1200px) {
+  #conditions_holder {
+    width: 300px;
+  }
+}
+#doubles_wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+#doubles_wrapper #show_double_info {
+  width: 50%;
+  float: left;
+}
+#doubles_wrapper #show_double_info p {
+  border-style: solid;
+  border-width: 1px;
+  padding: 5px;
+}
+#doubles_wrapper #show_doubles {
+  width: 50%;
+  float: left;
+}
+#doubles_wrapper #show_doubles a {
+  cursor: pointer;
+}
+#doubles_wrapper #show_doubles ul {
+  list-style: none;
+  padding-left: 0px;
+}
 #header {
   background-color: #b7072a;
   overflow: hidden;
   color: #ffffff !important;
   border-bottom: #4d4d4d solid 1px;
+}
+@media (max-width: 768px) {
+  #header {
+    display: none;
+  }
+}
+#header #location_selector {
+  margin: 0 0 0 0px;
+  padding: 0;
+  vertical-align: top;
+  width: 100px;
+  background-color: #fff;
+  border-radius: 0;
 }
 #header a,
 #header a.active {
@@ -152,6 +331,15 @@ body input:focus {
   width: 100px;
   text-align: right;
 }
+form .has_help {
+  cursor: help;
+}
+form .has_help img {
+  height: 10px;
+}
+form label[for=edit-favorite] {
+  height: 35px;
+}
 form .form-required {
   color: #b7072a;
 }
@@ -163,6 +351,10 @@ form select {
 form .error {
   border: 1px solid #b7072a !important;
 }
+form input.error,
+form textarea.error {
+  border-width: 1px !important;
+}
 form button,
 form input,
 form select,
@@ -172,20 +364,102 @@ form textarea {
 form .form-item .description {
   font-size: 11px;
 }
-form input[type=text],
-form textarea,
-form input[type=password],
-form select {
+form .form-item label {
+  display: block;
+  float: left;
+  font-weight: bold;
+  width: 160px;
+}
+form .form-item textarea {
+  resize: none;
+}
+form .form-item label {
+  height: 15px;
+  line-height: 18px;
+}
+form .form-item input[type=text],
+form .form-item textarea,
+form .form-item input[type=password],
+form .form-item select {
   border-color: #dbdbdb;
   border-style: solid;
   border-width: 1px;
 }
-form textarea {
-  resize: none;
+form .form-item input[type='text'] {
+  -webkit-appearance: none;
+  border-radius: 0;
 }
-form label {
-  height: 15px;
-  line-height: 18px;
+form .form-item .form-type-radios > label {
+  margin-bottom: 10px;
+  display: block;
+}
+form .form-item .form-type-radio input {
+  margin-right: 105px;
+}
+form div.password-suggestions {
+  width: 360px !important;
+}
+div.wide_form_label label {
+  width: 260px !important;
+}
+form#gojira-register-form {
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+form#gojira-register-form div.form-item {
+  overflow: hidden;
+}
+form#gojira-register-form div.form-item label {
+  float: left;
+  width: 150px;
+}
+form#gojira-register-form div.form-item input[type=text],
+form#gojira-register-form div.form-item input[type=password] {
+  float: right;
+  width: 220px;
+}
+form#gojira-register-form #edit-field-is-doctor {
+  margin-left: 5px;
+}
+/* register form */
+form#user-pass {
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+form#user-pass div.form-item {
+  overflow: hidden;
+}
+form#user-pass div.form-item label {
+  float: left;
+  width: 150px;
+}
+form#user-pass div.form-item input[type=text] {
+  float: right;
+  width: 220px;
+}
+/* user profile form */
+#user-profile-form input.password-field {
+  width: 130px !important;
+}
+#user-profile-form .password-strength {
+  margin-top: 0;
+}
+#user-profile-form input.password-confirm {
+  width: 130px !important;
+}
+#gojira-to-subscribe-page-form div.form-wrapper {
+  overflow: hidden;
+}
+#gojira-to-subscribe-page-form div.form-wrapper input[type=submit] {
+  width: 210px;
+}
+#gojira-to-subscribe-page-form div.form-wrapper span {
+  width: 215px;
+}
+div.password-strength,
+div.password-confirm {
+  margin-top: 0;
+  width: 220px;
 }
 a.gbutton:hover {
   color: #ffffff;
@@ -194,24 +468,177 @@ a.gbutton:hover {
   color: #4d4d4d;
   font-weight: bold;
 }
+#crud_holder {
+  left: 10px;
+  position: absolute;
+  top: 76px;
+  width: 500px;
+  z-index: 100;
+  background-color: white;
+  overflow: hidden;
+  padding: 0 10px 10px 10px;
+}
+@media (max-width: 1200px) {
+  #crud_holder {
+    width: 300px !important;
+  }
+}
 #crud_holder h1 {
   margin-top: 10px;
 }
+#crud_holder form {
+  margin: 0 0 10px 0;
+}
+#crud_holder form div.form-item {
+  width: 100%;
+  clear: both;
+  overflow: hidden;
+}
+#crud_holder form div.form-item input.form-text {
+  width: 160px;
+}
+#crud_holder form div.form-item select.form-select {
+  width: 166px;
+}
+#crud_holder form div.form-item textarea {
+  width: 297px;
+}
 #crud_holder form div.form-item div.description {
   font-weight: lighter;
+}
+#crud_holder form div.form-item label {
+  width: 130px;
+  float: left;
+}
+#crud_holder form div.form-item div.description {
+  overflow: hidden;
+  float: right;
+  margin-top: 5px;
+}
+#crud_holder form div.form-item div.form-radios div.form-type-radio input {
+  width: 15px;
+  float: left;
+}
+#crud_holder form div.form-item div.form-radios div.form-type-radio label {
+  width: auto;
+  float: left;
+  padding-left: 10px;
+}
+#crud_holder p {
+  font-weight: normal;
 }
 #crud_holder p a {
   text-decoration: underline;
   cursor: pointer;
 }
+#crud_holder table {
+  border: none;
+  width: 100%;
+}
+#crud_holder table th {
+  background-color: #b7072a;
+  color: white;
+  text-align: left;
+  border: 0;
+}
+#crud_holder table tbody {
+  border-top: 0px;
+}
+#crud_holder table tbody tr td {
+  padding-top: 5px;
+}
+#content_holder.big #crud_holder {
+  width: 550px;
+}
+#search_result_info {
+  left: 10px;
+  position: absolute;
+  top: 76px;
+  width: 500px;
+  z-index: 100;
+}
+@media (max-width: 1200px) {
+  #search_result_info {
+    width: 300px;
+  }
+}
+#search_result_info span.result_txt {
+  display: none;
+}
+#search_result_info #search_results {
+  background-color: white;
+  overflow: hidden;
+}
+#search_result_info #search_results p {
+  padding: 5px 15px 15px 15px;
+  margin: 0;
+}
 #search_result_info #search_results p.info_text {
   font-size: 11px;
+}
+#search_result_info #search_results ul {
+  padding: 0 0 10px 15px;
+  list-style: none;
+  margin: -10px 0 0 0;
+}
+#search_result_info #search_results ul li {
+  padding-bottom: 5px;
 }
 #search_result_info #search_results ul li.active a {
   color: #b7072a;
 }
+#search_result_info #search_results > p {
+  padding-top: 10px;
+}
 #search_result_info #search_results > p div.results_paging {
   font-weight: normal;
+}
+#search_result_info #search_results .results_paging {
+  display: block;
+  overflow: hidden;
+  padding: 0 15px 15px 15px;
+}
+#search_result_info #search_results .results_paging > span {
+  line-height: 25px;
+  margin-left: 30px;
+}
+#search_result_info #search_results .results_paging span.first_page {
+  margin-left: 85px;
+}
+#search_result_info #search_results .results_paging p.searchresult_note_max {
+  padding: 10px 0 0 0;
+}
+#search_result_info #search_results .paging_hidden {
+  display: none !important;
+}
+#search_form {
+  background-color: #ffffff;
+  height: 25px;
+  left: 10px;
+  position: absolute;
+  top: 40px;
+  width: 300px;
+  z-index: 100;
+  overflow: hidden;
+}
+#search_form input[type=text] {
+  height: 25px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  width: 242px;
+  color: #b7072a;
+  font-weight: bold;
+  padding-left: 5px;
+}
+#search_form input[type=submit] {
+  height: 25px;
+  width: 50px;
+  padding: 0;
+  float: right;
+  margin: 0;
+  border: 0;
+  background: url(../img/magnify.png) 10px no-repeat #b7072a;
 }
 body.questions #questions_content section {
   font-weight: normal;
@@ -227,40 +654,312 @@ body.questions a.active.topic {
   text-decoration: underline !important;
   color: #b7072a;
 }
-#ownlist_content a.location_category_list {
+body.ownlist #crud_holder {
+  width: 400px;
+}
+body.ownlist #crud_holder #ownlist_menu {
+  width: 28%;
+  float: left;
+  overflow: hidden;
+}
+body.ownlist #crud_holder #ownlist_menu h2 {
+  margin-top: 10px;
+}
+body.ownlist #crud_holder #ownlist_menu ul {
+  list-style: none;
+  padding: 0;
+}
+body.ownlist #crud_holder #ownlist_menu ul li {
+  padding: 2px 0 2px 0;
+}
+body.ownlist #crud_holder #ownlist_menu ul li a {
+  text-decoration: none;
+  cursor: pointer;
+}
+body.ownlist #crud_holder #ownlist_menu ul li a.active,
+body.ownlist #crud_holder #ownlist_menu ul li a:hover {
+  color: #b7072a;
+  text-decoration: underline;
+}
+body.ownlist #crud_holder #ownlist_content {
+  width: 68%;
+  float: right;
+  margin: 10px 0 10px 0;
+  max-height: 400px;
+  overflow-y: auto;
+}
+body.ownlist #crud_holder #ownlist_content ul {
+  list-style: none;
+  margin: 0;
+  padding: 10px 0 0 0;
+}
+body.ownlist #crud_holder #ownlist_content ul li {
+  padding: 0 0 5px 0;
+}
+body.ownlist #crud_holder #ownlist_content a.location_category_list {
   text-decoration: none;
   font-style: italic;
   font-size: 11px;
 }
-#ownlist_content a.location_category_list spam {
+body.ownlist #crud_holder #ownlist_content a.location_category_list spam {
   text-decoration: none;
   font-style: normal;
   font-size: 12px;
 }
-#selected_location_info #fav_switch_label {
+body.ownlist #crud_holder #ownlist_content a.location_category_list:hover,
+body.ownlist #crud_holder #ownlist_content a.location_category_list.active {
+  text-decoration: underline;
+  color: #b7072a;
+}
+#selected_location_info {
+  background-color: white;
+  width: 500px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+@media (max-width: 1200px) {
+  #selected_location_info {
+    width: 300px;
+  }
+}
+#selected_location_info a#mailto {
+  text-decoration: underline;
+  cursor: pointer;
+  padding-top: 5px;
+  display: block;
+}
+#selected_location_info div.grouped {
+  width: 50%;
+  margin: 0;
+  padding: 0 5% 0 0;
+  float: left;
+}
+#selected_location_info div.grouped div {
+  margin: 0 0 5px 0;
+}
+#selected_location_info div.grouped div.adres {
+  width: 45%;
+  float: left;
+  font-weight: normal;
+}
+#selected_location_info > div {
+  margin: 15px;
+}
+#selected_location_info .search_result_wrapper {
+  width: 500px;
+}
+@media (max-width: 1200px) {
+  #selected_location_info .search_result_wrapper {
+    width: 300px;
+  }
+}
+#selected_location_info .search_result_wrapper br {
+  clear: both;
+}
+#selected_location_info .search_result_wrapper > div {
+  margin-bottom: 10px;
+}
+#selected_location_info .search_result_wrapper div.gbutton_wrapper {
+  clear: both;
+}
+#selected_location_info .search_result_wrapper p {
+  margin: 0;
+}
+#selected_location_info .search_result_wrapper div.inform {
+  padding-top: 5px;
+  font-size: 10px;
+}
+#selected_location_info .search_result_wrapper .favorites {
+  display: block;
+}
+#selected_location_info .search_result_wrapper span.fav_row button {
+  border: none;
+  display: inline;
+  color: #ffffff;
+  background-color: #dbdbdb;
+}
+#selected_location_info .search_result_wrapper span.fav_row button.fav_yes {
+  font-weight: bold;
+  background-color: #b7072a;
+}
+#selected_location_info .search_result_wrapper span.fav_row button.fav_no {
+  font-weight: normal;
+}
+#selected_location_info .search_result_wrapper span.fav_row button.fav_no:hover {
+  background-color: #dbdbdb;
+}
+#selected_location_info .search_result_wrapper span.fav_row button.fav_yes {
+  font-weight: normal;
+}
+#selected_location_info .search_result_wrapper span.fav_row button.fav_yes:hover {
+  background-color: #dbdbdb;
+}
+#selected_location_info .search_result_wrapper span.fav_row button.fav_no {
+  font-weight: bold;
+  background-color: #b7072a;
+}
+#selected_location_info .search_result_wrapper #fav_switch_label {
   color: #dbdbdb;
   font-style: italic;
 }
-#selected_location_info div.results_paging p.searchresult_note_max {
+#selected_location_info .search_result_wrapper div.results_paging p.searchresult_note_max {
   font-weight: normal;
 }
-#selected_location_info .new_label {
+#selected_location_info .search_result_wrapper .new_label {
   padding-left: 5px;
 }
-#selected_location_info div.add_label {
+#selected_location_info .search_result_wrapper div.add_label {
   height: 22px;
   line-height: 22px;
 }
-#selected_location_info div.add_label label {
+#selected_location_info .search_result_wrapper div.add_label label {
   line-height: 22px;
   float: left !important;
   margin-right: 3px;
 }
-#selected_location_info div.add_label span.tooltip {
-  margin-top: 4px;
+#selected_location_info .search_result_wrapper div.add_label form .new_label_wrapper {
+  display: block;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  overflow: hidden;
+  border-color: #4d4d4d;
+  border-style: solid;
+  border-width: 1px;
+  height: 20px;
+  width: 176px;
+  float: left;
+}
+#selected_location_info .search_result_wrapper div.add_label form .new_label_wrapper input.new_label {
+  border: none;
+  line-height: 18px;
+  color: #dbdbdb;
+}
+#selected_location_info .search_result_wrapper div.add_label form .new_label_wrapper button.add_new_label {
+  background: none;
+  border: none;
+  padding: 0 !important;
+  height: 20px;
+  width: 25px;
+  background-color: #b7072a;
+  float: right;
+}
+#selected_location_info .search_result_wrapper div.add_label form .new_label_wrapper button.add_new_label span {
+  font-weight: bold;
+  text-align: center;
+  line-height: 18px;
+  cursor: pointer;
+  color: white;
+}
+#selected_location_info .search_result_wrapper div.add_label form .new_label_wrapper button.add_new_label span:hover {
+  color: white;
+}
+#selected_location_info .search_result_wrapper div.labels {
+  overflow: hidden;
+}
+#selected_location_info .search_result_wrapper div.labels p {
+  color: #dbdbdb;
+  font-style: italic;
+}
+#selected_location_info .search_result_wrapper div.labels div.label_wrapper {
+  margin-bottom: 3px;
+}
+#selected_location_info .search_result_wrapper div.labels div.label {
+  background-color: #4d4d4d;
+  color: #4d4d4d;
+  height: 25px;
+  display: table-cell;
+}
+#selected_location_info .search_result_wrapper div.labels div.label div.labelnumber {
+  color: white;
+  height: 25px;
+  width: 28px;
+  text-align: center;
+  float: left;
+  line-height: 25px;
+  background-color: #b7072a;
+}
+#selected_location_info .search_result_wrapper div.labels div.label .labeltxt {
+  height: 25px;
+  float: left;
+  text-align: center;
+  line-height: 25px;
+  padding: 0 10px 0 10px;
+}
+#selected_location_info .search_result_wrapper div.labels div.label .labelbutton {
+  height: 25px;
+  border: 0;
+  float: left;
+  padding: 0 5px 0 5px;
+  text-align: center;
+  line-height: 25px;
+  cursor: pointer;
+}
+#selected_location_info .search_result_wrapper div.labels div.label .labelbutton span {
+  background-image: none !important;
+}
+#selected_location_info .search_result_wrapper div.labels div.label .labelbutton:focus {
+  outline: 0;
+}
+#selected_location_info .search_result_wrapper div.labels div.label .labelbutton:hover {
+  color: #b7072a;
+}
+#selected_location_info .search_result_wrapper div.labels div.label .labelremovebutton {
+  height: 25px;
+  border: 0;
+  float: left;
+  padding: 0 5px 0 5px;
+  text-align: center;
+  line-height: 25px;
+  cursor: pointer;
+  color: #ffffff;
+  background-color: #b7072a !important;
+}
+#selected_location_info .search_result_wrapper div.labels div.label .labelremovebutton span {
+  background-image: none !important;
+}
+#selected_location_info .search_result_wrapper div.labels div.label button.labelremovebutton:focus {
+  outline: 0;
+}
+#selected_location_info .search_result_wrapper div.labels div.minus,
+#selected_location_info .search_result_wrapper div.labels div.minus button {
+  background-color: #dbdbdb;
 }
 ul.ui-autocomplete li a {
   font-size: 12px !important;
+}
+#faq_sections section .accordion_content {
+  display: none;
+  font-weight: normal;
+}
+#faq_sections section h1 {
+  cursor: pointer;
+  font-size: 12px;
+}
+#faq_question_switch {
+  text-decoration: none !important;
+  font-size: 10px;
+  color: #B7072A;
+}
+#mobilemenu {
+  background-color: red;
+  overflow: hidden;
+  color: #ffffff !important;
+  border-bottom: #4d4d4d solid 1px;
+  position: fixed;
+  height: 10px;
+  width: 100%;
+  top: 0px;
+  display: block;
+  z-index: 400;
+}
+@media (min-width: 768px) {
+  #mobilemenu {
+    display: none;
+  }
 }
 /* buttons */
 .rounded {

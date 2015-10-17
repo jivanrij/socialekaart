@@ -1,4 +1,5 @@
 <?php include(drupal_get_path('theme', 'gojiratheme') . '/_header.tpl.php'); ?>
+<?php include(drupal_get_path('theme', 'gojiratheme') . '/_mobilemenu.tpl.php'); ?>
 <div id="content_holder" class="big">
     <div id="search_form" class="rounded">
         <form>

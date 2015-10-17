@@ -10,18 +10,28 @@
 @font-size-heading3         : 12px;
 @font-family                : Arial, Verdana, Sans-Serif;
 
-@import "partials/global";
+/* handle 3 stages, xs/md/lg */
+@screen-xs-max              : 768px;
+@screen-md-max              : 1200px;
+@screen-lg-min              : 1200px;
+
+@block-width-md             : 500px;
+@block-width-sm             : 300px;
+ 
+
+@import "partials/global";  
 @import "partials/header";
 @import "partials/forms";
 @import "partials/gbutton";
-@import "partials/map";
+@import "partials/map"; 
 @import "partials/crud"; 
 @import "partials/searchresults";
 @import "partials/searchform";
 @import "partials/questions";
 @import "partials/ownlist";
-@import "partials/location";
+@import "partials/location"; 
 @import "partials/autocomplete";
 @import "partials/faq";
+@import "partials/mobilemenu";
 
 @import "mixins"; 

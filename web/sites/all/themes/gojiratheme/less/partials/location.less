@@ -1,8 +1,12 @@
 #selected_location_info{
     background-color: white;
-    width: 300px;
+    width: @block-width-md;
     overflow:hidden;
     margin-top:10px;
+
+    @media (max-width: @screen-md-max) {
+        width: @block-width-sm;
+    }
 
     a#mailto{
         text-decoration: underline;
@@ -32,6 +36,10 @@
 
     .search_result_wrapper{
 
+        width:@block-width-md;
+        @media (max-width: @screen-md-max) {
+            width: @block-width-sm;
+        }
         br{
             clear:both;
         }
