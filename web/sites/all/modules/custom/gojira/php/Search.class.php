@@ -54,7 +54,7 @@ class Search {
         $h = '';
         $h .= '<div id="search_result_info">';
         if ($output['has_tags'] || isset($output['loc'])) {
-            $h .= '<div id="search_results" class="rounded">';
+            $h .= '<div id="search_results" class="rounded"><div>';
             if ($output['city_in_tag'] && $output['check_city'] == true && helper::userHasSubscribedRole()) {
                 $h .= '<p class="info_text">';
                 $h .= t('You are searching in the area of %city%.', array('%city%' => $output['city_in_tag'])) . '<br />';
@@ -154,7 +154,7 @@ class Search {
             }
 
 
-            $h .= '</div>';
+            $h .= '</div></div>';
         }
         $hidden_class = '';
         if ($output['by_id']) {

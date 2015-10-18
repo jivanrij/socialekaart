@@ -14,7 +14,6 @@
         background-color: white;
         overflow:hidden;
 
-
         p{
             padding: 5px 15px 15px 15px;
             margin:0;
@@ -33,7 +32,7 @@
             }
             li.active{
                 a{
-                    color: @color-main; 
+                    color: @color-main;
                 }
             }
         }
@@ -63,5 +62,24 @@
         .paging_hidden{
             display:none !important;
         }
+        @media (max-width: @screen-xs-max) {
+            .unround;
+            .unshadow;
+            > div{
+                margin:5px;
+                background-color:@color-lightest-grey;
+                .rounded;
+                .noshadow;
+            }
+        }
+        
     }
+    @media (max-width: @screen-xs-max) {
+        left:0;
+        width:100%;
+        top:50px;
+
+    }
+
+
 }

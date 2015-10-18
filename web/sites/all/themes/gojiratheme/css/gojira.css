@@ -461,6 +461,40 @@ div.password-confirm {
   margin-top: 0;
   width: 220px;
 }
+#mobilemenu form {
+  width: 80%;
+}
+#mobilemenu form input[type=text] {
+  border: 0;
+  -webkit-box-shadow: 0px 0px 8px #000000;
+  -moz-box-shadow: 0px 0px 8px #000000;
+  box-shadow: 0px 0px 8px #000000;
+  display: block;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  overflow: hidden;
+  width: 50%;
+  height: 25px;
+  float: left;
+  margin: 7px 10px 0 7px;
+  padding: 0;
+}
+#mobilemenu form > i {
+  display: block;
+  padding: 9px 0 0 0;
+  font-size: 20px;
+  color: #b7072a;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  body.mobile-form #map {
+    display: none;
+  }
+}
 a.gbutton:hover {
   color: #ffffff;
 }
@@ -480,7 +514,39 @@ a.gbutton:hover {
 }
 @media (max-width: 1200px) {
   #crud_holder {
-    width: 300px !important;
+    width: 300px;
+  }
+}
+@media (max-width: 768px) {
+  #crud_holder {
+    width: 100%;
+    padding: 0;
+    left: 0;
+    top: 55px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  }
+}
+@media (max-width: 768px) {
+  #crud_holder > div {
+    margin: 0 5px 5px 5px;
+    padding: 0 10px 10px 10px;
+    background-color: #f8f8f8;
+    -webkit-box-shadow: 0px 0px 8px #000000;
+    -moz-box-shadow: 0px 0px 8px #000000;
+    box-shadow: 0px 0px 8px #000000;
+    display: block;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    overflow: hidden;
   }
 }
 #crud_holder h1 {
@@ -611,6 +677,38 @@ a.gbutton:hover {
 #search_result_info #search_results .paging_hidden {
   display: none !important;
 }
+@media (max-width: 768px) {
+  #search_result_info #search_results {
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  }
+  #search_result_info #search_results > div {
+    margin: 5px;
+    background-color: #f8f8f8;
+    -webkit-box-shadow: 0px 0px 8px #000000;
+    -moz-box-shadow: 0px 0px 8px #000000;
+    box-shadow: 0px 0px 8px #000000;
+    display: block;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    overflow: hidden;
+  }
+}
+@media (max-width: 768px) {
+  #search_result_info {
+    left: 0;
+    width: 100%;
+    top: 50px;
+  }
+}
 #search_form {
   background-color: #ffffff;
   height: 25px;
@@ -621,7 +719,12 @@ a.gbutton:hover {
   z-index: 100;
   overflow: hidden;
 }
-#search_form input[type=text] {
+@media (max-width: 768px) {
+  #search_form {
+    display: none;
+  }
+}
+#search_form form input[type=text] {
   height: 25px;
   padding: 0;
   margin: 0;
@@ -631,7 +734,7 @@ a.gbutton:hover {
   font-weight: bold;
   padding-left: 5px;
 }
-#search_form input[type=submit] {
+#search_form form input[type=submit] {
   height: 25px;
   width: 50px;
   padding: 0;
@@ -928,6 +1031,22 @@ body.ownlist #crud_holder #ownlist_content a.location_category_list.active {
 #selected_location_info .search_result_wrapper div.labels div.minus button {
   background-color: #dbdbdb;
 }
+@media (max-width: 768px) {
+  #selected_location_info .search_result_wrapper {
+    width: 100%;
+  }
+}
+@media (max-width: 768px) {
+  #selected_location_info {
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    width: 100%;
+  }
+}
 ul.ui-autocomplete li a {
   font-size: 12px !important;
 }
@@ -945,21 +1064,35 @@ ul.ui-autocomplete li a {
   color: #B7072A;
 }
 #mobilemenu {
-  background-color: red;
   overflow: hidden;
   color: #ffffff !important;
-  border-bottom: #4d4d4d solid 1px;
   position: fixed;
-  height: 10px;
   width: 100%;
   top: 0px;
   display: block;
-  z-index: 400;
+  z-index: 100;
+  background-color: #ffffff;
 }
 @media (min-width: 768px) {
   #mobilemenu {
     display: none;
   }
+}
+#mobilemenu > div {
+  margin: 5px;
+  height: 40px;
+  background-color: #f8f8f8;
+  -webkit-box-shadow: 0px 0px 8px #000000;
+  -moz-box-shadow: 0px 0px 8px #000000;
+  box-shadow: 0px 0px 8px #000000;
+  display: block;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  overflow: hidden;
 }
 /* buttons */
 .rounded {
@@ -971,6 +1104,16 @@ ul.ui-autocomplete li a {
   -moz-box-shadow: 0px 0px 8px #000000;
   box-shadow: 0px 0px 8px #000000;
   overflow: hidden;
+}
+.unround {
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
+}
+.unshadow {
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
 }
 .noshadow {
   display: block;

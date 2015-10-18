@@ -147,3 +147,35 @@ div.password-strength, div.password-confirm{
     margin-top: 0;
     width: 220px;
 }
+
+#mobilemenu{
+    form{
+        width:80%;
+        input[type=text]{
+            border:0;
+            .rounded;
+            .noshadow;
+            width:50%;
+            height: 25px;
+            float:left;
+            margin:7px 10px 0 7px;
+            padding:0;
+        }
+        
+        > i {
+            display: block;
+            padding: 9px 0 0 0;
+            font-size: 20px;
+            color: @color-main;
+            cursor: pointer;
+        }
+    }
+}
+
+@media (max-width: @screen-xs-max) {
+    body.mobile-form{
+        #map{
+            display:none;
+        }
+    }
+}

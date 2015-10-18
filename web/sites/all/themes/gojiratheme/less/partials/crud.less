@@ -7,11 +7,30 @@
     background-color: white;
     overflow:hidden;
     padding:0 10px 10px 10px;
-    
+
     @media (max-width: @screen-md-max) {
-        width: @block-width-sm !important;
+        width: @block-width-sm;
+    }
+    @media (max-width: @screen-xs-max) {
+        width: 100%;
+        width:100%;
+        padding:0;
+        left:0;
+        top:55px;
+        .unround;
+        .unshadow;
     }
     
+    > div{
+        @media (max-width: @screen-xs-max) {
+                margin: 0 5px 5px 5px;
+                padding:0 10px 10px 10px;
+                background-color:@color-lightest-grey;
+                .rounded;
+                .noshadow;
+        }
+    }
+
     h1{
         margin-top:10px;
     }

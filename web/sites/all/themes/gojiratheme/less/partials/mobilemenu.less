@@ -1,18 +1,24 @@
 #mobilemenu {
-    
-    background-color: red;
+
     overflow: hidden;
     color: @color-white !important;
-    border-bottom: @color-dark solid 1px;
     position: fixed;
-    height:10px;
     width: 100%;
     top:0px;
     display: block;
-    z-index: 400;
-    
-    
+    z-index: 100;
+    background-color: @color-white;
+
     @media (min-width: @screen-xs-max) {
         display:none;
+
+    }
+    
+    > div{
+        margin:5px;
+        height:40px;
+        background-color:@color-lightest-grey;
+        .rounded;
+        .noshadow;
     }
 }

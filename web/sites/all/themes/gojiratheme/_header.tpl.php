@@ -3,9 +3,6 @@
   <?php global $user;
   if ($user->uid): ?>
     <div id="header_options">
-        
-        
-        
       <?php $mobileDetect = new Mobile_Detect(); ?>
       <?php if(Subscriptions::currentGroupHasPayed()): ?>
         &nbsp;

@@ -29,7 +29,7 @@
   }
  
   ?>
-  <body class="<?php echo $class; ?>">
+  <body class="<?php echo $class; ?> <?php echo Template::getMobileType(); ?>">
       <?php print $page; ?>
       <?php if(Template::getView() == Template::VIEWTYPE_FRONT && helper::getIEVersion() != 8): ?><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><?php endif; ?>
         <script> 
