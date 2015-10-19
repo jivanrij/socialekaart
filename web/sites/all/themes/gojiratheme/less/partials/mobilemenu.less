@@ -1,4 +1,4 @@
-#mobilemenu {
+#mobileheader {
 
     overflow: hidden;
     color: @color-white !important;
@@ -11,7 +11,6 @@
 
     @media (min-width: @screen-xs-max) {
         display:none;
-
     }
     
     > div{
@@ -20,5 +19,34 @@
         background-color:@color-lightest-grey;
         .rounded;
         .noshadow;
+        
+        button{
+            position: absolute;
+            right: 10px;
+            top:12px;
+            color:@color-main;
+            font-size: 24px;
+            background-color: @color-lightest-grey;
+            border: none;
+        }
+    }
+}
+#mobilemenu {
+    position: absolute;
+    width: 100%;
+    top:50px;
+    z-index:300;
+    background-color: @color-white;
+    right:100%;
+   
+    > div {
+        margin:7px;
+        background-color: @color-lightest-grey;
+        .rounded;
+        .noshadow;
+    }
+    
+    @media (min-width: @screen-xs-max) {
+        display:none;
     }
 }

@@ -461,10 +461,10 @@ div.password-confirm {
   margin-top: 0;
   width: 220px;
 }
-#mobilemenu form {
+#mobileheader form {
   width: 80%;
 }
-#mobilemenu form input[type=text] {
+#mobileheader form input[type=text] {
   border: 0;
   -webkit-box-shadow: 0px 0px 8px #000000;
   -moz-box-shadow: 0px 0px 8px #000000;
@@ -483,7 +483,7 @@ div.password-confirm {
   margin: 7px 10px 0 7px;
   padding: 0;
 }
-#mobilemenu form > i {
+#mobileheader form > i {
   display: block;
   padding: 9px 0 0 0;
   font-size: 20px;
@@ -1063,7 +1063,7 @@ ul.ui-autocomplete li a {
   font-size: 10px;
   color: #B7072A;
 }
-#mobilemenu {
+#mobileheader {
   overflow: hidden;
   color: #ffffff !important;
   position: fixed;
@@ -1074,11 +1074,11 @@ ul.ui-autocomplete li a {
   background-color: #ffffff;
 }
 @media (min-width: 768px) {
-  #mobilemenu {
+  #mobileheader {
     display: none;
   }
 }
-#mobilemenu > div {
+#mobileheader > div {
   margin: 5px;
   height: 40px;
   background-color: #f8f8f8;
@@ -1093,6 +1093,43 @@ ul.ui-autocomplete li a {
   -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
   overflow: hidden;
+}
+#mobileheader > div button {
+  position: absolute;
+  right: 10px;
+  top: 12px;
+  color: #b7072a;
+  font-size: 24px;
+  background-color: #f8f8f8;
+  border: none;
+}
+#mobilemenu {
+  position: absolute;
+  width: 100%;
+  top: 50px;
+  z-index: 300;
+  background-color: #ffffff;
+  right: 100%;
+}
+#mobilemenu > div {
+  margin: 7px;
+  background-color: #f8f8f8;
+  -webkit-box-shadow: 0px 0px 8px #000000;
+  -moz-box-shadow: 0px 0px 8px #000000;
+  box-shadow: 0px 0px 8px #000000;
+  display: block;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  #mobilemenu {
+    display: none;
+  }
 }
 /* buttons */
 .rounded {

@@ -540,7 +540,7 @@ function focusLocation(nid) {
             jQuery(window).trigger('resize');
             jQuery('#selected_location_info').removeClass('hidden');
 //            closeOverlay();
-            if((window.markerMapping[nid] !== undefined) && (window.markers._layers[window.markerMapping[nid]] !== undefined)) {
+            if ((window.markerMapping[nid] !== undefined) && (window.markers._layers[window.markerMapping[nid]] !== undefined)) {
                 window.markers._layers[window.markerMapping[nid]].toggleBouncing();
             }
         },
@@ -1004,8 +1004,23 @@ function reportDoublePractices(nids, uid) {
         url: "/?q=ajax/reportdouble&nids=" + nids,
         type: 'POST',
         success: function (data) {
-            jQuery('#report_double_'+uid).html('<p>Bedankt! We zullen dit controleren.</p>');
+            jQuery('#report_double_' + uid).html('<p>Bedankt! We zullen dit controleren.</p>');
             closeOverlay();
         }
+    });
+}
+
+function bindMobileMenu() {
+    jQuery('#mobileheader > div > button').click(function () {
+        if (jQuery('#mobileheader > div > button').hasClass('active')) {
+            jQuery('#mobileheader > div > button').removeClass('active');
+            jQuery('#mobilemenu').css('right', '100%');
+        } else {
+            jQuery('#mobileheader > div > button').addClass('active');
+            jQuery('#mobilemenu').css('right', '0%');
+        }
+
+
+
     });
 }

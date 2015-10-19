@@ -7,6 +7,7 @@ jQuery(function () {
 
         bindGlobal();
         bindFaq();
+        bindMobileMenu();
 
         if (Drupal.settings.gojira.ask_default_location) {
             askDefaultLocation();

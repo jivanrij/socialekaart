@@ -26,6 +26,5 @@
         <?php endif; ?>
     </div>
   <?php endif; ?>
-<?php print render($page['header_right']); ?>
-<?php print render($page['header_left']); ?>
+<?php print render($page['header_menu']); ?>
 </div>
