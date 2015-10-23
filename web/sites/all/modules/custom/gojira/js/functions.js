@@ -1011,16 +1011,84 @@ function reportDoublePractices(nids, uid) {
 }
 
 function bindMobileMenu() {
-    jQuery('#mobileheader > div > button').click(function () {
-        if (jQuery('#mobileheader > div > button').hasClass('active')) {
-            jQuery('#mobileheader > div > button').removeClass('active');
+    // menu button
+    jQuery('#mobileheader > div > button.fa-bars').click(function () {
+        if (jQuery('#mobileheader > div > button.fa-bars').hasClass('active')) {
+            jQuery('#mobileheader > div > button.fa-bars').removeClass('active');
             jQuery('#mobilemenu').css('right', '100%');
         } else {
-            jQuery('#mobileheader > div > button').addClass('active');
+            jQuery('#mobileheader > div > button.fa-bars').addClass('active');
             jQuery('#mobilemenu').css('right', '0%');
         }
+    });
 
+    // link to my map button
+    jQuery('#mobileheader > div > button.fa-map-o').click(function () {
+        window.location = '/mijn-kaart';
+    });
 
+    // link to add location page
+    jQuery('#mobileheader > div > button.fa-plus-square').click(function () {
+        window.location = '/suggestlocation';
+    });
+    
 
+    //  switch global search on or off for mobile menu
+    jQuery('a.search_global').click(function () {
+        if(jQuery(this).hasClass('on')){
+            jQuery(this).addClass('off');
+            jQuery(this).removeClass('on');
+            jQuery.ajax({
+                url: '/?q=ajax/switchglobalsearch&turn=off',
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                }
+            });
+        }else{
+            jQuery(this).addClass('on');
+            jQuery(this).removeClass('off');            
+            jQuery.ajax({
+                url: '/?q=ajax/switchglobalsearch&turn=on',
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                }
+            });
+        }
+    });
+    
+    //  switch favorites search on or off for mobile menu
+    jQuery('a.search_favorite').click(function () {
+        if(jQuery(this).hasClass('on')){
+            jQuery(this).addClass('off');
+            jQuery(this).removeClass('on');
+            jQuery.ajax({
+                url: '/?q=ajax/switchfavorites&turn=off',
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                }
+            });
+        }else{
+            jQuery(this).addClass('on');
+            jQuery(this).removeClass('off');            
+            jQuery.ajax({
+                url: '/?q=ajax/switchfavorites&turn=on',
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                }
+            });
+        }
+    });
+    
+    // select another main location
+    jQuery('#select_location_mobile').change(function () {
+        jQuery.ajax({
+            type: "POST",
+            url: '/?q=ajax/picklocation',
+            data: {nid: jQuery(this).val()}
+        });
     });
 }

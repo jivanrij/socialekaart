@@ -12,15 +12,15 @@
     @media (min-width: @screen-xs-max) {
         display:none;
     }
-    
+
     > div{
         margin:5px;
         height:40px;
         background-color:@color-lightest-grey;
         .rounded;
         .noshadow;
-        
-        button{
+
+        button.fa-bars{
             position: absolute;
             right: 10px;
             top:12px;
@@ -29,6 +29,25 @@
             background-color: @color-lightest-grey;
             border: none;
         }
+        button.fa-map-o{
+            position: absolute;
+            right: 70px;
+            top:12px;
+            color:@color-main;
+            font-size: 24px;
+            background-color: @color-lightest-grey;
+            border: none;
+        }
+        button.fa-plus-square{
+            position: absolute;
+            right: 40px;
+            top:12px;
+            color:@color-main;
+            font-size: 24px;
+            background-color: @color-lightest-grey;
+            border: none;
+        }
+
     }
 }
 #mobilemenu {
@@ -38,14 +57,83 @@
     z-index:300;
     background-color: @color-white;
     right:100%;
-   
+
     > div {
         margin:7px;
         background-color: @color-lightest-grey;
         .rounded;
         .noshadow;
+        ul{
+            padding-left:0;
+            li{
+                list-style: none;
+                padding:0;
+                margin:0;
+                a{
+                    width:80%;
+                    display:block;
+                    border-style: solid;
+                    border-width: 1px;
+                    text-align: center;
+                    margin: 10px auto 10px auto;
+                    padding:5px;
+                    .rounded;
+                    .noshadow;
+                    text-decoration: none;
+                    &:hover{
+                        border-color: @color-main;
+                        color: @color-main;
+                        background-color:@color-white;
+                    }
+                }
+            }
+        }
     }
-    
+    > div.options {
+        padding-left: 5px;
+        label{
+            line-height: 30px;
+            float:left;
+        }
+        select{            
+            .rounded;
+            .noshadow;
+            margin: 6px 0 0 5px;
+            display:initial;
+            border-color: @color-main;
+            color: @color-main;
+        }
+
+        a{
+            margin-left:10px;
+            line-height: 30px;
+            cursor:pointer;
+            display:inline-block;
+            &:before{
+                color:@color-main;
+                font: normal normal normal 14px/1 FontAwesome;
+                display:inline-block;
+                width:15px;
+            }
+            &.search_global{
+                &.on:before{
+                    content: "\f046";
+                }
+                &.off:before{
+                    content: "\f096";
+                }
+            }
+            &.search_favorite{
+                &.on:before{
+                    content: "\f046";
+                }
+                &.off:before{
+                    content: "\f096";
+                }
+            }
+        }
+    }
+
     @media (min-width: @screen-xs-max) {
         display:none;
     }

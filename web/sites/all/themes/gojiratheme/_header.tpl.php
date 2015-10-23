@@ -3,7 +3,6 @@
   <?php global $user;
   if ($user->uid): ?>
     <div id="header_options">
-      <?php $mobileDetect = new Mobile_Detect(); ?>
       <?php if(Subscriptions::currentGroupHasPayed()): ?>
         &nbsp;
         <a title="<?php echo t('Search over the entire country but limits the amount of results to 500'); ?>" class="global_search_header <?php echo (helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD) ? 'on' : 'off'); ?>"><?php echo t('Search entire country'); ?></a>

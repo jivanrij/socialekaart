@@ -235,6 +235,13 @@ class Template {
      * @return string
      */
     public static function getMobileType(){
+        
+        // exceptions
+        if ($_GET['q'] == 'ownlist' || $_GET['q'] == 'mijn-kaart'){
+            return 'mobile-search';
+        }
+        
+        // default return values
         switch(Template::getView()){
           case Template::VIEWTYPE_AJAX:
             return '';
