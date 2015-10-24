@@ -514,7 +514,7 @@ a.gbutton:hover {
 }
 @media (max-width: 1200px) {
   #crud_holder {
-    width: 300px;
+    width: 500px;
   }
 }
 @media (max-width: 768px) {
@@ -797,12 +797,12 @@ body.ownlist #crud_holder > div #ownlist_menu ul li a:hover {
   color: #b7072a;
   text-decoration: underline;
 }
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
   body.ownlist #crud_holder > div #ownlist_menu ul li {
     padding: 0px 0 15px 10px;
   }
 }
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
   body.ownlist #crud_holder > div #ownlist_menu {
     width: 40%;
   }
@@ -822,12 +822,12 @@ body.ownlist #crud_holder > div #ownlist_content ul {
 body.ownlist #crud_holder > div #ownlist_content ul li {
   padding: 0 0 5px 0;
 }
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
   body.ownlist #crud_holder > div #ownlist_content ul li {
     padding: 0 0 15px 0;
   }
 }
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
   body.ownlist #crud_holder > div #ownlist_content ul {
     padding: 30px 0 5px 0;
   }
@@ -847,12 +847,12 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
   text-decoration: underline;
   color: #b7072a;
 }
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
   body.ownlist #crud_holder > div #ownlist_content {
     width: 60%;
   }
 }
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
   body.ownlist #crud_holder > div {
     padding: 0;
     margin: 5px;
@@ -860,7 +860,7 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
     width: auto;
   }
 }
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
   body.ownlist #crud_holder {
     width: 100%;
     top: 50px;
@@ -1104,7 +1104,7 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
 ul.ui-autocomplete li a {
   font-size: 12px !important;
 }
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
   body.questions #crud_holder {
     width: auto !important;
   }
