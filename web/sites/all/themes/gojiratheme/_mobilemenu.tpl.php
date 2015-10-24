@@ -1,14 +1,16 @@
 <div id="mobileheader">
     <div>
-        <form action="/" method="GET" id="form-mobile-search">
-            <input type="text" placeholder="<?php echo t('Search'); ?>" name="tags" />
-            <i class="fa fa-search" onClick="jQuery(this).closest('form').submit();" title="Zoeken"></i>
-        </form>
+        <?php if (helper::agreedToConditions()): ?>
+            <form action="/" method="GET" id="form-mobile-search">
+                <input type="text" placeholder="<?php echo t('Search'); ?>" name="tags" />
+                <i class="fa fa-search" onClick="jQuery(this).closest('form').submit();" title="Zoeken"></i>
+            </form>
+        <?php endif; ?>
         <?php if (user_access(helper::PERMISSION_PERSONAL_LIST)): ?>
             <button class="fa fa-map-o" title="Naar mijn kaart" />
         <?php endif; ?>
-            
-            
+
+
         <button class="fa fa-plus-square" title="Zorgverlener toevoegen" />    
         <button class="fa fa-bars" title="Menu" />
     </div>
@@ -24,15 +26,15 @@
                 <?php endforeach; ?>
             </select>
         <?php endif; ?>
-            
-      <?php if(Subscriptions::currentGroupHasPayed()): ?>
-        <a class="search_global <?php echo (helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD) ? 'on' : 'off'); ?>" title="<?php echo t('Search over the entire country but limits the amount of results to 500'); ?>" >  <?php echo t('Search entire country'); ?></a>
-      <?php endif; ?>
-        
-      <?php if (user_access(helper::PERMISSION_PERSONAL_LIST)): ?>
-        <a title="<?php echo t('Only search on your favorites'); ?>" class="search_favorite <?php echo (helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_FAVORITES_FIELD) ? 'on' : 'off'); ?>"> <?php echo t('Filter search on favorites'); ?></a>
-      <?php endif; ?>
-            
+
+        <?php if (Subscriptions::currentGroupHasPayed()): ?>
+            <a class="search_global <?php echo (helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD) ? 'on' : 'off'); ?>" title="<?php echo t('Search over the entire country but limits the amount of results to 500'); ?>" >  <?php echo t('Search entire country'); ?></a>
+        <?php endif; ?>
+
+        <?php if (user_access(helper::PERMISSION_PERSONAL_LIST)): ?>
+            <a title="<?php echo t('Only search on your favorites'); ?>" class="search_favorite <?php echo (helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_FAVORITES_FIELD) ? 'on' : 'off'); ?>"> <?php echo t('Filter search on favorites'); ?></a>
+        <?php endif; ?>
+
     </div>
     <div>
         <?php print render($page['mobile_menu']); ?>

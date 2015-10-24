@@ -98,8 +98,8 @@
         border: none;
         width:100%;
         th{
-            background-color: #b7072a;
-            color: white;
+            background-color: @color-main;
+            color: @color-white;
             text-align: left;
             border:0;
         }
@@ -112,5 +112,15 @@
     }
 }
 #content_holder.big #crud_holder{
-    width: 550px;
+    @media (min-width: @screen-lg-min) {
+        width:1000px;
+    } 
+    @media (max-width: @screen-md-max) {
+        width:700px;
+    }
+    @media (max-width: @screen-xs-max) {
+        width:100%;
+    }
+
+
 }
