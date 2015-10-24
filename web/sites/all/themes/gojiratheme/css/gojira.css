@@ -534,7 +534,7 @@ a.gbutton:hover {
 @media (max-width: 768px) {
   #crud_holder > div {
     margin: 0 5px 5px 5px;
-    padding: 0 10px 10px 10px;
+    padding: 0px 10px 10px 10px;
     background-color: #f8f8f8;
     -webkit-box-shadow: 0px 0px 8px #000000;
     -moz-box-shadow: 0px 0px 8px #000000;
@@ -547,6 +547,18 @@ a.gbutton:hover {
     -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
     box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
     overflow: hidden;
+  }
+}
+@media (max-width: 768px) {
+  #crud_holder > div.errormessage,
+  #crud_holder > div.statusmessage {
+    padding: 10px 10px 10px 10px;
+  }
+}
+@media (max-width: 768px) {
+  #crud_holder > div > div.errormessage,
+  #crud_holder > div > div.statusmessage {
+    padding: 10px 10px 10px 10px;
   }
 }
 #crud_holder h1 {
@@ -757,62 +769,104 @@ body.questions a.active.topic {
   text-decoration: underline !important;
   color: #b7072a;
 }
-body.ownlist #crud_holder {
+body.ownlist #crud_holder > div {
   width: 400px;
 }
-body.ownlist #crud_holder #ownlist_menu {
+body.ownlist #crud_holder > div #ownlist_menu {
   width: 28%;
   float: left;
   overflow: hidden;
 }
-body.ownlist #crud_holder #ownlist_menu h2 {
+body.ownlist #crud_holder > div #ownlist_menu h2 {
   margin-top: 10px;
+  margin-left: 10px;
 }
-body.ownlist #crud_holder #ownlist_menu ul {
+body.ownlist #crud_holder > div #ownlist_menu ul {
   list-style: none;
   padding: 0;
 }
-body.ownlist #crud_holder #ownlist_menu ul li {
-  padding: 2px 0 2px 0;
+body.ownlist #crud_holder > div #ownlist_menu ul li {
+  padding: 2px 0 2px 10px;
 }
-body.ownlist #crud_holder #ownlist_menu ul li a {
+body.ownlist #crud_holder > div #ownlist_menu ul li a {
   text-decoration: none;
   cursor: pointer;
 }
-body.ownlist #crud_holder #ownlist_menu ul li a.active,
-body.ownlist #crud_holder #ownlist_menu ul li a:hover {
+body.ownlist #crud_holder > div #ownlist_menu ul li a.active,
+body.ownlist #crud_holder > div #ownlist_menu ul li a:hover {
   color: #b7072a;
   text-decoration: underline;
 }
-body.ownlist #crud_holder #ownlist_content {
+@media (max-width: 1200px) {
+  body.ownlist #crud_holder > div #ownlist_menu ul li {
+    padding: 0px 0 15px 10px;
+  }
+}
+@media (max-width: 1200px) {
+  body.ownlist #crud_holder > div #ownlist_menu {
+    width: 40%;
+  }
+}
+body.ownlist #crud_holder > div #ownlist_content {
   width: 68%;
   float: right;
   margin: 10px 0 10px 0;
   max-height: 400px;
   overflow-y: auto;
 }
-body.ownlist #crud_holder #ownlist_content ul {
+body.ownlist #crud_holder > div #ownlist_content ul {
   list-style: none;
   margin: 0;
   padding: 10px 0 0 0;
 }
-body.ownlist #crud_holder #ownlist_content ul li {
+body.ownlist #crud_holder > div #ownlist_content ul li {
   padding: 0 0 5px 0;
 }
-body.ownlist #crud_holder #ownlist_content a.location_category_list {
+@media (max-width: 1200px) {
+  body.ownlist #crud_holder > div #ownlist_content ul li {
+    padding: 0 0 15px 0;
+  }
+}
+@media (max-width: 1200px) {
+  body.ownlist #crud_holder > div #ownlist_content ul {
+    padding: 30px 0 5px 0;
+  }
+}
+body.ownlist #crud_holder > div #ownlist_content a.location_category_list {
   text-decoration: none;
   font-style: italic;
   font-size: 11px;
 }
-body.ownlist #crud_holder #ownlist_content a.location_category_list spam {
+body.ownlist #crud_holder > div #ownlist_content a.location_category_list spam {
   text-decoration: none;
   font-style: normal;
   font-size: 12px;
 }
-body.ownlist #crud_holder #ownlist_content a.location_category_list:hover,
-body.ownlist #crud_holder #ownlist_content a.location_category_list.active {
+body.ownlist #crud_holder > div #ownlist_content a.location_category_list:hover,
+body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active {
   text-decoration: underline;
   color: #b7072a;
+}
+@media (max-width: 1200px) {
+  body.ownlist #crud_holder > div #ownlist_content {
+    width: 60%;
+  }
+}
+@media (max-width: 1200px) {
+  body.ownlist #crud_holder > div {
+    padding: 0;
+    margin: 5px;
+    display: block;
+    width: auto;
+  }
+}
+@media (max-width: 1200px) {
+  body.ownlist #crud_holder {
+    width: 100%;
+    top: 50px;
+    overflow: hidden;
+    position: fixed;
+  }
 }
 #selected_location_info {
   background-color: white;
@@ -1050,6 +1104,11 @@ body.ownlist #crud_holder #ownlist_content a.location_category_list.active {
 ul.ui-autocomplete li a {
   font-size: 12px !important;
 }
+@media (max-width: 1200px) {
+  body.questions #crud_holder {
+    width: auto !important;
+  }
+}
 #faq_sections section .accordion_content {
   display: none;
   font-weight: normal;
@@ -1057,6 +1116,9 @@ ul.ui-autocomplete li a {
 #faq_sections section h1 {
   cursor: pointer;
   font-size: 12px;
+}
+#faq_sections section h1:hover {
+  color: #b7072a;
 }
 #faq_question_switch {
   text-decoration: none !important;

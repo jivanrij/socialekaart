@@ -20,14 +20,26 @@
         .unround;
         .unshadow;
     }
-    
+
     > div{
         @media (max-width: @screen-xs-max) {
-                margin: 0 5px 5px 5px;
-                padding:0 10px 10px 10px;
-                background-color:@color-lightest-grey;
-                .rounded;
-                .noshadow;
+            margin: 0 5px 5px 5px;
+            padding:0px 10px 10px 10px;
+            background-color:@color-lightest-grey;
+            .rounded;
+            .noshadow;
+        }
+        &.errormessage, &.statusmessage{
+            @media (max-width: @screen-xs-max) {
+                padding:10px 10px 10px 10px;
+            }            
+        }
+        > div{
+            &.errormessage, &.statusmessage{
+                @media (max-width: @screen-xs-max) {
+                    padding:10px 10px 10px 10px;
+                }            
+            }
         }
     }
 

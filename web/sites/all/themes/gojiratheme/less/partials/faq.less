@@ -1,3 +1,12 @@
+
+body.questions{
+    #crud_holder{
+        @media (max-width: @screen-md-max) {
+            width: auto !important;
+        }
+    }
+}
+
 #faq_sections section{
     .accordion_content{
         display:none;
@@ -6,6 +15,9 @@
     h1{
         cursor: pointer;
         font-size: 12px;
+        &:hover{
+            color:@color-main;
+        }
     }
 }
 #faq_question_switch {

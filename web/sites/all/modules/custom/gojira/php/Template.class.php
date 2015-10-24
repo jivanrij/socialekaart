@@ -240,6 +240,10 @@ class Template {
         if ($_GET['q'] == 'ownlist' || $_GET['q'] == 'mijn-kaart'){
             return 'mobile-search';
         }
+        if ($_GET['q'] == 'questions'){
+            return 'mobile-form';
+        }        
+        
         
         // default return values
         switch(Template::getView()){

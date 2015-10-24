@@ -1,60 +1,89 @@
 body.ownlist{
     #crud_holder{
-        width: 400px;
-        #ownlist_menu{
-            width:28%;
-            float:left;
-            overflow:hidden;
-            h2{
-                margin-top:10px;
-            }
-            ul{
-                list-style: none;
-                padding:0;
-                li{
-                    padding:2px 0 2px 0;
-                    a{
-                        text-decoration: none;
-                        cursor: pointer;
-                    }
-                    a.active, a:hover{
-                        color:#b7072a;
-                        text-decoration: underline;
-                    }
-
+        > div{
+            width: 400px;
+            #ownlist_menu{
+                width:28%;
+                float:left;
+                overflow:hidden;
+                h2{
+                    margin-top:10px;
+                    margin-left:10px;
                 }
+                ul{
+                    list-style: none;
+                    padding:0;
+                    li{
+                        padding:2px 0 2px 10px;
+                        a{
+                            text-decoration: none;
+                            cursor: pointer;
+                        }
+                        a.active, a:hover{
+                            color:#b7072a;
+                            text-decoration: underline;
+                        }
+                        @media (max-width: @screen-md-max) {
+                            padding:0px 0 15px 10px;
+                        }
+                    }
+                }
+                @media (max-width: @screen-md-max) {
+                    width:40%;
+                }
+            }
+            #ownlist_content{
+                width:68%;
+                float:right;
+                margin:10px 0 10px 0;
+                max-height: 400px;
+                overflow-y: auto;
+                ul{
+                    list-style: none;
+                    margin:0;
+                    padding:10px 0 0 0;
+                    li{
+                        padding: 0 0 5px 0;
+                        @media (max-width: @screen-md-max) {
+                            padding: 0 0 15px 0;
+                        }
+                    }
+                    @media (max-width: @screen-md-max) {
+                        padding: 30px 0 5px 0;
+                    }
+                }
+                a.location_category_list{
+                    text-decoration: none;
+                    font-style: italic;
+                    font-size: 11px;
+                    spam{
+                        text-decoration: none;
+                        font-style: normal;
+                        font-size: 12px;
+                    }
+                }
+                a.location_category_list:hover,
+                    a.location_category_list.active{
+                    color: #b7072a;
+                    text-decoration: underline;
+                    color: #b7072a;
+                }
+                @media (max-width: @screen-md-max) {
+                    width:60%;
+                }
+            }
+            @media (max-width: @screen-md-max) {
+                padding: 0;
+                margin:5px;
+                display:block;
+                width:auto;
             }
         }
-        #ownlist_content{
-            width:68%;
-            float:right;
-            margin:10px 0 10px 0;
-            max-height: 400px;
-            overflow-y: auto;
-            ul{
-                list-style: none;
-                margin:0;
-                padding:10px 0 0 0;
-                li{
-                    padding: 0 0 5px 0;
-                }
-            }
-            a.location_category_list{
-                text-decoration: none;
-                font-style: italic;
-                font-size: 11px;
-                spam{
-                    text-decoration: none;
-                    font-style: normal;
-                    font-size: 12px;
-                }
-            }
-            a.location_category_list:hover,
-                a.location_category_list.active{
-                color: #b7072a;
-                text-decoration: underline;
-                color: #b7072a;
-            }
+        @media (max-width: @screen-md-max) {
+            width:100%;
+            top:50px;
+            overflow:hidden;
+            position:fixed;
         }
     }
 }
