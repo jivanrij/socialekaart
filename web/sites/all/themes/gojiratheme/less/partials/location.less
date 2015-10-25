@@ -16,36 +16,50 @@
     }
 
     div.grouped{
-        width:50%;
+        width:100%;
         margin:0;
         padding:0 5% 0 0;
         float:left;
         div{
             margin:0 0 5px 0;
         }
-        div.adres{   
-            width:45%;
-            float:left;
-            font-weight: normal;
-        }
+
     }
 
     > div{
-        margin:15px;
+        @media (max-width: @screen-xs-max) {
+            margin:15px;
+        }
+    }
+    @media (max-width: @screen-xs-max) {
+        margin-top: 0;
     }
 
     .search_result_wrapper{
 
-        width:@block-width-md;
-        @media (max-width: @screen-md-max) {
-            width: @block-width-sm;
+        @media (min-width: @screen-xs-max) {
+            width:@block-width-md;
         }
+
+
         br{
             clear:both;
         }
 
         > div {
+            margin-left:15px;
             margin-bottom: 10px;
+            > div.title{
+                margin-top: 10px;
+            }
+            &.adres{
+                width:45%;
+                float:left;
+                font-weight: normal;
+                @media (max-width: @screen-xs-max) {
+                    margin-bottom: 0;
+                }
+            }
         }
         div.gbutton_wrapper{
             clear:both;
@@ -59,9 +73,24 @@
             padding-top:5px;
             font-size:10px;
         }
-
-        .favorites{
-            display:block;
+        .favorites_switch{
+            cursor: pointer;
+            width: 100px;
+            .in_favorites{
+                display:block;
+                &:before{
+                    color:@color-main;
+                    font: normal normal normal 14px/1 FontAwesome;
+                    display:inline-block;
+                    width:15px;
+                }
+                &.true:before{
+                    content: "\f046";
+                }
+                &.false:before{
+                    content: "\f096";
+                }
+            }
         }
         span.fav_row {
             button {
@@ -89,10 +118,6 @@
             button.fav_no { 
                 font-weight: bold; background-color: @color-main; 
             }
-        }
-        #fav_switch_label{
-            color: @color-light;
-            font-style: italic;
         }
         div.results_paging p.searchresult_note_max{
             font-weight: normal;
@@ -151,6 +176,10 @@
                         }
                     }
                 }
+            }
+
+            @media (max-width: @screen-xs-max) {
+                display:none;
             }
         }
 
@@ -224,18 +253,67 @@
             }
 
             div.minus,
-            div.minus button{
+            div.minus button,
+            div.plus,
+            div.plus button{
                 background-color: @color-light;
+            }
+            @media (max-width: @screen-xs-max) {
+                display:none;
+            }
+        }
+        .mobile_labels{
+            @media (min-width: @screen-xs-max) {
+                display:none;
+            }
+            > div {
+                .rounded;
+                .noshadow;
+                display: inline-block;
+                margin-right: 5px;
+                overflow: hidden;
+                height: 20px;
+                padding: 5px 5px 0 5px;
+                color: @color-white;
+                &.score_0{background-color: @color-score-low;}
+                &.score_1{background-color: @color-score-low;}
+                &.score_3{background-color: @color-score-low;}
+                &.score_4{background-color: @color-score-low;}
+                &.score_5{background-color: @color-score-low;}
+                &.score_6{background-color: @color-score-some;}
+                &.score_7{background-color: @color-score-some;}
+                &.score_8{background-color: @color-score-some;}
+                &.score_9{background-color: @color-score-some;}
+                &.score_10{background-color: @color-score-some;}
+                &.score_11{background-color: @color-score-more;}
+                &.score_12{background-color: @color-score-more;}
+                &.score_13{background-color: @color-score-more;}
+                &.score_14{background-color: @color-score-more;}
+                &.score_15{background-color: @color-score-more;}
+                &.score_16{background-color: @color-score-a-lot;}
+                &.score_17{background-color: @color-score-a-lot;}
+                &.score_18{background-color: @color-score-a-lot;}
+                &.score_19{background-color: @color-score-a-lot;}
+                &.score_20{background-color: @color-score-a-lot;}
             }
         }
         @media (max-width: @screen-xs-max) {
-            width: 100%;
+            .rounded;
+            .unshadow;
+            background-color: @color-lightest-grey;
+            margin: 0 5px 5px 5px;
+            padding: 0;
+            display:block;
+            overflow:hidden;
         }
     }
     @media (max-width: @screen-xs-max) {
         .unround;
         .unshadow;
         width: 100%;
+        margin:0;
+        padding:0;
+        overflow:hidden;
     }
 }
 

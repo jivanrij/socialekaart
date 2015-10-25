@@ -25,7 +25,7 @@
     <?php $f = drupal_get_form('gojira_to_subscribe_page_form'); echo render($f); ?>
 <?php endif; ?>
     
-  <p>
+  <p class="show_intro">
       Klik <a rel="1" onClick="showTutorial();" title="introductie bekijken">hier</a> als u de introductie nog een keer wilt zien.
   </p>
 <?php if($output['multiple_locations']): ?>

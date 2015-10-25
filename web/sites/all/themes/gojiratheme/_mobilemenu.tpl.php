@@ -3,6 +3,7 @@
         <?php if (helper::agreedToConditions()): ?>
             <form action="/" method="GET" id="form-mobile-search">
                 <input type="text" placeholder="<?php echo t('Search'); ?>" name="tags" />
+                <input type="hidden" name="m" value="1" />
                 <i class="fa fa-search" onClick="jQuery(this).closest('form').submit();" title="Zoeken"></i>
             </form>
         <?php endif; ?>

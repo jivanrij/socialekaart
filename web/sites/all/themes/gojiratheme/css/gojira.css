@@ -1,4 +1,3 @@
-/* handle 3 stages, xs/md/lg */
 html,
 body {
   height: 100%;
@@ -196,7 +195,7 @@ a.help_link_content:hover {
 }
 @media (max-width: 1200px) {
   #conditions_holder {
-    width: 300px;
+    width: 500px;
   }
 }
 #doubles_wrapper {
@@ -494,6 +493,9 @@ div.password-confirm {
   body.mobile-form #map {
     display: none;
   }
+  p.show_intro {
+    display: none;
+  }
 }
 a.gbutton:hover {
   color: #ffffff;
@@ -522,7 +524,7 @@ a.gbutton:hover {
     width: 100%;
     padding: 0;
     left: 0;
-    top: 55px;
+    top: 50px;
     -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
     border-radius: 0px;
@@ -640,6 +642,11 @@ a.gbutton:hover {
     width: 100%;
   }
 }
+@media (max-width: 768px) {
+  body.locationcheck #crud_holder {
+    top: 50px;
+  }
+}
 #search_result_info {
   left: 10px;
   position: absolute;
@@ -649,7 +656,7 @@ a.gbutton:hover {
 }
 @media (max-width: 1200px) {
   #search_result_info {
-    width: 300px;
+    width: 500px;
   }
 }
 #search_result_info span.result_txt {
@@ -711,7 +718,7 @@ a.gbutton:hover {
     -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
   }
   #search_result_info #search_results > div {
-    margin: 5px;
+    margin: 0 5px 5px 5px;
     background-color: #f8f8f8;
     -webkit-box-shadow: 0px 0px 8px #000000;
     -moz-box-shadow: 0px 0px 8px #000000;
@@ -739,7 +746,7 @@ a.gbutton:hover {
   left: 10px;
   position: absolute;
   top: 40px;
-  width: 300px;
+  width: 520px;
   z-index: 100;
   overflow: hidden;
 }
@@ -753,7 +760,7 @@ a.gbutton:hover {
   padding: 0;
   margin: 0;
   border: 0;
-  width: 242px;
+  width: 440px;
   color: #b7072a;
   font-weight: bold;
   padding-left: 5px;
@@ -888,7 +895,7 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
 }
 @media (max-width: 1200px) {
   #selected_location_info {
-    width: 300px;
+    width: 500px;
   }
 }
 #selected_location_info a#mailto {
@@ -898,7 +905,7 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
   display: block;
 }
 #selected_location_info div.grouped {
-  width: 50%;
+  width: 100%;
   margin: 0;
   padding: 0 5% 0 0;
   float: left;
@@ -906,27 +913,40 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
 #selected_location_info div.grouped div {
   margin: 0 0 5px 0;
 }
-#selected_location_info div.grouped div.adres {
-  width: 45%;
-  float: left;
-  font-weight: normal;
+@media (max-width: 768px) {
+  #selected_location_info > div {
+    margin: 15px;
+  }
 }
-#selected_location_info > div {
-  margin: 15px;
+@media (max-width: 768px) {
+  #selected_location_info {
+    margin-top: 0;
+  }
 }
-#selected_location_info .search_result_wrapper {
-  width: 500px;
-}
-@media (max-width: 1200px) {
+@media (min-width: 768px) {
   #selected_location_info .search_result_wrapper {
-    width: 300px;
+    width: 500px;
   }
 }
 #selected_location_info .search_result_wrapper br {
   clear: both;
 }
 #selected_location_info .search_result_wrapper > div {
+  margin-left: 15px;
   margin-bottom: 10px;
+}
+#selected_location_info .search_result_wrapper > div > div.title {
+  margin-top: 10px;
+}
+#selected_location_info .search_result_wrapper > div.adres {
+  width: 45%;
+  float: left;
+  font-weight: normal;
+}
+@media (max-width: 768px) {
+  #selected_location_info .search_result_wrapper > div.adres {
+    margin-bottom: 0;
+  }
 }
 #selected_location_info .search_result_wrapper div.gbutton_wrapper {
   clear: both;
@@ -938,8 +958,24 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
   padding-top: 5px;
   font-size: 10px;
 }
-#selected_location_info .search_result_wrapper .favorites {
+#selected_location_info .search_result_wrapper .favorites_switch {
+  cursor: pointer;
+  width: 100px;
+}
+#selected_location_info .search_result_wrapper .favorites_switch .in_favorites {
   display: block;
+}
+#selected_location_info .search_result_wrapper .favorites_switch .in_favorites:before {
+  color: #b7072a;
+  font: normal normal normal 14px/1 FontAwesome;
+  display: inline-block;
+  width: 15px;
+}
+#selected_location_info .search_result_wrapper .favorites_switch .in_favorites.true:before {
+  content: "\f046";
+}
+#selected_location_info .search_result_wrapper .favorites_switch .in_favorites.false:before {
+  content: "\f096";
 }
 #selected_location_info .search_result_wrapper span.fav_row button {
   border: none;
@@ -966,10 +1002,6 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
 #selected_location_info .search_result_wrapper span.fav_row button.fav_no {
   font-weight: bold;
   background-color: #b7072a;
-}
-#selected_location_info .search_result_wrapper #fav_switch_label {
-  color: #dbdbdb;
-  font-style: italic;
 }
 #selected_location_info .search_result_wrapper div.results_paging p.searchresult_note_max {
   font-weight: normal;
@@ -1025,6 +1057,11 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
 }
 #selected_location_info .search_result_wrapper div.add_label form .new_label_wrapper button.add_new_label span:hover {
   color: white;
+}
+@media (max-width: 768px) {
+  #selected_location_info .search_result_wrapper div.add_label {
+    display: none;
+  }
 }
 #selected_location_info .search_result_wrapper div.labels {
   overflow: hidden;
@@ -1094,12 +1131,115 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
   outline: 0;
 }
 #selected_location_info .search_result_wrapper div.labels div.minus,
-#selected_location_info .search_result_wrapper div.labels div.minus button {
+#selected_location_info .search_result_wrapper div.labels div.minus button,
+#selected_location_info .search_result_wrapper div.labels div.plus,
+#selected_location_info .search_result_wrapper div.labels div.plus button {
   background-color: #dbdbdb;
 }
 @media (max-width: 768px) {
+  #selected_location_info .search_result_wrapper div.labels {
+    display: none;
+  }
+}
+@media (min-width: 768px) {
+  #selected_location_info .search_result_wrapper .mobile_labels {
+    display: none;
+  }
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div {
+  -webkit-box-shadow: 0px 0px 8px #000000;
+  -moz-box-shadow: 0px 0px 8px #000000;
+  box-shadow: 0px 0px 8px #000000;
+  display: block;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  display: inline-block;
+  margin-right: 5px;
+  overflow: hidden;
+  height: 20px;
+  padding: 5px 5px 0 5px;
+  color: #ffffff;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_0 {
+  background-color: #fcb1bf;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_1 {
+  background-color: #fcb1bf;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_3 {
+  background-color: #fcb1bf;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_4 {
+  background-color: #fcb1bf;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_5 {
+  background-color: #fcb1bf;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_6 {
+  background-color: #e76f85;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_7 {
+  background-color: #e76f85;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_8 {
+  background-color: #e76f85;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_9 {
+  background-color: #e76f85;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_10 {
+  background-color: #e76f85;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_11 {
+  background-color: #db4763;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_12 {
+  background-color: #db4763;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_13 {
+  background-color: #db4763;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_14 {
+  background-color: #db4763;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_15 {
+  background-color: #db4763;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_16 {
+  background-color: #b7072a;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_17 {
+  background-color: #b7072a;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_18 {
+  background-color: #b7072a;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_19 {
+  background-color: #b7072a;
+}
+#selected_location_info .search_result_wrapper .mobile_labels > div.score_20 {
+  background-color: #b7072a;
+}
+@media (max-width: 768px) {
   #selected_location_info .search_result_wrapper {
-    width: 100%;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0px 0px 8px #000000;
+    -moz-box-shadow: 0px 0px 8px #000000;
+    box-shadow: 0px 0px 8px #000000;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    background-color: #f8f8f8;
+    margin: 0 5px 5px 5px;
+    padding: 0;
+    display: block;
+    overflow: hidden;
   }
 }
 @media (max-width: 768px) {
@@ -1111,6 +1251,9 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
     -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
     -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
     width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
   }
 }
 ul.ui-autocomplete li a {
@@ -1147,7 +1290,7 @@ ul.ui-autocomplete li a {
   z-index: 100;
   background-color: #ffffff;
 }
-@media (min-width: 768px) {
+@media (min-width: 769px) {
   #mobileheader {
     display: none;
   }
@@ -1204,7 +1347,7 @@ ul.ui-autocomplete li a {
   right: 100%;
 }
 #mobilemenu > div {
-  margin: 7px;
+  margin: 10px;
   background-color: #f8f8f8;
   -webkit-box-shadow: 0px 0px 8px #000000;
   -moz-box-shadow: 0px 0px 8px #000000;
@@ -1252,6 +1395,7 @@ ul.ui-autocomplete li a {
   background-color: #ffffff;
 }
 #mobilemenu > div.options {
+  margin-top: 0;
   padding-left: 5px;
 }
 #mobilemenu > div.options label {
@@ -1392,3 +1536,4 @@ body.conditions #crud_holder #conditions_holder {
 .hidden {
   display: none;
 }
+/* handle 3 stages, xs/md/lg */

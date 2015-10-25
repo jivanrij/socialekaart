@@ -56,15 +56,15 @@
             </p>
         </section>
         <section>
-            <h1>Kan ik zoeken binnen mijn favorietenlijst?</h1>
+            <h1>Kan ik zoeken binnen mijn <i>mijn kaart</i>?</h1>
             <p class="accordion_content">
                 U kunt ook zoeken binnen uw eigen kaart. Dit doet u door de knop <i>Zoeken binnen uw kaart</i> aan te klikken. De zoekresultaten worden dan beperkt tot de favorieten.
             </p>
         </section>
         <section>
-            <h1>Hoe kan ik mijn favorietenlijst in het geheel bekijken?</h1>
+            <h1>Hoe kan ik <i>mijn kaart</i> in het geheel bekijken?</h1>
             <p class="accordion_content">
-                Als u op <i>mijn kaart</i>  klikt in de menubalk dan wordt de favorietenlijst getoond. Vanuit deze lijst kunt u categorieën aanklikken of individuele zorgverleners.
+                Als u op <i>mijn kaart</i>  klikt in de menubalk dan wordt uw kaart getoond. Vanuit deze lijst kunt u categorieën aanklikken of individuele zorgverleners.
             </p>
         </section>
         <section>
