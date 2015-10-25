@@ -476,16 +476,15 @@ div.password-confirm {
   -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
   overflow: hidden;
-  width: 50%;
-  height: 25px;
+  width: 30%;
+  height: 18px;
   float: left;
-  margin: 7px 10px 0 7px;
+  margin: 6px 10px 0 7px;
   padding: 0;
 }
 #mobileheader form > i {
-  display: block;
-  padding: 9px 0 0 0;
-  font-size: 20px;
+  padding: 7px 0 0 0;
+  font-size: 16px;
   color: #b7072a;
   cursor: pointer;
 }
@@ -524,7 +523,7 @@ a.gbutton:hover {
     width: 100%;
     padding: 0;
     left: 0;
-    top: 50px;
+    top: 36px;
     -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
     border-radius: 0px;
@@ -644,7 +643,7 @@ a.gbutton:hover {
 }
 @media (max-width: 768px) {
   body.locationcheck #crud_holder {
-    top: 50px;
+    top: 36px;
   }
 }
 #search_result_info {
@@ -737,7 +736,7 @@ a.gbutton:hover {
   #search_result_info {
     left: 0;
     width: 100%;
-    top: 50px;
+    top: 36px;
   }
 }
 #search_form {
@@ -882,7 +881,7 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
 @media (max-width: 768px) {
   body.ownlist #crud_holder {
     width: 100%;
-    top: 50px;
+    top: 36px;
     overflow: hidden;
     position: fixed;
   }
@@ -915,7 +914,7 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
 }
 @media (max-width: 768px) {
   #selected_location_info > div {
-    margin: 15px;
+    /*margin:15px;*/
   }
 }
 @media (max-width: 768px) {
@@ -1224,6 +1223,13 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
 #selected_location_info .search_result_wrapper .mobile_labels > div.score_20 {
   background-color: #b7072a;
 }
+#selected_location_info .search_result_wrapper a.close_button {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  font-size: 18px;
+  cursor: pointer;
+}
 @media (max-width: 768px) {
   #selected_location_info .search_result_wrapper {
     -moz-border-radius: 3px;
@@ -1254,6 +1260,8 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
     margin: 0;
     padding: 0;
     overflow: hidden;
+    position: fixed;
+    top: 38px;
   }
 }
 ul.ui-autocomplete li a {
@@ -1297,7 +1305,7 @@ ul.ui-autocomplete li a {
 }
 #mobileheader > div {
   margin: 5px;
-  height: 40px;
+  height: 30px;
   background-color: #f8f8f8;
   -webkit-box-shadow: 0px 0px 8px #000000;
   -moz-box-shadow: 0px 0px 8px #000000;
@@ -1311,37 +1319,29 @@ ul.ui-autocomplete li a {
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
   overflow: hidden;
 }
-#mobileheader > div button.fa-bars {
+#mobileheader > div button {
+  width: 18px;
+  height: 18px;
   position: absolute;
-  right: 10px;
-  top: 12px;
   color: #b7072a;
-  font-size: 24px;
+  font-size: 18px;
   background-color: #f8f8f8;
   border: none;
+  top: 10px;
+}
+#mobileheader > div button.fa-bars {
+  right: 15px;
 }
 #mobileheader > div button.fa-map-o {
-  position: absolute;
   right: 70px;
-  top: 12px;
-  color: #b7072a;
-  font-size: 24px;
-  background-color: #f8f8f8;
-  border: none;
 }
 #mobileheader > div button.fa-plus-square {
-  position: absolute;
   right: 40px;
-  top: 12px;
-  color: #b7072a;
-  font-size: 24px;
-  background-color: #f8f8f8;
-  border: none;
 }
 #mobilemenu {
   position: absolute;
   width: 100%;
-  top: 50px;
+  top: 36px;
   z-index: 300;
   background-color: #ffffff;
   right: 100%;
@@ -1450,7 +1450,7 @@ ul.ui-autocomplete li a {
 }
 @media (max-width: 768px) {
   body.conditions #crud_holder {
-    top: 50px;
+    top: 36px;
     width: 100%;
     padding: 0;
     left: 0;

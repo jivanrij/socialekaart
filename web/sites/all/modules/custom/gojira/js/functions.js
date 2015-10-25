@@ -519,6 +519,11 @@ function bindAfterSearch(bind_list, bind_details) {
             e.preventDefault();
             addNewLabel(this);
         });
+        
+        jQuery("a.close_button").click(function(){
+           jQuery("#selected_location_info").html(''); 
+        });
+        
     }
 
     jQuery("input.new_label").click(function () {

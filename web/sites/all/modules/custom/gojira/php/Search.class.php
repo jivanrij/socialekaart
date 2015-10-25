@@ -203,6 +203,7 @@ class Search {
   <div class="inform">
     {$improve_txt} <a href="?q=inform&nid=%nid%" title="{$improve_txt} {$improve_link}">{$improve_link}</a>
   </div>
+  <a class="fa fa-times close_button"></a>
 </div>
 EAT;
 

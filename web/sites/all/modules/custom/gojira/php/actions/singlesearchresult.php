@@ -12,8 +12,8 @@ function singlesearchresult() {
     $after_html = '';
     $before_html = '';
     if(isset($_GET['wrap_it'])){
-        $before_html = '<div id="search_result_info"><div id="selected_location_info" class="rounded"><div id="location_info_'.$locationNode->nid.'"><div class="search_result_wrapper" id="location_'.$locationNode->nid.'">';    
-        $after_html = '</div></div></div>';
+        $before_html = '<div id="search_result_info"><div id="selected_location_info" class="rounded"><div id="location_info_'.$locationNode->nid.'">';
+        $after_html = '</div></div>';
     }
     
     

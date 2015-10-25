@@ -15,45 +15,39 @@
 
     > div{
         margin:5px;
-        height:40px;
+        height:30px;
         background-color:@color-lightest-grey;
         .rounded;
         .noshadow;
 
-        button.fa-bars{
+        button{
+            width:18px;
+            height:18px;
             position: absolute;
-            right: 10px;
-            top:12px;
             color:@color-main;
-            font-size: 24px;
+            font-size: 18px;
             background-color: @color-lightest-grey;
             border: none;
+            top:10px;
+
+            &.fa-bars{
+                right: 15px;
+            }
+            &.fa-map-o{
+                right: 70px;
+            }
+            &.fa-plus-square{
+                right: 40px;
+            }
         }
-        button.fa-map-o{
-            position: absolute;
-            right: 70px;
-            top:12px;
-            color:@color-main;
-            font-size: 24px;
-            background-color: @color-lightest-grey;
-            border: none;
-        }
-        button.fa-plus-square{
-            position: absolute;
-            right: 40px;
-            top:12px;
-            color:@color-main;
-            font-size: 24px;
-            background-color: @color-lightest-grey;
-            border: none;
-        }
+
 
     }
 }
 #mobilemenu {
     position: absolute;
     width: 100%;
-    top:50px;
+    top:36px;
     z-index:300;
     background-color: @color-white;
     right:100%;
