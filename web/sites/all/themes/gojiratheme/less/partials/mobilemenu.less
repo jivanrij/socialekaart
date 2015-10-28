@@ -20,24 +20,56 @@
         .rounded;
         .noshadow;
 
+        @button_h_w: 20px;
+        
         button{
-            width:18px;
-            height:18px;
+            width:@button_h_w;
+            height:@button_h_w;
             position: absolute;
             color:@color-main;
-            font-size: 18px;
+            font-size: @button_h_w;
             background-color: @color-lightest-grey;
             border: none;
+            margin:0;
+            padding:0;
             top:10px;
 
-            &.fa-bars{
+            &.tomobilemenu{
                 right: 15px;
+                &:before{
+                    display:block;
+                    font: normal normal normal 20px/1 FontAwesome;
+                    width:@button_h_w;
+                    height:@button_h_w;
+                    /*content: "\f0c9";*/
+                    content: "\f03b";
+                }
             }
-            &.fa-map-o{
+            &.tomobilemenu.active{
+                &:before{
+                    content: "\f03c";
+                }
+            }
+            &.mymap{
                 right: 70px;
+                
+                &:before{
+                    display:block;
+                    font: normal normal normal 18px/1 FontAwesome;
+                    width:@button_h_w;
+                    height:@button_h_w;
+                    content: "\f278";
+                }
             }
-            &.fa-plus-square{
+            &.suggestlocation{
                 right: 40px;
+                &:before{
+                    display:block;
+                    font: normal normal normal 20px/1 FontAwesome;
+                    width:@button_h_w;
+                    height:@button_h_w;
+                    content: "\f0fe";
+                }
             }
         }
 
@@ -53,7 +85,7 @@
     right:100%;
 
     > div {
-        margin:10px;
+        margin:5px;
         background-color: @color-lightest-grey;
         .rounded;
         .noshadow;
@@ -76,15 +108,15 @@
                     text-decoration: none;
                     &:hover{
                         border-color: @color-main;
-                        color: @color-main;
+                        color: @color-main; 
                         background-color:@color-white;
                     }
                 }
             }
         }
-    }
+    } 
     > div.options {
-        margin-top: 0;
+        margin-top: 5px; 
         padding-left: 5px;
         label{
             line-height: 30px;

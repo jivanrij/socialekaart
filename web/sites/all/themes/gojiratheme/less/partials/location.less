@@ -24,6 +24,10 @@
             margin:0 0 5px 0;
         }
 
+        @media (max-width: @screen-xs-max) {
+            width: 85%;
+        }
+
     }
 
     > div{
@@ -303,15 +307,19 @@
             top:10px;
             font-size:18px;
             cursor:pointer;
+            @media (min-width: @screen-xs-max) {
+                display: none;
+            }
         }
         @media (max-width: @screen-xs-max) {
             .rounded;
             .unshadow;
             background-color: @color-lightest-grey;
-            margin: 0 5px 5px 5px;
+            margin: 3px 5px 5px 5px;
             padding: 0;
             display:block;
             overflow:hidden;
+            width:auto;
         }
     }
     @media (max-width: @screen-xs-max) {

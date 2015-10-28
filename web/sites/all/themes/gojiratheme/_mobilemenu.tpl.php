@@ -8,12 +8,12 @@
             </form>
         <?php endif; ?>
         <?php if (user_access(helper::PERMISSION_PERSONAL_LIST)): ?>
-            <button class="fa fa-map-o" title="Naar mijn kaart" />
+            <button class="mymap" title="Naar mijn kaart" />
         <?php endif; ?>
 
 
-        <button class="fa fa-plus-square" title="Zorgverlener toevoegen" />    
-        <button class="fa fa-bars" title="Menu" />
+        <button class="suggestlocation" title="Zorgverlener toevoegen" />    
+        <button class="tomobilemenu" title="Menu" />
     </div>
 </div>
 <div id="mobilemenu">

@@ -342,7 +342,7 @@ function setupMapDefault() {
 
     window.map = new L.Map('map', {zoomControl: false, center: new L.LatLng(Drupal.settings.gojira.latitude, Drupal.settings.gojira.longitude), zoom: Drupal.settings.gojira.zoom});
 
-    new L.Control.Zoom({position: 'bottomleft'}).addTo(window.map);
+    new L.Control.Zoom({position: 'bottomright'}).addTo(window.map);
 
     //L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(window.map);
 
@@ -489,11 +489,11 @@ function bindAfterSearch(bind_list, bind_details) {
         });
         jQuery('div.results_paging a').on('click', function (e) {
             e.preventDefault();
-            jQuery('#search_results div').hide();
+            jQuery('#search_results > div > div.results_paging').hide();
             jQuery('#search_results ul').hide();
             var page_class = jQuery(this).attr('ref');
             jQuery('ul.' + page_class).show();
-            jQuery('div.' + page_class).show();
+            jQuery('div.results_paging.' + page_class).show();
 
             jQuery(window).trigger('resize');
 
@@ -554,7 +554,7 @@ function focusLocation(nid) {
         jQuery("div.leaflet-popup").css('display', 'none');
     }
 
-//    openOverlay();
+    openOverlay();
 
     if (Drupal.settings.gojira.page != 'ownlist' && Drupal.settings.gojira.page != 'showlocation') {
         jQuery('li.active').removeClass('active');
@@ -572,14 +572,15 @@ function focusLocation(nid) {
             jQuery("#selected_location_info").html(data.html);
 
             // move to it
-            //window.map.setView([data.latitude, data.longitude], data.zoom);
-            window.map.panTo([data.latitude, data.longitude]);
-
+            if(!onMobileView()){
+                window.map.panTo([data.latitude, data.longitude]);
+            }
+            
             bindAfterSearch(false, true);
 
             jQuery(window).trigger('resize');
             jQuery('#selected_location_info').removeClass('hidden');
-//            closeOverlay();
+            closeOverlay();
             if ((window.markerMapping[nid] !== undefined) && (window.markers._layers[window.markerMapping[nid]] !== undefined)) {
                 window.markers._layers[window.markerMapping[nid]].toggleBouncing();
             }
@@ -1052,23 +1053,23 @@ function reportDoublePractices(nids, uid) {
 
 function bindMobileMenu() {
     // menu button
-    jQuery('#mobileheader > div > button.fa-bars').click(function () {
-        if (jQuery('#mobileheader > div > button.fa-bars').hasClass('active')) {
-            jQuery('#mobileheader > div > button.fa-bars').removeClass('active');
+    jQuery('#mobileheader > div > button.tomobilemenu').click(function () {
+        if (jQuery('#mobileheader > div > button.tomobilemenu').hasClass('active')) {
+            jQuery('#mobileheader > div > button.tomobilemenu').removeClass('active');
             jQuery('#mobilemenu').css('right', '100%');
         } else {
-            jQuery('#mobileheader > div > button.fa-bars').addClass('active');
+            jQuery('#mobileheader > div > button.tomobilemenu').addClass('active');
             jQuery('#mobilemenu').css('right', '0%');
         }
     });
 
     // link to my map button
-    jQuery('#mobileheader > div > button.fa-map-o').click(function () {
+    jQuery('#mobileheader > div > button.mymap').click(function () {
         window.location = '/mijn-kaart';
     });
 
     // link to add location page
-    jQuery('#mobileheader > div > button.fa-plus-square').click(function () {
+    jQuery('#mobileheader > div > button.suggestlocation').click(function () {
         window.location = '/suggestlocation';
     });
 
