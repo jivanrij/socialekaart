@@ -65,11 +65,10 @@ function gojira_terms_conditions_form_submit($form, &$form_state) {
         $iAmount = db_query("select count(users.uid) amount from users join field_data_field_user_not_imported on (field_data_field_user_not_imported.entity_id = users.uid) join field_data_field_agree_conditions on (field_data_field_agree_conditions.entity_id = users.uid) where field_data_field_agree_conditions.field_agree_conditions_value = 1 and field_data_field_user_not_imported.field_user_not_imported_value = 1")->fetchField();
         
         if($iAmount < variable_get('gojira_user_amount_with_discount', 300)){
-            watchdog(WATCHDOG_SUBSCRIPTIONS, 'Giving user '.$user->uid.' a discount because there are still '.$iAmount.' users registered.');
+            watchdog(GojiraSettings::WATCHDOG_SUBSCRIPTIONS, 'Giving user '.$user->uid.' a discount because there are still '.$iAmount.' users registered.');
             Haweb::setNewFreePeriodUser($user); // Adds crucial information/roles/stuff to a new created user from the HAWeb SSO
             Mailer::newAccountWithFreePeriod($user); // sends email to inform the user he/she has got a free period
         }
-        die;
     }
 
 
