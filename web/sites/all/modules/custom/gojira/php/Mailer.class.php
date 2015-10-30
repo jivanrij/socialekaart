@@ -561,7 +561,7 @@ EOT;
     public static function newAccountWithFreePeriod($oUser) {
         
             $sEmail = $oUser->mail;
-
+ 
             $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
             $aInfo['from_name'] = 'SocialeKaart.care';
             $aInfo['subject'] = 'Gefeliciteerd!';
