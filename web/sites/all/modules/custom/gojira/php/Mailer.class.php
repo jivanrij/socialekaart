@@ -566,20 +566,23 @@ EOT;
             $aInfo['from_name'] = 'SocialeKaart.care';
             $aInfo['subject'] = 'Gefeliciteerd!';
             $aInfo['text'] = <<<EOT
-Gefeliciteerd u bent een van de eerste geregistreerde gebruikers van Sociale Kaart. Daarom krijgt u van ons een gratis proefabonnement t.w.v. 6 euro!
-                    
-Een abonnement geeft u de volgende extra functionaliteiten:
-- zoeken naar verwijsgegevens in het hele land of specifiek in bepaalde steden of dorpen;
-- uw collega's en medewerkers laten werken met dezelfde informatie d.m.v. extra accounts;
+Gefeliciteerd u hoort tot de groep gebruikers van Sociale Kaart die in aanmerking komt voor onze introductie-actie. U krijgt u van ons een gratis proefabonnement voor de duur van 3 maanden!
+
+Met de standaard versie van Sociale Kaart kunt u eenvoudig en snel verwijzen naar zorgverleners in uw regio. Door kenmerken toe te voegen aan zorgverleners worden de zoekresultaten steeds relevanter.
+
+Een (proef-)abonnement op de volledige versie geeft u daarnaast nog de volgende extra functionaliteiten:
 - eenvoudig uw eigen sociale kaart samenstellen waarbinnen u kunt zoeken;
-- meerdere praktijken toevoegen zodat u ook vanuit deze andere praktijken kunt zoeken.
-                    
-Als u tijdens deze periode of na deze periode besluit een abonnement af te willen sluiten kunt u dit vanuit de site doen. Een abonnement is 2 euro per maan en kan per jaar afgerekend worden.
-                    
-Als laatste willen we u op de hoogste stellen dat we standaard beschikken over meer dan 100.000 zorgverleners verspreid over het gehele land. Mocht u toch zorgaanbieders kennen die ontbreken in Sociale Kaart dan kunt u deze makkelijk en snel toevoegen via de link in het menu 'Zorgaanbieder toevoegen'. Op deze manier kunt u uw eigen sociale kaart compleet krijgen en kunnen uw collega's hier ook direct profijt van hebben.
-                
-We wensen u veel plezier in het werken met Sociale Kaart.
-                    
+- zoeken naar verwijsgegevens specifiek in bepaalde steden of dorpen;
+- zoeken in heel Nederland;
+- uw collega's en medewerkers laten werken met dezelfde informatie;
+- meerdere praktijken toevoegen zodat u ook vanuit andere praktijken kunt zoeken.
+
+Mocht u na de proefperiode besluiten een abonnement af te sluiten kunt u dit simpel via de website doen. Een abonnement is 2 euro per maand en kan per jaar afgerekend worden.
+
+Als laatste willen we u op de hoogte stellen dat we standaard beschikken over meer dan 115.000 zorgverleners verspreid over het gehele land. Mocht u toch zorgaanbieders kennen die ontbreken in SocialeKaart.care dan kunt u deze gemakkelijk en snel toevoegen via de link 'Zorgaanbieder toevoegen' in het menu. Op deze manier kunt u uw eigen sociale kaart compleet krijgen en hebben uw collega's hier direct profijt van.
+
+We wensen u veel plezier in het werken met Sociale Kaart!
+
 Met vriendelijke groet,
 Het team van Sociale Kaart
 EOT;
