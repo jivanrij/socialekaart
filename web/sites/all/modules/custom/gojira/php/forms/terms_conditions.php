@@ -58,7 +58,19 @@ function gojira_terms_conditions_form_submit($form, &$form_state) {
             Mailer::newAccountThroughSSO($user); // Informs the user he has logged on to SocialeKaart for the first time through SSO from haweb
             db_query("UPDATE `users` SET `haweb_sso_setup_done`=1 WHERE uid=" . $user->uid);
         }
+    }else{
+        // we have decided that we will give the first x amount of users that have registered themself a free period of 3 months
+        
+        // get amount of users that have registered themself and have agreed with the conditions
+        $iAmount = db_query("select count(users.uid) amount from users join field_data_field_user_not_imported on (field_data_field_user_not_imported.entity_id = users.uid) join field_data_field_agree_conditions on (field_data_field_agree_conditions.entity_id = users.uid) where field_data_field_agree_conditions.field_agree_conditions_value = 1 and field_data_field_user_not_imported.field_user_not_imported_value = 1")->fetchField();
+        
+        if($iAmount < variable_get('gojira_user_amount_with_discount', 300)){
+            watchdog(GojiraSettings::WATCHDOG_SUBSCRIPTIONS, 'Giving user '.$user->uid.' a discount because there are still '.$iAmount.' users registered.');
+            Haweb::setNewFreePeriodUser($user); // Adds crucial information/roles/stuff to a new created user from the HAWeb SSO
+            Mailer::newAccountWithFreePeriod($user); // sends email to inform the user he/she has got a free period
+        }
     }
+
 
     if (array_key_exists('subscribe_newsletter', $_POST) && $_POST['subscribe_newsletter'] == '1') {
         Mailer::subscribeToMailchimp($user->mail);

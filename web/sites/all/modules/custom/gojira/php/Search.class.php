@@ -370,18 +370,6 @@ EAT;
             }
         }
 
-//        $aSortedFoundNodes = usort($foundNodes, 'sortFoundKeywords');
-//        $aSortedLimitedFoundNodes = array();
-//        $iCounter = 1;
-//        foreach($aSortedFoundNodes as $aSortedNode){
-//            if($iCounter > 500){
-//                break;
-//            }
-//            $aSortedLimitedFoundNodes[$aSortedFoundNodes['nid']] = $aSortedFoundNodes['score'];
-//            $iCounter++;
-//        }
-
-
         // build the case to add the score field to the query
         if (count($foundNodes)) {
             $score_sql = ' (CASE ';
@@ -410,11 +398,6 @@ EAT;
         $distance = 0.09;
         if ($force_global || helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) {
             $distance = 20.0;
-//            $order_by_sql = 'ORDER BY score desc';
-//            if (!$sCityLabel) {
-                // only remove the distance order (this one retrieves all the search results in a radius) when we search global && don't search a city
-//                $order_by_sql = 'ORDER BY score desc';
-//            }
         }
 
 
@@ -431,20 +414,6 @@ EAT;
                 $sFilterCity = " AND field_data_field_address_city.field_address_city_value = :city ";
             }
         }
-        
-        
-//        $filter = '';
-//        if (variable_get('gojira_search_in', 'all') == 'adhocdata') {
-//            $filter = " AND node.source = 'adhocdata' ";
-//        } elseif (variable_get('gojira_search_in', 'all') == 'spider') {
-//            $filter = " AND node.source = 'spider' ";
-//        } elseif (variable_get('gojira_search_in', 'all') == 'gojira') {
-//            $filter = " AND node.source = 'gojira' ";
-//        } elseif (variable_get('gojira_search_in', 'all') == 'adhocdata_gojira') {
-//            $filter = " AND (node.source = 'adhocdata' OR node.source = 'gojira') ";
-//        } elseif (variable_get('gojira_search_in', 'all') == 'spider_gojira') {
-//            $filter = " AND (node.source = 'spider' OR node.source = 'gojira') ";
-//        }
 
         $filter = " AND node.source != 'spider' ";
         
@@ -716,11 +685,6 @@ EOT;
             }
         }
 
-        // replace characters as ë with e
-//        foreach($aText as &$sText){
-//            str_replace(self::$aSpecialChars, self::$aSpecialCharsReplacements, $sText);
-//        }
-
         return $aText;
     }
 
@@ -780,15 +744,4 @@ EOT;
                 )
         );
     }
-
 }
-
-//function sortFoundKeywords ( $aOne, $bTwo ){
-//    if($aOne['score'] < $bOne['score']){
-//        return -1;
-//    }else if($aOne['score'] == $bOne['score']){
-//        return 0;
-//    }
-//    return 1;
-//
-//}

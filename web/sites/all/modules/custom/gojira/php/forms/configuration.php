@@ -75,6 +75,14 @@ function gojira_configuration_form($form, &$form_state) {
         '#options' => array(0 => 'no', 1 => 'yes'),
         '#default_value' => variable_get('gojira_subscribe_possible', 1),
     );
+    
+    $form['algemene_instellingen']['gojira_user_amount_with_discount'] = array(
+        '#title' => t('Amount of users what get a discount.'),
+        '#type' => 'textfield',
+        '#description' => 'This is the amount of users that get a discount when registering. If it\'s put on 300 a new user will get a discount if there are less then 300 users registered that have accepted the conditions & are not from Haweb.',
+        '#default_value' => variable_get('gojira_user_amount_with_discount', 300),
+    );
+    
     $form['algemene_instellingen']['gojira_haweb_sso_button_visible'] = array(
         '#title' => t('Show HAweb login button'),
         '#type' => 'select',
@@ -409,6 +417,7 @@ function gojira_configuration_form_submit($form, &$form_state) {
     variable_set('cron_remove_unconditional_users', $_POST['cron_remove_unconditional_users']);
     variable_set('cron_restore_backup_locations', $_POST['cron_restore_backup_locations']);
     variable_set('gojira_ideal_return_url', $_POST['gojira_ideal_return_url']);
+    variable_set('gojira_user_amount_with_discount', $_POST['gojira_user_amount_with_discount']);
     
     drupal_set_message(t('Saved all the settings.'), 'status');
 }

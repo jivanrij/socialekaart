@@ -60,7 +60,7 @@ class Mailer {
 //                    )
 //                )
 //            ),
-            'tags' => array('password-resets'),
+//            'tags' => array('password-resets'),
 //            'subaccount' => 'customer-123',
 //            'google_analytics_domains' => array('example.com'),
 //            'google_analytics_campaign' => 'message.from_email@example.com',
@@ -536,6 +536,56 @@ EOT;
             $aInfo['from_name'] = 'SocialeKaart.care';
             $aInfo['subject'] = 'Welkom bij SocialeKaart.care!';
             $aInfo['text'] = variable_get('new_account_through_sso', '');
+            $aInfo['to'][] = array(
+                'email' => $sEmail,
+                'name' => $sEmail,
+                'type' => 'to'
+            );
+            if(trim(variable_get('mailadres_information_bcc', 'blijnder@gmail.com')) != ''){
+                $aInfo['to'][] = array(
+                    'email' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
+                    'name' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
+                    'type' => 'bcc'
+                );
+            }
+            $oMailer = new Mailer();
+            $oMailer->send($aInfo);
+
+    }
+    
+
+    /**
+     * Informs the user he has logged on to SocialeKaart for the first time and had has given a free period
+     * 
+     */
+    public static function newAccountWithFreePeriod($oUser) {
+        
+            $sEmail = $oUser->mail;
+  
+            $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
+            $aInfo['from_name'] = 'SocialeKaart.care';
+            $aInfo['subject'] = 'Gefeliciteerd!';
+            $aInfo['text'] = <<<EOT
+Gefeliciteerd u hoort tot de groep gebruikers van Sociale Kaart die in aanmerking komt voor onze introductie-actie. U krijgt u van ons een gratis proefabonnement voor de duur van 3 maanden!
+
+Met de standaard versie van Sociale Kaart kunt u eenvoudig en snel verwijzen naar zorgverleners in uw regio. Door kenmerken toe te voegen aan zorgverleners worden de zoekresultaten steeds relevanter.
+
+Een (proef-)abonnement op de volledige versie geeft u daarnaast nog de volgende extra functionaliteiten:
+- eenvoudig uw eigen sociale kaart samenstellen waarbinnen u kunt zoeken;
+- zoeken naar verwijsgegevens specifiek in bepaalde steden of dorpen;
+- zoeken in heel Nederland;
+- uw collega's en medewerkers laten werken met dezelfde informatie;
+- meerdere praktijken toevoegen zodat u ook vanuit andere praktijken kunt zoeken.
+
+Mocht u na de proefperiode besluiten een abonnement af te sluiten kunt u dit simpel via de website doen. Een abonnement is 2 euro per maand en kan per jaar afgerekend worden.
+
+Als laatste willen we u op de hoogte stellen dat we standaard beschikken over meer dan 115.000 zorgverleners verspreid over het gehele land. Mocht u toch zorgaanbieders kennen die ontbreken in SocialeKaart.care dan kunt u deze gemakkelijk en snel toevoegen via de link 'Zorgaanbieder toevoegen' in het menu. Op deze manier kunt u uw eigen sociale kaart compleet krijgen en hebben uw collega's hier direct profijt van.
+
+We wensen u veel plezier in het werken met Sociale Kaart!
+
+Met vriendelijke groet,
+Het team van Sociale Kaart
+EOT;
             $aInfo['to'][] = array(
                 'email' => $sEmail,
                 'name' => $sEmail,
