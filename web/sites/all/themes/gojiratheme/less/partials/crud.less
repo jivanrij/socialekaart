@@ -54,10 +54,22 @@
             clear:both;
             overflow:hidden;
             input.form-text {
-                width:160px;
+                width:260px;
+                @media (max-width: @screen-xs-max) {
+                    width:75%;
+                    height: 24px;
+                    float:right;
+                } 
             }
             select.form-select {
-                width:166px;
+                width:266px;
+                @media (max-width: @screen-xs-max) {
+                    width:75%;
+                    height: 24px;
+                    float:right;
+                    margin:0;
+                    padding:0;
+                } 
             }
             textarea {
                 width: 297px;
@@ -68,6 +80,12 @@
             label{
                 width:130px;
                 float:left;
+                @media (max-width: @screen-xs-max) {
+                    width:20%;
+                    height: 24px;
+                    float:left;
+                    line-height: 24px;
+                } 
             }
             div.description{
                 overflow: hidden;

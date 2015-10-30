@@ -8,7 +8,7 @@ function l(log) {
  * @returns Boolean
  */
 function onMobileView() {
-    if (jQuery(window).width() >= 768) {
+    if (jQuery(window).width() >= 668) {
         return false;
     }
     return true;

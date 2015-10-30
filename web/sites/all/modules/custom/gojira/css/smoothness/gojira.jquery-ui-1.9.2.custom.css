@@ -9,7 +9,7 @@ ul.ul.ul_inputnew_label -> add new label
     font-size: 9px;
     background-color: white !important;
     border: none !important;
-    width: 246px !important;
+    width: 346px !important;
     border-style: outset ridge 1px #b7072a !important;
 }
 .ui-widget-content li a{
@@ -43,9 +43,11 @@ ul.ul_gojirasearch_search_term, .ui-corner-top, .ui-corner-left, .ui-corner-tl, 
 }
 ul.ul_gojirasearch_search_term{
     border-top:0;
-    width:240px;
-    top: 58px !important;
-    left:10px !important;    
+    top: 64px !important;
+    left:10px !important;
+    border-top-right-radius: 0px !important;
+    border-top-left-radius: 0px !important;
+    border-top:0 !important;
 }
 
 /* edit location / suggest location labels*/

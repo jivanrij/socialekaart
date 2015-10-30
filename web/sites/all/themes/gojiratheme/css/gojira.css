@@ -187,7 +187,7 @@ a.help_link_content:hover {
 #conditions_holder {
   width: 530px;
   margin-top: 5px;
-  height: 500px;
+  height: 400px;
   overflow-x: hidden;
   overflow-y: scroll;
   border-style: solid;
@@ -197,7 +197,7 @@ a.help_link_content:hover {
 }
 @media (max-width: 1200px) {
   #conditions_holder {
-    width: 500px;
+    width: 400px;
   }
 }
 #doubles_wrapper {
@@ -230,7 +230,7 @@ a.help_link_content:hover {
   color: #ffffff !important;
   border-bottom: #4d4d4d solid 1px;
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   #header {
     display: none;
   }
@@ -478,7 +478,7 @@ div.password-confirm {
   -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
   overflow: hidden;
-  width: 30%;
+  width: 50%;
   height: 18px;
   float: left;
   margin: 6px 10px 0 7px;
@@ -490,7 +490,7 @@ div.password-confirm {
   color: #b7072a;
   cursor: pointer;
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   body.mobile-form #map {
     display: none;
   }
@@ -509,7 +509,7 @@ a.gbutton:hover {
   left: 10px;
   position: absolute;
   top: 76px;
-  width: 500px;
+  width: 400px;
   z-index: 100;
   background-color: white;
   overflow: hidden;
@@ -517,10 +517,10 @@ a.gbutton:hover {
 }
 @media (max-width: 1200px) {
   #crud_holder {
-    width: 500px;
+    width: 400px;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   #crud_holder {
     width: 100%;
     padding: 0;
@@ -534,7 +534,7 @@ a.gbutton:hover {
     -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   #crud_holder > div {
     margin: 0 5px 5px 5px;
     padding: 0px 10px 10px 10px;
@@ -552,13 +552,13 @@ a.gbutton:hover {
     overflow: hidden;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   #crud_holder > div.errormessage,
   #crud_holder > div.statusmessage {
     padding: 10px 10px 10px 10px;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   #crud_holder > div > div.errormessage,
   #crud_holder > div > div.statusmessage {
     padding: 10px 10px 10px 10px;
@@ -576,10 +576,26 @@ a.gbutton:hover {
   overflow: hidden;
 }
 #crud_holder form div.form-item input.form-text {
-  width: 160px;
+  width: 260px;
+}
+@media (max-width: 668px) {
+  #crud_holder form div.form-item input.form-text {
+    width: 75%;
+    height: 24px;
+    float: right;
+  }
 }
 #crud_holder form div.form-item select.form-select {
-  width: 166px;
+  width: 266px;
+}
+@media (max-width: 668px) {
+  #crud_holder form div.form-item select.form-select {
+    width: 75%;
+    height: 24px;
+    float: right;
+    margin: 0;
+    padding: 0;
+  }
 }
 #crud_holder form div.form-item textarea {
   width: 297px;
@@ -590,6 +606,14 @@ a.gbutton:hover {
 #crud_holder form div.form-item label {
   width: 130px;
   float: left;
+}
+@media (max-width: 668px) {
+  #crud_holder form div.form-item label {
+    width: 20%;
+    height: 24px;
+    float: left;
+    line-height: 24px;
+  }
 }
 #crud_holder form div.form-item div.description {
   overflow: hidden;
@@ -638,12 +662,12 @@ a.gbutton:hover {
     width: 700px;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   #content_holder.big #crud_holder {
     width: 100%;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   body.locationcheck #crud_holder {
     top: 36px;
   }
@@ -652,12 +676,12 @@ a.gbutton:hover {
   left: 10px;
   position: absolute;
   top: 76px;
-  width: 500px;
+  width: 400px;
   z-index: 100;
 }
 @media (max-width: 1200px) {
   #search_result_info {
-    width: 500px;
+    width: 400px;
   }
 }
 #search_result_info span.result_txt {
@@ -709,7 +733,7 @@ a.gbutton:hover {
 #search_result_info #search_results .paging_hidden {
   display: none !important;
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   #search_result_info #search_results {
     /*            .unround;
             .unshadow;
@@ -722,7 +746,7 @@ a.gbutton:hover {
     display: none;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   #search_result_info {
     left: 0;
     width: 100%;
@@ -735,11 +759,11 @@ a.gbutton:hover {
   left: 10px;
   position: absolute;
   top: 40px;
-  width: 520px;
+  width: 400px;
   z-index: 100;
   overflow: hidden;
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   #search_form {
     display: none;
   }
@@ -749,7 +773,7 @@ a.gbutton:hover {
   padding: 0;
   margin: 0;
   border: 0;
-  width: 440px;
+  width: 340px;
   color: #b7072a;
   font-weight: bold;
   padding-left: 5px;
@@ -805,12 +829,12 @@ body.ownlist #crud_holder > div #ownlist_menu ul li a:hover {
   color: #b7072a;
   text-decoration: underline;
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   body.ownlist #crud_holder > div #ownlist_menu ul li {
     padding: 0px 0 15px 10px;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   body.ownlist #crud_holder > div #ownlist_menu {
     width: 40%;
   }
@@ -830,12 +854,12 @@ body.ownlist #crud_holder > div #ownlist_content ul {
 body.ownlist #crud_holder > div #ownlist_content ul li {
   padding: 0 0 5px 0;
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   body.ownlist #crud_holder > div #ownlist_content ul li {
     padding: 0 0 15px 0;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   body.ownlist #crud_holder > div #ownlist_content ul {
     padding: 30px 0 5px 0;
   }
@@ -855,12 +879,12 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
   text-decoration: underline;
   color: #b7072a;
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   body.ownlist #crud_holder > div #ownlist_content {
     width: 60%;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   body.ownlist #crud_holder > div {
     padding: 0;
     margin: 5px;
@@ -868,7 +892,7 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
     width: auto;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   body.ownlist #crud_holder {
     width: 100%;
     top: 36px;
@@ -878,13 +902,13 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
 }
 #selected_location_info {
   background-color: white;
-  width: 500px;
+  width: 400px;
   overflow: hidden;
   margin-top: 10px;
 }
 @media (max-width: 1200px) {
   #selected_location_info {
-    width: 500px;
+    width: 400px;
   }
 }
 #selected_location_info a#mailto {
@@ -902,24 +926,24 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
 #selected_location_info div.grouped div {
   margin: 0 0 5px 0;
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   #selected_location_info div.grouped {
     width: 85%;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   #selected_location_info > div {
     /*margin:15px;*/
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   #selected_location_info {
     margin-top: 0;
   }
 }
-@media (min-width: 768px) {
+@media (min-width: 668px) {
   #selected_location_info .search_result_wrapper {
-    width: 500px;
+    width: 400px;
   }
 }
 #selected_location_info .search_result_wrapper br {
@@ -937,7 +961,7 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
   float: left;
   font-weight: normal;
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   #selected_location_info .search_result_wrapper > div.adres {
     margin-bottom: 0;
   }
@@ -1052,7 +1076,7 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
 #selected_location_info .search_result_wrapper div.add_label form .new_label_wrapper button.add_new_label span:hover {
   color: white;
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   #selected_location_info .search_result_wrapper div.add_label {
     display: none;
   }
@@ -1130,12 +1154,12 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
 #selected_location_info .search_result_wrapper div.labels div.plus button {
   background-color: #dbdbdb;
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   #selected_location_info .search_result_wrapper div.labels {
     display: none;
   }
 }
-@media (min-width: 768px) {
+@media (min-width: 668px) {
   #selected_location_info .search_result_wrapper .mobile_labels {
     display: none;
   }
@@ -1225,12 +1249,12 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
   font-size: 18px;
   cursor: pointer;
 }
-@media (min-width: 768px) {
+@media (min-width: 668px) {
   #selected_location_info .search_result_wrapper a.close_button {
     display: none;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   #selected_location_info .search_result_wrapper {
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
@@ -1249,7 +1273,7 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
     width: auto;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   #selected_location_info {
     -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
@@ -1268,7 +1292,7 @@ body.ownlist #crud_holder > div #ownlist_content a.location_category_list.active
 ul.ui-autocomplete li a {
   font-size: 12px !important;
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   body.questions #crud_holder {
     width: auto !important;
   }
@@ -1299,7 +1323,7 @@ ul.ui-autocomplete li a {
   z-index: 100;
   background-color: #ffffff;
 }
-@media (min-width: 769px) {
+@media (min-width: 669px) {
   #mobileheader {
     display: none;
   }
@@ -1471,12 +1495,12 @@ ul.ui-autocomplete li a {
 #mobilemenu > div.options a.search_favorite.off:before {
   content: "\f096";
 }
-@media (min-width: 768px) {
+@media (min-width: 668px) {
   #mobilemenu {
     display: none;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   body.conditions #crud_holder {
     top: 36px;
     width: 100%;
@@ -1491,7 +1515,7 @@ ul.ui-autocomplete li a {
     border-radius: 0px;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   body.conditions #crud_holder form {
     padding-left: 10px;
   }
@@ -1510,7 +1534,7 @@ body.conditions #crud_holder #conditions_holder {
     width: 700px;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
   body.conditions #crud_holder #conditions_holder {
     height: auto;
     width: auto;
