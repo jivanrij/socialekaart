@@ -19,13 +19,15 @@
 <div id="mobilemenu">
     <div class="options">
         <?php if (Subscriptions::currentGroupHasPayed() && Location::userHasMultipleLocationsStored()): ?>
-            <label for="select_location_mobile"><?php echo t('select practice'); ?>:</label>
-            <?php $oCurrentLocation = Location::getCurrentLocationObjectOfUser(); ?>
-            <select id="select_location_mobile" name="select_location_mobile">
-                <?php foreach (Location::getUsersLocations() as $oLocation): ?>
-                    <?php if ($oLocation->status): ?><option <?php echo ($oCurrentLocation->nid == $oLocation->nid ? 'selected="selected"' : ''); ?>value="<?php echo $oLocation->nid; ?>"><?php echo $oLocation->title; ?></option><?php endif; ?>
-                <?php endforeach; ?>
-            </select>
+            <div>
+                <label for="select_location_mobile"><?php echo t('select practice'); ?>:</label>
+                <?php $oCurrentLocation = Location::getCurrentLocationObjectOfUser(); ?>
+                <select id="select_location_mobile" name="select_location_mobile">
+                    <?php foreach (Location::getUsersLocations() as $oLocation): ?>
+                        <?php if ($oLocation->status): ?><option <?php echo ($oCurrentLocation->nid == $oLocation->nid ? 'selected="selected"' : ''); ?>value="<?php echo $oLocation->nid; ?>"><?php echo $oLocation->title; ?></option><?php endif; ?>
+                    <?php endforeach; ?>
+                </select>
+            </div>
         <?php endif; ?>
 
         <?php if (Subscriptions::currentGroupHasPayed()): ?>

@@ -59,12 +59,15 @@
                     width:75%;
                     height: 24px;
                     float:right;
-                } 
+                }
+                @media (max-width: @screen-xxs-max) {
+                    width: 50%;
+                }
             }
             select.form-select {
                 width:266px;
                 @media (max-width: @screen-xs-max) {
-                    width:75%;
+                    width:65%;
                     height: 24px;
                     float:right;
                     margin:0;
@@ -85,6 +88,9 @@
                     height: 24px;
                     float:left;
                     line-height: 24px;
+                    @media (max-width: @screen-xxs-max) {
+                        width: 40%;
+                    }
                 } 
             }
             div.description{
