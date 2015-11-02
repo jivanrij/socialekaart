@@ -2,17 +2,15 @@
     left: 10px;
     position: absolute;
     top: 76px;
-    width: @block-width-md;
+    width: @block-width-sm;
     z-index: 100;
-    @media (max-width: @screen-md-max) {
-        width: @block-width-sm;
-    }
+
     span.result_txt{
         display:none;
     }
     #search_results{
         background-color: white;
-        overflow:hidden;
+        overflow:hidden; 
 
         p{
             padding: 5px 15px 15px 15px;
@@ -63,14 +61,6 @@
             display:none !important;
         }
         @media (max-width: @screen-xs-max) {
-/*            .unround;
-            .unshadow;
-            > div{
-                margin:5px 5px 5px 5px;
-                background-color:@color-lightest-grey;
-                .rounded;
-                .noshadow;
-            }*/
             display:none;
         }
         
@@ -79,8 +69,5 @@
         left:0;
         width:100%;
         top:36px;
-
     }
-
-
 }

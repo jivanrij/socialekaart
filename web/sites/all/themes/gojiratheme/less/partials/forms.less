@@ -1,11 +1,8 @@
 form{
-    .has_help {
-        cursor: help;
+    span.form-required{
+        margin-right: 2px;
     }
-    .has_help img{
-        height:10px;
-    }
-
+    
     label[for=edit-favorite]{
         height:35px;
     }
@@ -43,7 +40,7 @@ form{
         }
 
         label{
-            height:15px; 
+            /*height:15px;*/ 
             line-height: 18px;
         }
         input[type=text], textarea, input[type=password], select{
@@ -72,6 +69,17 @@ form{
 
     div.password-suggestions{
         width: 360px !important;
+    }
+
+    .has_help{
+        cursor: help;
+        &:after{
+            content: '\f059';
+            color:@color-main;
+            font: normal normal normal 14px/1 FontAwesome;
+            display:inline-block;
+            width:15px;
+        }
     }
 }
 
@@ -161,7 +169,7 @@ div.password-strength, div.password-confirm{
             margin:6px 10px 0 7px;
             padding:0;
         }
-        
+
         > i {
             padding: 7px 0 0 0;
             font-size: 16px;

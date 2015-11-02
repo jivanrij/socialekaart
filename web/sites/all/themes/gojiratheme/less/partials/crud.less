@@ -2,15 +2,12 @@
     left: 10px;
     position: absolute;
     top: 76px;
-    width: @block-width-md;
+    width: @block-width-sm;
     z-index: 100;
     background-color: white;
     overflow:hidden;
     padding:0 10px 10px 10px;
 
-    @media (max-width: @screen-md-max) {
-        width: @block-width-md;
-    }
     @media (max-width: @screen-xs-max) {
         width: 100%;
         width:100%;
@@ -81,13 +78,13 @@
                 font-weight: lighter;
             }
             label{
-                width:130px;
+                width:140px;
                 float:left;
                 @media (max-width: @screen-xs-max) {
                     width:20%;
-                    height: 24px;
+                    /*height: 24px;*/
                     float:left;
-                    line-height: 24px;
+                    /*line-height: 24px;*/
                     @media (max-width: @screen-xxs-max) {
                         width: 40%;
                     }

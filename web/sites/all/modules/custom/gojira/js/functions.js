@@ -573,7 +573,7 @@ function focusLocation(nid) {
 
             // move to it
             if(!onMobileView()){
-                window.map.panTo([data.latitude, data.longitude]);
+                window.map.panTo([(data.latitude-1), data.longitude]);
             }
             
             bindAfterSearch(false, true);

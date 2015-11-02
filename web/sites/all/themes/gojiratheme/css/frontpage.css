@@ -25,12 +25,12 @@ body.front .frontpage_block > div {
   overflow: hidden;
   background-color: #f8f8f8;
 }
-@media (max-width: 668px) {
+@media (max-width: 710px) {
   body.front .frontpage_block > div {
     padding-top: 30px;
   }
 }
-@media (max-width: 668px) {
+@media (max-width: 710px) {
   body.front .frontpage_block.login > div {
     padding-top: 0px;
   }
