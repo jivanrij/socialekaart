@@ -19,7 +19,7 @@ function gojira_login_form($form, &$form_state) {
     '#title' => t('Password'),
     '#description' => t('Enter the password that accompanies your username.'),
     '#required' => TRUE,
-    '#description' => '<a href="/passwordreset" title="'.t('Click here if you forgot your password.').'">'.t('Click here if you forgot your password.').'</a>',
+    '#description' => '<a href="/wachtwoord-reset" title="'.t('Click here if you forgot your password.').'">'.t('Click here if you forgot your password.').'</a>',
   );
   
   $form['#validate'] = user_login_default_validators();
