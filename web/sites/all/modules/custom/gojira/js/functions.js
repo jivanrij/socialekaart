@@ -292,7 +292,7 @@ function addNewLabel(element) {
         dataType: 'json',
         success: function (data) {
             if (data.success == false) {
-                alert(data.error);
+//                alert(data.error);
             } else {
                 focusLocation(nid);
                 // check if we need to resize
@@ -573,7 +573,7 @@ function focusLocation(nid) {
 
             // move to it
             if(!onMobileView()){
-                window.map.panTo([(data.latitude-1), data.longitude]);
+                window.map.panTo([data.latitude, data.longitude]);
             }
             
             bindAfterSearch(false, true);
