@@ -1,0 +1,129 @@
+#header {
+
+    @media (max-width: @screen-xs-max) {
+        display:none;
+    }
+
+    background-color: @color-main;
+    overflow: hidden;
+    color: @color-white !important;
+    border-bottom: @color-dark solid 1px;
+
+
+
+
+    a, a.active {
+        text-decoration:none;
+        color: @color-white;
+        font-weight: bold;
+    }
+
+    #header_options{
+        height:20px;
+        display:inline-block;
+        a{
+            display:inline-block;
+            cursor: pointer;
+            margin-left:10px;
+            &:after{
+                color:@color-white;
+                font: normal normal normal 14px/1 FontAwesome;
+                display:inline-block;
+                width:14px;
+                margin-left:4px;
+            }
+            line-height: 28px;
+        }
+        a.on{
+            &:after{
+                content: '\f046';
+            }            
+        }
+        a.off{
+            &:after{
+                content: '\f096';
+            }
+        }
+
+        label[for=location_selector]{
+            display:inline-block;
+            margin-left:10px;
+        }
+        select{
+
+        }
+        #location_selector{
+            display:inline-block;
+            height: 20px;
+            /*padding:20px;*/
+            margin:0 0 0 0px;
+            padding:0;
+            /*vertical-align: top;*/
+            width:100px;
+            background-color: #fff;
+            border-radius: 0;
+        }
+    }
+    ul.menu{
+        display:inline-block;
+        margin:0;
+        float:right;
+        padding:0;
+        li{
+            display:block;
+            float:left;
+            padding:0;
+            margin:0;
+            height:27px;
+            a{
+                line-height: 27px;
+                margin:0;
+                padding: 0 8px 0 8px;
+                height:27px;
+                display:block;
+            }
+            a.active, 
+            a:hover{
+                text-decoration: underline;
+            }
+
+            ul.menu{
+                display: none;
+                position: absolute;
+                visibility: none;
+                opacity: 1;
+                padding: 0;
+                top: 23px;
+                z-index: 150;
+                background-color: #b7072a;
+                width:170px;
+                right:0;
+                li{
+                    display:block;
+                    clear:both;
+                    a{
+                        margin:0;
+                        display: block;
+                        padding:2px 5px 2px 5px;
+                    }
+                }
+            }
+        }
+        li:hover{
+            ul.menu{
+                visibility:visible;
+                display: block;
+            }
+        }
+        li.active-trail > a{
+            text-decoration: underline;
+        }
+    }
+    > ul.menu{
+        >li{
+            width:100px;
+            text-align: right;
+        }
+    }
+}
+

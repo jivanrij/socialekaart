@@ -33,6 +33,44 @@ class Labels {
         return $terms;
     }
 
+
+    /**
+     * Draws all the labels
+     * 
+     * @param type $node
+     */
+    public static function drawMobileLabels($node) {
+
+        $sHtml = '';
+
+        $terms = self::getLabels($node);
+
+        $shuffle = array();
+        foreach ($terms as $tid => $label) {
+            $shuffle[] = array('tid' => $tid, 'label' => $label);
+        }
+
+        shuffle($shuffle);
+
+        foreach ($shuffle as $termInfo) {
+
+            $tid = $termInfo['tid'];
+            $term = $termInfo['label'];
+
+            $amount_of_likes = self::getLikes($tid, $node->nid);
+
+            if($amount_of_likes > 20){
+                $amount_of_likes = 20; // css is limited to 20 right now
+            }
+            
+            $sHtml .= '<div class="score_'.$amount_of_likes.'">'.$term.'</div>';
+        }
+
+        $sHtml = '<div class="mobile_labels">' . $sHtml . '</div>';
+
+        return $sHtml;
+    }
+    
     /**
      * Draws all the labels
      * 

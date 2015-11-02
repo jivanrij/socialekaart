@@ -3,9 +3,6 @@
   vertical-align: bottom;
   color:red;
 }
-span.tooltip{
-    background-image: url(../img/questionmark_small.png) !important;
-}
 
 #crud_holder form div.form-item div.description{
   margin-top:3px;

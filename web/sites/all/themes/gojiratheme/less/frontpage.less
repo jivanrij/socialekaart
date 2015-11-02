@@ -1,13 +1,4 @@
-
-@font-text-size-normal: 16px;
-@font-text-size-h1: 20px;
-@font-text-size-h2: 16px;
-@font-text-size-borderarea: 12px;
-@font-text-size-labels: 12px;
-@font-text-size-buttons: 12px;
-
-@block-color: #f8f8f8;
-@button-color: #b7072a;
+@import "values"; 
 
 .rounded_border{
     display: block;
@@ -23,7 +14,7 @@
 
 body.front{
     font-weight: normal;
-    height:auto;
+    height:auto; 
     font-size:@font-text-size-normal;
 
     #frontpage_footer{
@@ -38,6 +29,17 @@ body.front{
             padding:30px;
             overflow:hidden;
             background-color:@block-color;
+            @media (max-width: @screen-xs-max) {
+                padding-top: 30px;
+            }
+
+        }
+        &.login{
+            > div{
+                @media (max-width: @screen-xs-max) {
+                    padding-top: 0px;
+                }
+            }
         }
 
         p{
@@ -56,7 +58,7 @@ body.front{
         }
     }
     .frontpage_block.text{
-        
+
     }
     .form-block{
         h1{
@@ -69,11 +71,15 @@ body.front{
             img{
                 border-style:solid;
                 border-width: 1px;
-                border-color: #4d4d4d;
-                border: 1px #4d4d4d solid;
+                border-color: @color-dark;
+                border: 1px @color-dark solid;
                 .rounded_border;
+                &:hover{
+                    border-color: @color-main;
+                }
             }
-            
+
+
         }
         p{
             padding:0;
@@ -118,6 +124,7 @@ body.front{
     }
     .col-sm-9.frontpage_block{
         padding-right:10px;
+
     }
     .col-sm-3.frontpage_block.hidden-xs{
         padding-left:0px;

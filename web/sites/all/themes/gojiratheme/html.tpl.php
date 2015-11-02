@@ -8,6 +8,7 @@
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
     <?php endif; ?>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <?php print $head; ?>
     <title><?php print $head_title; ?></title>
     <?php print $styles; ?>
@@ -28,7 +29,7 @@
   }
  
   ?>
-  <body class="<?php echo $class; ?>">
+  <body class="<?php echo $class; ?> <?php echo Template::getMobileType(); ?>">
       <?php print $page; ?>
       <?php if(Template::getView() == Template::VIEWTYPE_FRONT && helper::getIEVersion() != 8): ?><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><?php endif; ?>
         <script> 

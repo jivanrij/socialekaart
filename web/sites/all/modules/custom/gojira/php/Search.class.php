@@ -54,7 +54,7 @@ class Search {
         $h = '';
         $h .= '<div id="search_result_info">';
         if ($output['has_tags'] || isset($output['loc'])) {
-            $h .= '<div id="search_results" class="rounded">';
+            $h .= '<div id="search_results" class="rounded"><div>';
             if ($output['city_in_tag'] && $output['check_city'] == true && helper::userHasSubscribedRole()) {
                 $h .= '<p class="info_text">';
                 $h .= t('You are searching in the area of %city%.', array('%city%' => $output['city_in_tag'])) . '<br />';
@@ -154,7 +154,7 @@ class Search {
             }
 
 
-            $h .= '</div>';
+            $h .= '</div></div>';
         }
         $hidden_class = '';
         if ($output['by_id']) {
@@ -203,7 +203,7 @@ class Search {
   <div class="inform">
     {$improve_txt} <a href="?q=inform&nid=%nid%" title="{$improve_txt} {$improve_link}">{$improve_link}</a>
   </div>
-  %admin%
+  <a class="fa fa-times close_button"></a>
 </div>
 EAT;
 
@@ -217,18 +217,18 @@ EAT;
             $favoriteClass = "yes";
         }
 
-        $adminLink = '';
-        if (user_access(helper::PERMISSION_SHOW_DEBUG)) {
-
-            $search_index_info = '';
-            $index_info = db_query('select word, score from searchword join searchword_nid on (searchword.id = searchword_nid.searchword_id) where searchword_nid.node_nid = ' . $foundNode->nid);
-            foreach ($index_info as $info) {
-                $search_index_info .= 'score:' . $info->score . ' word:' . $info->word . '<br />';
-            }
-            $search_index_info = '<p class="admin_info">' . $search_index_info . '</p>';
-
-            $adminLink = $search_index_info . '<div class="admin_info"><a href="?q=/admin/config/system/gojiratools&redirect_to_view=1&index_some=' . $foundNode->nid . '">Reindex location</a> <a href="/showlocation&loc=' . $foundNode->nid . '" title="weergeven in frontend">weergeven</a> <a href="/location/edit&id=' . $foundNode->nid . '" title="beheren in frontend">frontend</a> <a title="beheren in de backend" href="/node/' . $foundNode->nid . '/edit&destination=admin/content">backend</a> <!-- &nbsp; <a target="_blank" href="https://maps.google.com/maps?q=' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD) . '+' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD) . ',' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD) . ',' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD) . '" title="weergeven in google maps">google maps</a>--></div>';
-        }
+//        $adminLink = '';
+//        if (user_access(helper::PERMISSION_SHOW_DEBUG)) {
+//
+//            $search_index_info = '';
+//            $index_info = db_query('select word, score from searchword join searchword_nid on (searchword.id = searchword_nid.searchword_id) where searchword_nid.node_nid = ' . $foundNode->nid);
+//            foreach ($index_info as $info) {
+//                $search_index_info .= 'score:' . $info->score . ' word:' . $info->word . '<br />';
+//            }
+//            $search_index_info = '<p class="admin_info">' . $search_index_info . '</p>';
+//
+//            $adminLink = $search_index_info . '<div class="admin_info"><a href="?q=/admin/config/system/gojiratools&redirect_to_view=1&index_some=' . $foundNode->nid . '">Reindex location</a> <a href="/showlocation&loc=' . $foundNode->nid . '" title="weergeven in frontend">weergeven</a> <a href="/location/edit&id=' . $foundNode->nid . '" title="beheren in frontend">frontend</a> <a title="beheren in de backend" href="/node/' . $foundNode->nid . '/edit&destination=admin/content">backend</a> <!-- &nbsp; <a target="_blank" href="https://maps.google.com/maps?q=' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD) . '+' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD) . ',' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD) . ',' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD) . '" title="weergeven in google maps">google maps</a>--></div>';
+//        }
 
         $url = helper::value($foundNode, GojiraSettings::CONTENT_TYPE_URL_FIELD);
         $email = helper::value($foundNode, GojiraSettings::CONTENT_TYPE_EMAIL_FIELD);
@@ -244,21 +244,13 @@ EAT;
 
         $oCurrentLocation = Location::getCurrentLocationObjectOfUser();
         
-        $favorites = '';
+        $sFavorites = '';
         if (user_access(helper::PERMISSION_PERSONAL_LIST)) {
-            if (Favorite::getInstance()->isFavorite($foundNode->nid, $oCurrentLocation->nid)) {
-                $fav_class = 'yes';
-            } else {
-                $fav_class = 'no';
+            $sOnList = 'false';
+            if(Favorite::getInstance()->isFavorite($foundNode->nid, $oCurrentLocation->nid)){
+                $sOnList = 'true';    
             }
-            $favorites = '';
-            if (user_access(helper::PERMISSION_MODERATE_LOCATION_CONTENT)) {
-                $favorites = '<div class="favorites"><span class="fav_row ' . $fav_class . '"><span id="fav_switch_label">' . t('Put on my list:') . ' </span><button class="fav_yes rounded noshadow">' . t('Yes') . '</button> / <button class="fav_no rounded noshadow">' . t('No') . '</button></span></div>';
-            } else {
-                if ($fav_class == 'yes') {
-                    $favorites = '<div class="favorites"><span>' . t('Is part of your favorites.') . '</span></div>';
-                }
-            }
+            $sFavorites = '<div class="favorites_switch"><a class="in_favorites '.$sOnList.'" title="Bepaal of deze zorgverlener in ow kaart zit.">In <i>Mijn kaart</i></a></div>';
         }
 
         $category_txt = '';
@@ -271,8 +263,8 @@ EAT;
             $category_txt = '<p>' . t('This locations has no category.') . '</p>';
         }
 
-        $labels = Labels::draw($foundNode);
-        
+        $labels = Labels::draw($foundNode).Labels::drawMobileLabels($foundNode);
+
         $html = str_replace(
                 array('%title%',
             '%street%',
@@ -283,7 +275,7 @@ EAT;
             '%email%',
             '%url%',
             '%labels%',
-            '%admin%',
+            //'%admin%',
             '%nid%',
             '%favorites%',
             '%category%'), array($foundNode->title,
@@ -295,9 +287,9 @@ EAT;
             $email,
             $url,
             $labels,
-            $adminLink,
+            //$adminLink,
             $foundNode->nid,
-            $favorites,
+            $sFavorites,
             $category_txt), $popupHtml);
 
         return $html;
@@ -378,18 +370,6 @@ EAT;
             }
         }
 
-//        $aSortedFoundNodes = usort($foundNodes, 'sortFoundKeywords');
-//        $aSortedLimitedFoundNodes = array();
-//        $iCounter = 1;
-//        foreach($aSortedFoundNodes as $aSortedNode){
-//            if($iCounter > 500){
-//                break;
-//            }
-//            $aSortedLimitedFoundNodes[$aSortedFoundNodes['nid']] = $aSortedFoundNodes['score'];
-//            $iCounter++;
-//        }
-
-
         // build the case to add the score field to the query
         if (count($foundNodes)) {
             $score_sql = ' (CASE ';
@@ -418,11 +398,6 @@ EAT;
         $distance = 0.09;
         if ($force_global || helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) {
             $distance = 20.0;
-//            $order_by_sql = 'ORDER BY score desc';
-//            if (!$sCityLabel) {
-                // only remove the distance order (this one retrieves all the search results in a radius) when we search global && don't search a city
-//                $order_by_sql = 'ORDER BY score desc';
-//            }
         }
 
 
@@ -439,20 +414,6 @@ EAT;
                 $sFilterCity = " AND field_data_field_address_city.field_address_city_value = :city ";
             }
         }
-        
-        
-//        $filter = '';
-//        if (variable_get('gojira_search_in', 'all') == 'adhocdata') {
-//            $filter = " AND node.source = 'adhocdata' ";
-//        } elseif (variable_get('gojira_search_in', 'all') == 'spider') {
-//            $filter = " AND node.source = 'spider' ";
-//        } elseif (variable_get('gojira_search_in', 'all') == 'gojira') {
-//            $filter = " AND node.source = 'gojira' ";
-//        } elseif (variable_get('gojira_search_in', 'all') == 'adhocdata_gojira') {
-//            $filter = " AND (node.source = 'adhocdata' OR node.source = 'gojira') ";
-//        } elseif (variable_get('gojira_search_in', 'all') == 'spider_gojira') {
-//            $filter = " AND (node.source = 'spider' OR node.source = 'gojira') ";
-//        }
 
         $filter = " AND node.source != 'spider' ";
         
@@ -724,11 +685,6 @@ EOT;
             }
         }
 
-        // replace characters as ë with e
-//        foreach($aText as &$sText){
-//            str_replace(self::$aSpecialChars, self::$aSpecialCharsReplacements, $sText);
-//        }
-
         return $aText;
     }
 
@@ -788,15 +744,4 @@ EOT;
                 )
         );
     }
-
 }
-
-//function sortFoundKeywords ( $aOne, $bTwo ){
-//    if($aOne['score'] < $bOne['score']){
-//        return -1;
-//    }else if($aOne['score'] == $bOne['score']){
-//        return 0;
-//    }
-//    return 1;
-//
-//}

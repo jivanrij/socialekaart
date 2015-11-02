@@ -7,6 +7,7 @@ jQuery(function () {
 
         bindGlobal();
         bindFaq();
+        bindMobileMenu();
 
         if (Drupal.settings.gojira.ask_default_location) {
             askDefaultLocation();
@@ -56,10 +57,19 @@ jQuery(function () {
         }
 
         jQuery(window).resize(function () {
-            //var mapHeight = jQuery(window).height() - 24;
-            jQuery('#map').css('height', getHeightPx());
-            jQuery('#map').css('width', '100%');
+            if(onMobileView()){
+                jQuery('#map').css('height', getHeightPx()+5);
+                jQuery('#map').css('top', (parseInt(jQuery(window).height()) - getHeightPx())-5);
+                jQuery('#map').css('width', '100%');                
+            }else{
+                jQuery('#map').css('height', getHeightPx());
+                jQuery('#map').css('top', 0);
+                jQuery('#map').css('width', '100%');
+            }
         });
+        if(onMobileView()){
+            jQuery(window).trigger('resize');
+        }
 
         if (Drupal.settings.gojira.doSearch != 0) {
             doSearchCall(Drupal.settings.gojira.doSearch, 0);

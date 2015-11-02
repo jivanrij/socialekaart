@@ -2,60 +2,96 @@ function l(log) {
     console.log(log)
 }
 
+/**
+ * Tells you if we are in a mobile view
+ * 
+ * @returns Boolean
+ */
+function onMobileView() {
+    if (jQuery(window).width() >= 668) {
+        return false;
+    }
+    return true;
+}
+
 // get's you the needed height of the window based on the content
 function getHeightPx() {
 
-    var has_crud_holder_element = false;
-    if (typeof jQuery('#crud_holder') !== 'undefined') {
-        has_crud_holder_element = true;
-    }
+    if (onMobileView()) { // mobile view
 
-    if (Drupal.settings.gojira.page == 'ownlist') {
-        var selected_location_info = 0;
-        if (typeof jQuery('#selected_location_info').css('height') !== 'undefined') {
-            selected_location_info = parseInt(jQuery('#selected_location_info').css('height').replace('px', ''));
+        var crud_holder_height = 0;
+        if (typeof jQuery('#crud_holder').css('height') !== 'undefined') {
+            crud_holder_height = parseInt(jQuery('#crud_holder').css('height').replace('px', ''));
         }
-        minimal_needed_height = selected_location_info + parseInt(jQuery('#crud_holder').css('height').replace('px', '')) + 75;
-    } else if (jQuery('#selected_location_info').length) {
-        var selected_location_info = parseInt(jQuery('#selected_location_info').css('height').replace('px', ''));
-        var search_results = 1;
-        if (typeof jQuery('#search_results').css('height') !== 'undefined') {
-            search_results = parseInt(jQuery('#search_results').css('height').replace('px', ''));
+        
+        var mobileheader_height = 0;
+        if (typeof jQuery('#mobileheader').css('height') !== 'undefined') {
+            mobileheader_height = parseInt(jQuery('#mobileheader').css('height').replace('px', ''));
         }
-        var minimal_needed_height = selected_location_info + search_results + 70;
-    } else if (has_crud_holder_element) {
-        if (typeof jQuery('#crud_holder').css('height') == 'undefined') {
-            var minimal_needed_height = 70;
+
+        var content_height = crud_holder_height + mobileheader_height;
+        
+        var window_height = parseInt(jQuery(window).height());
+        
+        return (window_height - content_height);
+    } else { // no mobile view
+        var has_crud_holder_element = false;
+        if (typeof jQuery('#crud_holder') !== 'undefined') {
+            has_crud_holder_element = true;
+        }
+
+        if (Drupal.settings.gojira.page == 'ownlist') {
+            var selected_location_info = 0;
+            if (typeof jQuery('#selected_location_info').css('height') !== 'undefined') {
+                selected_location_info = parseInt(jQuery('#selected_location_info').css('height').replace('px', ''));
+            }
+            minimal_needed_height = selected_location_info + parseInt(jQuery('#crud_holder').css('height').replace('px', '')) + 75;
+        } else if (jQuery('#selected_location_info').length) {
+            var selected_location_info = parseInt(jQuery('#selected_location_info').css('height').replace('px', ''));
+            var search_results = 1;
+            if (typeof jQuery('#search_results').css('height') !== 'undefined') {
+                search_results = parseInt(jQuery('#search_results').css('height').replace('px', ''));
+            }
+            var minimal_needed_height = selected_location_info + search_results + 70;
+        } else if (has_crud_holder_element) {
+            if (typeof jQuery('#crud_holder').css('height') == 'undefined') {
+                var minimal_needed_height = 70;
+            } else {
+                var minimal_needed_height = parseInt(jQuery('#crud_holder').css('height').replace('px', '')) + 70;
+            }
         } else {
-            var minimal_needed_height = parseInt(jQuery('#crud_holder').css('height').replace('px', '')) + 70;
+            minimal_needed_height = 70;
         }
-    } else {
-        minimal_needed_height = 70;
+
+        // default height of the window when there is no extra needed space
+        var default_height = parseInt(jQuery(window).height() - 29);
+
+        // if we need less then we have, just use the space we have.
+        if (minimal_needed_height < default_height) {
+            minimal_needed_height = default_height;
+        }
+
+        return minimal_needed_height;
     }
-
-    // default height of the window when there is no extra needed space
-    var default_height = parseInt(jQuery(window).height() - 29);
-
-    // if we need less then we have, just use the space we have.
-    if (minimal_needed_height < default_height) {
-        minimal_needed_height = default_height;
-    }
-
-    return minimal_needed_height;
 }
 
 // show the first step of the tutorial
 function showTutorial() {
+    var width = '600px';
+    if(onMobileView()){
+        var width = '80%';
+    }
+    
     jQuery.colorbox({
         href: '/?q=ajax/showtutorial',
         closeButton: false,
         escKey: false,
         overlayClose: false,
-        width: '600px',
+        width: width,
         opacity: 0.5,
         onComplete: function () {
             bindTutorialButtons();
-        },
+        }
     });
 }
 // bind the tutorial buttons
@@ -87,7 +123,11 @@ function tutorialButtonClick(button) {
         });
     } else {
         // show next step and bind new buttons
-        jQuery.colorbox({escKey: false, closeButton: false, width: '600px', opacity: 0.5, overlayClose: false, href: "/?q=ajax/showtutorial&step=" + ref, onComplete: function () {
+        var width = '600px';
+        if(onMobileView()){
+            var width = '80%';
+        }
+        jQuery.colorbox({escKey: false, closeButton: false, width: width, opacity: 0.5, overlayClose: false, href: "/?q=ajax/showtutorial&step=" + ref, onComplete: function () {
                 bindTutorialButtons()
             }});
     }
@@ -203,43 +243,38 @@ function bindLabelButtons(selector) {
  * This is the favorite switch on the location detail form
  */
 function bindFavoriteSwitch() {
-    jQuery("span.fav_row button.fav_yes").click(function (e) {
+    jQuery(".in_favorites").click(function (e) {
         e.preventDefault();
-
-        var nid = jQuery(this).closest('div.search_result_wrapper').attr('id').replace('location_', '');
         var button = this;
-
-        // switch to yes
-        jQuery.ajax({
-            url: '/?q=ajax/setfavorite&turn=yes&nid=' + nid,
-            type: 'POST',
-            success: function (data) {
-                jQuery(button).closest('span').removeClass('no');
-                jQuery(button).closest('span').addClass('yes');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                somethingWrongMessage();
-            }
-        });
-    });
-    jQuery("span.fav_row button.fav_no").click(function (e) {
-        e.preventDefault();
-
         var nid = jQuery(this).closest('div.search_result_wrapper').attr('id').replace('location_', '');
-        var button = this;
-
-        // switch to yes
-        jQuery.ajax({
-            url: '/?q=ajax/setfavorite&turn=no&nid=' + nid,
-            type: 'POST',
-            success: function (data) {
-                jQuery(button).closest('span').removeClass('yes');
-                jQuery(button).closest('span').addClass('no');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                somethingWrongMessage();
-            }
-        });
+        
+        if(jQuery(this).hasClass('true')){
+            // turn it off
+            jQuery.ajax({
+                url: '/?q=ajax/setfavorite&turn=off&nid=' + nid,
+                type: 'POST',
+                success: function (data) {
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    somethingWrongMessage();
+                }
+            });
+            jQuery(button).removeClass('true');
+            jQuery(button).addClass('false');
+        }else{
+            // turn it on
+            jQuery.ajax({
+                url: '/?q=ajax/setfavorite&turn=on&nid=' + nid,
+                type: 'POST',
+                success: function (data) {
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    somethingWrongMessage();
+                }
+            });
+            jQuery(button).removeClass('false');
+            jQuery(button).addClass('true');
+        }
     });
 }
 
@@ -307,7 +342,7 @@ function setupMapDefault() {
 
     window.map = new L.Map('map', {zoomControl: false, center: new L.LatLng(Drupal.settings.gojira.latitude, Drupal.settings.gojira.longitude), zoom: Drupal.settings.gojira.zoom});
 
-    new L.Control.Zoom({position: 'bottomleft'}).addTo(window.map);
+    new L.Control.Zoom({position: 'bottomright'}).addTo(window.map);
 
     //L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(window.map);
 
@@ -454,11 +489,11 @@ function bindAfterSearch(bind_list, bind_details) {
         });
         jQuery('div.results_paging a').on('click', function (e) {
             e.preventDefault();
-            jQuery('#search_results div').hide();
+            jQuery('#search_results > div > div.results_paging').hide();
             jQuery('#search_results ul').hide();
             var page_class = jQuery(this).attr('ref');
             jQuery('ul.' + page_class).show();
-            jQuery('div.' + page_class).show();
+            jQuery('div.results_paging.' + page_class).show();
 
             jQuery(window).trigger('resize');
 
@@ -484,6 +519,11 @@ function bindAfterSearch(bind_list, bind_details) {
             e.preventDefault();
             addNewLabel(this);
         });
+        
+        jQuery("a.close_button").click(function(){
+           jQuery("#selected_location_info").html(''); 
+        });
+        
     }
 
     jQuery("input.new_label").click(function () {
@@ -514,7 +554,7 @@ function focusLocation(nid) {
         jQuery("div.leaflet-popup").css('display', 'none');
     }
 
-//    openOverlay();
+    openOverlay();
 
     if (Drupal.settings.gojira.page != 'ownlist' && Drupal.settings.gojira.page != 'showlocation') {
         jQuery('li.active').removeClass('active');
@@ -532,15 +572,16 @@ function focusLocation(nid) {
             jQuery("#selected_location_info").html(data.html);
 
             // move to it
-            //window.map.setView([data.latitude, data.longitude], data.zoom);
-            window.map.panTo([data.latitude, data.longitude]);
-
+            if(!onMobileView()){
+                window.map.panTo([(data.latitude-1), data.longitude]);
+            }
+            
             bindAfterSearch(false, true);
 
             jQuery(window).trigger('resize');
             jQuery('#selected_location_info').removeClass('hidden');
-//            closeOverlay();
-            if((window.markerMapping[nid] !== undefined) && (window.markers._layers[window.markerMapping[nid]] !== undefined)) {
+            closeOverlay();
+            if ((window.markerMapping[nid] !== undefined) && (window.markers._layers[window.markerMapping[nid]] !== undefined)) {
                 window.markers._layers[window.markerMapping[nid]].toggleBouncing();
             }
         },
@@ -1004,8 +1045,91 @@ function reportDoublePractices(nids, uid) {
         url: "/?q=ajax/reportdouble&nids=" + nids,
         type: 'POST',
         success: function (data) {
-            jQuery('#report_double_'+uid).html('<p>Bedankt! We zullen dit controleren.</p>');
+            jQuery('#report_double_' + uid).html('<p>Bedankt! We zullen dit controleren.</p>');
             closeOverlay();
         }
+    });
+}
+
+function bindMobileMenu() {
+    // menu button
+    jQuery('#mobileheader > div > button.tomobilemenu').click(function () {
+        if (jQuery('#mobileheader > div > button.tomobilemenu').hasClass('active')) {
+            jQuery('#mobileheader > div > button.tomobilemenu').removeClass('active');
+            jQuery('#mobilemenu').css('right', '100%');
+        } else {
+            jQuery('#mobileheader > div > button.tomobilemenu').addClass('active');
+            jQuery('#mobilemenu').css('right', '0%');
+        }
+    });
+
+    // link to my map button
+    jQuery('#mobileheader > div > button.mymap').click(function () {
+        window.location = '/mijn-kaart';
+    });
+
+    // link to add location page
+    jQuery('#mobileheader > div > button.suggestlocation').click(function () {
+        window.location = '/suggestlocation';
+    });
+
+
+    //  switch global search on or off for mobile menu
+    jQuery('a.search_global').click(function () {
+        if (jQuery(this).hasClass('on')) {
+            jQuery(this).addClass('off');
+            jQuery(this).removeClass('on');
+            jQuery.ajax({
+                url: '/?q=ajax/switchglobalsearch&turn=off',
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                }
+            });
+        } else {
+            jQuery(this).addClass('on');
+            jQuery(this).removeClass('off');
+            jQuery.ajax({
+                url: '/?q=ajax/switchglobalsearch&turn=on',
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                }
+            });
+        }
+    });
+
+    //  switch favorites search on or off for mobile menu
+    jQuery('a.search_favorite').click(function () {
+        if (jQuery(this).hasClass('on')) {
+            jQuery(this).addClass('off');
+            jQuery(this).removeClass('on');
+            jQuery.ajax({
+                url: '/?q=ajax/switchfavorites&turn=off',
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                }
+            });
+        } else {
+            jQuery(this).addClass('on');
+            jQuery(this).removeClass('off');
+            jQuery.ajax({
+                url: '/?q=ajax/switchfavorites&turn=on',
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                }
+            });
+        }
+    });
+
+    // select another main location
+    jQuery('#select_location_mobile').change(function () {
+        jQuery.ajax({
+            type: "POST",
+            url: '/?q=ajax/picklocation',
+            data: {nid: jQuery(this).val()}
+        });
     });
 }

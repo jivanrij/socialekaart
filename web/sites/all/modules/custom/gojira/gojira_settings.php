@@ -76,8 +76,8 @@ class GojiraSettings
     const IMAGE_STYLE_ADD_SMALL = 'add_small';
     const IMAGE_STYLE_ADD_WIDE = 'add_wide';
     
+    const MAP_ZOOMLEVEL_STREET = 14;
     const MAP_ZOOMLEVEL_REGION = 12;
-    const MAP_ZOOMLEVEL_STREET = 16;
     const MAP_ZOOMLEVEL_COUNTRY = 8;
     
     const SYSTEM_WWW_ROOT_FOLDER = 'wwwroot';

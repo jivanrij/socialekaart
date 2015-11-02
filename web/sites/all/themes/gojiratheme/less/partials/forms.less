@@ -1,0 +1,192 @@
+form{
+    span.form-required{
+        margin-right: 2px;
+    }
+    
+    label[for=edit-favorite]{
+        height:35px;
+    }
+
+    .form-required {
+        color: @color-main;
+    }
+
+    input, textarea, select{  
+        color:@color-main;
+    }
+    .error{
+        border: 1px solid @color-error !important;
+    }
+    input.error,
+    textarea.error {
+        border-width: 1px !important;
+    }
+    button, input, select, textarea {
+        padding-left:5px !important;
+    }
+    .form-item{
+
+        .description {
+            font-size: 11px;
+        }  
+        label{
+            display: block;
+            float: left;
+            font-weight: bold;
+            width: 160px;
+        }
+        textarea {
+            resize: none;
+        }
+
+        label{
+            /*height:15px;*/ 
+            line-height: 18px;
+        }
+        input[type=text], textarea, input[type=password], select{
+            border-color: #dbdbdb;
+            border-style: solid; 
+            border-width: 1px;
+        }
+
+        input[type='text']{
+            -webkit-appearance: none;
+            border-radius: 0;
+        }
+
+        .form-type-radios{
+
+            > label{
+                margin-bottom: 10px;
+                display:block;
+            }
+
+        }
+        .form-type-radio input{
+            margin-right:105px;
+        }
+    }
+
+    div.password-suggestions{
+        width: 360px !important;
+    }
+
+    .has_help{
+        cursor: help;
+        &:after{
+            content: '\f059';
+            color:@color-main;
+            font: normal normal normal 14px/1 FontAwesome;
+            display:inline-block;
+            width:15px;
+        }
+    }
+}
+
+div.wide_form_label label{
+    width:260px !important;
+}
+
+form#gojira-register-form{
+    overflow:hidden;
+    margin-bottom:10px;
+    div.form-item{
+        overflow:hidden;
+    }
+    div.form-item label{
+        float:left;
+        width:150px;
+    }
+    div.form-item input[type=text],
+    div.form-item input[type=password]{
+        float:right;
+        width:220px;
+    }
+    #edit-field-is-doctor{
+        margin-left:5px;
+    }
+}
+
+/* register form */
+form#user-pass{
+    overflow:hidden;
+    margin-bottom:10px;
+    div.form-item{
+        overflow:hidden;
+    }
+    div.form-item{ 
+        label{
+            float:left;
+            width:150px;
+        }
+        input[type=text]{
+            float:right;
+            width:220px;
+        }
+    }
+}
+
+/* user profile form */
+#user-profile-form{
+    input.password-field{
+        width:130px !important;
+    }
+    .password-strength{
+        margin-top:0;
+    }
+    input.password-confirm{
+        width:130px !important;
+    }
+} 
+
+#gojira-to-subscribe-page-form{ 
+    div.form-wrapper{
+        overflow:hidden;
+        input[type=submit]{
+            width: 210px;
+        }
+        span{
+            width: 215px;
+        }
+    }
+}
+
+div.password-strength, div.password-confirm{
+    margin-top: 0;
+    width: 220px;
+}
+
+#mobileheader{
+    form{
+        width:80%;
+        input[type=text]{
+            border:0;
+            .rounded;
+            .noshadow;
+            width:50%;
+            height: 18px;
+            float:left;
+            margin:6px 10px 0 7px;
+            padding:0;
+        }
+
+        > i {
+            padding: 7px 0 0 0;
+            font-size: 16px;
+            color: @color-main;
+            cursor: pointer;
+        }
+    }
+}
+
+@media (max-width: @screen-xs-max) {
+    body.mobile-form{
+        #map{
+            display:none;
+        }
+    }
+    p.show_intro{
+        display:none;
+    }
+}
+

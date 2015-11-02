@@ -168,12 +168,14 @@ function gojira_css_alter(&$css) {
 // boodstrap shizzle
 function gojira_init() {
   global $user;
-
+  
   if(!user_is_logged_in() && (helper::getIEVersion() == 8 OR helper::getIEVersion() == 9))
   {
     drupal_add_js(array('gojira' => array('browserwarning' => 1)), 'setting');
   }
 
+  drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/normalize.css');
+  
   if(!user_is_logged_in()){
     drupal_add_js(drupal_get_path('module', 'gojira') . '/js/frontpage.js');
     drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/frontpage.css');
@@ -233,7 +235,6 @@ function gojira_init() {
     $mobileDetect = new Mobile_Detect();
 
     if($mobileDetect->isTablet()){
-      drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/tablet.css');
       drupal_add_js(array('gojira' => array('tablet' => '1')), 'setting');
     }else{
       drupal_add_js(array('gojira' => array('tablet' => '0')), 'setting');

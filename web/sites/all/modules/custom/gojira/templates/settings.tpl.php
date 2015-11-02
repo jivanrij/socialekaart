@@ -25,7 +25,7 @@
     <?php $f = drupal_get_form('gojira_to_subscribe_page_form'); echo render($f); ?>
 <?php endif; ?>
     
-  <p>
+  <p class="show_intro">
       Klik <a rel="1" onClick="showTutorial();" title="introductie bekijken">hier</a> als u de introductie nog een keer wilt zien.
   </p>
 <?php if($output['multiple_locations']): ?>
@@ -39,7 +39,7 @@
         <tr>
           <td>
               <?php if($location->status == 0): ?>
-                <label style="color:#d8d8d8;" class="has_help" title="<?php echo t('This practice is not usable because of incomplete data.'); ?>"><?php echo $location->title; ?><img style="height: 10px;margin-left:3px;" src="/sites/all/themes/gojiratheme/img/question_red.png" alt=""></label
+                <label style="color:#d8d8d8;" class="has_help" title="<?php echo t('This practice is not usable because of incomplete data.'); ?>"><?php echo $location->title; ?></label
               <?php else: ?>
                 <?php echo $location->title; ?>
               <?php endif; ?>

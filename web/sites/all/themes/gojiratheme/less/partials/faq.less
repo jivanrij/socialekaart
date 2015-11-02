@@ -1,0 +1,27 @@
+
+body.questions{
+    #crud_holder{
+        @media (max-width: @screen-xs-max) {
+            width: auto !important;
+        }
+    }
+}
+
+#faq_sections section{
+    .accordion_content{
+        display:none;
+        font-weight:normal;
+    }
+    h1{
+        cursor: pointer;
+        font-size: 12px;
+        &:hover{
+            color:@color-main;
+        }
+    }
+}
+#faq_question_switch {
+    text-decoration: none !important;
+    font-size: 10px;
+    color: #B7072A;
+}

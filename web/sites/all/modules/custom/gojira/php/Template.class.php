@@ -229,4 +229,50 @@ class Template {
         }
     }
 
+    /**
+     * Get the correct class for the body so the mobile css can hook on to it
+     * 
+     * @return string
+     */
+    public static function getMobileType() {
+
+        // exceptions
+        if ($_GET['q'] == 'ownlist' || $_GET['q'] == 'mijn-kaart') {
+            return 'mobile-search';
+        }
+        if ($_GET['q'] == 'questions') {
+            return 'mobile-form';
+        }
+        if ($_GET['q'] == 'conditions') {
+            return 'mobile-form';
+        }
+
+
+
+        // default return values
+        switch (Template::getView()) {
+            case Template::VIEWTYPE_AJAX:
+                return '';
+                break;
+            case Template::VIEWTYPE_FRONT:
+                return '';
+                break;
+            case Template::VIEWTYPE_CRUD:
+                return 'mobile-form';
+                break;
+            case Template::VIEWTYPE_CRUD_TITLE:
+                return 'mobile-form';
+                break;
+            case Template::VIEWTYPE_SEARCH:
+                return 'mobile-search';
+                break;
+            case Template::VIEWTYPE_BIG:
+                return 'mobile-content';
+                break;
+            case Template::VIEWTYPE_BIG_TITLE:
+                return 'mobile-content';
+                break;
+        }
+    }
+
 }
