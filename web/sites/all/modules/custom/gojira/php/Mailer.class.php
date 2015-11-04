@@ -706,13 +706,16 @@ EOT;
         $aLocations = explode(',',$sLocationIds);
         
         $sHtmlLinks = '';
+        $ids = array();
         foreach($aLocations as $iLocation){
             if(is_numeric($iLocation)){
                 $oLocation = node_load($iLocation);
                 $sHtmlLinks .= '<a href="https://www.socialekaart.care/?loc='.$iLocation.'">'.$oLocation->title.' '.$oLocation->nid.'</a><br />';
+                $ids[] = $iLocation;
             }
         }
         
+        $ids = implode(',', $ids);
         //auto_login_url_create($user->uid, '/?q=loginlink/but/fake', true)
         
         if($sHtmlLinks == ''){
@@ -727,7 +730,9 @@ EOT;
         $aInfo['html'] = <<<EOT
 User {$oUser->name} ({$oUser->uid}) thinks the following locations are double.<br />
 {$sHtmlLinks}<br />
-TODO: check them out and if they are double, merge them.
+TODO: check them out and if they are double, optionally merge them.<br />
+<br />
+<a href="https://www.socialekaart.care/admin/config/system/list_double/?ids_from_mail={$ids}">Double location merge page</a>
 EOT;
         $aInfo['to'][] = array(
             'email' => variable_get('site_mail', 'info@socialekaart.care'),

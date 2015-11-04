@@ -2,6 +2,7 @@
 
 function gojira_inform_form($form, &$form_state) {
     $options[0] = t('Make your choice.');
+    $options['is_double'] = t('This location is double stored.');
     $options['does_not_exist'] = t('This location does not exist (anymore).');
     $options['wrong_title'] = t('The location has a incorrect title.');
     $options['wrong_address'] = t('The address of this location is incorrect.');
