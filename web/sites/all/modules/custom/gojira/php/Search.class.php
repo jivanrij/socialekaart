@@ -21,6 +21,7 @@ class Search {
 
     public static $instance = null;
     public $toMuchResults = false;
+    public $latLonRadiusInfo = null;
 
     /**
      * Lists of characters thac will be replaced in the searchindex & search terms.
@@ -364,9 +365,6 @@ EAT;
                     $foundNodes[$found->nid] = (int) $found->score;
                     $nidsSql .= ',' . $found->nid;
                 }
-//                if ($found->word == $label) {
-//                    $foundNodes[$found->nid] = $foundNodes[$found->nid] + 0.5;
-//                }
             }
         }
 
@@ -399,10 +397,6 @@ EAT;
         if ($force_global || helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) {
             $distance = 20.0;
         }
-
-
-        // add admin link to the result if you are admin
-        
         
         $visible_join = ' join field_data_field_visible_to_other_user on (node.nid = field_data_field_visible_to_other_user.entity_id) join field_data_field_address_city on (node.nid = field_data_field_address_city.entity_id) ';
         $visible_where = " AND field_data_field_visible_to_other_user.field_visible_to_other_user_value = 1 AND field_data_field_visible_to_other_user.bundle = 'location' AND field_data_field_visible_to_other_user.delta = 0 ";
@@ -450,7 +444,9 @@ EOT;
 SELECT 
 node.nid, node.title,
 {$score_sql}
-{$sDistanceField}
+{$sDistanceField},
+Y(point) as lat,
+X(point) as lon
 FROM node 
 {$visible_join} 
 left join group_location_favorite on (group_location_favorite.nid = node.nid)
@@ -463,13 +459,36 @@ WHERE status = 1 AND {$relatedNids}
 GROUP BY node.nid {$order_by_sql} LIMIT {$limit} 
 EOT;
 
-
         $results = db_query($sql, $aParams);
 
         $counter = 0;
         $resultNodes = array();
+        $lonLow = null;
+        $lonHigh = null;
+        $latLow = null;
+        $latHigh = null;
         foreach ($results as $result) {
 
+            if(is_null($latLow) || $result->lat <= $latLow){
+                $latLow = $result->lat;
+            }
+            if(is_null($lonLow) || $result->lon <= $lonLow){
+                $lonLow = $result->lon;
+            }
+            if(is_null($latHigh) || $result->lat >= $latHigh){
+                $latHigh = $result->lat;
+            }
+            if(is_null($lonHigh) || $result->lon >= $lonHigh){
+                $lonHigh = $result->lon;
+            }
+            
+            Search::getInstance()->latLonRadiusInfo = array(
+              'latLow'  => $latLow,
+              'lonLow'  => $lonLow,
+              'latHigh'  => $latHigh,
+              'lonHigh'  => $lonHigh
+            );
+            
             $distance = $result->distance;
             $score = $result->score;
 

@@ -31,6 +31,7 @@ class Template {
         $front_pages[] = 'onesignin/response';
         $front_pages[] = 'user/blank';
         $front_pages[] = 'user';
+        $front_pages[] = 'register';
         $front_pages[] = '/user';
         $front_pages[] = 'practicecheck';
         foreach ($front_pages as $url) {

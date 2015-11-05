@@ -454,7 +454,12 @@ function doSearchCall(searchFor, search_own_area) {
                 window.markerMapping[thisResult.n] = marker._leaflet_id;
             }
 
-            window.map.setView([data.latitude, data.longitude], data.zoom);
+//            window.map.setView([data.latitude, data.longitude], data.zoom);
+
+            window.map.fitBounds([
+              [data.boxInfo.latLow, data.boxInfo.lonLow],
+              [data.boxInfo.latHigh, data.boxInfo.lonHigh]
+            ]);
 
             bindAfterSearch();
 
