@@ -135,17 +135,17 @@ function search() {
     $output['your_location'] = t('This is your location');
 
     // determ the zoom level that is shown after a search result
-//    if(helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)){ // user searches on a country level
-//        if (isset($_GET['tags']) && ($_GET['tags'] == 'ownlist')) { // country level == on, but also filters on favorites
-//          $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_REGION; // show region level
-//        }else if( Search::getInstance()->getCityNameFromTags()){ // country level == on, but also searches with a city name
-//          $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_STREET;// show street level
-//        }else{ // country == on
-//          $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_COUNTRY; // show country level
-//        }
-//    } else { // normal search result
-//        $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_STREET; // show street level
-//    }
+    if(helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)){ // user searches on a country level
+        if (isset($_GET['tags']) && ($_GET['tags'] == 'ownlist')) { // country level == on, but also filters on favorites
+          $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_REGION; // show region level
+        }else if( Search::getInstance()->getCityNameFromTags()){ // country level == on, but also searches with a city name
+          $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_STREET;// show street level
+        }else{ // country == on
+          $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_COUNTRY; // show country level
+        }
+    } else { // normal search result
+        $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_STREET; // show street level
+    }
 
     if (isset($_GET['tags']) && ($_GET['tags'] == 'favorites')) {
         $output['search_favorites'] = 1;

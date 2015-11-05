@@ -23,16 +23,16 @@ function getHeightPx() {
         if (typeof jQuery('#crud_holder').css('height') !== 'undefined') {
             crud_holder_height = parseInt(jQuery('#crud_holder').css('height').replace('px', ''));
         }
-        
+
         var mobileheader_height = 0;
         if (typeof jQuery('#mobileheader').css('height') !== 'undefined') {
             mobileheader_height = parseInt(jQuery('#mobileheader').css('height').replace('px', ''));
         }
 
         var content_height = crud_holder_height + mobileheader_height;
-        
+
         var window_height = parseInt(jQuery(window).height());
-        
+
         return (window_height - content_height);
     } else { // no mobile view
         var has_crud_holder_element = false;
@@ -78,10 +78,10 @@ function getHeightPx() {
 // show the first step of the tutorial
 function showTutorial() {
     var width = '600px';
-    if(onMobileView()){
+    if (onMobileView()) {
         var width = '80%';
     }
-    
+
     jQuery.colorbox({
         href: '/?q=ajax/showtutorial',
         closeButton: false,
@@ -124,7 +124,7 @@ function tutorialButtonClick(button) {
     } else {
         // show next step and bind new buttons
         var width = '600px';
-        if(onMobileView()){
+        if (onMobileView()) {
             var width = '80%';
         }
         jQuery.colorbox({escKey: false, closeButton: false, width: width, opacity: 0.5, overlayClose: false, href: "/?q=ajax/showtutorial&step=" + ref, onComplete: function () {
@@ -247,8 +247,8 @@ function bindFavoriteSwitch() {
         e.preventDefault();
         var button = this;
         var nid = jQuery(this).closest('div.search_result_wrapper').attr('id').replace('location_', '');
-        
-        if(jQuery(this).hasClass('true')){
+
+        if (jQuery(this).hasClass('true')) {
             // turn it off
             jQuery.ajax({
                 url: '/?q=ajax/setfavorite&turn=off&nid=' + nid,
@@ -261,7 +261,7 @@ function bindFavoriteSwitch() {
             });
             jQuery(button).removeClass('true');
             jQuery(button).addClass('false');
-        }else{
+        } else {
             // turn it on
             jQuery.ajax({
                 url: '/?q=ajax/setfavorite&turn=on&nid=' + nid,
@@ -454,13 +454,14 @@ function doSearchCall(searchFor, search_own_area) {
                 window.markerMapping[thisResult.n] = marker._leaflet_id;
             }
 
-//            window.map.setView([data.latitude, data.longitude], data.zoom);
-
-            window.map.fitBounds([
-              [data.boxInfo.latLow, data.boxInfo.lonLow],
-              [data.boxInfo.latHigh, data.boxInfo.lonHigh]
-            ]);
-
+            if (data.boxInfo === null) {
+                window.map.setView([data.latitude, data.longitude], data.zoom);
+            } else {
+                window.map.fitBounds([
+                    [data.boxInfo.latLow, data.boxInfo.lonLow],
+                    [data.boxInfo.latHigh, data.boxInfo.lonHigh]
+                ]);
+            }
             bindAfterSearch();
 
             if (data.single_location) {
@@ -524,11 +525,11 @@ function bindAfterSearch(bind_list, bind_details) {
             e.preventDefault();
             addNewLabel(this);
         });
-        
-        jQuery("a.close_button").click(function(){
-           jQuery("#selected_location_info").html(''); 
+
+        jQuery("a.close_button").click(function () {
+            jQuery("#selected_location_info").html('');
         });
-        
+
     }
 
     jQuery("input.new_label").click(function () {
@@ -577,10 +578,10 @@ function focusLocation(nid) {
             jQuery("#selected_location_info").html(data.html);
 
             // move to it
-            if(!onMobileView()){
+            if (!onMobileView()) {
                 window.map.panTo([data.latitude, data.longitude]);
             }
-            
+
             bindAfterSearch(false, true);
 
             jQuery(window).trigger('resize');

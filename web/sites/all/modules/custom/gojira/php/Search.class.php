@@ -481,7 +481,7 @@ EOT;
             if(is_null($lonHigh) || $result->lon >= $lonHigh){
                 $lonHigh = $result->lon;
             }
-            
+
             Search::getInstance()->latLonRadiusInfo = array(
               'latLow'  => $latLow,
               'lonLow'  => $lonLow,
