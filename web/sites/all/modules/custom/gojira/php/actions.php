@@ -24,7 +24,7 @@ function gojira_theme() {
       'settings_thanks' => array('template' => 'templates/settings_thanks'),
       'gojirasearch' => array('template' => 'templates/gojirasearch'),
       'showlocation' => array('template' => 'templates/showlocation'),
-      'list_double' => array('template' => 'templates/list_double'),
+      'doublelocations' => array('template' => 'templates/doublelocations'),
       'favorites' => array('template' => 'templates/favorites'),
       'passwordthanks' => array('template' => 'templates/passwordthanks'),
 //      'gojirareport_suggested_inactive_locations' => array('template' => 'templates/gojirareport_suggested_inactive_locations'),
@@ -129,7 +129,7 @@ function gojira_menu() {
   
   // ADMIN
   $items['admin/config/system/docu'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'docu', 'title' => t('Gojira documentation'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Documentation of Gojira.'));
-  $items['admin/config/system/list_double'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'list_double', 'title' => t('Double locations in the system'), 'type' => MENU_NORMAL_ITEM);
+  $items['admin/config/system/doublelocations'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'doublelocations', 'title' => t('Double locations in the system'), 'type' => MENU_NORMAL_ITEM);
   $items['admin/config/system/idealreport'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'idealreport', 'title' => t('Gojira ideal report'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Report of the payments'));
   $items['admin/config/system/gojiratools'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'tools', 'title' => t('Gojira tools'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Several tools for Gojira.'));
   $items['admin/config/system/gojiraconfiguration'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'configuration', 'title' => t('Gojira configuration'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Several configurations for Gojira.'));

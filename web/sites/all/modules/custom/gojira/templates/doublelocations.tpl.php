@@ -19,7 +19,7 @@
                     <?php echo $aOneDouble->x; ?> <?php echo $aOneDouble->y; ?>
                 </td>
                 <td style="width:10%;">
-                    <?php echo $aOneDouble->nid; ?>
+                    <a title="bekijk op sociale kaart" target="_new" href="/?loc=<?php echo $aOneDouble->nid; ?>"><?php echo $aOneDouble->nid; ?></a>
                 </td>
                 <td style="width:25%;">
                     <?php echo $aOneDouble->title; ?>

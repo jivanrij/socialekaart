@@ -21,7 +21,7 @@ class Labels {
     public static function getLabels($node) {
         $terms = array();
         $term = field_view_field('node', $node, GojiraSettings::CONTENT_TYPE_LOCATION_VOCABULARY_FIELD);
-        
+
         // get the original terms of the object
         if (isset($term['#object'])) {
             $vocabulairyLoaded = $term['#object'];
@@ -32,7 +32,6 @@ class Labels {
         }
         return $terms;
     }
-
 
     /**
      * Draws all the labels
@@ -59,18 +58,18 @@ class Labels {
 
             $amount_of_likes = self::getLikes($tid, $node->nid);
 
-            if($amount_of_likes > 20){
+            if ($amount_of_likes > 20) {
                 $amount_of_likes = 20; // css is limited to 20 right now
             }
-            
-            $sHtml .= '<div class="score_'.$amount_of_likes.'">'.$term.'</div>';
+
+            $sHtml .= '<div class="score_' . $amount_of_likes . '">' . $term . '</div>';
         }
 
         $sHtml = '<div class="mobile_labels">' . $sHtml . '</div>';
 
         return $sHtml;
     }
-    
+
     /**
      * Draws all the labels
      * 
@@ -81,7 +80,7 @@ class Labels {
         $returnHtml = '';
 
         $terms = self::getLabels($node);
-        
+
         $label_button = '';
         $remove_label = '';
         if (user_access(helper::PERMISSION_MODERATE_LOCATION_CONTENT)) {
@@ -199,7 +198,10 @@ EAT;
         if (is_null($gid)) {
             $gid = Group::getGroupId();
         }
-        db_query("INSERT INTO `group_location_term` (`gid`, `nid`, `tid`) VALUES ({$gid}, {$nid}, {$tid})");
+        
+        if(!self::groupHasLiked($tid, $nid, $gid)){
+            db_query("INSERT INTO `group_location_term` (`gid`, `nid`, `tid`) VALUES ({$gid}, {$nid}, {$tid})");
+        }
     }
 
     /**
@@ -268,13 +270,24 @@ EAT;
 
     /**
      * Saves a label to a location node
+     * 
+     * @param array $labels
+     * @param stdClass $node
+     * @return boolean
+     */
+    public static function addLabel($sLabel, $oNode){
+        return self::addAndScoreLabel($sLabel, $oNode, false);
+    }
+    
+    /**
+     * Saves a label to a location node
      * and gives it one + by the current user
      * 
      * @param array $labels
      * @param stdClass $node
      * @return boolean
      */
-    public static function addAndScoreLabel($sLabel, $oNode) {
+    public static function addAndScoreLabel($sLabel, $oNode, $like = true) {
         if (is_numeric($oNode)) {
             $oNode = node_load($oNode);
         }
@@ -291,18 +304,37 @@ EAT;
 
             foreach ($oNode->field_location_labels[LANGUAGE_NONE] as $aNodeLabel) {
                 if ($aNodeLabel['tid'] == $iTid) {
-                    continue 2;
+                    return true; // stop the function if the location allready has the label
                 }
             }
             $oNode->field_location_labels[LANGUAGE_NONE][count($oNode->field_location_labels[LANGUAGE_NONE])]['tid'] = $iTid;
             node_save($oNode);
         }
 
-        self::like($iTid, $oNode->nid, Group::getGroupId());
-
+        if($like){
+            self::like($iTid, $oNode->nid, Group::getGroupId());
+        }
+        
         Search::getInstance()->updateSearchIndex($oNode->nid);
 
         return true;
+    }
+
+    /**
+     * Gets all the groups that have favorited this locations
+     * 
+     * returns array with combined gid & pid
+     */
+    public function getAllLabelLikesByGroup($nid) {
+        $return = array();
+        $results = db_query('select gid, tid from group_location_term where nid = :nid', array(':nid' => $nid));
+        foreach ($results as $result) {
+            $return[$result->gid+$result->tid] = array(
+                'gid' => $result->gid,
+                'tid' => $result->tid
+            );
+        }
+        return $return;
     }
 
 }
