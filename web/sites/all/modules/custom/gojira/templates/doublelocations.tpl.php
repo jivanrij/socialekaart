@@ -40,7 +40,7 @@
         </table>
     </form>
 <?php endforeach; ?>
-<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
 <script>
     jQuery(".remove_selected_locations").on('click', function (e) {
         e.preventDefault();

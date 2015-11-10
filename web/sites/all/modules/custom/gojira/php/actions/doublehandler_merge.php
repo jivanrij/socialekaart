@@ -1,8 +1,6 @@
 <?php
 
 function doublehandler_merge() {
-
-    return false; // still needs testing
     
     //578675-578682
     $ids = explode('-', filter_input(INPUT_GET, 'ids', FILTER_SANITIZE_ENCODED));

@@ -79,7 +79,7 @@ class Favorite {
         if (array_key_exists($nid, $favoriteLocations)) {
             return;
         } else {
-            if($pid = null){
+            if($pid === null){
                 $oCurrentLocation = Location::getCurrentLocationObjectOfUser();
                 $pid = $oCurrentLocation->nid;
             }            

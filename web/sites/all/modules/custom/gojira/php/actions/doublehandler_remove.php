@@ -5,10 +5,7 @@ function doublehandler_remove() {
 
     foreach ($ids as $nid) {
         if ($nid !== '') {
-            $node = node_load($nid);
-            $node->status = 0;
-            node_save($node);
-            db_query("UPDATE `node` SET `double_checked`=1, `source`='double' WHERE  `nid`=" . $nid);
+            node_delete($nid);
         }
     }
 
