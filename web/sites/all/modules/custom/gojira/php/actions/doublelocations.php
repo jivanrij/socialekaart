@@ -20,12 +20,12 @@ function doublelocations(){
     
     $limitArea = "";
     
-    $rResult = db_query("select X(point) as x, Y(point) as y from node where {$limitArea} type = 'location' and point is not null and double_checked != 1 group by point having count(nid)>1 limit 250")->fetchAll();
+    $rResult = db_query("select X(point) as x, Y(point) as y from node where {$limitArea} type = 'location' and source != 'spider' and point is not null and double_checked != 1 group by point having count(nid)>1 limit 250")->fetchAll();
     
     foreach($rResult as $oResult){
         $x = $oResult->x;
         $y = $oResult->y;
-        $aDoubleLocations[str_replace('.','',$oResult->x.$oResult->y)] = db_query("select nid, title, source, X(point) as x, Y(point) as y from node where status = 1 AND source != 'spider' AND source != 'double' and type = 'location' and X(point) = {$x} and Y(point) = {$y}")->fetchAll();
+        $aDoubleLocations[str_replace('.','',$oResult->x.$oResult->y)] = db_query("select nid, title, source, X(point) as x, Y(point) as y from node where status = 1 AND source != 'spider' and type = 'location' and X(point) = {$x} and Y(point) = {$y}")->fetchAll();
     }
     
   }else{
