@@ -13,7 +13,7 @@
             <?php $adres = Location::getAddressString(node_load($aOneDouble->nid)); ?>
             <tr>
                 <td style="width:5%;">
-                    <input type="checkbox" class="marked_locations" value="<?php echo $aOneDouble->nid; ?>">
+                    <input type="checkbox" class="marked_locations location_mark_<?php echo $key; ?>" value="<?php echo $aOneDouble->nid; ?>">
                 </td>
                 <td style="width:20%;">
                     <?php echo $aOneDouble->x; ?> <?php echo $aOneDouble->y; ?>
@@ -34,7 +34,7 @@
             <?php endforeach; ?>
             <tr>
                 <td colspan="6">
-                    <a href="#" class="remove_selected_locations">verwijderen</a> | <a href="#" class="merge_selected_locations">samenvoegen</a> | <a href="#" class="mark_as_checked">goedkeuren</a>
+                    <a href="#" class="select_all_locations">select all</a> | <a href="#" class="remove_selected_locations">verwijderen</a> | <a href="#" class="merge_selected_locations">samenvoegen</a> | <a href="#" class="mark_as_checked">goedkeuren</a>
                 </td>
             </tr>
         </table>
@@ -44,7 +44,7 @@
 <script>
     jQuery(".remove_selected_locations").on('click', function (e) {
         e.preventDefault();
-        if (confirm('Sure you want to REMOVE?')) {
+
             var button = jQuery(this);
             var key = jQuery(this).closest('form').attr('id').replace('double_key_', '');
 
@@ -67,7 +67,7 @@
                     jQuery(".marked_locations:checked", jQuery(button).closest('table')).remove();
                 }
             });
-        }
+        
     });
     jQuery(".merge_selected_locations").on('click', function (e) {
         e.preventDefault();
@@ -91,7 +91,7 @@
 
 
         if (counter > 1) {
-            if (confirm('Sure you want to MERGE?')) {
+
                 jQuery.ajax({
                     url: "/?q=ajax/doublehandler_merge&ids=" + ids,
                     type: 'POST',
@@ -102,7 +102,7 @@
                     }
                 });
 
-            }
+            
         } else {
             alert('Only one selected.');
         }
@@ -132,6 +132,12 @@
                 jQuery(".marked_locations:checked", jQuery(button).closest('table')).remove();
             }
         });
+    });
+    jQuery(".select_all_locations").on('click', function (e) {
+        e.preventDefault();
+        var key = jQuery(this).closest('form').attr('id').replace('double_key_', '');
+
+        jQuery(".location_mark_"+key).prop('checked', true);
     });
 </script>
 <style>

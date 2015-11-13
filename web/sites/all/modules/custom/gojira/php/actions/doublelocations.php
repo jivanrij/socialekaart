@@ -35,4 +35,5 @@ function doublelocations(){
   }
   
   return theme('doublelocations', array('aDoubleLocations'=>$aDoubleLocations));
+
 }
