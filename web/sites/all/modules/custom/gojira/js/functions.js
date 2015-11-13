@@ -380,13 +380,15 @@ function bindGojirasearch() {
     });
 }
 
-function doSearchCall(searchFor, search_own_area) {
+function doSearchCall(searchFor, search_own_area, add_results_list) {
 
     openOverlay();
 
-    jQuery('#crud_holder').hide();
-    jQuery('#search_result_info').hide();
-
+    if(add_results_list){
+        jQuery('#crud_holder').hide();
+        jQuery('#search_result_info').hide();
+    }
+    
     // force a search in the area of the user
     if (search_own_area) {
         searchFor = searchFor + '&check_city=0';
@@ -412,7 +414,9 @@ function doSearchCall(searchFor, search_own_area) {
                 somethingWrongMessage();
             }
 
-            jQuery('#ajax_search_results').html(data.results_html);
+            if(add_results_list){
+                jQuery('#ajax_search_results').html(data.results_html);
+            }
 
             for (var i = 0; i < data.mapSearchResultsCount; i++) {
 
@@ -506,7 +510,7 @@ function bindAfterSearch(bind_list, bind_details) {
         });
         jQuery('#search_own_area').click(function (e) {
             e.preventDefault();
-            doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 1);
+            doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 1, 1);
         });
     }
 
@@ -574,9 +578,13 @@ function focusLocation(nid) {
         type: 'POST',
         dataType: 'json',
         success: function (data) {
-
-            jQuery("#selected_location_info").html(data.html);
-
+            
+            if (typeof jQuery('#search_result_info') !== 'undefined') {
+                jQuery("#ajax_search_results").html('<div id="search_result_info"><div id="selected_location_info" class="rounded">'+data.html+'</div></div>');
+            }else{
+                jQuery("#selected_location_info").html(data.html);
+            }         
+            
             // move to it
             if (!onMobileView()) {
                 window.map.panTo([data.latitude, data.longitude]);
@@ -758,7 +766,7 @@ function bindGlobal() {
                 success: function (data) {
                     //window.map.setView([data.latitude, data.longitude], data.zoom);
                     if (jQuery('#gojirasearch_search_term').val() != '') {
-                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
+                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0, 1);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -775,7 +783,7 @@ function bindGlobal() {
                 success: function (data) {
 //                    window.map.setView([data.latitude, data.longitude], data.zoom);
                     if (jQuery('#gojirasearch_search_term').val() != '') {
-                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
+                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0, 1);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -796,7 +804,7 @@ function bindGlobal() {
                 type: 'POST',
                 success: function (data) {
                     if (jQuery('#gojirasearch_search_term').val() != '') {
-                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
+                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0, 1);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -811,7 +819,7 @@ function bindGlobal() {
                 type: 'POST',
                 success: function (data) {
                     if (jQuery('#gojirasearch_search_term').val() != '') {
-                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
+                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0, 1);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -932,13 +940,13 @@ function bindOwnlist() {
                 jQuery(button).addClass('active');
 
                 // remove current markers
-                window.map.removeLayer(window.markers);
+                //window.map.removeLayer(window.markers);
                 // create new marker layer
-                window.markers = new L.FeatureGroup();
-                window.map.addLayer(window.markers);
+                //window.markers = new L.FeatureGroup();
+                //window.map.addLayer(window.markers);
                 // add layer
-                var marker = L.marker([data.latitude, data.longitude], {icon: window.redIcon}).addTo(window.map);
-                window.markers.addLayer(marker);
+                //var marker = L.marker([data.latitude, data.longitude], {icon: window.redIcon}).addTo(window.map);
+                //window.markers.addLayer(marker);
 
                 // move to it
                 window.map.setView([data.latitude, (data.longitude - 0.004)], data.zoom);
@@ -956,6 +964,8 @@ function bindOwnlist() {
             }
         });
     });
+    
+    doSearchCall('ownlist', 0, 0);
 }
 
 /**
