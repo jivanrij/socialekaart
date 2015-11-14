@@ -732,7 +732,7 @@ User {$oUser->name} ({$oUser->uid}) thinks the following locations are double.<b
 {$sHtmlLinks}<br />
 TODO: check them out and if they are double, optionally merge them.<br />
 <br />
-<a href="https://www.socialekaart.care/admin/config/system/list_double/?ids_from_mail={$ids}">Double location merge page</a>
+<a href="https://www.socialekaart.care/admin/config/system/doublelocations/?ids_from_mail={$ids}">Double location merge page</a>
 EOT;
         $aInfo['to'][] = array(
             'email' => variable_get('site_mail', 'info@socialekaart.care'),

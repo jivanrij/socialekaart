@@ -5,6 +5,10 @@
     Verwijderen: De zorgverlener zal in-actief gezet worden.<br />
     Samenvoegen: De geselecteerde zorgverleners zullen samengevoegd worden.<br />
 </p>
+<p>
+    <b>Filteren op een vierkant waar een specifiek gebied in valt:</b>
+    <a href="/admin/config/system/doublelocations?map=hw">Hoeksche Waard</a><br />
+</p>
 <?php foreach ($aDoubleLocations as $key => $aDoubleLocation): ?>
     <form id="double_key_<?php echo $key; ?>">
         <hr />
@@ -40,6 +44,7 @@
         </table>
     </form>
 <?php endforeach; ?>
+<p><?php echo $query; ?></p>
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
 <script>
     jQuery(".remove_selected_locations").on('click', function (e) {

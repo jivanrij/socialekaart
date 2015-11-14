@@ -380,12 +380,14 @@ function bindGojirasearch() {
     });
 }
 
-function doSearchCall(searchFor, search_own_area, add_results_list) {
+function doSearchCall(searchFor, search_own_area) {
+
+console.log(1);
 
     openOverlay();
 
-    if(add_results_list){
-        jQuery('#crud_holder').hide();
+    if(searchFor == 'ownlist'){
+        //jQuery('#crud_holder').hide();
         jQuery('#search_result_info').hide();
     }
     
@@ -414,7 +416,7 @@ function doSearchCall(searchFor, search_own_area, add_results_list) {
                 somethingWrongMessage();
             }
 
-            if(add_results_list){
+            if(searchFor != 'ownlist'){
                 jQuery('#ajax_search_results').html(data.results_html);
             }
 
@@ -510,7 +512,7 @@ function bindAfterSearch(bind_list, bind_details) {
         });
         jQuery('#search_own_area').click(function (e) {
             e.preventDefault();
-            doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 1, 1);
+            doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 1);
         });
     }
 
@@ -579,9 +581,13 @@ function focusLocation(nid) {
         dataType: 'json',
         success: function (data) {
             
-            if (typeof jQuery('#search_result_info') !== 'undefined') {
+//            console.log(jQuery('#search_result_info'));
+            
+            if (typeof jQuery('#search_result_info') === 'undefined') {
+//                console.log(1);
                 jQuery("#ajax_search_results").html('<div id="search_result_info"><div id="selected_location_info" class="rounded">'+data.html+'</div></div>');
             }else{
+//                console.log(2);
                 jQuery("#selected_location_info").html(data.html);
             }         
             
@@ -766,7 +772,7 @@ function bindGlobal() {
                 success: function (data) {
                     //window.map.setView([data.latitude, data.longitude], data.zoom);
                     if (jQuery('#gojirasearch_search_term').val() != '') {
-                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0, 1);
+                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -783,7 +789,7 @@ function bindGlobal() {
                 success: function (data) {
 //                    window.map.setView([data.latitude, data.longitude], data.zoom);
                     if (jQuery('#gojirasearch_search_term').val() != '') {
-                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0, 1);
+                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -804,7 +810,7 @@ function bindGlobal() {
                 type: 'POST',
                 success: function (data) {
                     if (jQuery('#gojirasearch_search_term').val() != '') {
-                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0, 1);
+                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -819,7 +825,7 @@ function bindGlobal() {
                 type: 'POST',
                 success: function (data) {
                     if (jQuery('#gojirasearch_search_term').val() != '') {
-                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0, 1);
+                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -965,7 +971,7 @@ function bindOwnlist() {
         });
     });
     
-    doSearchCall('ownlist', 0, 0);
+    doSearchCall('ownlist', 0);
 }
 
 /**
