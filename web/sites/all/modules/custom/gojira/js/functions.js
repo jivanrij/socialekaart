@@ -382,14 +382,14 @@ function bindGojirasearch() {
 
 function doSearchCall(searchFor, search_own_area) {
 
-console.log(1);
-
     openOverlay();
 
     if(searchFor == 'ownlist'){
         //jQuery('#crud_holder').hide();
         jQuery('#search_result_info').hide();
     }
+    
+    jQuery('#locationset_wrapper').hide();
     
     // force a search in the area of the user
     if (search_own_area) {

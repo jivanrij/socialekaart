@@ -9,6 +9,7 @@ class Template {
     const VIEWTYPE_BIG = 'big'; // big dynamic pages, same a contant_big but with the page title in it
     const VIEWTYPE_SEARCH = 'search';
     const VIEWTYPE_BIG_TITLE = 'big_title'; // random content on a wide page without a global title
+    const VIEWTYPE_LOCATIONSET = 'locationset'; // just content, with a title
 
     /**
      * Gives you the type of rendering needed for the page
@@ -98,6 +99,9 @@ class Template {
             $nid = arg(1);
             $node = node_load($nid);
             if (isset($node->type)) {
+                if ($node->type == GojiraSettings::CONTENT_TYPE_SET_OF_LOCATIONS) {
+                    return Template::VIEWTYPE_LOCATIONSET;
+                }
                 if ($node->type == GojiraSettings::CONTENT_TYPE_PAGE) {
                     return Template::VIEWTYPE_CRUD_TITLE;
                 }

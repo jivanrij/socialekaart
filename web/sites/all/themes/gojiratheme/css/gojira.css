@@ -277,8 +277,52 @@ a.help_link_content:hover {
   padding: 0;
   /*vertical-align: top;*/
   width: 100px;
-  background-color: #fff;
+  background-color: #ffffff;
   border-radius: 0;
+}
+#header #header_options .maplist {
+  float: right;
+  padding: 0;
+  text-align: left;
+  list-style: none;
+  margin: 0;
+  display: relative;
+}
+#header #header_options .maplist > li {
+  display: relative;
+}
+#header #header_options .maplist > li > a {
+  margin-left: 10px;
+  line-height: 30px;
+  cursor: pointer;
+  display: inline-block;
+}
+#header #header_options .maplist > li > a:before {
+  color: #ffffff;
+  font: normal normal normal 14px/1 FontAwesome;
+  display: inline-block;
+  width: 15px;
+  content: "\f278";
+}
+#header #header_options .maplist > li > ul {
+  position: absolute;
+  top: 24px;
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 4px 0 0 0;
+  z-index: 150;
+  background-color: #b7072a;
+}
+#header #header_options .maplist > li > ul > li > a {
+  margin: 0 10px 0 10px;
+}
+#header #header_options .maplist > li > ul > li > a.active,
+#header #header_options .maplist > li > ul > li > a:hover {
+  text-decoration: underline;
+}
+#header #header_options .maplist > li:hover > ul {
+  display: block;
 }
 #header ul.menu {
   display: inline-block;
@@ -300,7 +344,6 @@ a.help_link_content:hover {
   height: 27px;
   display: block;
 }
-#header ul.menu li a.active,
 #header ul.menu li a:hover {
   text-decoration: underline;
 }
@@ -325,12 +368,12 @@ a.help_link_content:hover {
   display: block;
   padding: 2px 5px 2px 5px;
 }
+#header ul.menu li ul.menu li a.active {
+  text-decoration: underline;
+}
 #header ul.menu li:hover ul.menu {
   visibility: visible;
   display: block;
-}
-#header ul.menu li.active-trail > a {
-  text-decoration: underline;
 }
 #header > ul.menu > li {
   width: 100px;
@@ -1550,6 +1593,22 @@ body.conditions #crud_holder #conditions_holder {
     box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
     overflow: hidden;
   }
+}
+#locationset_wrapper {
+  left: 10px;
+  position: absolute;
+  top: 76px;
+  width: 500px;
+  z-index: 100;
+  background-color: white;
+  overflow: hidden;
+  padding: 0 10px 10px 10px;
+}
+#locationset_wrapper > h2 {
+  padding-top: 10px;
+}
+#locationset_wrapper > p {
+  font-weight: 100;
 }
 /* buttons */
 .rounded {

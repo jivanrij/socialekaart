@@ -19,6 +19,8 @@ class GojiraSettings
     const CONTENT_TYPE_PAGE = 'page'; // a content page
     const CONTENT_TYPE_PAGE_BIG = 'page_big'; // a content page with a wide text area
     const CONTENT_TYPE_FAQ = 'faq'; // a content page with a wide text area
+    const CONTENT_TYPE_POSTCODEAREA = 'postcodearea'; // postcode area to link locationsets with
+    const CONTENT_TYPE_SET_OF_LOCATIONS = 'zorgverlenersset'; // set of locations
 
     // LOCATION FIELDS
     const CONTENT_TYPE_TEXT_FIELD = 'field_text';
@@ -48,6 +50,13 @@ class GojiraSettings
     const CONTENT_TYPE_ADD_SHOWFROM_FIELD = 'field_showfrom'; // timestamp
     const CONTENT_TYPE_ADD_SHOWUNTILL_FIELD = 'field_showuntill'; // timestamp
     const CONTENT_TYPE_ADD_URL_FIELD = 'field_url'; // url to link to
+    
+    // zorgverlenersset FIELDS
+    const CONTENT_TYPE_LOCATIONSET_POSTCODES = 'field_postcodeareas';
+    const CONTENT_TYPE_LOCATIONSET_LOCATIONS = 'field_setlocations';
+    
+    // postcodearea FIELDS
+    const CONTENT_TYPE_POSTCODE_NUMBER = 'field_postcodenumber';
     
     // vocabulairy related fields
     const VOCABULARY_LOCATION = 'gojira_labels';
