@@ -18,8 +18,14 @@
                             <a title="<?php echo t('Your maps'); ?>" href="<?php echo url('ownlist'); ?>"></a>
                             <ul>
                                 <li><a href="<?php echo url('ownlist'); ?>">Mijn kaart</a></li>
+                                <li class="subtitle">(<?php echo t('Your own Social Map'); ?>)</li>
                                 <?php foreach(Locationsets::getInstance()->getMapSetsForCurrentUser() as $map): ?>
                                     <li><a href="<?php echo url('node/'. $map->nid); ?>"><?php echo $map->title; ?></a></li>
+                                    <?php if(trim(helper::value($map, GojiraSettings::CONTENT_TYPE_LOCATIONSET_SUBTITLE)) !== ''): ?>
+                                        <li class="subtitle">(<?php echo helper::value($map, GojiraSettings::CONTENT_TYPE_LOCATIONSET_SUBTITLE); ?>)</li>
+                                    <?php endif; ?>
+                                    
+                                    
                                 <?php endforeach; ?>
                             </ul>
                         <?php else: ?>

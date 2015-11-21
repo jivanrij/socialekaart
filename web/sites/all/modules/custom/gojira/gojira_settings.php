@@ -54,6 +54,7 @@ class GojiraSettings
     // zorgverlenersset FIELDS
     const CONTENT_TYPE_LOCATIONSET_POSTCODES = 'field_postcodeareas';
     const CONTENT_TYPE_LOCATIONSET_LOCATIONS = 'field_setlocations';
+    const CONTENT_TYPE_LOCATIONSET_SUBTITLE = 'field_subtitel';
     
     // postcodearea FIELDS
     const CONTENT_TYPE_POSTCODE_NUMBER = 'field_postcodenumber';
