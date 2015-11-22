@@ -20,7 +20,7 @@ class GojiraSettings
     const CONTENT_TYPE_PAGE_BIG = 'page_big'; // a content page with a wide text area
     const CONTENT_TYPE_FAQ = 'faq'; // a content page with a wide text area
     const CONTENT_TYPE_POSTCODEAREA = 'postcodearea'; // postcode area to link locationsets with
-    const CONTENT_TYPE_SET_OF_LOCATIONS = 'zorgverlenersset'; // set of locations
+    const CONTENT_TYPE_SET_OF_LOCATIONS = 'locationsset'; // set of locations
 
     // LOCATION FIELDS
     const CONTENT_TYPE_TEXT_FIELD = 'field_text';

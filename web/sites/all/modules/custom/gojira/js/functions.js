@@ -385,11 +385,13 @@ function doSearchCall(searchFor, search_own_area) {
     openOverlay();
 
     if(searchFor == 'ownlist'){
-        //jQuery('#crud_holder').hide();
         jQuery('#search_result_info').hide();
+    }else{
+        jQuery('#crud_holder').hide();
     }
-    
     jQuery('#locationset_wrapper').hide();
+    
+    
     
     // force a search in the area of the user
     if (search_own_area) {

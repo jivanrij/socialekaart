@@ -208,6 +208,12 @@ Een doctor met abonnement zonder verlenging (een extra betaalde periode die nog 
     <li>Controle op abonnementen, trekt abonnementen in & stuurt waarschuwingen voor het bijna verlopen van abonnementen</li>
     <li>Verwijder SSO gebruikers die niet akkoort zijn met de algemene voorwaarden</li>
 </ul>
+<h2>
+    Locatiesets - Aparte kaarten instellen voor postcodegebieden
+</h2>
+<p>
+    Het is voor de admin mogelijk om aparte sets aan kaarten in te stellen. Dit kan hij doen via een locationsset node. Hier kunnen verschillende locaties aan gelinkt worden. Een locationsset kan gelinkt worden aan een postcodegebied. Als het postcodegebied van de geselecteerde praktijk van de gebruiker overeenkomt met de het postcodegebied waar de locationsset aan hangt zal de gebruiker (als hij de <a href="/admin/people/permissions">rechten</a> heeft) deze weergegeven krijgen in een lijstje onder de kaart knop in de header.
+</p>
 <style>
     h2{
         font-size:14px;

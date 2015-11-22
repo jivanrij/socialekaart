@@ -8,7 +8,7 @@
         <ul>
             <?php foreach($aLocationsets as $oLocationset): ?>
                 <li>
-                    <?php echo Category::getCategoryName($oLocationset['node']).' / '.$oLocationset['node']->title; ?>
+                    <?php echo Category::getCategoryName($oLocationset).' / '.$oLocationset->title; ?>
                 </li>
             <?php endforeach; ?>
         </ul>

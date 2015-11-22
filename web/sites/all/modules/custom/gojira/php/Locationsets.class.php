@@ -18,7 +18,10 @@ class Locationsets {
      * @return boolean
      */
     public function userHasRightToLocationssets() {
-        return true;
+        if (user_access(helper::PERMISSION_LOCATIONSETS)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -47,12 +50,21 @@ class Locationsets {
      */
     public function getLocations(){
         $oSet = $this->getCurrentLocationset();
+        
+        $aReturn = array();
+        
         if($oSet){
             $sFieldname = GojiraSettings::CONTENT_TYPE_LOCATIONSET_LOCATIONS;
             $aField = $oSet->$sFieldname;
-            return $aField[LANGUAGE_NONE];
+            foreach($aField[LANGUAGE_NONE] as $location){
+                $oNode = node_load($location['nid']);
+                if($oNode){
+                    $aReturn[] = $oNode;
+                }
+            }
         }
-        return array();
+        
+        return $aReturn;
     }
     
     /**
@@ -70,7 +82,7 @@ class Locationsets {
                 if(is_numeric($sPostcodeNumber)){
                     $iPostcodearea = db_query("select field_data_field_postcodenumber.entity_id as nid from node join field_data_field_postcodenumber on (field_data_field_postcodenumber.entity_id = node.nid) where node.type = 'postcodearea' and field_data_field_postcodenumber.bundle = 'postcodearea' and field_data_field_postcodenumber.field_postcodenumber_value = {$sPostcodeNumber}")->fetchField();
                     if(is_numeric($iPostcodearea)){
-                        $rLocationsets = db_query("select entity_id as nid from field_data_field_postcodeareas where bundle = 'zorgverlenersset' and field_postcodeareas_nid = {$iPostcodearea}")->fetchAll();
+                        $rLocationsets = db_query("select entity_id as nid from field_data_field_postcodeareas where bundle = 'locationsset' and field_postcodeareas_nid = {$iPostcodearea}")->fetchAll();
                     }
                 }
                 foreach ($rLocationsets as $oLocationset) {
