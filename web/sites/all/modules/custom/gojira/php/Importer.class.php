@@ -618,7 +618,60 @@ class Importer {
         $sql = "DELETE FROM `node` WHERE  `type`='{$type}'";
         db_query($sql);
     }
+    
+    public static function removeZidbLocations() {
+        return false;
+        $result = db_query("select nid from node where source = 'zidb'");
+        foreach ($result as $r) {
+            node_delete($r->nid);
+            echo 'remove node: '.$r->nid.'<br />';
+        }
+        self::cleanFieldTables();
+    }
+    
+    public static function mergeZidbLocationsWithEchother() {
+        return false;
+        $results_original = db_query("select labels, postcode, title, city, street, number, category from practices_backup_original");
+        
+        foreach($results_original as $result_original){
+           
+            $key = str_replace(' ','',$result_original->title.$result_original->city.$result_original->street.$result_original->number.$result_original->category);
+            
+            echo $key.'<br />';
 
+            $result = db_query("select id, labels, postcode, title, city, street, number, category from practices_backup where uid = '{$key}'")->fetchObject();
+            if($result){
+                // merge to existing location
+                if($result_original->labels !== $result->labels){
+                    $first = explode('|', $result_original->labels);
+                    $second = explode('|', $result->labels);
+                    $third = array_merge($first, $second);
+                    $clean = array();
+                    foreach($third as $thirdVal){
+                        if(trim($thirdVal) != ''){
+                            $clean[] = $thirdVal;
+                        }
+                    }
+                    $forth = implode('|', $clean);
+                    db_query("UPDATE `practices_backup` SET `labels`='{$forth}' WHERE  `id`={$result->id}");
+                }
+            }else{
+                // add to new table
+                db_query("INSERT INTO `practices_backup` (`uid`, `title`, `city`, `street`, `number`, `postcode`, `labels`, `category`, `source`) VALUES ('".$key."', '".$result_original->title."', '".$result_original->city."', '".$result_original->street."', '".$result_original->number."', '".$result_original->postcode."', '".$result_original->labels."', '".$result_original->category."', 'zidb')");
+            }
+        }
+    }
+    
+    public static function setCoordinatesOnZIBD(){
+        return false;
+        $results = db_query("select id, labels, postcode, title, city, street, number, category from practices_backup where latitude is null and longitude is null");
+        foreach($results as $result){
+            $location = Location::getLocationForAddress($result->street.' '.$result->number.','.$result->postcode.' '.$result->city);
+            if($location){
+                db_query("UPDATE `practices_backup` SET `longitude`='{$location->longitude}', `latitude`='{$location->latitude}' WHERE  `id`={$result->id}");
+            }
+        }
+    }
 }
 
 function gojira_set_encode($str) {

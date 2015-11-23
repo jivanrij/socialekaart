@@ -428,8 +428,7 @@ function gojira_cron() {
 
   if(variable_get('cron_restore_backup_locations')){
     helper::restoreBackup(200, true);
-  }
-  
+  } 
 }
 
 function gojira_form_alter(&$form, &$form_state, $form_id){
