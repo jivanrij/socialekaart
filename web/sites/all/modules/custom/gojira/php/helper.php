@@ -67,11 +67,11 @@ class helper {
     public static function restoreBackup($amount, $cron = false){
         $rLocations = db_query("select id, source, title, telephone, city, street, number, postcode, category, email, longitude, latitude, url, labels from practices_backup where import_it = 1 limit {$amount}");
         foreach ($rLocations as $o) {
-            $aLabels = explode('|', $o->labels);
+            $aLabels = explode('|', strtolower($o->labels));
             if(!$aLabels){
                 $aLabels = array();
             }
-            Importer::restoreLocationFromBackup($o->source, $o->title, $o->telephone, $o->city, $o->street, $o->number, $o->postcode, $o->category, $o->email, $o->longitude, $o->latitude, $o->url, $aLabels, $o->id);
+            Importer::restoreLocationFromBackup($o->source, $o->title, $o->telephone, $o->city, $o->street, $o->number, $o->postcode, strtolower($o->category), $o->email, $o->longitude, $o->latitude, $o->url, $aLabels, $o->id);
         }
         if(!$cron){
             drupal_set_message(t('Restored some locations!'), 'status');
