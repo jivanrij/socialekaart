@@ -757,7 +757,7 @@ function bindGlobal() {
     bindAutocompleteAllTags("#gojirasearch_search_term");
 
     // prevent the menu with a dropdown option to do something on a click
-    jQuery('ul.menu li.expanded > a').click(function (e) {
+    jQuery('ul.menu li.expanded > a, #maps_hover_icon').click(function (e) {
         e.preventDefault();
     });
 
@@ -773,6 +773,7 @@ function bindGlobal() {
                 dataType: 'json',
                 success: function (data) {
                     //window.map.setView([data.latitude, data.longitude], data.zoom);
+                    jQuery("#gojirasearch_search_term").attr('placeholder','Zoek landelijk');
                     if (jQuery('#gojirasearch_search_term').val() != '') {
                         doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
                     }
@@ -790,6 +791,7 @@ function bindGlobal() {
                 dataType: 'json',
                 success: function (data) {
 //                    window.map.setView([data.latitude, data.longitude], data.zoom);
+                    jQuery("#gojirasearch_search_term").attr('placeholder','Zoek in de regio');
                     if (jQuery('#gojirasearch_search_term').val() != '') {
                         doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
                     }

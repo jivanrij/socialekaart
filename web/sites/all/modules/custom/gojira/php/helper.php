@@ -482,6 +482,20 @@ class helper {
     }
     
     /**
+     * Gives true if the global search is turned on, else false
+     * 
+     * @global stdClass $user
+     * @return boolean
+     */
+    public static function globalSearchCheck(){
+        global $user;
+        if(helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)){
+            return true;
+        }
+        return false;
+    }
+    
+    /**
      * Get's the tags from the query string
      * 
      * return Array

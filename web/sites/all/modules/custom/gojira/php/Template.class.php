@@ -9,7 +9,7 @@ class Template {
     const VIEWTYPE_BIG = 'big'; // big dynamic pages, same a contant_big but with the page title in it
     const VIEWTYPE_SEARCH = 'search';
     const VIEWTYPE_BIG_TITLE = 'big_title'; // random content on a wide page without a global title
-    const VIEWTYPE_LOCATIONSET = 'locationset'; // just content, with a title
+    const VIEWTYPE_LOCATIONSSET = 'locationsset'; // just content, with a title
 
     /**
      * Gives you the type of rendering needed for the page
@@ -79,7 +79,6 @@ class Template {
         $crud_pages[] = 'wronginfo';
         $crud_pages[] = 'inform';
         $crud_pages[] = 'informthanks';
-        $crud_pages[] = 'ownlist';
         $crud_pages[] = 'subscribe';
         $crud_pages[] = 'idealpay';
         $crud_pages[] = 'idealreturn';
@@ -100,7 +99,7 @@ class Template {
             $node = node_load($nid);
             if (isset($node->type)) {
                 if ($node->type == GojiraSettings::CONTENT_TYPE_SET_OF_LOCATIONS) {
-                    return Template::VIEWTYPE_LOCATIONSET;
+                    return Template::VIEWTYPE_LOCATIONSSET;
                 }
                 if ($node->type == GojiraSettings::CONTENT_TYPE_PAGE) {
                     return Template::VIEWTYPE_CRUD_TITLE;
@@ -119,7 +118,14 @@ class Template {
                 }
             }
         }
-
+        
+        $locationsset_pages[] = 'ownlist';
+        foreach ($locationsset_pages as $url) {
+            if ($_GET['q'] == $url) {
+                return Template::VIEWTYPE_LOCATIONSSET;
+            }
+        }
+        
         // custom pages that need to be rendered like the page big nodes
         $big_pages[] = 'locationcheck';
         $big_pages[] = 'conditions';

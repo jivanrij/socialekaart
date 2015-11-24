@@ -27,7 +27,7 @@ switch(Template::getView()){
     echo $overlay;
     include(drupal_get_path('theme', 'gojiratheme') . '/_page_big_title.tpl.php');
     break;
-  case Template::VIEWTYPE_LOCATIONSET:
+  case Template::VIEWTYPE_LOCATIONSSET:
     echo $overlay;
     include(drupal_get_path('theme', 'gojiratheme') . '/_page_locationset.tpl.php');
     break;
