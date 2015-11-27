@@ -20,7 +20,7 @@ jQuery(function () {
         if (Drupal.settings.gojira.page == 'inform') {
             bindInformForm();
         }
-        
+
         if (Drupal.settings.gojira.page == 'ownlist') {
             bindOwnlist();
         }
@@ -29,7 +29,11 @@ jQuery(function () {
             bindGojirasearch();
             doSearchCall('favorites', 0);
         }
-        
+
+        if (Drupal.settings.gojira.page == 'locationsset') {
+            bindLocationsset();
+        }
+
         if (Drupal.settings.gojira.page == 'showlocation') {
             bindGojirasearch();
         }
@@ -60,7 +64,7 @@ jQuery(function () {
             if(onMobileView()){
                 jQuery('#map').css('height', getHeightPx()+5);
                 jQuery('#map').css('top', (parseInt(jQuery(window).height()) - getHeightPx())-5);
-                jQuery('#map').css('width', '100%');                
+                jQuery('#map').css('width', '100%');
             }else{
                 jQuery('#map').css('height', getHeightPx());
                 jQuery('#map').css('top', 0);

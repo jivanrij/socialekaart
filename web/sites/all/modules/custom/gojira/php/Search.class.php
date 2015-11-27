@@ -39,11 +39,10 @@ class Search {
 
     /**
      * Gives you the searchresults html output
-     * 
+     *
      * @param type $output
      */
     public function getResultListHtml($output) {
-
         $pageLength = $output['page_length'];
         $counter = 1;
         $previousPage = 0;
@@ -235,6 +234,7 @@ EAT;
         $email = helper::value($foundNode, GojiraSettings::CONTENT_TYPE_EMAIL_FIELD);
         $note = helper::value($foundNode, GojiraSettings::CONTENT_TYPE_NOTE_FIELD);
 
+
         if (trim($url) != '') {
             $url = '<div class="url"><a target="_new" href="http://' . $url . '" title="' . $foundNode->title . '">' . $url . '</a></div>';
         }
@@ -244,18 +244,19 @@ EAT;
         }
 
         $oCurrentLocation = Location::getCurrentLocationObjectOfUser();
-        
+
         $sFavorites = '';
         if (user_access(helper::PERMISSION_PERSONAL_LIST)) {
             $sOnList = 'false';
             if(Favorite::getInstance()->isFavorite($foundNode->nid, $oCurrentLocation->nid)){
-                $sOnList = 'true';    
+                $sOnList = 'true';
             }
             $sFavorites = '<div class="favorites_switch"><a class="in_favorites '.$sOnList.'" title="Bepaal of deze zorgverlener in ow kaart zit.">In <i>Mijn kaart</i></a></div>';
         }
 
         $category_txt = '';
         $category_nid = helper::value($foundNode, GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD, 'nid');
+
         if (is_numeric($category_nid)) {
             $category_node = node_load($category_nid);
             $category_txt = '<p>' . $category_node->title . '</p>';
@@ -298,14 +299,14 @@ EAT;
 
     /**
      * Does the tags search
-     * 
+     *
      * @param array $labels
      */
     public function doSearch($labels, $check_city = true, $force_global = false, $force_favorites = false) {
 
         global $user;
         $oUser = user_load($user->uid);
-        
+
         $found = array();
         $foundNodes = array();
         $sCityLabel = null;
@@ -320,7 +321,7 @@ EAT;
         $limit = variable_get('SEARCH_MAX_RESULT_AMOUNT') + 1; // let's add one to the result, so we can check if we have more results the the max, afterwards remove it
 
         $aParams = array();
-        
+
         // make from jantje, piet en klaas -=> jantje, piet, en, klaas
         $labels = explode(' ', implode(' ', $labels));
 
@@ -339,7 +340,7 @@ EAT;
                 $sCityLabel = $label;
             }
         }
-       
+
         $lowerlabels = helper::cleanArrayWithBlacklist($lowerlabels);
 
         $labels = $lowerlabels;
@@ -394,12 +395,12 @@ EAT;
 
 //        $order_by_sql = 'ORDER BY (score-distance) desc';
         $order_by_sql = 'ORDER BY score desc, distance asc';
-        
+
         $distance = 0.09;
         if ($force_global || helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) {
             $distance = 20.0;
         }
-        
+
         $visible_join = ' join field_data_field_visible_to_other_user on (node.nid = field_data_field_visible_to_other_user.entity_id) join field_data_field_address_city on (node.nid = field_data_field_address_city.entity_id) ';
         $visible_where = " AND field_data_field_visible_to_other_user.field_visible_to_other_user_value = 1 AND field_data_field_visible_to_other_user.bundle = 'location' AND field_data_field_visible_to_other_user.delta = 0 ";
 
@@ -412,7 +413,7 @@ EAT;
         }
 
         $filter = " AND node.source != 'spider' ";
-        
+
         // query get's all the nodes in radius, maybe only from favorites, but surly visible, and filters them on the nodes with the related tags
 
         $iMinLongitude = ($location->longitude - ($distance * 2));
@@ -441,22 +442,22 @@ $sDistanceField = <<<EOT
 EOT;
 
         $sql = <<<EOT
-SELECT 
+SELECT
 node.nid, node.title,
 {$score_sql}
 {$sDistanceField},
 Y(point) as lat,
 X(point) as lon
-FROM node 
-{$visible_join} 
+FROM node
+{$visible_join}
 left join group_location_favorite on (group_location_favorite.nid = node.nid)
 WHERE status = 1 AND {$relatedNids}
 {$sql_max_distance}
-{$favoriteFilter} 
-{$visible_where} 
-{$sFilterCity} 
-{$filter} 
-GROUP BY node.nid {$order_by_sql} LIMIT {$limit} 
+{$favoriteFilter}
+{$visible_where}
+{$sFilterCity}
+{$filter}
+GROUP BY node.nid {$order_by_sql} LIMIT {$limit}
 EOT;
 
 
@@ -489,7 +490,7 @@ EOT;
               'latHigh'  => $latHigh,
               'lonHigh'  => $lonHigh
             );
-            
+
             $distance = $result->distance;
             $score = $result->score;
 
@@ -527,7 +528,7 @@ EOT;
 
     /**
      * Makes it possible for the admin to reindex some id's
-     * 
+     *
      * @param string $ids
      */
     public function indexSomeNodes($ids) {
@@ -548,7 +549,7 @@ EOT;
 
     /**
      * This function updates the nodes that need updating of there indexes
-     * 
+     *
      * @param integer $max
      */
     public function indexNeeded($max = null) {
@@ -569,7 +570,7 @@ EOT;
 
     /**
      * Updates the search index for the given node
-     * 
+     *
      * @param stClass|integer $node
      */
     public function updateSearchIndex($node) {
@@ -600,7 +601,7 @@ EOT;
     /**
      * Adds a word to the searchindex
      * In the process makes it lowecase
-     * 
+     *
      * @param type $word
      * @return id of the word row
      */
@@ -619,7 +620,7 @@ EOT;
 
     /**
      * Removes current link between location and word, and adds a new one besed on the given information
-     * 
+     *
      * @param int $word_id
      * @param int $location_nid
      * @param int $score
@@ -631,7 +632,7 @@ EOT;
 
     /**
      * Get's you the text that needs to be put in the search index for the given node
-     * 
+     *
      * @param stClass $node
      * @return array
      */
@@ -710,11 +711,11 @@ EOT;
 
     /**
      * Gives you the correct Location object to base the center of the map on
-     * 
+     *
      * Uses the by the user chosen location unless:
      * A) a specific location is given in the uri
      * B) a city name is given as a tag
-     * 
+     *
      * @return Location
      */
     public function getCenterMap($checkForCity = true) {
@@ -734,7 +735,7 @@ EOT;
 
     /**
      * Checks all the given tag's in the $_GET for city names, if one if found, returns it. Else returns false.
-     * 
+     *
      * @return boolean|string
      */
     public function getCityNameFromTags() {

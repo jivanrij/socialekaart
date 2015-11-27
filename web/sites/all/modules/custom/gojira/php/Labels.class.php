@@ -4,7 +4,7 @@ class Labels {
 
     /**
      * Prepairs a label to be saved
-     * 
+     *
      * @param string $labelToBe
      * @return label
      */
@@ -14,7 +14,7 @@ class Labels {
 
     /**
      * Get's you all the labels of the given node
-     * 
+     *
      * @param stdClass $node
      * @return array
      */
@@ -35,7 +35,7 @@ class Labels {
 
     /**
      * Draws all the labels
-     * 
+     *
      * @param type $node
      */
     public static function drawMobileLabels($node) {
@@ -72,7 +72,7 @@ class Labels {
 
     /**
      * Draws all the labels
-     * 
+     *
      * @param type $node
      */
     public static function draw($node) {
@@ -152,7 +152,7 @@ EAT;
 
     /**
      * Get's you the amount of likes the label has on this locations
-     * 
+     *
      * @param integer $tid
      * @param integer $nid
      * @return integer
@@ -163,7 +163,7 @@ EAT;
 
     /**
      * Tells you if a group has liked a term on a location
-     * 
+     *
      * @param integer $tid
      * @param integer $nid
      * @param integer $gid
@@ -175,7 +175,7 @@ EAT;
 
     /**
      * Unlikes a label for a group/location combination
-     * 
+     *
      * @param integer $tid
      * @param integer $nid
      * @param integer $gid
@@ -189,7 +189,7 @@ EAT;
 
     /**
      * Unlikes a label for a group/location combination
-     * 
+     *
      * @param integer $tid
      * @param integer $nid
      * @param integer $gid
@@ -198,7 +198,7 @@ EAT;
         if (is_null($gid)) {
             $gid = Group::getGroupId();
         }
-        
+
         if(!self::groupHasLiked($tid, $nid, $gid)){
             db_query("INSERT INTO `group_location_term` (`gid`, `nid`, `tid`) VALUES ({$gid}, {$nid}, {$tid})");
         }
@@ -206,7 +206,7 @@ EAT;
 
     /**
      * Saves a Label
-     * 
+     *
      * @param string $label
      * @return integer tid or false if failed
      */
@@ -232,7 +232,7 @@ EAT;
 
     /**
      * Saves a array of labels to a location node
-     * 
+     *
      * @param array $labels
      * @param stdClass $node
      * @return boolean
@@ -270,7 +270,7 @@ EAT;
 
     /**
      * Saves a label to a location node
-     * 
+     *
      * @param array $labels
      * @param stdClass $node
      * @return boolean
@@ -278,11 +278,11 @@ EAT;
     public static function addLabel($sLabel, $oNode){
         return self::addAndScoreLabel($sLabel, $oNode, false);
     }
-    
+
     /**
      * Saves a label to a location node
      * and gives it one + by the current user
-     * 
+     *
      * @param array $labels
      * @param stdClass $node
      * @return boolean
@@ -314,7 +314,7 @@ EAT;
         if($like){
             self::like($iTid, $oNode->nid, Group::getGroupId());
         }
-        
+
         Search::getInstance()->updateSearchIndex($oNode->nid);
 
         return true;
@@ -322,7 +322,7 @@ EAT;
 
     /**
      * Gets all the groups that have favorited this locations
-     * 
+     *
      * returns array with combined gid & pid
      */
     public function getAllLabelLikesByGroup($nid) {

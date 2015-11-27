@@ -22,11 +22,21 @@ function search() {
     $foundNodes = array();
     $output['has_tags'] = true;
     $output['by_id'] = false;
+
     if (isset($_GET['tags']) && ($_GET['tags'] == 'favorites')) {
+        // favorites
         $foundNodes = Favorite::getInstance()->getAllFavoriteLocations();
-    } else if (isset($_GET['tags']) && ($_GET['tags'] == 'ownlist')) {
+    } else if (isset($_GET['tags']) && ($_GET['tags'] == '')) {
+        // ownlist - depricated?!
         $foundNodes = Favorite::getInstance()->getAllFavoriteLocations();
+    } else if (isset($_GET['tags']) && ($_GET['tags'] == 'locationsset')) {
+        if(isset($_GET['id']) && is_numeric($_GET['id'])){
+            $foundNodes = Locationsets::getInstance()->getLocations($_GET['id']);
+        }else{
+            $foundNodes = Favorite::getInstance()->getAllFavoriteLocations();
+        }
     } else if (isset($_GET['tags']) && strstr($_GET['tags'], 'allwithtag:')) {
+        // shizzle
         $tag = str_replace('allwithtag:', '', $_GET['tags']);
         $foundNodes = Search::getInstance()->doSearch(array($tag), false, true, false);
     } else if ($single_location) {
@@ -151,7 +161,13 @@ function search() {
         $output['search_favorites'] = 1;
     }
 
-    $output['results_html'] = Search::getInstance()->getResultListHtml($output);
+
+    if (isset($_GET['tags']) && ($_GET['tags'] == 'locationsset')){
+        $output['results_html'] = '';
+    }else{
+        $output['results_html'] = Search::getInstance()->getResultListHtml($output);
+    }
+
 
     $output['single_location'] = $single_location;
 
@@ -163,17 +179,17 @@ function search() {
 //    );
 
     $output['boxInfo'] = Search::getInstance()->latLonRadiusInfo;
-    
+
     echo json_encode($output, true);
     exit;
 }
 
 /**
  * merge results if they are to close, based on there coordinates
- * imagine: result 1,2,3 & 4 
+ * imagine: result 1,2,3 & 4
  * and 1 & 2 are close to eachother this code will merge this array into the following: a(2=>(1,2),3,4). 2 will have the coordinates of 1
  * and 1, 2 & 3 are close to eachother this code will merge this array into the following: a(2=>(1,2,3),4). 2 will have the coordinates of 1
- * 
+ *
  * @param type $searchResults
  */
 function _merge_and_strip_searchresults_for_js($searchResults, $hasTags) {

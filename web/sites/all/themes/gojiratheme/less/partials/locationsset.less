@@ -1,0 +1,57 @@
+#locationset_wrapper{
+    left: 10px;
+    position: absolute;
+    top: 76px;
+    width: @block-width-md;
+    z-index: 100;
+    background-color: white;
+    overflow:hidden;
+    padding:0 10px 10px 10px;
+    > h2{
+        padding-top:10px;
+    }
+    >p{
+        font-weight: 100;
+    }
+    #locationsset_categories{
+        margin:0 0 10px 0;
+        list-style: none;
+        padding:0;
+        li{
+            display:block;
+            float:left;
+            margin-right:10px;
+            &.active a{
+                color:@color-main;
+            }
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+        overflow:hidden;
+        cursor: pointer;
+    }
+    label#locations{
+        color:@color-light;
+    }
+    #locationsset_locations{
+        padding:0;
+        margin:0;
+        li{
+            margin-right:10px;
+            margin-top:5px;
+            a{
+                text-decoration: none;
+            }
+            &.active a{
+                color:@color-main;
+            }
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+        overflow:hidden;
+        cursor: pointer;
+    }
+
+}

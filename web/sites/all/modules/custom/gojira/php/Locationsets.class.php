@@ -4,17 +4,17 @@ class Locationsets {
 
     public static $instance = null;
     public $mapsAvailable = null;
-    
+
     public static function getInstance() {
         if (is_null(self::$instance)) {
             self::$instance = new Locationsets();
         }
         return self::$instance;
     }
-    
+
     /**
      * Tells you if a user can access predefined maps
-     * 
+     *
      * @return boolean
      */
     public function userHasRightToLocationssets() {
@@ -26,7 +26,7 @@ class Locationsets {
 
     /**
      * Get's you the current node
-     * 
+     *
      * @return node
      */
     public function getCurrentLocationset(){
@@ -41,18 +41,23 @@ class Locationsets {
         }
         return null;
     }
-    
+
     /**
      * Get's the locations belonging to the current locationset page.
      * Only works on a locationsset page node
-     * 
+     *
      * @return array
      */
-    public function getLocations(){
-        $oSet = $this->getCurrentLocationset();
-        
+    public function getLocations($nid = null){
+
+        if(is_null($nid)){
+            $oSet = $this->getCurrentLocationset();
+        }else{
+            $oSet = node_load($nid);
+        }
+
         $aReturn = array();
-        
+
         if($oSet){
             $sFieldname = GojiraSettings::CONTENT_TYPE_LOCATIONSET_LOCATIONS;
             $aField = $oSet->$sFieldname;
@@ -63,15 +68,15 @@ class Locationsets {
                 }
             }
         }
-        
+
         return $aReturn;
     }
-    
+
     /**
      * Get's a set of maps to use for the user
      */
     public function getMapSetsForCurrentUser() {
-        
+
         if(is_null($this->mapsAvailable)){
             $return = array();
             $rLocationsets = array();
@@ -99,11 +104,23 @@ class Locationsets {
 
     /**
      * Tells you if a user can access a specific map
-     * 
+     *
      * @param type $nid
      */
     public function userCanAssessLocationset($nid) {
         return true;
+    }
+
+    /**
+     * Get's the categories from an set of locations in an array
+     */
+    public function getCategoriesFromLocationsArray($aLocations){
+        $aCategories = array();
+        foreach($aLocations as $oLocation){
+            $oCatagory = Category::getCategoryOfLocation($oLocation);
+            $aCategories[$oCatagory->nid] = $oCatagory;
+        }
+        return $aCategories;
     }
 
 }
