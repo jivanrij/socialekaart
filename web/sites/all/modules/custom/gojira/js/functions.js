@@ -1137,6 +1137,8 @@ function bindLocationsset(){
         jQuery(window).trigger('resize');
     });
 
+    jQuery("#locationsset_categories li:first-child a").trigger('click');
+
     doSearchCall("locationsset", 0, "&id="+Drupal.settings.gojira.locationsset_id);
 
     jQuery('a.locationset_show_loc').click(function (e) {
@@ -1162,7 +1164,8 @@ function bindLocationsset(){
                 jQuery(button).closest("li").addClass('active');
 
                 // move to it
-                window.map.setView([data.latitude, (data.longitude - 0.004)], data.zoom);
+                //window.map.setView([data.latitude, (data.longitude - 0.004)], data.zoom);
+                window.map.panTo([data.latitude, data.longitude]);
 
                 bindAfterSearch(false, true);
 

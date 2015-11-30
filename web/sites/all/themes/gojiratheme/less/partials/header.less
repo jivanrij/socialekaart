@@ -22,27 +22,14 @@
             display:inline-block;
             cursor: pointer;
             margin-left:10px;
-/*            &:after{
-                color:@color-white;
-                font: normal normal normal 14px/1 FontAwesome;
-                display:inline-block;
-                width:14px;
-                margin-left:4px;
-            }*/
             line-height: 28px;
             padding-right:40px;
         }
         a.on{
             background: url(../img/button_on.png) no-repeat right;
-/*            &:after{
-                content: '\f046';
-            }            */
         }
         a.off{
             background: url(../img/button_off.png) no-repeat right;
-/*            &:after{
-                content: '\f096';
-            }*/
         }
 
         label[for=location_selector]{
@@ -53,10 +40,8 @@
             display:inline-block;
             border-width: 1px;
             height: 20px;
-            /*padding:20px;*/
             margin:0 0 0 0px;
             padding:0;
-            /*vertical-align: top;*/
             width:100px;
             background-color: @color-white;
             border-radius: 0;
@@ -68,18 +53,19 @@
             list-style:none;
             margin:0;
             display:relative;
-            > li{ 
-                > a{
+            > li{
+                > a {
                     margin-left:10px;
                     line-height: 30px;
                     cursor:pointer;
                     display:inline-block;
-                    &:before{
+                    &:after{
                         color:@color-white;
                         font: normal normal normal 14px/1 FontAwesome;
                         display:inline-block;
-                        width:15px;
                         content: "\f278";
+                        align: right;
+                        padding-left:5px;
                     }
                 }
                 display:relative;
@@ -151,7 +137,7 @@
                 right:0;
                 li{
                     display:block;
-                    clear:both; 
+                    clear:both;
                     a{
                         margin:0;
                         display: block;

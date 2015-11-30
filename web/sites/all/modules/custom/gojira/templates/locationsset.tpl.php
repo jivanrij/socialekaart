@@ -21,9 +21,8 @@ drupal_add_js(array('gojira' => array('page' => 'locationsset')), 'setting');
     <?php if(count($aCategories)>0): ?>
     <label id="locations"><?php echo t("Show locations of specific category:"); ?></label>
     <ul id="locationsset_categories">
-        <li rel="all" class="active"><a class="locationset_show_cat"><?php echo t("All"); ?></a></li>
         <?php foreach($aCategories as $aCategorie): ?>
-        <li rel="<?php echo $aCategorie->nid; ?>"><a class="locationset_show_cat"><?php echo $aCategorie->title; ?></a></li>
+            <li rel="<?php echo $aCategorie->nid; ?>"><a class="locationset_show_cat"><?php echo $aCategorie->title; ?></a></li>
         <?php endforeach; ?>
     </ul>
     <?php endif; ?>

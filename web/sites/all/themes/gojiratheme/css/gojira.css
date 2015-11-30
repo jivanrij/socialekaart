@@ -249,27 +249,14 @@ a.help_link_content:hover {
   display: inline-block;
   cursor: pointer;
   margin-left: 10px;
-  /*            &:after{
-                color:@color-white;
-                font: normal normal normal 14px/1 FontAwesome;
-                display:inline-block;
-                width:14px;
-                margin-left:4px;
-            }*/
   line-height: 28px;
   padding-right: 40px;
 }
 #header #header_options a.on {
   background: url(../img/button_on.png) no-repeat right;
-  /*            &:after{
-                content: '\f046';
-            }            */
 }
 #header #header_options a.off {
   background: url(../img/button_off.png) no-repeat right;
-  /*            &:after{
-                content: '\f096';
-            }*/
 }
 #header #header_options label[for=location_selector] {
   display: inline-block;
@@ -279,10 +266,8 @@ a.help_link_content:hover {
   display: inline-block;
   border-width: 1px;
   height: 20px;
-  /*padding:20px;*/
   margin: 0 0 0 0px;
   padding: 0;
-  /*vertical-align: top;*/
   width: 100px;
   background-color: #ffffff;
   border-radius: 0;
@@ -304,12 +289,13 @@ a.help_link_content:hover {
   cursor: pointer;
   display: inline-block;
 }
-#header #header_options .maplist > li > a:before {
+#header #header_options .maplist > li > a:after {
   color: #ffffff;
   font: normal normal normal 14px/1 FontAwesome;
   display: inline-block;
-  width: 15px;
   content: "\f278";
+  align: right;
+  padding-left: 5px;
 }
 #header #header_options .maplist > li > ul {
   position: absolute;
