@@ -36,6 +36,7 @@ function gojira_theme() {
         'tools' => array('template' => 'templates/tools'),
         'idealreport' => array('template' => 'templates/idealreport'),
         'docu' => array('template' => 'templates/docu'),
+        'websites' => array('template' => 'templates/websites'),
         'configuration' => array('template' => 'templates/configuration'),
         'ownlist' => array('template' => 'templates/ownlist'),
         'conditions' => array('template' => 'templates/conditions'),
@@ -106,7 +107,7 @@ function gojira_menu() {
     $items['settings_thanks'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'settings_thanks', 'title' => t('Settings thanks'), 'type' => MENU_NORMAL_ITEM);
     $items['questions'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'questions', 'title' => t('Questions'), 'type' => MENU_NORMAL_ITEM);
 
-    // AJAX 
+    // AJAX
     $items['ajax/search'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'search', 'title' => t('Search'), 'type' => MENU_NORMAL_ITEM);
     $items['ajax/locationtags'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'locationtags', 'title' => t('Set tags'), 'type' => MENU_NORMAL_ITEM);
     $items['ajax/switchfavorites'] = array('access arguments' => array(helper::PERMISSION_PERSONAL_LIST), 'page callback' => 'switchfavorites', 'title' => t('Switch only show favorites'), 'type' => MENU_NORMAL_ITEM);
@@ -129,6 +130,7 @@ function gojira_menu() {
 
     // ADMIN
     $items['admin/config/system/docu'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'docu', 'title' => t('Gojira documentation'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Documentation of Gojira.'));
+    $items['admin/config/system/websites'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'websites', 'title' => t('Gojira documentation'), 'type' => MENU_NORMAL_ITEM, 'description' => t('List of websites'));
     $items['admin/config/system/doublelocations'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'doublelocations', 'title' => t('Double locations in the system'), 'type' => MENU_NORMAL_ITEM);
     $items['admin/config/system/idealreport'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'idealreport', 'title' => t('Gojira ideal report'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Report of the payments'));
     $items['admin/config/system/gojiratools'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'tools', 'title' => t('Gojira tools'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Several tools for Gojira.'));

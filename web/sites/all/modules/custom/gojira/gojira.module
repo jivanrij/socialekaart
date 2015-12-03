@@ -31,6 +31,7 @@ include ('php/actions/conditions.php');
 include ('php/actions/paymentconditions.php');
 include ('php/actions/tools.php');
 include ('php/actions/docu.php');
+include ('php/actions/websites.php');
 include ('php/actions/configuration.php');
 include ('php/actions/employeedelete.php');
 include ('php/actions/employeeedit.php');
@@ -175,16 +176,16 @@ function gojira_css_alter(&$css) {
 
 // boodstrap shizzle
 function gojira_init() {
-    
+
   global $user;
-  
+
   if(!user_is_logged_in() && (helper::getIEVersion() == 8 OR helper::getIEVersion() == 9))
   {
     drupal_add_js(array('gojira' => array('browserwarning' => 1)), 'setting');
   }
 
   drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/normalize.css');
-  
+
   if(!user_is_logged_in()){
     drupal_add_js(drupal_get_path('module', 'gojira') . '/js/frontpage.js');
     drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/frontpage.css');
@@ -195,11 +196,11 @@ function gojira_init() {
   }
 
   if (Template::shouldWeIncludeMapFrontendFiles()) {
-      
+
     drupal_add_js(array('gojira' => array('mapbox_accesstoken' => variable_get('mapbox_accesstoken', ''))), 'setting');
     drupal_add_js(array('gojira' => array('mapbox_projectid' => variable_get('mapbox_projectid', ''))), 'setting');
-      
-      
+
+
     // collides with a backend include...
     drupal_add_js(drupal_get_path('module', 'gojira') . '/js/jquery-1.8.3.js');
     drupal_add_js(drupal_get_path('module', 'gojira') . '/js/jquery-ui-1.9.2.custom.min.js');
@@ -278,7 +279,7 @@ function gojira_init() {
           drupal_add_js(array('gojira' => array('show_tutorial' => 1)), 'setting');
         }
       }
-      
+
       if(count(Location::getUsersLocations(true))==0){
 
         // user is allowed to be in these routes without a location
@@ -319,7 +320,7 @@ function gojira_init() {
 
     Map::setMapInfo($_GET['q']);
   }
-  
+
   // add meta tags and description if it's a public page
     if (arg(0) == 'node' && is_numeric(arg(1))) {
       $oNode = node_load(arg(1));
@@ -428,7 +429,7 @@ function gojira_cron() {
 
   if(variable_get('cron_restore_backup_locations')){
     helper::restoreBackup(200, true);
-  } 
+  }
 }
 
 function gojira_form_alter(&$form, &$form_state, $form_id){
