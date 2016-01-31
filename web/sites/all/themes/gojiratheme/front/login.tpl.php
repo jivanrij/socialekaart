@@ -13,11 +13,6 @@
 
         <div class="col-sm-4 frontpage_block form-block login">
             <div>
-                <?php if (variable_get('gojira_haweb_sso_button_visible')): ?>
-                    <a class="haweb_link hidden-sm hidden-md" href="<?php echo $base_url; ?>/user/login" title="socialekaart.care"><img src="/<?php echo drupal_get_path('theme', 'gojiratheme') . '/img/inloggen_haweb.png'; ?>" alt="Logo HAweb" /></a>
-                    <a class="haweb_link hidden-lg hidden-sm hidden-xs" href="<?php echo $base_url; ?>/user/login" title="socialekaart.care"><img src="/<?php echo drupal_get_path('theme', 'gojiratheme') . '/img/inloggen_haweb_md.png'; ?>" alt="Logo HAweb" /></a>
-                    <a class="haweb_link hidden-lg hidden-md hidden-xs" href="<?php echo $base_url; ?>/user/login" title="socialekaart.care"><img src="/<?php echo drupal_get_path('theme', 'gojiratheme') . '/img/inloggen_haweb_sm.png'; ?>" alt="Logo HAweb" /></a>
-                <?php endif; ?>
                 <h1><?php echo t('Login'); ?></h1>
                 <?php print @drupal_render(drupal_get_form('gojira_login_form')); ?>        
                 <?php include(drupal_get_path('theme', 'gojiratheme') . '/_messages.tpl.php'); ?>

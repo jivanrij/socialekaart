@@ -83,12 +83,6 @@ function gojira_configuration_form($form, &$form_state) {
         '#default_value' => variable_get('gojira_user_amount_with_discount', 300),
     );
     
-    $form['algemene_instellingen']['gojira_haweb_sso_button_visible'] = array(
-        '#title' => t('Show HAweb login button'),
-        '#type' => 'select',
-        '#options' => array(0 => 'no', 1 => 'yes'),
-        '#default_value' => variable_get('gojira_haweb_sso_button_visible', 1),
-    );
     $form['algemene_instellingen']['gojira_check_coordinates_on_update_node'] = array(
         '#title' => t('Check coordinates on saving of nodes.'),
         '#type' => 'select',
@@ -408,7 +402,6 @@ function gojira_configuration_form_submit($form, &$form_state) {
     variable_set('account_activated_by_admin', $_POST['account_activated_by_admin']);
     variable_set('new_account_through_sso', $_POST['new_account_through_sso']);
     variable_set('gojira_double_account_login_warning', $_POST['gojira_double_account_login_warning']);
-    variable_set('gojira_haweb_sso_button_visible', $_POST['gojira_haweb_sso_button_visible']);
     variable_set('mailadres_information_inform_admin', $_POST['mailadres_information_inform_admin']);
     variable_set('mailadres_helpdesk', $_POST['mailadres_helpdesk']);
     variable_set('cron_remove_unlinked_tax_terms', $_POST['cron_remove_unlinked_tax_terms']);

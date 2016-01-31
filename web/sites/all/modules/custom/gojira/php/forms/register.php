@@ -28,6 +28,21 @@ function gojira_register_form($form, &$form_state) {
       '#default_value' => $id,
   );
   
+  if (isset($_GET['ha']) && !is_null($_GET['ha']) && $_GET['ha'] == 'web') {
+    $form['from_haweb'] = array(
+      '#title' => t('from_haweb'),
+      '#type' => 'hidden',
+      '#default_value' => 1,
+    );
+  }else{
+    $form['from_haweb'] = array(
+      '#title' => t('from_haweb'),
+      '#type' => 'hidden',
+      '#default_value' => 0,
+    );
+  }
+
+  
   if ($user) {
     $bigfield = GojiraSettings::CONTENT_TYPE_BIG_FIELD;
     $bigfield = $user->$bigfield;
@@ -129,8 +144,13 @@ function gojira_register_form_submit($form, &$form_state) {
   $user->$conditionsField = array(LANGUAGE_NONE => array(0 => array('value' => 0)));  
   $tutorialField = GojiraSettings::CONTENT_TYPE_TUTORIAL_FIELD;
   $user->$tutorialField = array(LANGUAGE_NONE => array(0 => array('value' => 0)));
+  
   $importedField = GojiraSettings::CONTENT_TYPE_USER_NOT_IMPORTED;
-  $user->$importedField = array(LANGUAGE_NONE => array(0 => array('value' => 1)));
+  if($form['from_haweb']['#value'] == 1){
+      $user->$importedField = array(LANGUAGE_NONE => array(0 => array('value' => 0)));
+  }else{
+      $user->$importedField = array(LANGUAGE_NONE => array(0 => array('value' => 1)));
+  }
   
   $group = Group::createNewGroup($user);
   
