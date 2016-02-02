@@ -107,6 +107,7 @@ function gojira_settings_form_validate($form, &$form_state) {
     if (user_access(helper::PERMISSION_MODERATE_LOCATION_CONTENT) && in_array(helper::ROLE_EMPLOYER_MASTER, $user->roles)) {
         if (!has_multiple_locations($user)) { // if we do not have multiple locations, we need to validate the form values for one location
             $locations = Location::getUsersLocations(false);
+            
             if (count($locations) == 1) {
                 $locationNode = array_pop($locations);
                 gojira_get_core_location_form_validate($form, $form_state, $locationNode->nid);

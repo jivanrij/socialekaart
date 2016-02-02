@@ -892,7 +892,7 @@ body.questions a.active.topic {
   margin-top: 10px;
 }
 #selected_location_info .search_result_wrapper > div.adres {
-  width: 45%;
+  width: 90%;
   float: left;
   font-weight: normal;
 }
@@ -900,6 +900,20 @@ body.questions a.active.topic {
   #selected_location_info .search_result_wrapper > div.adres {
     margin-bottom: 0;
   }
+}
+#selected_location_info .search_result_wrapper > div.note {
+  width: 90%;
+  float: left;
+  font-weight: normal;
+}
+@media (max-width: 710px) {
+  #selected_location_info .search_result_wrapper > div.note {
+    margin-bottom: 0;
+  }
+}
+#selected_location_info .search_result_wrapper > div.note a.fa {
+  color: #b7072a;
+  text-decoration: none;
 }
 #selected_location_info .search_result_wrapper div.gbutton_wrapper {
   clear: both;

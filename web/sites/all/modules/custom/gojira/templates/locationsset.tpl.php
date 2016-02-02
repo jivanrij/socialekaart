@@ -39,6 +39,5 @@ drupal_add_js(array('gojira' => array('page' => 'locationsset')), 'setting');
     <?php endif; ?>
 
     <div id="locationsset_location_details">
-
     </div>
 </div>

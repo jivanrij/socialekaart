@@ -97,8 +97,9 @@ class Location {
     public static function getCurrentLocationObjectOfUser($bFallback = false) {
 
         $aLocations = Location::getUsersLocations(true);
+        
         $iAmount = count($aLocations);
-
+        
         if ($iAmount == 0) { // no location found, let's check fallback option
             if ($bFallback) {
                 return new Location(variable_get('CENTER_COUNTRY_LONGITUDE'), variable_get('CENTER_COUNTRY_LATITUDE'));
@@ -116,12 +117,16 @@ class Location {
                 }
             }
         }
-
+        
         // let's just return one if ther is just one found or no known preference for one
         $oLocationNode = array_shift($aLocations);
         $oLocation = Location::getLocationObjectOfNode($oLocationNode->nid);
-        $oLocation->nid = $oLocationNode->nid;
-        return $oLocation;
+        if($oLocation){
+            $oLocation->nid = $oLocationNode->nid;
+            return $oLocation;
+        }
+        
+        return false;
     }
 
     /**
@@ -273,7 +278,7 @@ class Location {
 
             self::$_userLocations = array();
             self::$_userLocationsWithCheck = array();
-
+            
             global $user;
             $uid = $user->uid;
 
@@ -304,7 +309,7 @@ class Location {
                 }
             }
         }
-        
+                
         if ($bCheckPublished) {
             return self::$_userLocationsWithCheck;
         }
@@ -387,5 +392,36 @@ class Location {
             return true;
         }
         return false;
+    }
+    
+    /**
+     * Get's the note a user's group has on a location
+     * 
+     * @param integer $nid
+     * @return boolean
+     */
+    public static function getNote($nid, $postfix = '', $default = ''){
+        $gid = Group::getGroupId();
+        
+        $note = db_query("select note from group_location_note where nid = :nid and gid = :gid", array(':nid' => $nid, ':gid' => $gid))->fetchField();
+        
+        if(trim($note) !== ''){
+            return $note.$postfix;
+        }
+        return $default.$postfix;
+    }
+    
+    /**
+     * Adds a note for a group on a location
+     * 
+     * @param integer $nid
+     * @param string $note
+     */
+    public static function setNote($nid, $note){
+        $gid = Group::getGroupId();
+        
+        db_query("delete from group_location_note where nid = :nid and gid = :gid", array(':nid' => $nid, ':gid' => $gid));
+        
+        db_query("INSERT INTO `group_location_note` (`nid`, `gid`, `note`) VALUES (:nid,:gid,:note)", array(':nid' => $nid, ':gid' => $gid, ':note' => $note));
     }
 }

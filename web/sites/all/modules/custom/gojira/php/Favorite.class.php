@@ -61,6 +61,24 @@ class Favorite {
 
         return $this->favoriteLocations;
     }
+    
+    /**
+     * Get's you all the favorite locations from a specific category
+     * 
+     * @param integer $filter_category_nid
+     * @return array
+     */
+    public function getAllFavoritesInCategory($filter_category_nid){
+        $favorites = self::getAllFavoriteLocations();
+        $return = array();
+        foreach($favorites as $favorite){
+            $category_nid = helper::value($favorite, GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD, 'nid');
+            if($category_nid == $filter_category_nid){
+                $return[] = $favorite;
+            }
+        }
+        return $return;
+    }
 
     /**
      * Saves the personalized info of the given location (nid) for the given user's group

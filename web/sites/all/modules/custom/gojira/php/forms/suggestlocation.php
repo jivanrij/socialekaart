@@ -102,7 +102,7 @@ function gojira_suggestlocation_form_validate($form, &$form_state) {
                             $form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#value']
                     )
     );
-
+    
     $aPossibleDoubles = array();
     if ($location) {
         $rResults = db_query("select nid, title, X(point) as x, Y(point) as y from {node} where type = 'location' and status = 1 and X(point) = :longitude and Y(point) = :latitude", array(':longitude' => $location->longitude, ':latitude' => $location->latitude))->fetchAll();

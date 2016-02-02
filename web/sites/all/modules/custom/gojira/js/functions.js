@@ -389,16 +389,15 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
 
     openOverlay();
 
-    if(searchFor == 'ownlist'){
+    if (searchFor == 'ownlist') {
         jQuery('#search_result_info').hide();
-    }else{
+    } else {
         jQuery('#crud_holder').hide();
     }
-    if(searchFor !== 'locationsset'){
+    if (searchFor !== 'locationsset') {
         jQuery('#locationset_wrapper').hide();
+        jQuery('#search_result_info').hide();
     }
-
-
 
     // force a search in the area of the user
     if (search_own_area) {
@@ -425,7 +424,7 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
                 somethingWrongMessage();
             }
 
-            if(searchFor != 'ownlist'){
+            if (searchFor != 'ownlist') {
                 jQuery('#ajax_search_results').html(data.results_html);
             }
 
@@ -477,7 +476,10 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
                     [data.boxInfo.latHigh, data.boxInfo.lonHigh]
                 ]);
             }
-            bindAfterSearch();
+
+            if (searchFor !== 'locationsset') {
+                bindAfterSearch();
+            }
 
             if (data.single_location) {
                 jQuery('#loc_' + data.by_id).click();
@@ -591,11 +593,21 @@ function focusLocation(nid) {
         dataType: 'json',
         success: function (data) {
 
-            if (typeof jQuery('#search_result_info') === 'undefined') {
-                jQuery("#ajax_search_results").html('<div id="search_result_info"><div id="selected_location_info" class="rounded">'+data.html+'</div></div>');
-            }else{
+            if (jQuery("#ajax_search_results > div#search_result_info").length == 0) {
+                // sometimes we don't have a search_result_info, let's create it
+                jQuery("#ajax_search_results").html('<div id="search_result_info"><div id="selected_location_info" class="rounded">' + data.html + '</div></div>');
+            } else {
+                // default, just hang the result in the dom
                 jQuery("#selected_location_info").html(data.html);
             }
+
+            if (jQuery("#content_holder #locationset_wrapper").length == 1) {
+                // and when we are on a locationset page, let's add some stuff for that....
+                correctHeightForLocationsetSearchResult();
+                jQuery('#locationsset_locations li').removeClass('active');
+                jQuery('#locationsset_locations li a[href=#' + nid + ']').closest('li').addClass('active');
+            }
+
 
             // move to it
             if (!onMobileView()) {
@@ -777,7 +789,7 @@ function bindGlobal() {
                 dataType: 'json',
                 success: function (data) {
                     //window.map.setView([data.latitude, data.longitude], data.zoom);
-                    jQuery("#gojirasearch_search_term").attr('placeholder','Zoek landelijk');
+                    jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek landelijk');
                     if (jQuery('#gojirasearch_search_term').val() != '') {
                         doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
                     }
@@ -795,7 +807,7 @@ function bindGlobal() {
                 dataType: 'json',
                 success: function (data) {
 //                    window.map.setView([data.latitude, data.longitude], data.zoom);
-                    jQuery("#gojirasearch_search_term").attr('placeholder','Zoek in de regio');
+                    jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in de regio');
                     if (jQuery('#gojirasearch_search_term').val() != '') {
                         doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
                     }
@@ -808,40 +820,40 @@ function bindGlobal() {
         }
     });
 
-    jQuery('a.favorite_header').click(function (e) {
-        e.preventDefault();
-        if (!jQuery(this).hasClass('on')) {
-            jQuery('a.favorite_header').addClass('on');
-            jQuery('a.favorite_header').removeClass('off');
-            jQuery.ajax({
-                url: '/?q=ajax/switchfavorites&turn=on',
-                type: 'POST',
-                success: function (data) {
-                    if (jQuery('#gojirasearch_search_term').val() != '') {
-                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    somethingWrongMessage();
-                }
-            });
-        } else {
-            jQuery('a.favorite_header').addClass('off');
-            jQuery('a.favorite_header').removeClass('on');
-            jQuery.ajax({
-                url: '/?q=ajax/switchfavorites&turn=off',
-                type: 'POST',
-                success: function (data) {
-                    if (jQuery('#gojirasearch_search_term').val() != '') {
-                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    somethingWrongMessage();
-                }
-            });
-        }
-    });
+//    jQuery('a.favorite_header').click(function (e) {
+//        e.preventDefault();
+//        if (!jQuery(this).hasClass('on')) {
+//            jQuery('a.favorite_header').addClass('on');
+//            jQuery('a.favorite_header').removeClass('off');
+//            jQuery.ajax({
+//                url: '/?q=ajax/switchfavorites&turn=on',
+//                type: 'POST',
+//                success: function (data) {
+//                    if (jQuery('#gojirasearch_search_term').val() != '') {
+//                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
+//                    }
+//                },
+//                error: function (jqXHR, textStatus, errorThrown) {
+//                    somethingWrongMessage();
+//                }
+//            });
+//        } else {
+//            jQuery('a.favorite_header').addClass('off');
+//            jQuery('a.favorite_header').removeClass('on');
+//            jQuery.ajax({
+//                url: '/?q=ajax/switchfavorites&turn=off',
+//                type: 'POST',
+//                success: function (data) {
+//                    if (jQuery('#gojirasearch_search_term').val() != '') {
+//                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
+//                    }
+//                },
+//                error: function (jqXHR, textStatus, errorThrown) {
+//                    somethingWrongMessage();
+//                }
+//            });
+//        }
+//    });
 
     jQuery('#edit-submit').click(function (e) {
         e.preventDefault();
@@ -899,8 +911,6 @@ function bindLocationFinder() {
                 && (jQuery('#edit-field-address-street').val().trim().length != 0) && (jQuery('#edit-field-address-postcode').val().trim().length != 0)) {
             addressLookup();
         }
-
-
 
 //        if ((jQuery('#edit-field-address-city').val().trim().length == 0) && (jQuery('#edit-field-address-street').val().trim().length == 0)) {
 //            postcodeLookup()
@@ -1121,16 +1131,19 @@ function bindMobileMenu() {
     });
 }
 
-function bindLocationsset(){
-    jQuery(".locationset_show_cat").click(function(e){
+function bindLocationsset() {
+    jQuery(".locationset_show_cat").click(function (e) {
         e.preventDefault();
         jQuery("#ajax_search_results").html("");
         jQuery("#locationsset_categories li").removeClass("active");
         jQuery(this).closest("li").addClass("active");
         var cat_id = jQuery(this).closest("li").attr("rel");
-        if(cat_id == "all"){
+
+        doSearchCall("locationsset", 0, "&id=" + Drupal.settings.gojira.locationsset_id + '&cat_id=' + cat_id);
+
+        if (cat_id == "all") {
             jQuery(".locationset_show_loc").closest("li").show();
-        }else{
+        } else {
             jQuery(".locationset_show_loc").closest("li").hide();
             jQuery("li[rel=" + cat_id + "]").show();
         }
@@ -1138,8 +1151,6 @@ function bindLocationsset(){
     });
 
     jQuery("#locationsset_categories li:first-child a").trigger('click');
-
-    doSearchCall("locationsset", 0, "&id="+Drupal.settings.gojira.locationsset_id);
 
     jQuery('a.locationset_show_loc').click(function (e) {
         e.preventDefault();
@@ -1156,9 +1167,7 @@ function bindLocationsset(){
 
                 jQuery("#ajax_search_results").html(data.html);
 
-                var top = 90 + parseInt(jQuery('#locationset_wrapper').css('height').replace('px', ''));
-
-                jQuery("#search_result_info").css("top",top+"px");
+                correctHeightForLocationsetSearchResult();
 
                 jQuery('#locationsset_locations li').removeClass('active');
                 jQuery(button).closest("li").addClass('active');
@@ -1167,7 +1176,7 @@ function bindLocationsset(){
                 //window.map.setView([data.latitude, (data.longitude - 0.004)], data.zoom);
                 window.map.panTo([data.latitude, data.longitude]);
 
-                bindAfterSearch(false, true);
+                //bindAfterSearch(false, true);
 
                 jQuery("#search_result_info").css('top', top + 'px');
 
@@ -1181,4 +1190,12 @@ function bindLocationsset(){
         });
     });
 
+}
+
+/**
+ * Corrects the height of the searchresult of the locationset
+ */
+function correctHeightForLocationsetSearchResult() {
+    var top = 90 + parseInt(jQuery('#locationset_wrapper').css('height').replace('px', ''));
+    jQuery("#search_result_info").css("top", top + "px");
 }

@@ -23,6 +23,8 @@ function search() {
     $output['has_tags'] = true;
     $output['by_id'] = false;
 
+    
+    
     if (isset($_GET['tags']) && ($_GET['tags'] == 'favorites')) {
         // favorites
         $foundNodes = Favorite::getInstance()->getAllFavoriteLocations();
@@ -30,10 +32,12 @@ function search() {
         // ownlist - depricated?!
         $foundNodes = Favorite::getInstance()->getAllFavoriteLocations();
     } else if (isset($_GET['tags']) && ($_GET['tags'] == 'locationsset')) {
-        if(isset($_GET['id']) && is_numeric($_GET['id'])){
-            $foundNodes = Locationsets::getInstance()->getLocations($_GET['id']);
-        }else{
-            $foundNodes = Favorite::getInstance()->getAllFavoriteLocations();
+        if (isset($_GET['cat_id']) && is_numeric($_GET['cat_id'])) {
+            if ($_GET['id'] == 'favorites') { // display own list
+                $foundNodes = Favorite::getInstance()->getAllFavoritesInCategory($_GET['cat_id']);
+            } else { // display a map
+                $foundNodes = Locationsets::getInstance()->getLocations($_GET['id'], $_GET['cat_id']);
+            }
         }
     } else if (isset($_GET['tags']) && strstr($_GET['tags'], 'allwithtag:')) {
         // shizzle

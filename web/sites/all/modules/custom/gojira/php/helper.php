@@ -8,14 +8,13 @@ class helper {
 
     // Permissions
     const PERMISSION_ACCESS_CONTENT = 'access content';
-    const PERMISSION_GOJIRA_ADMIN = 'administer gojira';
     const PERMISSION_ACCESS_LOCATION_CONTENT = 'gojira access location info';
     const PERMISSION_MODERATE_LOCATION_CONTENT = 'gojira moderate location info';
-    const PERMISSION_HIDE_ADDS = 'remove adds';
     const PERMISSION_MANAGE_USERS = 'manage gojira group users';
     const PERMISSION_DO_PAYMENTS = 'do payments for a gojira group';
     const PERMISSION_MULTIPLE_LOCATIONS = 'multiple locations';
     const PERMISSION_MANAGE_MULTIPLE_LOCATIONS = 'manage multiple locations';
+    const PERMISSION_CORRECT_EXISTING_LOCATIONS = 'correct existing locations';
     const PERMISSION_SHOW_DEBUG = 'show debug data';
     const PERMISSION_PERSONAL_LIST = 'has personal list';
     const PERMISSION_LOCATIONSETS = 'can see locationsets';

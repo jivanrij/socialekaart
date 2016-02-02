@@ -19,7 +19,6 @@ include ('php/Favorite.class.php');
 include ('php/Importer.class.php');
 include ('php/Search.class.php');
 include ('php/BIG.class.php');
-include ('php/Add.class.php');
 include ('php/Mailer.class.php');
 include ('php/Locationsets.class.php');
 include ('php/Haweb.class.php');
@@ -40,6 +39,7 @@ include ('php/actions/questions.php');
 include ('php/actions/favorites.php');
 include ('php/actions/practicecheck.php');
 include ('php/actions/locationinfo.php');
+include ('php/actions/editnote.php');
 include ('php/actions/doublelocations.php');
 //include ('php/actions/gojirareport_double_locations.php');
 //include ('php/actions/gojirareport_location_by_category.php');
@@ -56,6 +56,7 @@ include ('php/actions/likelabel.php');
 include ('php/actions/locationcheck.php');
 include ('php/actions/locationdelete.php');
 include ('php/actions/locationedit.php');
+include ('php/actions/locationcorrect.php');
 include ('php/actions/locationlist.php');
 include ('php/actions/locationtags.php');
 include ('php/actions/linkhaweb.php');
@@ -93,11 +94,13 @@ include ('php/actions/doublehandler_remove.php');
 include ('php/forms/employeeedit.php');
 include ('php/forms/settings.php');
 include ('php/forms/locationedit.php');
+include ('php/forms/locationcorrect.php');
 include ('php/forms/terms_conditions.php');
 include ('php/forms/suggestlocation.php');
 include ('php/forms/idealpay.php');
 include ('php/forms/inform.php');
 include ('php/forms/login.php');
+include ('php/forms/editnote.php');
 include ('php/forms/help.php');
 include ('php/forms/passwordreset.php');
 include ('php/forms/configuration.php');
@@ -114,13 +117,9 @@ function gojira_permission() {
       'title' => t('Moderate Gojira data'),
       'description' => t('Users with this permission can change and add labels, add to my list, etc.. '),
     ),
-    helper::PERMISSION_GOJIRA_ADMIN => array(
-      'title' => t('Moderate Gojira as admin'),
-      'description' => t('This permission basicly gives a user admin rights on gojira.'),
-    ),
-    helper::PERMISSION_HIDE_ADDS => array(
-      'title' => t('No adds'),
-      'description' => t('The user with this permission does not get to see adds.'),
+    helper::PERMISSION_CORRECT_EXISTING_LOCATIONS => array(
+      'title' => t('Correct existing locations'),
+      'description' => t('This permission gives a user rights to change existing locations in the frontend.'),
     ),
     helper::PERMISSION_MANAGE_USERS => array(
       'title' => t('Manage users'),
@@ -367,12 +366,12 @@ function gojira_init() {
 // after update
 function gojira_entity_update($entity, $type) {
   // after inserting a new location
-  if (isset($entity->type) && $type == 'node' && $entity->type == GojiraSettings::CONTENT_TYPE_LOCATION) {
-    Search::getInstance()->updateSearchIndex($entity->nid);
-    if(variable_get('gojira_check_coordinates_on_update_node', 1)){
-        Location::checkAndSaveLocation($entity); // TODO TURN ON turned off for import
-    }
-  }
+//  if (isset($entity->type) && $type == 'node' && $entity->type == GojiraSettings::CONTENT_TYPE_LOCATION) {
+//    Search::getInstance()->updateSearchIndex($entity->nid);
+//    if(variable_get('gojira_check_coordinates_on_update_node', 1)){
+//        Location::checkAndSaveLocation($entity); // TODO TURN ON turned off for import
+//    }
+//  }
 }
 
 // register the post save function

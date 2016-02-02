@@ -499,13 +499,13 @@ EOT;
      */
     public static function getEndCurrentPeriod($format = null, $gid = null) {
 
-
         if (is_null($gid)) {
             $gid = Group::getGroupId();
         }
 
         // get the lates payment row thas is payed for of a specified groep
         $period_end = db_query("SELECT period_end FROM gojira_payments WHERE gid = {$gid} AND status = 1 ORDER BY period_end DESC")->fetchField();
+        
         if (!$period_end) {
             return false;
         }

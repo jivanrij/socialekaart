@@ -174,8 +174,17 @@ class Search {
             $add_label = '<form id="new_label_form_%nid%" class="new_label_form"><div class="new_label_wrapper"><input class="new_label" value="label toevoegen" name="new_label_%nid%" id="new_label_%nid%" /><button class="add_new_label"><span>' . t('+') . '</span></button></div></form>';
         }
 
-        $improve_txt = t('Is this information incorrect of incomplete?');
-        $improve_link = t('Report it here.');
+        if (user_access(helper::PERMISSION_CORRECT_EXISTING_LOCATIONS)) {
+            $improve_txt = t('Do you think this information is incorrect?');
+            $improve_link = t('You can change it here.');
+            $improveroute = 'location/correct';
+        }else{
+            $improve_txt = t('Is this information incorrect of incomplete?');
+            $improve_link = t('Report it here.');
+            $improveroute = 'inform';
+        }
+
+        $yournote = t('Your note:').'<br />';
 
         $popupHtml = <<<EAT
 <div id="location_%nid%" class="search_result_wrapper">
@@ -189,10 +198,11 @@ class Search {
   </div>
   %favorites%
   <div class="adres">
-    %street% %housenr%<br />
-    %postcode%, %city%<br />
-    %phone%<br />
-    %email%
+    %adres%
+  </div>
+  <div class="note">
+    <i>{$yournote}</i>
+    %note%
   </div>
   <br />
   %url%
@@ -201,7 +211,7 @@ class Search {
     {$add_label}
   </div>
   <div class="inform">
-    {$improve_txt} <a href="?q=inform&nid=%nid%" title="{$improve_txt} {$improve_link}">{$improve_link}</a>
+    {$improve_txt} <a href="/{$improveroute}&nid=%nid%" title="{$improve_txt} {$improve_link}">{$improve_link}</a>
   </div>
   <a class="fa fa-times close_button"></a>
 </div>
@@ -240,7 +250,7 @@ EAT;
         }
 
         if (trim($email) != '') {
-            $email = '<a mailto="' . $email . '" id="mailto">' . $email . '</a><br />';
+            $email = '<a mailto="' . $email . '" id="mailto">' . $email . '</a>';
         }
 
         $oCurrentLocation = Location::getCurrentLocationObjectOfUser();
@@ -267,32 +277,50 @@ EAT;
 
         $labels = Labels::draw($foundNode).Labels::drawMobileLabels($foundNode);
 
+        // format the adres
+        $adres = '';
+        $street = trim(helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD));
+        $number = trim(helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD));
+        $postcode = trim(helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD));
+        $city = trim(helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD));
+        $telephone = trim(helper::value($foundNode, GojiraSettings::CONTENT_TYPE_TELEPHONE_FIELD));
+        $fax = trim(helper::value($foundNode, GojiraSettings::CONTENT_TYPE_FAX_FIELD));
+        if($street.$number !== ''){
+            $adres .= $street.' '.$number.'<br />';
+        }
+        if($postcode.$city !== ''){
+            $adres .= $postcode.' '.$city.'<br />';
+        }
+        if($telephone !== ''){
+            $adres .= 'Tel.'.$telephone.'<br />';
+        }
+        if($fax !== ''){
+            $adres .= 'Fax.'.$fax.'<br />';
+        }
+        if($email !== ''){
+            $adres .= $email;
+        }
+                    
         $html = str_replace(
                 array('%title%',
-            '%street%',
-            '%housenr%',
-            '%postcode%',
-            '%city%',
-            '%phone%',
-            '%email%',
+            '%adres%',
             '%url%',
             '%labels%',
             //'%admin%',
             '%nid%',
             '%favorites%',
-            '%category%'), array($foundNode->title,
-            helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD),
-            helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD),
-            helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD),
-            helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD),
-            helper::value($foundNode, GojiraSettings::CONTENT_TYPE_TELEPHONE_FIELD),
-            $email,
+            '%category%',
+            '%note%'), 
+            array($foundNode->title,
+            $adres,
             $url,
             $labels,
             //$adminLink,
             $foundNode->nid,
             $sFavorites,
-            $category_txt), $popupHtml);
+            $category_txt,
+            nl2br(Location::getNote($foundNode->nid,' <a title="'.t('Edit note').'" class="fa fa-pencil" href="/editnote?nid='.$foundNode->nid.'"></a>',t('Empty'))),
+            ), $popupHtml);
 
         return $html;
     }
@@ -728,7 +756,7 @@ EOT;
                 }
             }
         }
-
+        
         // return default user Location
         return Location::getCurrentLocationObjectOfUser(true);
     }

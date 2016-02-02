@@ -45,10 +45,12 @@ class Locationsets {
     /**
      * Get's the locations belonging to the current locationset page.
      * Only works on a locationsset page node
-     *
-     * @return array
+     * 
+     * @param integer set id | optional, default is the current set
+     * @param integer category to filter on | optional
+     * @return type
      */
-    public function getLocations($nid = null){
+    public function getLocations($nid = null, $iFilterCategoryId = null){
 
         if(is_null($nid)){
             $oSet = $this->getCurrentLocationset();
@@ -64,11 +66,17 @@ class Locationsets {
             foreach($aField[LANGUAGE_NONE] as $location){
                 $oNode = node_load($location['nid']);
                 if($oNode){
-                    $aReturn[] = $oNode;
+                    if($iFilterCategoryId){ // filter on category
+                        $iThisCategoryId = helper::value($oNode, GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD, 'nid');
+                        if($iFilterCategoryId == $iThisCategoryId){
+                            $aReturn[] = $oNode;
+                        }
+                    }else{
+                        $aReturn[] = $oNode;
+                    }
                 }
             }
         }
-
         return $aReturn;
     }
 

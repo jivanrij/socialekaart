@@ -66,6 +66,7 @@ class Template {
         $crud_pages = array();
         $crud_pages[] = 'location/list';
         $crud_pages[] = 'location/edit';
+        $crud_pages[] = 'location/correct';
         $crud_pages[] = 'settings';
         $crud_pages[] = 'settings_thanks';
         $crud_pages[] = 'passwordthanks';
@@ -78,6 +79,7 @@ class Template {
         $crud_pages[] = 'suggestlocationthanks';
         $crud_pages[] = 'wronginfo';
         $crud_pages[] = 'inform';
+        $crud_pages[] = 'editnote';
         $crud_pages[] = 'informthanks';
         $crud_pages[] = 'subscribe';
         $crud_pages[] = 'idealpay';

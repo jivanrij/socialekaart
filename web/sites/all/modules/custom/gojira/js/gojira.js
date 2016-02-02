@@ -21,15 +21,6 @@ jQuery(function () {
             bindInformForm();
         }
 
-        if (Drupal.settings.gojira.page == 'ownlist') {
-            bindOwnlist();
-        }
-
-        if (Drupal.settings.gojira.page == 'favorites') {
-            bindGojirasearch();
-            doSearchCall('favorites', 0);
-        }
-
         if (Drupal.settings.gojira.page == 'locationsset') {
             bindLocationsset();
         }
@@ -41,6 +32,10 @@ jQuery(function () {
         if (Drupal.settings.gojira.page == 'suggestlocation') {
             bindLocationFinder();
             bindSuggestlocation();
+        }
+
+        if (Drupal.settings.gojira.page == 'locationcorrect') {
+            bindLocationFinder();
         }
 
         if (Drupal.settings.gojira.page == 'locationedit' || Drupal.settings.gojira.page == 'unownedlocationedit') {
@@ -61,17 +56,17 @@ jQuery(function () {
         }
 
         jQuery(window).resize(function () {
-            if(onMobileView()){
-                jQuery('#map').css('height', getHeightPx()+5);
-                jQuery('#map').css('top', (parseInt(jQuery(window).height()) - getHeightPx())-5);
+            if (onMobileView()) {
+                jQuery('#map').css('height', getHeightPx() + 5);
+                jQuery('#map').css('top', (parseInt(jQuery(window).height()) - getHeightPx()) - 5);
                 jQuery('#map').css('width', '100%');
-            }else{
+            } else {
                 jQuery('#map').css('height', getHeightPx());
                 jQuery('#map').css('top', 0);
                 jQuery('#map').css('width', '100%');
             }
         });
-        if(onMobileView()){
+        if (onMobileView()) {
             jQuery(window).trigger('resize');
         }
 

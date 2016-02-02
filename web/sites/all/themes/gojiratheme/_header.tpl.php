@@ -13,7 +13,7 @@
             <ul class="maplist">
                 <li>
                     <?php if(Locationsets::getInstance()->userHasRightToLocationssets() && count(Locationsets::getInstance()->getMapSetsForCurrentUser())>0): ?>
-                        <a id="maps_hover_icon" title="<?php echo t('Your maps'); ?>" href="<?php echo url('ownlist'); ?>"><?php echo t('Uw kaarten'); ?></a>
+                        <a id="maps_hover_icon" title="<?php echo t('Your maps'); ?>" href="<?php echo url('ownlist'); ?>"><?php echo t('Your maps'); ?></a>
                         <ul>
                             <li><a href="<?php echo url('ownlist'); ?>">Mijn kaart</a></li>
                             <li class="subtitle">(<?php echo t('Your own Social Map'); ?>)</li>
@@ -25,7 +25,7 @@
                             <?php endforeach; ?>
                         </ul>
                     <?php else: ?>
-                        <a id="direct_link" title="<?php echo t('Your map'); ?>" href="<?php echo url('ownlist'); ?>"><?php echo t('Uw kaart'); ?></a>
+                        <a id="direct_link" title="<?php echo t('Your map'); ?>" href="<?php echo url('ownlist'); ?>"><?php echo t('Your map'); ?></a>
                     <?php endif; ?>
                 </li>
             </ul>

@@ -11,7 +11,9 @@ function gojira_theme() {
 
     return array('welcome' => array('template' => 'templates/welcome'),
         'locationedit' => array('template' => 'templates/locationedit'),
+        'locationcorrect' => array('template' => 'templates/locationcorrect'),
         'linkhaweb' => array('template' => 'templates/linkhaweb'),
+        'editnote' => array('template' => 'templates/editnote'),
         'inform' => array('template' => 'templates/inform'),
         'informthanks' => array('template' => 'templates/informthanks'),
         'activateuser' => array('template' => 'templates/activateuser'),
@@ -62,11 +64,6 @@ function gojira_theme() {
 function gojira_menu() {
     $items = array();
 
-    //$items['admin/reports/gojirareport_suggested_inactive_locations'] = array('access arguments' => array(helper::PERMISSION_GOJIRA_ADMIN), 'page callback' => 'gojirareport_suggested_inactive_locations', 'title' => t('Gojira suggested inactive locations'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Suggested inactive locations.'));
-    //$items['admin/reports/gojirareport_suggested_active_locations'] = array('access arguments' => array(helper::PERMISSION_GOJIRA_ADMIN), 'page callback' => 'gojirareport_suggested_active_locations', 'title' => t('Gojira suggested active locations'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Suggested active locations.'));
-//  $items['admin/reports/gojirareport_double_locations'] = array('access arguments' => array(helper::PERMISSION_GOJIRA_ADMIN), 'page callback' => 'gojirareport_double_locations', 'title' => t('Gojira double locations'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Generate a list of locations that have exactly the same coordinates.'));
-    //$items['admin/reports/gojirareport_location_by_tag'] = array('access arguments' => array(helper::PERMISSION_GOJIRA_ADMIN), 'page callback' => 'gojirareport_location_by_tag', 'title' => t('Gojira locations by label'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Gat all locations that have a specific tag.'));
-    //$items['admin/reports/gojirareport_location_by_category'] = array('access arguments' => array(helper::PERMISSION_GOJIRA_ADMIN), 'page callback' => 'gojirareport_location_by_category', 'title' => t('Gojira locations by category'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Gat all locations that belong to a specific category.'));
     // ideal related actions
     $items['idealcallback'] = array('access arguments' => array('access content'), 'page callback' => 'idealcallback', 'title' => t('Callback page for iDeal'), 'type' => MENU_NORMAL_ITEM);
     $items['subscribe'] = array('access arguments' => array(helper::PERMISSION_DO_PAYMENTS), 'page callback' => 'subscribe', 'title' => t('Subscribe'), 'type' => MENU_NORMAL_ITEM);
@@ -98,6 +95,7 @@ function gojira_menu() {
     $items['passwordreset'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'passwordreset', 'title' => t('Password reset page'), 'type' => MENU_NORMAL_ITEM);
     $items['passwordmailsend'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'passwordmailsend', 'title' => t('Thanks page after password rest mail is send'), 'type' => MENU_NORMAL_ITEM);
     $items['location/edit'] = array('access arguments' => array(helper::PERMISSION_MANAGE_MULTIPLE_LOCATIONS), 'page callback' => 'locationedit', 'title' => t('Edit location page'), 'type' => MENU_NORMAL_ITEM);
+    $items['location/correct'] = array('access arguments' => array(helper::PERMISSION_CORRECT_EXISTING_LOCATIONS), 'page callback' => 'locationcorrect', 'title' => t('Correct location'), 'type' => MENU_NORMAL_ITEM);
     $items['location/list'] = array('access arguments' => array(helper::PERMISSION_MANAGE_MULTIPLE_LOCATIONS), 'page callback' => 'locationlist', 'title' => t('Manage locations'), 'type' => MENU_NORMAL_ITEM);
     $items['passwordthanks'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'passwordthanks', 'title' => t('Password reset send'), 'type' => MENU_NORMAL_ITEM);
     $items['suggestlocation'] = array('access arguments' => array(helper::PERMISSION_MODERATE_LOCATION_CONTENT), 'page callback' => 'suggestlocation', 'title' => t('Add a missing location.'), 'type' => MENU_NORMAL_ITEM);
@@ -106,6 +104,7 @@ function gojira_menu() {
     $items['settings'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'settings', 'title' => t('Settings'), 'type' => MENU_NORMAL_ITEM);
     $items['settings_thanks'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'settings_thanks', 'title' => t('Settings thanks'), 'type' => MENU_NORMAL_ITEM);
     $items['questions'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'questions', 'title' => t('Questions'), 'type' => MENU_NORMAL_ITEM);
+    $items['editnote'] = array('access arguments' => array(helper::PERMISSION_MODERATE_LOCATION_CONTENT), 'page callback' => 'editnote', 'title' => t('Edit note'), 'type' => MENU_NORMAL_ITEM);
 
     // AJAX
     $items['ajax/search'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'search', 'title' => t('Search'), 'type' => MENU_NORMAL_ITEM);
