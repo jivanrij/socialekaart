@@ -438,6 +438,7 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
                     marker.bindPopup(thisResult.h).on('popupopen', function () {
                         window.map.panTo(this._latlng);
                     });
+                    
                     window.markers.addLayer(marker);
                 }
                 if (thisResult.x && !thisResult.c) {
@@ -446,6 +447,7 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
                     marker.bindPopup('<span class="self_popup_link">' + data.your_location + '</span>').on('popupopen', function () {
                         jQuery('#selected_location_info > div').hide();
                     });
+                    
                     window.markers.addLayer(marker);
                 }
                 if (!thisResult.x && thisResult.c > 0) {
@@ -455,6 +457,7 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
                         window.map.panTo(this._latlng);
                         jQuery('#selected_location_info > div').hide();
                     });
+                    
                     window.markers.addLayer(marker);
                 }
                 if (!thisResult.x && !thisResult.c) {
@@ -463,6 +466,7 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
                     marker.bindPopup('<span class="hidden open_location_popup">' + thisResult.n + '</span>').on('popupopen', function () {
                         focusLocation();
                     });
+                    
                     window.markers.addLayer(marker);
                 }
                 window.markerMapping[thisResult.n] = marker._leaflet_id;
@@ -1172,6 +1176,8 @@ function bindLocationsset() {
                 jQuery('#locationsset_locations li').removeClass('active');
                 jQuery(button).closest("li").addClass('active');
 
+                //console.log(window.markers);
+
                 // move to it
                 //window.map.setView([data.latitude, (data.longitude - 0.004)], data.zoom);
                 window.map.panTo([data.latitude, data.longitude]);
@@ -1181,6 +1187,11 @@ function bindLocationsset() {
                 jQuery("#search_result_info").css('top', top + 'px');
 
                 jQuery(window).trigger('resize');
+
+                L.Marker.stopAllBouncingMarkers();
+                if ((window.markerMapping[location_id] !== undefined) && (window.markers._layers[window.markerMapping[location_id]] !== undefined)) {
+                    window.markers._layers[window.markerMapping[location_id]].toggleBouncing();
+                }
 
                 closeOverlay();
             },
