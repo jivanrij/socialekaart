@@ -95,7 +95,7 @@ function gojira_menu() {
     $items['passwordreset'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'passwordreset', 'title' => t('Password reset page'), 'type' => MENU_NORMAL_ITEM);
     $items['passwordmailsend'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'passwordmailsend', 'title' => t('Thanks page after password rest mail is send'), 'type' => MENU_NORMAL_ITEM);
     $items['location/edit'] = array('access arguments' => array(helper::PERMISSION_MANAGE_MULTIPLE_LOCATIONS), 'page callback' => 'locationedit', 'title' => t('Edit location page'), 'type' => MENU_NORMAL_ITEM);
-    $items['location/correct'] = array('access arguments' => array(helper::PERMISSION_CORRECT_EXISTING_LOCATIONS), 'page callback' => 'locationcorrect', 'title' => t('Correct location'), 'type' => MENU_NORMAL_ITEM);
+    $items['location/correct'] = array('access arguments' => array(helper::PERMISSION_CORRECT_EXISTING_LOCATIONS), 'page callback' => 'locationcorrect', 'title' => t('Change location'), 'type' => MENU_NORMAL_ITEM);
     $items['location/list'] = array('access arguments' => array(helper::PERMISSION_MANAGE_MULTIPLE_LOCATIONS), 'page callback' => 'locationlist', 'title' => t('Manage locations'), 'type' => MENU_NORMAL_ITEM);
     $items['passwordthanks'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'passwordthanks', 'title' => t('Password reset send'), 'type' => MENU_NORMAL_ITEM);
     $items['suggestlocation'] = array('access arguments' => array(helper::PERMISSION_MODERATE_LOCATION_CONTENT), 'page callback' => 'suggestlocation', 'title' => t('Add a missing location.'), 'type' => MENU_NORMAL_ITEM);

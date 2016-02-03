@@ -2,12 +2,13 @@
     <div id="doubles_wrapper">
         <div id="show_doubles">
             <p>
+                <?php echo t('Found location(s):'); ?>
+            </p>
             <ul>
                 <?php foreach (DoubleLocationFormHelper::getInstance()->getDoubleLocations($_POST[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD], $_POST[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD], $_POST[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD], $_POST[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]) as $iNid => $oPossibleDouble): ?>
                     <li><a class="double_locs" id="double_loc_<?php echo $iNid; ?>"><?php echo $oPossibleDouble; ?></a></li>
                 <?php endforeach; ?>
             </ul>
-            </p>
         </div>
         <div id="show_double_info"></div>
     </div>

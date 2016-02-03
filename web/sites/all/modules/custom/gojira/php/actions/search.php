@@ -69,6 +69,11 @@ function search() {
 
     $popupHtml = '';
 
+    $latLow = null;
+    $lonLow = null;
+    $latHigh = null;
+    $lonHigh = null;
+    
     // format the results
     foreach ($foundNodes as $key => $foundNode) {
         if ($foundNode) {
@@ -87,6 +92,21 @@ function search() {
                     'lo' => $location->getLongitude(),
                     'la' => $location->getLatitude()
                 );
+                
+                //get the lowest & highest lat & lon
+                if($latLow == null || $latLow >= $location->getLatitude()){
+                    $latLow = $location->getLatitude();
+                }
+                if($latHigh == null || $latHigh <= $location->getLatitude()){
+                    $latHigh = $location->getLatitude();
+                }
+                if($lonLow == null || $lonLow >= $location->getLongitude()){
+                    $lonLow = $location->getLongitude();
+                }
+                if($lonHigh == null || $lonHigh <= $location->getLongitude()){
+                    $lonHigh = $location->getLongitude();
+                }
+                
             }
         }
     }
@@ -175,15 +195,15 @@ function search() {
 
     $output['single_location'] = $single_location;
 
-//    Search::getInstance()->latLonRadiusInfo = array(
-//      'latLow'  => $latLow,
-//      'lonLow'  => $lonLow,
-//      'latHigh'  => $latHigh,
-//      'lonHigh'  => $lonHigh
-//    );
-
+    Search::getInstance()->latLonRadiusInfo = array(
+      'latLow'  => $latLow,
+      'lonLow'  => $lonLow,
+      'latHigh'  => $latHigh,
+      'lonHigh'  => $lonHigh
+    );
+    
     $output['boxInfo'] = Search::getInstance()->latLonRadiusInfo;
-
+    
     echo json_encode($output, true);
     exit;
 }

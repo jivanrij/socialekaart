@@ -200,30 +200,6 @@ a.help_link_content:hover {
     width: 400px;
   }
 }
-#doubles_wrapper {
-  width: 100%;
-  overflow: hidden;
-}
-#doubles_wrapper #show_double_info {
-  width: 50%;
-  float: left;
-}
-#doubles_wrapper #show_double_info p {
-  border-style: solid;
-  border-width: 1px;
-  padding: 5px;
-}
-#doubles_wrapper #show_doubles {
-  width: 50%;
-  float: left;
-}
-#doubles_wrapper #show_doubles a {
-  cursor: pointer;
-}
-#doubles_wrapper #show_doubles ul {
-  list-style: none;
-  padding-left: 0px;
-}
 #header {
   background-color: #b7072a;
   overflow: hidden;
@@ -1237,6 +1213,35 @@ body.questions a.active.topic {
     position: fixed;
     top: 38px;
   }
+}
+#doubles_wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+#doubles_wrapper #show_double_info {
+  width: 50%;
+  float: left;
+}
+#doubles_wrapper #show_double_info p {
+  border-style: solid;
+  border-width: 1px;
+  padding: 5px;
+}
+#doubles_wrapper #show_doubles {
+  width: 50%;
+  float: left;
+}
+#doubles_wrapper #show_doubles p {
+  margin: 10px 0 0 0;
+  padding: 0;
+}
+#doubles_wrapper #show_doubles a {
+  cursor: pointer;
+}
+#doubles_wrapper #show_doubles ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 ul.ui-autocomplete li a {
   font-size: 12px !important;

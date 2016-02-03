@@ -175,17 +175,12 @@ class Search {
         }
 
         if (user_access(helper::PERMISSION_CORRECT_EXISTING_LOCATIONS)) {
-            $improve_txt = t('Do you think this information is incorrect?');
-            $improve_link = t('You can change it here.');
-            $improveroute = 'location/correct';
+            $inform = '<i class="fa fa-wrench"></i> <a href="/location/correct&nid=%nid%" title="Verander">Verander</a> of <a href="/inform&nid=%nid%" title="informeer ons">informeer ons</a> als er iets niet klopt aan deze zorgverlener.';
         }else{
-            $improve_txt = t('Is this information incorrect of incomplete?');
-            $improve_link = t('Report it here.');
-            $improveroute = 'inform';
+            $inform = '<i class="fa fa-envelope-o"></i> <a href="/inform&nid=%nid%" title="Informeer ons">Informeer ons</a> als er iets niet klopt aan deze zorgverlener.';
         }
 
         $yournote = t('Your note:').'<br />';
-
         $popupHtml = <<<EAT
 <div id="location_%nid%" class="search_result_wrapper">
   <div class="grouped">
@@ -211,7 +206,7 @@ class Search {
     {$add_label}
   </div>
   <div class="inform">
-    {$improve_txt} <a href="/{$improveroute}&nid=%nid%" title="{$improve_txt} {$improve_link}">{$improve_link}</a>
+    {$inform}
   </div>
   <a class="fa fa-times close_button"></a>
 </div>

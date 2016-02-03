@@ -472,6 +472,10 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
                 window.markerMapping[thisResult.n] = marker._leaflet_id;
             }
 
+//var featureLayer = L.mapbox.featureLayer().addTo(window.map);
+//featureLayer.on('ready', function() {
+//    window.map.fitBounds(featureLayer.getBounds());
+//});
             if (data.boxInfo === null) {
                 window.map.setView([data.latitude, data.longitude], data.zoom);
             } else {

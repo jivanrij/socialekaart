@@ -28,6 +28,19 @@ function gojira_locationcorrect_form($form, &$form_state) {
 
     $form = gojira_get_core_location_form($form, $form_state, $node, 'locationedit');
 
+    $categorys = db_query("select title, nid from node where type = 'category' and status = 1 and title != 'Huisarts'");
+    foreach ($categorys as $category) {
+        $cat_options[$category->nid] = $category->title;
+    }
+    $iCategory = helper::value($node, GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD, 'nid');
+    $form[GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD] = array(
+        '#title' => t('Category'),
+        '#type' => 'select',
+        '#required' => true,
+        '#options' => $cat_options,
+        '#default_value' => $iCategory,
+    );
+    
     $form[GojiraSettings::CONTENT_TYPE_URL_FIELD] = array(
         '#title' => t('Website'),
         '#type' => 'textfield',
@@ -37,7 +50,7 @@ function gojira_locationcorrect_form($form, &$form_state) {
     
     $form['submit'] = array(
         '#type' => 'submit',
-        '#prefix' => '<div class="gbutton_wrapper"><span class="gbutton rounded noshadow right">',
+        '#prefix' => '<div class="gbutton_wrapper"><a class="gbutton rounded noshadow left" href="\?loc='.$id.'" title="' . t('Show location') . '"><span>' . t('Show location') . '</span></a><span class="gbutton rounded noshadow right">',
         '#value' => t('Submit'),
         '#suffix' => '</span></div>'
     );
@@ -76,6 +89,9 @@ function gojira_locationcorrect_form_submit($form, &$form_state) {
     foreach (Location::getAddressFields() as $field) {
         $node->$field = array(LANGUAGE_NONE => array(0 => array('value' => $form[$field]['#value'])));
     }
+
+    $catfield = GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD;
+    $node->$catfield = array('und' => array(0 => array('nid' => $form[GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD]['#value'])));
     
     node_save($node);
     
