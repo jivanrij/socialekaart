@@ -661,7 +661,11 @@ EOT;
             watchdog(GojiraSettings::WATCHDOG_HAWEB_SSO, 'user ' . $account->uid . ' allready has gotten a free period. Kill the setNewFreePeriodUser rights/payments proces.');
             return;
         }
-
+        $group = Group::getGroupNode();
+        
+        $group->field_payed_status[LANGUAGE_NONE][0]['value'] = 1;
+        node_save($group);
+        
         Subscriptions::setRolesForPayed($group, false);
         // add a payment log so the group will have a payed period of 3 months
         $sql = "INSERT INTO `gojira_payments` (`uid`, `name`, `description`, `amount`, `gid`, `ideal_id`, `ideal_code`, `period_start`, `status`, `period_end`,`discount`,`tax`,`payed`) VALUES ({$account->uid}, '{$account->name}', '" . GojiraSettings::IDEAL_FREE_PERIOD_DESCRIPTION . "', 0, " . $group->nid . ", '0', '0', " . helper::getTime() . ", 1, " . strtotime("+3 months", helper::getTime()) . ",0,0,0)";

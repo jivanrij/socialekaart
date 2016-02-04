@@ -557,11 +557,6 @@ EOT;
             'name' => $oUser->mail,
             'type' => 'to'
         );
-        $aInfo['to'][] = array(
-            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'type' => 'bcc'
-        );
 
         $oMailer = new Mailer();
         $oMailer->send($aInfo);

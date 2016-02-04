@@ -24,7 +24,7 @@
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         </ul>
-                    <?php else: ?>
+                    <?php elseif(Subscriptions::currentGroupHasPayed()): ?>
                         <a id="direct_link" title="<?php echo t('Your map'); ?>" href="<?php echo url('ownlist'); ?>"><?php echo t('Your map'); ?></a>
                     <?php endif; ?>
                 </li>
