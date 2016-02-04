@@ -6,9 +6,10 @@ if($oLocationset){
     $sTitle = $oLocationset->title;
     drupal_add_js(array('gojira' => array('locationsset_id' => $oLocationset->nid)), 'setting');
 }else{
-    $aLocations = Favorite::getInstance()->getAllFavoriteLocations(true);
+    $currentPractice = Location::getCurrentLocationNodeObjectOfUser();
+    $aLocations = Favorite::getInstance()->getAllFavoriteLocations(true, $currentPractice->nid);
     $sBody = t('Your own personal map\'s decription.');
-    $sTitle = t('Your own personal map.');
+    $sTitle = 'Sociale kaart '.$currentPractice->title;
     drupal_add_js(array('gojira' => array('locationsset_id' => "favorites")), 'setting');
 }
 $aCategories = Locationsets::getCategoriesFromLocationsArray($aLocations);

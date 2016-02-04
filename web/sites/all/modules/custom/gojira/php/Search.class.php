@@ -175,9 +175,9 @@ class Search {
         }
 
         if (user_access(helper::PERMISSION_CORRECT_EXISTING_LOCATIONS)) {
-            $inform = '<i class="fa fa-wrench"></i> <a href="/location/correct&nid=%nid%" title="Verander">Verander</a> of <a href="/inform&nid=%nid%" title="informeer ons">informeer ons</a> als er iets niet klopt aan deze zorgverlener.';
+            $inform = '<i class="fa fa-wrench"></i> Gegevens onjuist/onvolledig? <a href="/inform&nid=%nid%" title="Informeer ons">Informeer ons</a> of <a href="/location/correct&nid=%nid%" title="wijzig hier">wijzig hier</a>.';
         }else{
-            $inform = '<i class="fa fa-envelope-o"></i> <a href="/inform&nid=%nid%" title="Informeer ons">Informeer ons</a> als er iets niet klopt aan deze zorgverlener.';
+            $inform = '<i class="fa fa-envelope-o"></i> Gegevens onjuist/onvolledig? <a href="/inform&nid=%nid%" title="Informeer ons">Informeer ons</a>.';
         }
 
         $yournote = t('Your note:').'<br />';

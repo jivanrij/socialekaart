@@ -35,8 +35,10 @@ class Favorite {
     /**
      * Get's you all the favorite locations of the current logged in user's group
      * If you order by title it get's ordered, else the keys will be the nid's
+     * Add a optional 2nd param with a practice id to only get the favorites of the current selected practice
      * 
      * @param boolean $order_by_title
+     * @param integer Practice id
      * @return Array
      */
     public function getAllFavoriteLocations($order_by_title = false, $iLocationPractice = null) {
