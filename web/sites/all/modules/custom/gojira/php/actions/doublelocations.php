@@ -20,10 +20,18 @@ function doublelocations(){
     //51.7026117
     //4.6240819
     
+    //Epe links boven
+    //52.530148
+    //5.7489782
+    //Epe rechts onder
+    //52.2312446
+    //6.2384336
+    
     $limitArea = "";
     if($specific_map == 'hw'){
-//        $limitArea = " (X(point) BETWEEN 4.2369379 AND 4.6240819) AND (Y(point) BETWEEN 51.8406974 AND 51.7026117) AND ";
         $limitArea = " (X(point) > 4.2369379 AND X(point) < 4.6240819) AND (Y(point) > 51.7026117 AND Y(point) < 51.8406974) AND ";
+    }else if($specific_map == 'epe'){
+        $limitArea = " (X(point) > 5.7489782 AND X(point) < 6.2384336) AND (Y(point) > 52.2312446 AND Y(point) < 52.530148) AND ";
     }
 
     $criteria = " {$limitArea} type = 'location' and source != 'spider' and point is not null and double_checked != 1 ";

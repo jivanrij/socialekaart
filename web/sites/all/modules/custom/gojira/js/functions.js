@@ -428,6 +428,12 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
                 jQuery('#ajax_search_results').html(data.results_html);
             }
 
+            if(data.mapSearchResultsCount == 1){
+                // no results, only our own practice
+                closeOverlay();
+                return;
+            }
+
             for (var i = 0; i < data.mapSearchResultsCount; i++) {
 
                 var thisResult = data.mapSearchResults[i];

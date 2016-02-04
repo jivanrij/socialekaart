@@ -28,7 +28,7 @@ function gojira_locationcorrect_form($form, &$form_state) {
 
     $form = gojira_get_core_location_form($form, $form_state, $node, 'locationedit');
 
-    $categorys = db_query("select title, nid from node where type = 'category' and status = 1 and title != 'Huisarts'");
+    $categorys = db_query("select title, nid from node where type = 'category' and status = 1 and title != 'Huisarts' order by title");
     foreach ($categorys as $category) {
         $cat_options[$category->nid] = $category->title;
     }

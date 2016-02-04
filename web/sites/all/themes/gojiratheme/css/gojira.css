@@ -485,6 +485,10 @@ form#user-pass div.form-item input[type=text] {
 #gojira-to-subscribe-page-form div.form-wrapper span {
   width: 215px;
 }
+#gojira-editnote-form #edit-note {
+  height: 400px;
+  width: 100%;
+}
 div.password-strength,
 div.password-confirm {
   margin-top: 0;
@@ -890,6 +894,9 @@ body.questions a.active.topic {
 #selected_location_info .search_result_wrapper > div.note a.fa {
   color: #b7072a;
   text-decoration: none;
+}
+#selected_location_info .search_result_wrapper > div.note i {
+  font-weight: bold;
 }
 #selected_location_info .search_result_wrapper div.gbutton_wrapper {
   clear: both;

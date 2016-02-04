@@ -13,6 +13,14 @@ if($oLocationset){
     drupal_add_js(array('gojira' => array('locationsset_id' => "favorites")), 'setting');
 }
 $aCategories = Locationsets::getCategoriesFromLocationsArray($aLocations);
+
+$aCategoriesSorted = array();
+foreach($aCategories as $aCategorie){
+    $aCategoriesSorted[$aCategorie->title] = $aCategorie;
+}
+ksort($aCategoriesSorted);
+$aCategories = $aCategoriesSorted;
+
 drupal_add_js(array('gojira' => array('page' => 'locationsset')), 'setting');
 ?>
 <div id="locationset_wrapper" class="rounded">

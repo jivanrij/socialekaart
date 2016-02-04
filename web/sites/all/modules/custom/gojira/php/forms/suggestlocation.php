@@ -41,7 +41,7 @@ function gojira_suggestlocation_form($form, &$form_state) {
         '#required' => false,
     );
 
-    $categorys = db_query("select title, nid from node where type = 'category' and status = 1 and title != 'Huisarts'");
+    $categorys = db_query("select title, nid from node where type = 'category' and status = 1 and title != 'Huisarts' order by title");
     $cat_options = array(0 => t('Select category'));
     foreach ($categorys as $category) {
         $cat_options[$category->nid] = $category->title;

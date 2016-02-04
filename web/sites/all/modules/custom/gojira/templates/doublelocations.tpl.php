@@ -6,8 +6,9 @@
     Samenvoegen: De geselecteerde zorgverleners zullen samengevoegd worden.<br />
 </p>
 <p>
-    <b>Filteren op een vierkant waar een specifiek gebied in valt:</b>
+    <b>Filteren op een vierkant waar een specifiek gebied in valt:</b><br />
     <a href="/admin/config/system/doublelocations?map=hw">Hoeksche Waard</a><br />
+    <a href="/admin/config/system/doublelocations?map=epe">Epe</a><br />
 </p>
 <?php foreach ($aDoubleLocations as $key => $aDoubleLocation): ?>
     <form id="double_key_<?php echo $key; ?>">
