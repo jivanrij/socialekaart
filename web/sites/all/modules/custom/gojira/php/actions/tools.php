@@ -215,17 +215,9 @@ EOT;
                     Mailer::accountActivatedByAdmin($user);
                     drupal_set_message(t('Just send the mail to the user that gets send when an admin activates the account.'), 'status');
                     break;
-                case 'newAccountThroughSSO':
-                    Mailer::newAccountThroughSSO($user);
-                    drupal_set_message(t('Just send the e-mail that gets send when a new account is created through sso to the user of that account.'), 'status');
-                    break;
                 case 'sendAccountNeedsValidation':
                     Mailer::sendAccountNeedsValidation($user);
                     drupal_set_message(t('Just send the e-mail to the admin to tell hem an account needs activation.'), 'status');
-                    break;
-                case 'sendDoubleAccountWarning':
-                    Mailer::sendDoubleAccountWarning($user);
-                    drupal_set_message(t('Just send the e-mail to the user that he has 2 accounts, one in Haweb and one in SK. Not linked.'), 'status');
                     break;
             }
         }

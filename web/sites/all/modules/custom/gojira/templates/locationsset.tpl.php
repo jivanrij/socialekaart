@@ -14,7 +14,6 @@ if($oLocationset){
 }
 $aCategories = Locationsets::getCategoriesFromLocationsArray($aLocations);
 drupal_add_js(array('gojira' => array('page' => 'locationsset')), 'setting');
-
 ?>
 <div id="locationset_wrapper" class="rounded">
     <h2><?php echo $sTitle; ?></h2>

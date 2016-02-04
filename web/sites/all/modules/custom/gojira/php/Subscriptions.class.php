@@ -411,6 +411,7 @@ EOT;
                     self::addRoleToUser($groupuser->uid, helper::ROLE_SUBSCRIBED_MASTER);
                 } else {
                     // is not the master user
+                    // don't need to assign a role, we only need to activate them
                     if ($bSendMails) {
                         Mailer::sendSubscribeActivationMail($groupuser);
                     }
@@ -646,4 +647,25 @@ EOT;
         }
     }
 
+    /**
+     * Adds crucial information/roles/stuff to a new created user NOT from the HAWeb SSO
+     * 
+     * Do NOT run this function on allready existing accounts
+     * 
+     * @param stdClass $account
+     */
+    public static function giveNewUserDiscount(&$account) {
+
+        $iFreePeriodeGiven = db_query("select count(id) from `gojira_payments` where uid = {$account->uid} and description = '" . GojiraSettings::IDEAL_FREE_PERIOD_DESCRIPTION . "'")->fetchField();
+        if ($iFreePeriodeGiven > 0) {
+            watchdog(GojiraSettings::WATCHDOG_HAWEB_SSO, 'user ' . $account->uid . ' allready has gotten a free period. Kill the setNewFreePeriodUser rights/payments proces.');
+            return;
+        }
+
+        Subscriptions::setRolesForPayed($group, false);
+        // add a payment log so the group will have a payed period of 3 months
+        $sql = "INSERT INTO `gojira_payments` (`uid`, `name`, `description`, `amount`, `gid`, `ideal_id`, `ideal_code`, `period_start`, `status`, `period_end`,`discount`,`tax`,`payed`) VALUES ({$account->uid}, '{$account->name}', '" . GojiraSettings::IDEAL_FREE_PERIOD_DESCRIPTION . "', 0, " . $group->nid . ", '0', '0', " . helper::getTime() . ", 1, " . strtotime("+3 months", helper::getTime()) . ",0,0,0)";
+        db_query($sql);
+    }
+    
 }

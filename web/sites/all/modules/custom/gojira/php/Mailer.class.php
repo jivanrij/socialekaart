@@ -163,8 +163,8 @@ class Mailer {
             'type' => 'to'
         );
         $aInfo['to'][] = array(
-            'email' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-            'name' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
+            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'bcc'
         );
         $oMailer = new Mailer();
@@ -197,13 +197,12 @@ class Mailer {
             'name' => $account->mail,
             'type' => 'to'
         );
-        if(trim(variable_get('mailadres_information_bcc', 'blijnder@gmail.com')) != ''){
-            $aInfo['to'][] = array(
-                'email' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                'name' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                'type' => 'bcc'
-            );
-        }
+        $aInfo['to'][] = array(
+            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'type' => 'bcc'
+        );
+
 
         $oMailer = new Mailer();
         $oMailer->send($aInfo);
@@ -235,13 +234,12 @@ class Mailer {
             'name' => $account->mail,
             'type' => 'to'
         );
-        if(trim(variable_get('mailadres_information_bcc', 'blijnder@gmail.com')) != ''){
-            $aInfo['to'][] = array(
-                'email' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                'name' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                'type' => 'bcc'
-            );
-        }
+
+        $aInfo['to'][] = array(
+            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'type' => 'bcc'
+        );
         $oMailer = new Mailer();
         $oMailer->send($aInfo);
     }
@@ -271,13 +269,11 @@ class Mailer {
             'name' => $user->mail,
             'type' => 'to'
         );
-        if(trim(variable_get('mailadres_information_bcc', 'blijnder@gmail.com')) != ''){
-            $aInfo['to'][] = array(
-                'email' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                'name' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                'type' => 'bcc'
-            );
-        }
+        $aInfo['to'][] = array(
+            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'type' => 'bcc'
+        );
         $oMailer = new Mailer();
         $oMailer->send($aInfo);
     }
@@ -307,13 +303,11 @@ class Mailer {
             'name' => $user->mail,
             'type' => 'to'
         );
-        if(trim(variable_get('mailadres_information_bcc', 'blijnder@gmail.com')) != ''){
-            $aInfo['to'][] = array(
-                'email' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                'name' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                'type' => 'bcc'
-            );
-        }
+        $aInfo['to'][] = array(
+            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'type' => 'bcc'
+        );
         $oMailer = new Mailer();
         $oMailer->send($aInfo);
     }
@@ -339,13 +333,11 @@ class Mailer {
             'name' => $title,
             'type' => 'to'
         );
-        if(trim(variable_get('mailadres_information_bcc', 'blijnder@gmail.com')) != ''){
-            $aInfo['to'][] = array(
-                'email' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                'name' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                'type' => 'bcc'
-            );
-        }
+        $aInfo['to'][] = array(
+            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'type' => 'bcc'
+        );
         $oMailer = new Mailer();
         $oMailer->send($aInfo);
     }
@@ -369,13 +361,11 @@ class Mailer {
             'name' => $main_doctor->mail,
             'type' => 'to'
         );
-        if(trim(variable_get('mailadres_information_bcc', 'blijnder@gmail.com')) != ''){
-            $aInfo['to'][] = array(
-                'email' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                'name' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                'type' => 'bcc'
-            );
-        }
+        $aInfo['to'][] = array(
+            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'type' => 'bcc'
+        );
         $oMailer = new Mailer();
         $oMailer->send($aInfo);
     }
@@ -396,6 +386,11 @@ class Mailer {
             'email' => variable_get('site_mail', 'info@socialekaart.care'),
             'name' => variable_get('site_mail', 'info@socialekaart.care'),
             'type' => 'to'
+        );
+        $aInfo['to'][] = array(
+            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'type' => 'bcc'
         );
         $oMailer = new Mailer();
         $oMailer->send($aInfo);
@@ -425,8 +420,8 @@ EOT;
         $aInfo['subject'] = '[' . $title . '] - Verbetersuggestie voor locatie - ' . $type_of_problem;
         $aInfo['text'] = $body;
         $aInfo['to'][] = array(
-            'email' => variable_get('site_mail', 'info@socialekaart.care'),
-            'name' => variable_get('site_mail', 'info@socialekaart.care'),
+            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'to'
         );
         $oMailer = new Mailer();
@@ -462,34 +457,6 @@ EOT;
     }
     
     /**
-     * Informs the user that someone with the same username is tryed to login on SocialeKaart.care from HAWeb
-     * In the case the accounts are not linked. 
-     * 
-     * In this e-mail the user get's a linkt to login with and merge the accounts.
-     */
-    public static function sendDoubleAccountWarning($sEmail) {
-
-        $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
-        $aInfo['from_name'] = 'SocialeKaart.care';
-        $aInfo['subject'] = 'Inloggen op SocialeKaart.care vanuit HAweb?';
-        $aInfo['text'] = variable_get('gojira_double_account_login_warning', '');
-        $aInfo['to'][] = array(
-            'email' => $sEmail,
-            'name' => $sEmail,
-            'type' => 'to'
-        );
-        if(trim(variable_get('mailadres_information_bcc', 'blijnder@gmail.com')) != ''){
-            $aInfo['to'][] = array(
-                'email' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                'name' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                'type' => 'bcc'
-            );
-        }
-        $oMailer = new Mailer();
-        $oMailer->send($aInfo);
-    }
-
-    /**
      * This e-mail informs the admin that there is a new account added and it need validation
      */
     public static function sendAccountNeedsValidation($oUser) {
@@ -516,41 +483,12 @@ EOT;
         $aInfo['subject'] = 'Account moet gevalideerd worden van '.$sTitle;
         $aInfo['html'] = $sBody;
         $aInfo['to'][] = array(
-            'email' => variable_get('site_mail', 'info@socialekaart.care'),
-            'name' => variable_get('site_mail', 'info@socialekaart.care'),
+            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'to'
         );
         $oMailer = new Mailer();
         $oMailer->send($aInfo);
-    }
-
-    /**
-     * Informs the user he has logged on to SocialeKaart for the first time through SSO from haweb 
-     * 
-     */
-    public static function newAccountThroughSSO($oUser) {
-        
-            $sEmail = $oUser->mail;
-
-            $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
-            $aInfo['from_name'] = 'SocialeKaart.care';
-            $aInfo['subject'] = 'Welkom bij SocialeKaart.care!';
-            $aInfo['text'] = variable_get('new_account_through_sso', '');
-            $aInfo['to'][] = array(
-                'email' => $sEmail,
-                'name' => $sEmail,
-                'type' => 'to'
-            );
-            if(trim(variable_get('mailadres_information_bcc', 'blijnder@gmail.com')) != ''){
-                $aInfo['to'][] = array(
-                    'email' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                    'name' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                    'type' => 'bcc'
-                );
-            }
-            $oMailer = new Mailer();
-            $oMailer->send($aInfo);
-
     }
     
 
@@ -566,7 +504,7 @@ EOT;
             $aInfo['from_name'] = 'SocialeKaart.care';
             $aInfo['subject'] = 'Gefeliciteerd!';
             $aInfo['text'] = <<<EOT
-Gefeliciteerd u hoort tot de groep gebruikers van Sociale Kaart die in aanmerking komt voor onze introductie-actie. U krijgt u van ons een gratis proefabonnement voor de duur van 3 maanden!
+U krijgt u van ons een gratis proefabonnement voor de duur van 3 maanden!
 
 Met de standaard versie van Sociale Kaart kunt u eenvoudig en snel verwijzen naar zorgverleners in uw regio. Door kenmerken toe te voegen aan zorgverleners worden de zoekresultaten steeds relevanter.
 
@@ -591,13 +529,11 @@ EOT;
                 'name' => $sEmail,
                 'type' => 'to'
             );
-            if(trim(variable_get('mailadres_information_bcc', 'blijnder@gmail.com')) != ''){
-                $aInfo['to'][] = array(
-                    'email' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                    'name' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                    'type' => 'bcc'
-                );
-            }
+            $aInfo['to'][] = array(
+                'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+                'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+                'type' => 'bcc'
+            );
             $oMailer = new Mailer();
             $oMailer->send($aInfo);
 
@@ -621,17 +557,14 @@ EOT;
             'name' => $oUser->mail,
             'type' => 'to'
         );
-        if(trim(variable_get('mailadres_information_bcc', 'blijnder@gmail.com')) != ''){
-            $aInfo['to'][] = array(
-                'email' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                'name' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-                'type' => 'bcc'
-            );
-        }
+        $aInfo['to'][] = array(
+            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'type' => 'bcc'
+        );
 
         $oMailer = new Mailer();
         $oMailer->send($aInfo);
-
     }
     
     /**
@@ -666,12 +599,16 @@ EOT;
         $aInfo['from_name'] = 'SocialeKaart.care';
         $aInfo['subject'] = 'SocialeKaart.care No Coordinates found! - '.$iLocation;
         $aInfo['html'] = $sBody;
-            $aInfo['to'][] = array(
-                'email' => variable_get('site_mail', 'info@socialekaart.care'),
-                'name' => variable_get('site_mail', 'info@socialekaart.care'),
-                'type' => 'to'
-            );
-
+        $aInfo['to'][] = array(
+            'email' => variable_get('site_mail', 'info@socialekaart.care'),
+            'name' => variable_get('site_mail', 'info@socialekaart.care'),
+            'type' => 'to'
+        );
+        $aInfo['to'][] = array(
+            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'type' => 'bcc'
+        );
 
         $oMailer = new Mailer();
         $oMailer->send($aInfo);
@@ -688,8 +625,8 @@ EOT;
         $aInfo['subject'] = 'SocialeKaart.care ISSUE - group ' . $iGroup . ' has no payment information';
         $aInfo['text'] = 'SocialeKaart.care ISSUE - group ' . $iGroup . ' has no payment information, but is flagged as a group with a payed account.';
         $aInfo['to'][] = array(
-            'email' => variable_get('site_mail', 'info@socialekaart.care'),
-            'name' => variable_get('site_mail', 'info@socialekaart.care'),
+            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'to'
         );
 
@@ -735,8 +672,8 @@ TODO: check them out and if they are double, optionally merge them.<br />
 <a href="https://www.socialekaart.care/admin/config/system/doublelocations/?ids_from_mail={$ids}">Double location merge page</a>
 EOT;
         $aInfo['to'][] = array(
-            'email' => variable_get('site_mail', 'info@socialekaart.care'),
-            'name' => variable_get('site_mail', 'info@socialekaart.care'),
+            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
+            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'to'
         );
 

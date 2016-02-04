@@ -102,12 +102,6 @@ function gojira_configuration_form($form, &$form_state) {
         '#default_value' => variable_get('gojira_ideal_return_url', ''),
         '#description' => 'Return url after a user has made a payment, must be absolute.'
     );
-    $form['algemene_instellingen']['mailadres_information_bcc'] = array(
-        '#title' => t('User mails BCC E-mail address'),
-        '#type' => 'textfield',
-        '#default_value' => variable_get('mailadres_information_bcc', 'blijnder@gmail.com'),
-        '#description' => 'The BCC E-mailadres for all e-mails that get send to users. Keep this empty if you don\'t want this.'
-    );
     $form['algemene_instellingen']['mailadres_information_inform_admin'] = array(
         '#title' => t('Informative e-mails to Admin'),
         '#type' => 'textfield',
@@ -320,44 +314,6 @@ function gojira_configuration_form($form, &$form_state) {
           %url% <- the url of the password reset link.<br />'
     );
 
-//            $sBody = <<<EOT
-//Welkom bij SocialeKaart.care!
-//                
-//U bent zojuist voor het eerst ingelogd in SocialeKaart.care via uw Haweb.nl account.
-//
-//Vanaf nu heeft u onbeperkt toegang tot een uniek bestand met contactgegevens van zorgaanbieders in uw regio.
-//
-//Dit betekent dat u voortaan vanuit uw praktijk:
-//- snel kunt zoeken op verwijsgegevens;
-//- medische contactgegevens altijd en overal online beschikbaar hebt;
-//- eenvoudig een 'eigen' bestand met verwijsgegevens kunt opbouwen;
-//- samen met andere huisartsen, zorgaanbieders kunt voorzien van eigenschappen waarop ze vindbaar zijn;
-//- voor het systeem onbekende zorgaanbieders kunt toevoegen.
-//
-//Voor onze gebruikers is het mogelijk een abonnement te nemen. Omdat u vanuit Haweb lid bent gewoorden kunt u voor de eerste 3 maanden gebruik maken van de extra functionaliteiten die behoren tot een abonnement. Ook krijgt u via uw lidmaatschap bij Haweb korting als u later besluit over te gaan op een abonnement.
-//    
-//Met een abonnement kunt u volledig reclame vrij gebruikmaken van de volgende functionaliteiten:
-//- zoeken naar verwijsgegevens in het gehele land;
-//- uw collega's en medewerkers laten werken met dezelfde informatie d.m.v. extra accounts;
-//- u kunt meerdere praktijken toevoegen zodat u vanuit een andere plaats/praktijk kunt zoeken naar zorginstellingen.
-//
-//Als laatste willen wij u op de hoogste stellen dat we standaard beschikken over 117.000 zorginstellingen verspreid over het gehele land. Verschillende hiervan zult u kennen en sommige niet, ook zult zorginstellingen kennen wie wij niet in ons systeem hebben staan. Deze kunt u makkelijk en snel toevoegen via ons 'Zorgverlener toevoegen' formulier. Op deze manier kunt u uw eigen zorgkaart compleet krijgen en kunnen uw collega's hier ook direct profijt van hebben.
-//                
-//Wij wensen u veel plezier in het werken met SocialeKaart.care.
-//Uw vragen en ideëen zijn meer dan welkom, stuur ze naar: info@socialekaart.care.
-//
-//Met vriendelijke groet,
-//Het team van SocialeKaart.care
-//EOT;
-    
-    $form['email']['new_account_through_sso'] = array(
-        '#title' => t('New account by SSO'),
-        '#type' => 'textarea',
-        '#default_value' => variable_get('new_account_through_sso', ''),
-        '#description' => 'TEXT e-mail<br />This e-mail is send to the user when he logs in to the system for the first time by sso.'
-    );
-
-
     $form['submit_down_under'] = array(
         '#type' => 'submit',
         '#value' => t('Submit'),
@@ -385,7 +341,6 @@ function gojira_configuration_form_submit($form, &$form_state) {
     variable_set('CENTER_COUNTRY_LATITUDE', $_POST['CENTER_COUNTRY_LATITUDE']);
     variable_set('CENTER_COUNTRY_LONGITUDE', $_POST['CENTER_COUNTRY_LONGITUDE']);
     variable_set('SEARCH_MAX_RESULT_AMOUNT', $_POST['SEARCH_MAX_RESULT_AMOUNT']);
-    variable_set('mailadres_information_bcc', $_POST['mailadres_information_bcc']);
     variable_set('gojira_amount_calls_to_google', $_POST['gojira_amount_calls_to_google']);
 //    variable_set('gojira_search_in', $_POST['gojira_search_in']);
     variable_set('gojira_subscription_expire_warning', $_POST['gojira_subscription_expire_warning']);
@@ -400,7 +355,6 @@ function gojira_configuration_form_submit($form, &$form_state) {
     variable_set('mapbox_accesstoken', $_POST['mapbox_accesstoken']);
     variable_set('mapbox_projectid', $_POST['mapbox_projectid']);
     variable_set('account_activated_by_admin', $_POST['account_activated_by_admin']);
-    variable_set('new_account_through_sso', $_POST['new_account_through_sso']);
     variable_set('gojira_double_account_login_warning', $_POST['gojira_double_account_login_warning']);
     variable_set('mailadres_information_inform_admin', $_POST['mailadres_information_inform_admin']);
     variable_set('mailadres_helpdesk', $_POST['mailadres_helpdesk']);

@@ -102,13 +102,7 @@
     <b>sendLocationAddedByUserToAdmin</b> wordt verzonden naar de admin met de informatie van een locatie die een gebruiker heeft toegevoegd aan het systeem.
 </p>
 <p>
-    Als er iemand via HAweb voor het eerst probeerd in te loggen en er is al een account in het systeem met hetzelfde e-mailadres wordt <b>sendDoubleAccountWarning</b> verstuurd. Hierin wordt uitgelegd wat de gebruiker moet doen om de SSO werkend te krijgen.
-</p>
-<p>
     Na een handmatige registratie van een nieuwe gebruiker/doctor zal de e-mail <b>sendAccountNeedsValidation</b> worden verzonden naar de admin. Hierin staat wat de admin moet doen om de account te activeren/controlleren.
-</p>
-<p>
-    <b>newAccountThroughSSO</b> Na de eerste keer dat iemand inlogt via de SSO met HAweb wordt deze e-mail verstuurd naar de gebruiker.
 </p>
 <p>
     <b>accountActivatedByAdmin</b> wordt verstuurd naar een account die geactiveerd is door de admin via de tools pagina. Wordt meestal gebruikt voor accounts die zich handmatig hebben geregistreerd.
@@ -126,12 +120,6 @@
 <h2>SSO registratie</h2>
 <p>
     Bij acceptatie van de algemene voorwaarden krijgt de gebruiker 3 maanden abonnements voordeel. In dit geval worden er geen activatie e-mails verstuurd naar de gebruikers van de groep.
-</p>
-<p>
-    Als iemand in zowel HAweb als in Sociale Kaart een account heeft met hetzelfde e-mailadres kan hij/zij niet inloggen via HAweb. In dit geval krijgt deze gebruiker op dit e-mailadres een e-mail met de uitleg wat de situatie is. Ook wordt er in de database een flag gezet op het veldje users.haweb_sso_dublicate_warning_send om aan te geven dat deze mail is verzonden. Met deze flag aan zal deze mail nooit meer verzonden worden.
-</p>
-<p>
-    Gebruikers krijgen via HAweb een account in Sociale Kaart. Deze account kan nog niet veel van zichzelf omdat deze nog niet de benodigde rechten heeft. Pas als de gebruiker akkoort gaat met de algemene voorwaarden wordt de account voorzien van alle benodigde rechten via rollen. Ook wordt er dan een flag gezet in de tabel users.haweb_sso_setup_done. Als deze flag gezet is zal het systeem nooit meer automatisch de user voorzien van deze rechten.
 </p>
 <hr/>
 <h2>Verbetersuggesties & andere input van de gebruikers</h2>

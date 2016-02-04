@@ -347,9 +347,7 @@ You can find the cron url <a href="/admin/config/system/cron" title="cron page">
         <option value="sendUnsubscribeMail">Send the e-mail a employer & employee recieve when unsubscribed</option>
         <option value="sendSubscribeActivationMail">Send the e-mail a employee & employer recieves when the account get's activated after it's unsubscribed</option>
         <option value="accountActivatedByAdmin">Send the mail that gets send when an admin activates the account</option>
-        <option value="newAccountThroughSSO">Sends e-mail that gets send when a new account is created through sso to the user of that account</option>
         <option value="sendAccountNeedsValidation">Sends the e-mail to the admin to tell hem an account needs activation</option>
-        <option value="sendDoubleAccountWarning">Sends the e-mail to the user that he has 2 accounts, one in Haweb and one in SK. Not linked.</option>
     </select>
     <input type="text" id="email" value="<?php echo (isset($_POST['email']) ? $_POST['email'] : ''); ?>" name="email" style='border:1px; border-style: solid;' />
   <input class="form-submit" type="submit" />

@@ -312,11 +312,6 @@ function onesignin_client_userdata_synchronize($uid_server, $last_change = 0) {
       watchdog('onesignin', 'Duplicate name %name while saving user account for user %uid_local (server uid %uid_server).', array('%name' => $edit['name'], '%uid_local' => ($mapping ? $mapping->uid : 'unknown'), '%uid_server' => $uid_server), WATCHDOG_ERROR);
       trigger_error('error saving account', E_USER_WARNING);
       
-      //SOCIALEKAART.CARE CHANGE START
-      if(module_exists('gojira')){
-          Haweb::dublicateWarning($edit['mail']);
-      }
-      //SOCIALEKAART.CARE CHANGE END
       return FALSE;
     }
 

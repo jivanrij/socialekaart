@@ -167,7 +167,6 @@ function gojira_register_form_submit($form, &$form_state) {
   $user->roles = $roles;
   
   user_save($user);
-
   
   drupal_set_message(t('Account sucesfully created.'));
   
@@ -175,8 +174,6 @@ function gojira_register_form_submit($form, &$form_state) {
   //register_no_approval_required
   
   Mailer::sendAccountNeedsValidation($user);
-  
-//  Mailer::subscribeToMailchimp($user->mail);
   
   drupal_goto('registered');
 }
