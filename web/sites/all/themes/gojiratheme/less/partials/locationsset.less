@@ -54,4 +54,23 @@
         cursor: pointer;
     }
 
+    @media (max-width: @screen-xs-max) {
+        .unround;
+        .unshadow;
+        width: 100%;
+        padding:0;
+        overflow:hidden;
+        position:fixed;
+        top:40px;
+        left:0;
+    }
+    div{
+        @media (max-width: @screen-xs-max) {
+            background-color: @color-lightest-grey;
+            margin:5px;
+            padding:5px;
+            .rounded;
+            .unshadow;
+        }        
+    }
 }

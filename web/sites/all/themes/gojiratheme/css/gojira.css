@@ -1575,6 +1575,40 @@ body.conditions #crud_holder #conditions_holder {
 #locationset_wrapper #locationsset_locations li:hover {
   text-decoration: underline;
 }
+@media (max-width: 710px) {
+  #locationset_wrapper {
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+    position: fixed;
+    top: 40px;
+    left: 0;
+  }
+}
+@media (max-width: 710px) {
+  #locationset_wrapper div {
+    background-color: #f8f8f8;
+    margin: 5px;
+    padding: 5px;
+    display: block;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0px 0px 8px #000000;
+    -moz-box-shadow: 0px 0px 8px #000000;
+    box-shadow: 0px 0px 8px #000000;
+    overflow: hidden;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  }
+}
 /* buttons */
 .rounded {
   display: block;

@@ -1076,7 +1076,7 @@ function bindMobileMenu() {
 
     // link to my map button
     jQuery('#mobileheader > div > button.mymap').click(function () {
-        window.location = '/mijn-kaart';
+        window.location = '/ownlist';
     });
 
     // link to add location page
