@@ -166,7 +166,6 @@ function search() {
     $output['has_tags'] = $output['has_tags'];
     $output['tags_changed_message'] = t('Tags successfully changed');
     $output['tags_not_changed_message'] = t('Failed to modify tags');
-    $output['your_location'] = t('This is your location');
 
     // determ the zoom level that is shown after a search result
     if(helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)){ // user searches on a country level

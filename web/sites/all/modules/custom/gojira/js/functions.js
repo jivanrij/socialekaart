@@ -377,6 +377,10 @@ function setupMapDefault() {
 function bindGojirasearch() {
     jQuery("#search_form form").submit(function (e) {
         e.preventDefault();
+        if (Drupal.settings.gojira.page == 'locationsset') {
+            window.location = "/?tags="+jQuery('#gojirasearch_search_term').val();
+            return;
+        }
         doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
     });
 }
@@ -395,7 +399,7 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
         jQuery('#crud_holder').hide();
     }
     if (searchFor !== 'locationsset') {
-        jQuery('#locationset_wrapper').hide();
+        jQuery('#locationset_wrapper').remove();
         jQuery('#search_result_info').hide();
     }
 
@@ -424,9 +428,7 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
                 somethingWrongMessage();
             }
 
-            if (searchFor != 'ownlist') {
-                jQuery('#ajax_search_results').html(data.results_html);
-            }
+            jQuery('#ajax_search_results').html(data.results_html);
 
             if(data.mapSearchResultsCount == 1){
                 // no results, only our own practice
@@ -434,54 +436,52 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
                 return;
             }
 
-            for (var i = 0; i < data.mapSearchResultsCount; i++) {
+            populateMap(data.mapSearchResults, data.mapSearchResultsCount);
 
-                var thisResult = data.mapSearchResults[i];
+//            for (var i = 0; i < data.mapSearchResultsCount; i++) {
+//
+//                var thisResult = data.mapSearchResults[i];
+//
+//                if (thisResult.x && thisResult.c > 0) {
+//                    // I am a merged marker with self as a part of my items
+//                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.mixedIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+//                    marker.bindPopup(thisResult.h).on('popupopen', function () {
+//                        window.map.panTo(this._latlng);
+//                    });
+//                    
+//                    window.markers.addLayer(marker);
+//                }
+//                if (thisResult.x && !thisResult.c) {
+//                    // I am just self, and not merged
+//                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.blackIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+//                    marker.bindPopup('<span class="self_popup_link">' + data.your_location + '</span>').on('popupopen', function () {
+//                        jQuery('#selected_location_info > div').hide();
+//                    });
+//                    
+//                    window.markers.addLayer(marker);
+//                }
+//                if (!thisResult.x && thisResult.c > 0) {
+//                    // Not self, but i am a merged one
+//                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+//                    marker.bindPopup(thisResult.h).on('popupopen', function () {
+//                        window.map.panTo(this._latlng);
+//                        jQuery('#selected_location_info > div').hide();
+//                    });
+//                    
+//                    window.markers.addLayer(marker);
+//                }
+//                if (!thisResult.x && !thisResult.c) {
+//                    // Not self, and not a merged one
+//                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+//                    marker.bindPopup('<span class="hidden open_location_popup">' + thisResult.n + '</span>').on('popupopen', function () {
+//                        focusLocation();
+//                    });
+//                    
+//                    window.markers.addLayer(marker);
+//                }
+//                window.markerMapping[thisResult.n] = marker._leaflet_id;
+//            }
 
-                if (thisResult.x && thisResult.c > 0) {
-                    // I am a merged marker with self as a part of my items
-                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.mixedIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
-                    marker.bindPopup(thisResult.h).on('popupopen', function () {
-                        window.map.panTo(this._latlng);
-                    });
-                    
-                    window.markers.addLayer(marker);
-                }
-                if (thisResult.x && !thisResult.c) {
-                    // I am just self, and not merged
-                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.blackIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
-                    marker.bindPopup('<span class="self_popup_link">' + data.your_location + '</span>').on('popupopen', function () {
-                        jQuery('#selected_location_info > div').hide();
-                    });
-                    
-                    window.markers.addLayer(marker);
-                }
-                if (!thisResult.x && thisResult.c > 0) {
-                    // Not self, but i am a merged one
-                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
-                    marker.bindPopup(thisResult.h).on('popupopen', function () {
-                        window.map.panTo(this._latlng);
-                        jQuery('#selected_location_info > div').hide();
-                    });
-                    
-                    window.markers.addLayer(marker);
-                }
-                if (!thisResult.x && !thisResult.c) {
-                    // Not self, and not a merged one
-                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
-                    marker.bindPopup('<span class="hidden open_location_popup">' + thisResult.n + '</span>').on('popupopen', function () {
-                        focusLocation();
-                    });
-                    
-                    window.markers.addLayer(marker);
-                }
-                window.markerMapping[thisResult.n] = marker._leaflet_id;
-            }
-
-//var featureLayer = L.mapbox.featureLayer().addTo(window.map);
-//featureLayer.on('ready', function() {
-//    window.map.fitBounds(featureLayer.getBounds());
-//});
             if (data.boxInfo === null) {
                 window.map.setView([data.latitude, data.longitude], data.zoom);
             } else {
@@ -491,9 +491,7 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
                 ]);
             }
 
-            if (searchFor !== 'locationsset') {
-                bindAfterSearch();
-            }
+            bindAfterSearch();
 
             if (data.single_location) {
                 jQuery('#loc_' + data.by_id).click();
@@ -625,7 +623,9 @@ function focusLocation(nid) {
 
             // move to it
             if (!onMobileView()) {
-                window.map.panTo([data.latitude, data.longitude]);
+                if(typeof data.latitude == 'string'){
+                    window.map.panTo([data.latitude, data.longitude]);
+                }
             }
 
             bindAfterSearch(false, true);
@@ -834,40 +834,40 @@ function bindGlobal() {
         }
     });
 
-//    jQuery('a.favorite_header').click(function (e) {
-//        e.preventDefault();
-//        if (!jQuery(this).hasClass('on')) {
-//            jQuery('a.favorite_header').addClass('on');
-//            jQuery('a.favorite_header').removeClass('off');
-//            jQuery.ajax({
-//                url: '/?q=ajax/switchfavorites&turn=on',
-//                type: 'POST',
-//                success: function (data) {
-//                    if (jQuery('#gojirasearch_search_term').val() != '') {
-//                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
-//                    }
-//                },
-//                error: function (jqXHR, textStatus, errorThrown) {
-//                    somethingWrongMessage();
-//                }
-//            });
-//        } else {
-//            jQuery('a.favorite_header').addClass('off');
-//            jQuery('a.favorite_header').removeClass('on');
-//            jQuery.ajax({
-//                url: '/?q=ajax/switchfavorites&turn=off',
-//                type: 'POST',
-//                success: function (data) {
-//                    if (jQuery('#gojirasearch_search_term').val() != '') {
-//                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
-//                    }
-//                },
-//                error: function (jqXHR, textStatus, errorThrown) {
-//                    somethingWrongMessage();
-//                }
-//            });
-//        }
-//    });
+    jQuery('a.favorite_header').click(function (e) {
+        e.preventDefault();
+        if (!jQuery(this).hasClass('on')) {
+            jQuery('a.favorite_header').addClass('on');
+            jQuery('a.favorite_header').removeClass('off');
+            jQuery.ajax({
+                url: '/?q=ajax/switchfavorites&turn=on',
+                type: 'POST',
+                success: function (data) {
+                    if (jQuery('#gojirasearch_search_term').val() != '') {
+                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    somethingWrongMessage();
+                }
+            });
+        } else {
+            jQuery('a.favorite_header').addClass('off');
+            jQuery('a.favorite_header').removeClass('on');
+            jQuery.ajax({
+                url: '/?q=ajax/switchfavorites&turn=off',
+                type: 'POST',
+                success: function (data) {
+                    if (jQuery('#gojirasearch_search_term').val() != '') {
+                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    somethingWrongMessage();
+                }
+            });
+        }
+    });
 
     jQuery('#edit-submit').click(function (e) {
         e.preventDefault();
@@ -1145,78 +1145,48 @@ function bindMobileMenu() {
     });
 }
 
-function bindLocationsset() {
-    jQuery(".locationset_show_cat").click(function (e) {
-        e.preventDefault();
-        jQuery("#ajax_search_results").html("");
-        jQuery("#locationsset_categories li").removeClass("active");
-        jQuery(this).closest("li").addClass("active");
-        var cat_id = jQuery(this).closest("li").attr("rel");
+function populateMap(searchresults, count) {
+    for (var i = 0; i < count; i++) {
 
-        doSearchCall("locationsset", 0, "&id=" + Drupal.settings.gojira.locationsset_id + '&cat_id=' + cat_id);
+        var thisResult = searchresults[i];
 
-        if (cat_id == "all") {
-            jQuery(".locationset_show_loc").closest("li").show();
-        } else {
-            jQuery(".locationset_show_loc").closest("li").hide();
-            jQuery("li[rel=" + cat_id + "]").show();
+        if (thisResult.x && thisResult.c > 0) {
+            // I am a merged marker with self as a part of my items
+            var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.mixedIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+            marker.bindPopup(thisResult.h).on('popupopen', function () {
+                window.map.panTo(this._latlng);
+            });
+
+            window.markers.addLayer(marker);
         }
-        jQuery(window).trigger('resize');
-    });
+        if (thisResult.x && !thisResult.c) {
+            // I am just self, and not merged
+            var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.blackIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+            marker.bindPopup('<span class="self_popup_link">Dit is uw eigen praktijk</span>').on('popupopen', function () {
+                jQuery('#selected_location_info > div').hide();
+            });
 
-    jQuery("#locationsset_categories li:first-child a").trigger('click');
+            window.markers.addLayer(marker);
+        }
+        if (!thisResult.x && thisResult.c > 0) {
+            // Not self, but i am a merged one
+            var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+            marker.bindPopup(thisResult.h).on('popupopen', function () {
+                window.map.panTo(this._latlng);
+                jQuery('#selected_location_info > div').hide();
+            });
 
-    jQuery('a.locationset_show_loc').click(function (e) {
-        e.preventDefault();
-        var location_id = jQuery(this).attr('href').replace('#', '');
-        var button = this;
+            window.markers.addLayer(marker);
+        }
+        if (!thisResult.x && !thisResult.c) {
+            // Not self, and not a merged one
+            var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+            marker.bindPopup('<span class="hidden open_location_popup">' + thisResult.n + '</span>').on('popupopen', function () {
+                focusLocation();
+            });
 
-        openOverlay();
-
-        jQuery.ajax({
-            url: '/?q=ajax/singlesearchresult&wrap_it=1&nid=' + location_id,
-            type: 'POST',
-            dataType: 'json',
-            success: function (data) {
-
-                jQuery("#ajax_search_results").html(data.html);
-
-                correctHeightForLocationsetSearchResult();
-
-                jQuery('#locationsset_locations li').removeClass('active');
-                jQuery(button).closest("li").addClass('active');
-
-                //console.log(window.markers);
-
-                // move to it
-                //window.map.setView([data.latitude, (data.longitude - 0.004)], data.zoom);
-                window.map.panTo([data.latitude, data.longitude]);
-
-                //bindAfterSearch(false, true);
-
-                jQuery("#search_result_info").css('top', top + 'px');
-
-                jQuery(window).trigger('resize');
-
-                L.Marker.stopAllBouncingMarkers();
-                if ((window.markerMapping[location_id] !== undefined) && (window.markers._layers[window.markerMapping[location_id]] !== undefined)) {
-                    window.markers._layers[window.markerMapping[location_id]].toggleBouncing();
-                }
-
-                closeOverlay();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                somethingWrongMessage();
-            }
-        });
-    });
-
-}
-
-/**
- * Corrects the height of the searchresult of the locationset
- */
-function correctHeightForLocationsetSearchResult() {
-    var top = 90 + parseInt(jQuery('#locationset_wrapper').css('height').replace('px', ''));
-    jQuery("#search_result_info").css("top", top + "px");
+            window.markers.addLayer(marker);
+        }
+        window.markerMapping[thisResult.n] = marker._leaflet_id;
+    }
 }

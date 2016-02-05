@@ -21,7 +21,6 @@ include ('php/Search.class.php');
 include ('php/BIG.class.php');
 include ('php/Mailer.class.php');
 include ('php/Locationsets.class.php');
-include ('php/Haweb.class.php');
 include ('php/Mobile_Detect.php');
 include ('php/Messages.class.php');
 include ('php/actions/ownlist.php');
@@ -215,6 +214,8 @@ function gojira_init() {
     drupal_add_css(drupal_get_path('module', 'gojira') . '/css/leaflet.css', array('group' => CSS_DEFAULT,'every_page' => TRUE));
     drupal_add_css(drupal_get_path('module', 'gojira') . '/css/colorbox.css', array('group' => CSS_DEFAULT,'every_page' => TRUE));
 
+    drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/font-awesome-4.5.0/css/font-awesome.min.css');
+    
     preg_match('/MSIE (.*?);/', $_SERVER['HTTP_USER_AGENT'], $matches);
     if(count($matches)<2){
       preg_match('/Trident\/\d{1,2}.\d{1,2}; rv:([0-9]*)/', $_SERVER['HTTP_USER_AGENT'], $matches);
@@ -261,6 +262,7 @@ function gojira_init() {
     drupal_add_js(drupal_get_path('module', 'gojira') . '/js/leaflet.smoothmarkerbouncing.js');
     drupal_add_js(drupal_get_path('module', 'gojira') . '/js/leaflet-google.js');
     drupal_add_js(drupal_get_path('module', 'gojira') . '/js/functions.js');
+    drupal_add_js(drupal_get_path('module', 'gojira') . '/js/functions_locationsset.js');
     drupal_add_js(drupal_get_path('module', 'gojira') . '/js/gojira.js');
 
 

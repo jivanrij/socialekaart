@@ -7,7 +7,7 @@
             <?php if (Subscriptions::currentGroupHasPayed()): ?>
                 <a title="<?php echo t('Search over the entire country but limits the amount of results to 500'); ?>" class="global_search_header <?php echo (helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD) ? 'on' : 'off'); ?>"><?php echo t('Search entire country'); ?></a>
             <?php endif; ?>
-            <?php if (false && user_access(helper::PERMISSION_PERSONAL_LIST)): ?>
+            <?php if (user_access(helper::PERMISSION_PERSONAL_LIST)): ?>
                 <a title="<?php echo t('Only search on your favorites'); ?>" class="favorite_header <?php echo (helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_FAVORITES_FIELD) ? 'on' : 'off'); ?>"><?php echo t('Filter search on favorites'); ?></a>
             <?php endif; ?>
             <ul class="maplist">

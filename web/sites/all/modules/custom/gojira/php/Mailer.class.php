@@ -569,7 +569,7 @@ EOT;
     public static function locationWithoutCoordinatesAdded($oLocation) {
         
 //        $sUrl = user_pass_reset_url($oUser);
-        $sAddress = Location::getAddressString($oLocation);
+        $sAddress = Location::getAddressString($oLocation).'<br />'.$oLocation->title;
         
         $sCategory = Category::getCategoryName($oLocation);
         $iLocation = $oLocation->nid;
