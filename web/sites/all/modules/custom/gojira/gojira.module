@@ -7,6 +7,7 @@ include ('inc/Mandrill.php');
 include ('gojira_settings.php');
 include ('php/helper.php');
 include ('php/actions.php');
+include ('php/api/api.php');
 include ('php/Postcode.class.php');
 include ('php/Subscriptions.class.php');
 include ('php/Template.class.php');
