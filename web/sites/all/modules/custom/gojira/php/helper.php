@@ -397,28 +397,28 @@ class helper {
             '#title' => t('Street'),
             '#type' => 'textfield',
             '#default_value' => ($node ? helper::value($node, GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD) : ''),
-            '#required' => TRUE,
+            '#required' => false,
         );
 
         $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD] = array(
             '#title' => t('Streetnumber'),
             '#type' => 'textfield',
             '#default_value' => ($node ? helper::value($node, GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD) : ''),
-            '#required' => TRUE,
+            '#required' => false,
         );
         
         $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD] = array(
             '#title' => t('Postcode'),
             '#type' => 'textfield',
             '#default_value' => ($node ? helper::value($node, GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD) : ''),
-            '#required' => TRUE,
+            '#required' => false,
         );
 
         $form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD] = array(
             '#title' => t('City'),
             '#type' => 'textfield',
             '#default_value' => ($node ? helper::value($node, GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD) : ''),
-            '#required' => TRUE,
+            '#required' => false,
         );
         
         // this field is used as an validation error wrapper for the location

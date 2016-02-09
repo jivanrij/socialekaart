@@ -97,11 +97,16 @@ function gojira_suggestlocation_form_validate($form, &$form_state) {
         }
     }
 
-    $location = Location::getLocationForAddress(
+    if((trim($form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#value']) !== '') &&
+        (trim($form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#value']) !== '') &&
+        (trim($form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#value']) !== '') &&
+        (trim($form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#value']) !== '')){
+        $location = Location::getLocationForAddress(
                     Location::formatAddress(
                             $form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#value']
                     )
-    );
+        );
+    }
     
     $aPossibleDoubles = array();
     if ($location) {
@@ -182,12 +187,16 @@ function gojira_suggestlocation_form_submit($form, &$form_state) {
 
     Mailer::sendLocationAddedByUserToAdmin($node, $user);
 
-
-    $location = Location::getLocationForAddress(
+    if((trim($form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#value']) !== '') &&
+        (trim($form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#value']) !== '') &&
+        (trim($form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#value']) !== '') &&
+        (trim($form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#value']) !== '')){
+        $location = Location::getLocationForAddress(
                     Location::formatAddress(
                             $form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#value']
                     )
-    );
+        );
+    }
 
     $iNode = $node->nid;
 

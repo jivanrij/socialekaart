@@ -16,6 +16,11 @@ function locationcorrect() {
     $location = Location::getLocationObjectOfNode($id);
   }
   
+  if(!$location){
+      $location = Location::getCurrentLocationObjectOfUser();
+  }
+
+  
   drupal_add_js(array('gojira' => array('page' => 'locationcorrect')), 'setting');
   drupal_add_js(array('gojira' => array('location_id' => $id)), 'setting');
   drupal_add_js(array('gojira' => array('longitude' => $location->longitude)), 'setting');

@@ -1529,50 +1529,50 @@ body.conditions #crud_holder #conditions_holder {
   overflow: hidden;
   padding: 0 10px 10px 10px;
 }
-#locationset_wrapper > h2 {
+#locationset_wrapper div > h2 {
   padding-top: 10px;
 }
-#locationset_wrapper > p {
+#locationset_wrapper div > p {
   font-weight: 100;
 }
-#locationset_wrapper #locationsset_categories {
+#locationset_wrapper div #locationsset_categories {
   margin: 0 0 10px 0;
   list-style: none;
   padding: 0;
   overflow: hidden;
   cursor: pointer;
 }
-#locationset_wrapper #locationsset_categories li {
+#locationset_wrapper div #locationsset_categories li {
   display: block;
   float: left;
   margin-right: 10px;
 }
-#locationset_wrapper #locationsset_categories li.active a {
+#locationset_wrapper div #locationsset_categories li.active a {
   color: #b7072a;
 }
-#locationset_wrapper #locationsset_categories li:hover {
+#locationset_wrapper div #locationsset_categories li:hover {
   text-decoration: underline;
 }
-#locationset_wrapper label#locations {
+#locationset_wrapper div label#locations {
   color: #dbdbdb;
 }
-#locationset_wrapper #locationsset_locations {
+#locationset_wrapper div #locationsset_locations {
   padding: 0;
   margin: 0;
   overflow: hidden;
   cursor: pointer;
 }
-#locationset_wrapper #locationsset_locations li {
+#locationset_wrapper div #locationsset_locations li {
   margin-right: 10px;
   margin-top: 5px;
 }
-#locationset_wrapper #locationsset_locations li a {
+#locationset_wrapper div #locationsset_locations li a {
   text-decoration: none;
 }
-#locationset_wrapper #locationsset_locations li.active a {
+#locationset_wrapper div #locationsset_locations li.active a {
   color: #b7072a;
 }
-#locationset_wrapper #locationsset_locations li:hover {
+#locationset_wrapper div #locationsset_locations li:hover {
   text-decoration: underline;
 }
 @media (max-width: 710px) {
