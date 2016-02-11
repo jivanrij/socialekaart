@@ -71,7 +71,11 @@ class Favorite {
      * @return array
      */
     public function getAllFavoritesInCategory($filter_category_nid){
-        $favorites = self::getAllFavoriteLocations();
+        
+        $loc = Location::getCurrentLocationNodeObjectOfUser();
+        
+        $favorites = self::getAllFavoriteLocations(false, $loc->nid);
+
         $return = array();
         foreach($favorites as $favorite){
             $category_nid = helper::value($favorite, GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD, 'nid');
