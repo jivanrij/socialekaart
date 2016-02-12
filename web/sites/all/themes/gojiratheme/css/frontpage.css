@@ -48,6 +48,7 @@ body.front .frontpage_block h2 {
 }
 body.front .frontpage_block a.register {
   width: 250px;
+  margin-bottom: 20px;
 }
 body.front .form-block h1 {
   padding: 0 0 0 0;

@@ -69,13 +69,6 @@ function gojira_configuration_form($form, &$form_state) {
         '#default_value' => variable_get('cron_restore_backup_locations', 0),
     );
     
-    $form['algemene_instellingen']['gojira_subscribe_possible'] = array(
-        '#title' => t('Users can subscribe to the system.'),
-        '#type' => 'select',
-        '#options' => array(0 => 'no', 1 => 'yes'),
-        '#default_value' => variable_get('gojira_subscribe_possible', 1),
-    );
-    
     $form['algemene_instellingen']['gojira_user_amount_with_discount'] = array(
         '#title' => t('Amount of users what get a discount.'),
         '#type' => 'textfield',
@@ -323,7 +316,6 @@ function gojira_configuration_form($form, &$form_state) {
 }
 
 function gojira_configuration_form_submit($form, &$form_state) {
-    variable_set('gojira_subscribe_possible', $_POST['gojira_subscribe_possible']);
     variable_set('gojira_unsubscribe_user', $_POST['gojira_unsubscribe_user']);
     variable_set('gojira_subscribe_activate_user', $_POST['gojira_subscribe_activate_user']);
     variable_set('gojira_new_employer_email', $_POST['gojira_new_employer_email']);
