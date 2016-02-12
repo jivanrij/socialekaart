@@ -32,7 +32,7 @@ class Group {
    * @return stdClass
    */
   public static function getGroupNode(){
-      return node_load(self::getGroupId());
+      die('getGroupNode is depricated');
   }
   
   /**

@@ -7,7 +7,7 @@ function gojiratheme_preprocess_page(&$vars) {
 
 function gojiratheme_form_element($vars) {
 
-    $aNotAllowed = array('agree_terms_conditions', 'pass');
+    $aNotAllowed = array(GojiraSettings::CONTENT_TYPE_CONDITIONS_AGREE_FIELD, 'pass');
 
     $required = '';
     if($vars['element']['#required']){

@@ -26,7 +26,6 @@ include ('php/Mobile_Detect.php');
 include ('php/Messages.class.php');
 include ('php/actions/ownlist.php');
 include ('php/actions/checklocation.php');
-include ('php/actions/conditions.php');
 include ('php/actions/paymentconditions.php');
 include ('php/actions/tools.php');
 include ('php/actions/docu.php');
@@ -95,7 +94,6 @@ include ('php/forms/employeeedit.php');
 include ('php/forms/settings.php');
 include ('php/forms/locationedit.php');
 include ('php/forms/locationcorrect.php');
-include ('php/forms/terms_conditions.php');
 include ('php/forms/suggestlocation.php');
 include ('php/forms/idealpay.php');
 include ('php/forms/inform.php');
@@ -194,6 +192,8 @@ function gojira_init() {
     drupal_set_title('Welcome');
   }
 
+  drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/font-awesome-4.5.0/css/font-awesome.min.css');
+  
   if (Template::shouldWeIncludeMapFrontendFiles()) {
 
     drupal_add_js(array('gojira' => array('mapbox_accesstoken' => variable_get('mapbox_accesstoken', ''))), 'setting');
@@ -214,8 +214,6 @@ function gojira_init() {
 
     drupal_add_css(drupal_get_path('module', 'gojira') . '/css/leaflet.css', array('group' => CSS_DEFAULT,'every_page' => TRUE));
     drupal_add_css(drupal_get_path('module', 'gojira') . '/css/colorbox.css', array('group' => CSS_DEFAULT,'every_page' => TRUE));
-
-    drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/font-awesome-4.5.0/css/font-awesome.min.css');
     
     preg_match('/MSIE (.*?);/', $_SERVER['HTTP_USER_AGENT'], $matches);
     if(count($matches)<2){
@@ -270,16 +268,8 @@ function gojira_init() {
     // some redirects for specific situations, are not allowed if you are logging out
     if(user_is_logged_in() && $_GET['q'] != 'user/logout' && !isset($_GET['pass-reset-token'])){
 
-      if(!helper::agreedToConditions()){
-        if($_GET['q'] != 'conditions' && $_GET['q'] != 'ajax/showtutorial'){
-          header('Location: /conditions');
-          exit;
-        }
-      }
       if(!helper::hasSeenTutorial()){
-        if($_GET['q'] != 'conditions'){
-          drupal_add_js(array('gojira' => array('show_tutorial' => 1)), 'setting');
-        }
+        drupal_add_js(array('gojira' => array('show_tutorial' => 1)), 'setting');
       }
 
       if(count(Location::getUsersLocations(true))==0){
@@ -288,12 +278,10 @@ function gojira_init() {
         $allowed_without_location = array(
             'ajax/showtutorial',
             'ajax/checklocation',
-            'conditions',
             'ajax/postcodesuggest',
             'locationcheck',
             'location/edit',
             'passwordthanks',
-            'conditionscheck',
             'settings'
         );
 
@@ -423,10 +411,6 @@ function gojira_cron() {
 
   if(variable_get('cron_check_subscriptions')){
     Subscriptions::checkSubscriptions();
-  }
-
-  if(variable_get('cron_remove_unconditional_users')){
-    Subscriptions::cleanupUnconditionalUsers();
   }
 
   if(variable_get('cron_restore_backup_locations')){

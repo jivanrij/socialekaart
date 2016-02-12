@@ -627,27 +627,6 @@ EOT;
     }
 
     /**
-     * Cleanup all the users that have not agreed to the conditions
-     */
-    public static function cleanupUnconditionalUsers() {
-        $aUsers = db_query("select users.uid from users left join field_data_field_agree_conditions on (users.uid = field_data_field_agree_conditions.entity_id) where bundle = 'user' and field_data_field_agree_conditions.field_agree_conditions_value = 0")->fetchAll();
-        foreach ($aUsers as $oUser) {
-            $oUser = user_load($oUser->uid);
-            // only for users that are imported
-            $iNotImported = helper::value($oUser, GojiraSettings::CONTENT_TYPE_USER_NOT_IMPORTED);
-            if (!$iNotImported) {
-                if (!in_array('administrator', array_values($oUser->roles))) {
-                    user_delete($oUser->uid);
-                    if (module_exists('onesignin_client')) {
-                        db_query("DELETE FROM {onesignin_client_uids} WHERE uid = " . $oUser->uid);
-                    }
-                    watchdog('users', 'Removing user ' . $oUser->uid . ' ' . $oUser->name . ' because he/she did not agreed on the terms & conditions.');
-                }
-            }
-        }
-    }
-
-    /**
      * Adds crucial information/roles/stuff to a new created user NOT from the HAWeb SSO
      * 
      * Do NOT run this function on allready existing accounts
@@ -661,7 +640,8 @@ EOT;
             watchdog(GojiraSettings::WATCHDOG_HAWEB_SSO, 'user ' . $account->uid . ' allready has gotten a free period. Kill the setNewFreePeriodUser rights/payments proces.');
             return;
         }
-        $group = Group::getGroupNode();
+
+        $group = node_load(Group::getGroupId($account->uid));
         
         $group->field_payed_status[LANGUAGE_NONE][0]['value'] = 1;
         node_save($group);
@@ -669,6 +649,7 @@ EOT;
         Subscriptions::setRolesForPayed($group, false);
         // add a payment log so the group will have a payed period of 3 months
         $sql = "INSERT INTO `gojira_payments` (`uid`, `name`, `description`, `amount`, `gid`, `ideal_id`, `ideal_code`, `period_start`, `status`, `period_end`,`discount`,`tax`,`payed`) VALUES ({$account->uid}, '{$account->name}', '" . GojiraSettings::IDEAL_FREE_PERIOD_DESCRIPTION . "', 0, " . $group->nid . ", '0', '0', " . helper::getTime() . ", 1, " . strtotime("+3 months", helper::getTime()) . ",0,0,0)";
+
         db_query($sql);
     }
     
