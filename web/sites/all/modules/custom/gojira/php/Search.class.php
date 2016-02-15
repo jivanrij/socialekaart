@@ -256,7 +256,7 @@ EAT;
             if(Favorite::getInstance()->isFavorite($foundNode->nid, $oCurrentLocation->nid)){
                 $sOnList = 'true';
             }
-            $sFavorites = '<div class="favorites_switch"><a class="in_favorites '.$sOnList.'" title="Bepaal of deze zorgverlener in ow kaart zit.">In <i>Mijn kaart</i></a></div>';
+            $sFavorites = '<div class="favorites_switch"><a class="in_favorites '.$sOnList.'" title="Bepaal of deze zorgverlener in uw kaart zit.">In <i>Mijn kaart</i></a></div>';
         }
 
         $category_txt = '';

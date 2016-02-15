@@ -34,6 +34,8 @@ drupal_add_js(array('gojira' => array('page' => 'locationsset')), 'setting');
                     <li rel="<?php echo $aCategorie->nid; ?>"><a class="locationset_show_cat"><?php echo $aCategorie->title; ?></a></li>
                 <?php endforeach; ?>
             </ul>
+        <?php else: ?>
+            <img style="border:1px #4d4d4d inset;" src="sites/all/modules/custom/gojira/img/search_result.png" alt="Zorgverlener" />
         <?php endif; ?>
 
         <?php if (count($aLocations) > 0): ?>
