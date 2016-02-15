@@ -298,6 +298,21 @@ a.help_link_content:hover {
 #header #header_options .maplist > li:hover > ul {
   display: block;
 }
+#header #header_options #search_type {
+  display: block;
+  float: left;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+#header #header_options #search_type label {
+  margin: 2px 5px 0 0;
+  display: block;
+  float: left;
+}
+#header #header_options #search_type .search_type_select {
+  display: block;
+  float: left;
+}
 #header #header_options .menu_bar_icon {
   display: inline;
   float: right;
