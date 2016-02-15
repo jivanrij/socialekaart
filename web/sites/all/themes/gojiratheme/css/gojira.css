@@ -221,17 +221,17 @@ a.help_link_content:hover {
   height: 20px;
   display: inline-block;
 }
-#header #header_options a {
+#header #header_options > a {
   display: inline-block;
   cursor: pointer;
   margin-left: 10px;
   line-height: 28px;
   padding-right: 40px;
 }
-#header #header_options a.on {
+#header #header_options > a.on {
   background: url(../img/button_on.png) no-repeat right;
 }
-#header #header_options a.off {
+#header #header_options > a.off {
   background: url(../img/button_off.png) no-repeat right;
 }
 #header #header_options label[for=location_selector] {
@@ -297,6 +297,19 @@ a.help_link_content:hover {
 }
 #header #header_options .maplist > li:hover > ul {
   display: block;
+}
+#header #header_options .menu_bar_icon {
+  display: inline;
+  float: right;
+}
+#header #header_options .menu_bar_icon a {
+  display: inline-block;
+  cursor: pointer;
+  margin-left: 10px;
+  line-height: 28px;
+}
+#header #header_options .menu_bar_icon a i {
+  margin-left: 5px;
 }
 #header ul.menu {
   display: inline-block;

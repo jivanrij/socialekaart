@@ -18,19 +18,20 @@
     #header_options{
         height:20px;
         display:inline-block;
-        a{
+        > a{
             display:inline-block;
             cursor: pointer;
             margin-left:10px;
             line-height: 28px;
             padding-right:40px;
+            &.on{
+                background: url(../img/button_on.png) no-repeat right;
+            }
+            &.off{
+                background: url(../img/button_off.png) no-repeat right;
+            }
         }
-        a.on{
-            background: url(../img/button_on.png) no-repeat right;
-        }
-        a.off{
-            background: url(../img/button_off.png) no-repeat right;
-        }
+
 
         label[for=location_selector]{
             display:inline-block;
@@ -97,6 +98,19 @@
             >li:hover{
                 > ul {
                     display:block;
+                }
+            }
+        }
+        .menu_bar_icon{
+            display: inline;
+            float: right;
+            a{
+                display:inline-block;
+                cursor: pointer;
+                margin-left:10px;
+                line-height: 28px;
+                i{
+                    margin-left:5px;
                 }
             }
         }

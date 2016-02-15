@@ -38,6 +38,11 @@
                 <?php endforeach; ?>
                 </select>
         <?php endif; ?>
+                
+        <div class="menu_bar_icon">
+            <a href="/suggestlocation" title="<?php echo t('Add location if you are missing one.'); ?>"><?php echo t('Add location'); ?><i class="fa fa-plus-square"></i></a>
+        </div>
+                
         </div>
     <?php endif; ?>
 <?php print render($page['header_menu']); ?>
