@@ -17,6 +17,7 @@ class helper {
     const PERMISSION_CORRECT_EXISTING_LOCATIONS = 'correct existing locations';
     const PERMISSION_SHOW_DEBUG = 'show debug data';
     const PERMISSION_PERSONAL_LIST = 'has personal list';
+    const PERMISSION_SEARCH_GLOBAL = 'can search global';
     const PERMISSION_LOCATIONSETS = 'can see locationsets';
     // we have 3 types of users:
     // 1. the original master of the group, the practitioner
@@ -30,6 +31,10 @@ class helper {
     const ROLE_EMPLOYER_MASTER = 'gojira master employer';
     const ROLE_SUBSCRIBED_MASTER = 'gojira master employer (subscribed)';
 
+    const SEARCH_TYPE_COUNTRY = 'country';
+    const SEARCH_TYPE_REGION = 'region';
+    const SEARCH_TYPE_OWNLIST = 'ownlist';
+    
     public static function redirectTo404() {
         header('Location: /404');
         exit;

@@ -377,10 +377,6 @@ function setupMapDefault() {
 function bindGojirasearch() {
     jQuery("#search_form form").submit(function (e) {
         e.preventDefault();
-        if (Drupal.settings.gojira.page == 'locationsset') {
-            window.location = "/?tags="+jQuery('#gojirasearch_search_term').val();
-            return;
-        }
         doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
     });
 }
@@ -416,8 +412,10 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
     window.markers = new L.FeatureGroup();
     window.map.addLayer(window.markers);
 
+    var type = '&type=' + jQuery( "#search_type_select" ).val();
+
     jQuery.ajax({
-        url: '/?q=ajax/search&tags=' + searchFor + extra_ajax_info,
+        url: '/?q=ajax/search&tags=' + searchFor + type + extra_ajax_info,
         type: 'GET',
         dataType: 'json',
         success: function (data) {
@@ -786,88 +784,105 @@ function bindGlobal() {
 
     bindAutocompleteAllTags("#gojirasearch_search_term");
 
+    if (Drupal.settings.gojira.page == 'locationsset') {
+        jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in uw sociale kaart');
+    }else{
+        jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in de regio');
+    }
+    jQuery("#search_type_select").change(function(){
+        if(jQuery(this).val() == 'ownlist'){
+            jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in uw sociale kaart');
+        }
+        if(jQuery(this).val() == 'country'){
+            jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in het gehele land');
+        }
+        if(jQuery(this).val() == 'region'){
+            jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in de regio');
+        }
+    });
+
     // prevent the menu with a dropdown option to do something on a click
     jQuery('ul.menu li.expanded > a, #maps_hover_icon').click(function (e) {
         e.preventDefault();
     });
 
-    jQuery('a.global_search_header').click(function (e) {
-
-        e.preventDefault();
-        if (!jQuery(this).hasClass('on')) {
-            jQuery('a.global_search_header').addClass('on');
-            jQuery('a.global_search_header').removeClass('off');
-            jQuery.ajax({
-                url: '/?q=ajax/switchglobalsearch&turn=on',
-                type: 'POST',
-                dataType: 'json',
-                success: function (data) {
-                    //window.map.setView([data.latitude, data.longitude], data.zoom);
-                    jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek landelijk');
-                    if (jQuery('#gojirasearch_search_term').val() != '') {
-                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    somethingWrongMessage();
-                }
-            });
-        } else {
-            jQuery('a.global_search_header').addClass('off');
-            jQuery('a.global_search_header').removeClass('on');
-            jQuery.ajax({
-                url: '/?q=ajax/switchglobalsearch&turn=off',
-                type: 'POST',
-                dataType: 'json',
-                success: function (data) {
-//                    window.map.setView([data.latitude, data.longitude], data.zoom);
-                    jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in de regio');
-                    if (jQuery('#gojirasearch_search_term').val() != '') {
-                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    somethingWrongMessage();
-                }
-            });
-
-        }
-    });
-
-    jQuery('a.favorite_header').click(function (e) {
-        e.preventDefault();
-        if (!jQuery(this).hasClass('on')) {
-            jQuery('a.favorite_header').addClass('on');
-            jQuery('a.favorite_header').removeClass('off');
-            jQuery.ajax({
-                url: '/?q=ajax/switchfavorites&turn=on',
-                type: 'POST',
-                success: function (data) {
-                    if (jQuery('#gojirasearch_search_term').val() != '') {
-                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    somethingWrongMessage();
-                }
-            });
-        } else {
-            jQuery('a.favorite_header').addClass('off');
-            jQuery('a.favorite_header').removeClass('on');
-            jQuery.ajax({
-                url: '/?q=ajax/switchfavorites&turn=off',
-                type: 'POST',
-                success: function (data) {
-                    if (jQuery('#gojirasearch_search_term').val() != '') {
-                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    somethingWrongMessage();
-                }
-            });
-        }
-    });
+//    jQuery('a.global_search_header').click(function (e) {
+//
+//        e.preventDefault();
+//        if (!jQuery(this).hasClass('on')) {
+//            jQuery('a.global_search_header').addClass('on');
+//            jQuery('a.global_search_header').removeClass('off');
+//            jQuery.ajax({
+//                url: '/?q=ajax/switchglobalsearch&turn=on',
+//                type: 'POST',
+//                dataType: 'json',
+//                success: function (data) {
+//                    //window.map.setView([data.latitude, data.longitude], data.zoom);
+//                    jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek landelijk');
+//                    if (jQuery('#gojirasearch_search_term').val() != '') {
+//                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
+//                    }
+//                },
+//                error: function (jqXHR, textStatus, errorThrown) {
+//                    somethingWrongMessage();
+//                }
+//            });
+//        } else {
+//            jQuery('a.global_search_header').addClass('off');
+//            jQuery('a.global_search_header').removeClass('on');
+//            jQuery.ajax({
+//                url: '/?q=ajax/switchglobalsearch&turn=off',
+//                type: 'POST',
+//                dataType: 'json',
+//                success: function (data) {
+////                    window.map.setView([data.latitude, data.longitude], data.zoom);
+//                    jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in de regio');
+//                    if (jQuery('#gojirasearch_search_term').val() != '') {
+//                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
+//                    }
+//                },
+//                error: function (jqXHR, textStatus, errorThrown) {
+//                    somethingWrongMessage();
+//                }
+//            });
+//
+//        }
+//    });
+//
+//    jQuery('a.favorite_header').click(function (e) {
+//        e.preventDefault();
+//        if (!jQuery(this).hasClass('on')) {
+//            jQuery('a.favorite_header').addClass('on');
+//            jQuery('a.favorite_header').removeClass('off');
+//            jQuery.ajax({
+//                url: '/?q=ajax/switchfavorites&turn=on',
+//                type: 'POST',
+//                success: function (data) {
+//                    if (jQuery('#gojirasearch_search_term').val() != '') {
+//                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
+//                    }
+//                },
+//                error: function (jqXHR, textStatus, errorThrown) {
+//                    somethingWrongMessage();
+//                }
+//            });
+//        } else {
+//            jQuery('a.favorite_header').addClass('off');
+//            jQuery('a.favorite_header').removeClass('on');
+//            jQuery.ajax({
+//                url: '/?q=ajax/switchfavorites&turn=off',
+//                type: 'POST',
+//                success: function (data) {
+//                    if (jQuery('#gojirasearch_search_term').val() != '') {
+//                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
+//                    }
+//                },
+//                error: function (jqXHR, textStatus, errorThrown) {
+//                    somethingWrongMessage();
+//                }
+//            });
+//        }
+//    });
 
     jQuery('#edit-submit').click(function (e) {
         e.preventDefault();
@@ -875,7 +890,9 @@ function bindGlobal() {
         jQuery(this).closest('form').submit();
     });
 
-    bindGojirasearch();
+    if (Drupal.settings.gojira.page != 'locationsset') {
+        bindGojirasearch();
+    }
 
     jQuery('#location_selector').change(function () {
         openOverlay();

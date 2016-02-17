@@ -1,4 +1,5 @@
 <?php
+drupal_add_js(array('gojira' => array('locationsset_has_filter' => 0)), 'setting');
 $oLocationset = Locationsets::getInstance()->getCurrentLocationset();
 if ($oLocationset) {
     $aLocations = Locationsets::getInstance()->getLocations();
@@ -7,7 +8,12 @@ if ($oLocationset) {
     drupal_add_js(array('gojira' => array('locationsset_id' => $oLocationset->nid)), 'setting');
 } else {
     $currentPractice = Location::getCurrentLocationNodeObjectOfUser();
-    $aLocations = Favorite::getInstance()->getAllFavoriteLocations(true, $currentPractice->nid);
+    if(isset($_GET['filter'])){
+        $aLocations = Search::searchInOwnMap($_GET['filter']);
+        drupal_add_js(array('gojira' => array('locationsset_has_filter' => 1)), 'setting');
+    }else{
+        $aLocations = Favorite::getInstance()->getAllFavoriteLocations($currentPractice->nid);        
+    }
     $sBody = t('Your own personal map\'s decription.');
     $sTitle = 'Sociale kaart ' . $currentPractice->title;
     drupal_add_js(array('gojira' => array('locationsset_id' => "favorites")), 'setting');
@@ -34,8 +40,10 @@ drupal_add_js(array('gojira' => array('page' => 'locationsset')), 'setting');
                     <li rel="<?php echo $aCategorie->nid; ?>"><a class="locationset_show_cat"><?php echo $aCategorie->title; ?></a></li>
                 <?php endforeach; ?>
             </ul>
-        <?php else: ?>
+        <?php elseif(!isset($_GET['filter'])): ?>
             <img style="border:1px #4d4d4d inset;" src="sites/all/modules/custom/gojira/img/search_result.png" alt="Zorgverlener" />
+        <?php elseif(isset($_GET['filter'])): ?>
+            <p><i><?php echo t("No locations found with this specific search term."); ?></i></p>
         <?php endif; ?>
 
         <?php if (count($aLocations) > 0): ?>

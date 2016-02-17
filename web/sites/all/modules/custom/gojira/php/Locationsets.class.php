@@ -29,7 +29,7 @@ class Locationsets {
      *
      * @return node
      */
-    public function getCurrentLocationset(){
+    public function getCurrentLocationset() {
         if (arg(0) == 'node' && is_numeric(arg(1))) {
             $nid = arg(1);
             $node = node_load($nid);
@@ -41,6 +41,29 @@ class Locationsets {
         }
         return null;
     }
+    
+    /**
+     * Tells you if you are on a locationset
+     * 
+     * @return boolean
+     */
+    public function onLocationsetOrOwnMap(){
+        
+        if (arg(0) == 'node' && is_numeric(arg(1))) {
+            $nid = arg(1);
+            $node = node_load($nid);
+            if (isset($node->type)) {
+                if ($node->type == GojiraSettings::CONTENT_TYPE_SET_OF_LOCATIONS) {
+                    return true;
+                }
+            }
+        }
+        
+        if(arg(0) == 'ownlist'){
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Get's the locations belonging to the current locationset page.
@@ -50,29 +73,50 @@ class Locationsets {
      * @param integer category to filter on | optional
      * @return type
      */
-    public function getLocations($nid = null, $iFilterCategoryId = null){
+    public function getLocations($nid = null, $iFilterCategoryId = null, $sFilterWithTags = '') {
 
-        if(is_null($nid)){
+        $filteredNodes = array();
+        if (trim($sFilterWithTags) != '') {
+            $tags = explode(' ', urldecode($sFilterWithTags));
+            $filteredTags = array();
+            foreach ($tags as $tag) {
+                $tag = trim($tag);
+                if ($tag != "") {
+                    $filteredTags[] = $tag;
+                }
+            }
+            $filteredNodes = Search::getInstance()->doSearch($filteredTags, false, helper::SEARCH_TYPE_COUNTRY);
+        }
+
+        if (is_null($nid)) {
             $oSet = $this->getCurrentLocationset();
-        }else{
+        } else {
             $oSet = node_load($nid);
         }
 
         $aReturn = array();
 
-        if($oSet){
+        if ($oSet) {
             $sFieldname = GojiraSettings::CONTENT_TYPE_LOCATIONSET_LOCATIONS;
             $aField = $oSet->$sFieldname;
-            foreach($aField[LANGUAGE_NONE] as $location){
+            foreach ($aField[LANGUAGE_NONE] as $location) {
                 $oNode = node_load($location['nid']);
-                if($oNode){
-                    if($iFilterCategoryId){ // filter on category
-                        $iThisCategoryId = helper::value($oNode, GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD, 'nid');
-                        if($iFilterCategoryId == $iThisCategoryId){
+                if ($oNode) {
+
+                    if ($sFilterWithTags) {
+                        if (array_key_exists($oNode->nid, $filteredNodes)) {
                             $aReturn[] = $oNode;
                         }
-                    }else{
-                        $aReturn[] = $oNode;
+                    } else {
+
+                        if ($iFilterCategoryId) { // filter on category
+                            $iThisCategoryId = helper::value($oNode, GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD, 'nid');
+                            if ($iFilterCategoryId == $iThisCategoryId) {
+                                $aReturn[] = $oNode;
+                            }
+                        } else {
+                            $aReturn[] = $oNode;
+                        }
                     }
                 }
             }
@@ -85,16 +129,16 @@ class Locationsets {
      */
     public function getMapSetsForCurrentUser() {
 
-        if(is_null($this->mapsAvailable)){
+        if (is_null($this->mapsAvailable)) {
             $return = array();
             $rLocationsets = array();
             if ($this->userHasRightToLocationssets()) {
                 $oLocation = Location::getCurrentLocationNodeObjectOfUser();
 
                 $sPostcodeNumber = substr(trim(helper::value($oLocation, GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD)), 0, 2);
-                if(is_numeric($sPostcodeNumber)){
+                if (is_numeric($sPostcodeNumber)) {
                     $iPostcodearea = db_query("select field_data_field_postcodenumber.entity_id as nid from node join field_data_field_postcodenumber on (field_data_field_postcodenumber.entity_id = node.nid) where node.type = 'postcodearea' and field_data_field_postcodenumber.bundle = 'postcodearea' and field_data_field_postcodenumber.field_postcodenumber_value = {$sPostcodeNumber}")->fetchField();
-                    if(is_numeric($iPostcodearea)){
+                    if (is_numeric($iPostcodearea)) {
                         $rLocationsets = db_query("select entity_id as nid from field_data_field_postcodeareas where bundle = 'locationsset' and field_postcodeareas_nid = {$iPostcodearea}")->fetchAll();
                     }
                 }
@@ -122,13 +166,35 @@ class Locationsets {
     /**
      * Get's the categories from an set of locations in an array
      */
-    public function getCategoriesFromLocationsArray($aLocations){
+    public function getCategoriesFromLocationsArray($aLocations) {
         $aCategories = array();
-        foreach($aLocations as $oLocation){
+        foreach ($aLocations as $oLocation) {
             $oCatagory = Category::getCategoryOfLocation($oLocation);
             $aCategories[$oCatagory->nid] = $oCatagory;
         }
         return $aCategories;
+    }
+    
+    public function getOwnMapLocations() {
+        $ownMapLocations = array();
+        $currentPractice = Location::getCurrentLocationNodeObjectOfUser();
+        
+        if (is_null($currentPractice)) {
+            $sPracticeString = '';
+        } else {
+            $sPracticeString = ' and group_location_favorite.pid = ' . $currentPractice->nid . ' ';
+        }
+
+        $results = db_query("select group_location_favorite.nid from group_location_favorite join node on (node.nid = group_location_favorite.nid) where group_location_favorite.gid = :gid {$sPracticeString} order by node.title asc", array(':gid' => Group::getGroupId()))->fetchAll();
+        foreach ($results as $nid) {
+            if ($order_by_title) {
+                $ownMapLocations[] = node_load($nid->nid);
+            } else {
+                $ownMapLocations[$nid->nid] = node_load($nid->nid);
+            }
+        }
+        
+        return $ownMapLocations;
     }
 
 }

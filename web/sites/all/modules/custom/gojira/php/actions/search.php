@@ -24,14 +24,8 @@ function search() {
     $output['by_id'] = false;
 
     
-    
-    if (isset($_GET['tags']) && ($_GET['tags'] == 'favorites')) {
-        // favorites
-        $foundNodes = Favorite::getInstance()->getAllFavoriteLocations();
-    } else if (isset($_GET['tags']) && ($_GET['tags'] == '')) {
-        // ownlist - depricated?!
-        $foundNodes = Favorite::getInstance()->getAllFavoriteLocations();
-    } else if (isset($_GET['tags']) && ($_GET['tags'] == 'locationsset')) {
+    if (isset($_GET['tags']) && ($_GET['tags'] == 'locationsset')) {
+        // SHOW OWN LIST ON THE LOCATIONSSET TEMPLATE
         if (isset($_GET['cat_id']) && is_numeric($_GET['cat_id'])) {
             if ($_GET['id'] == 'favorites') { // display own list
                 $foundNodes = Favorite::getInstance()->getAllFavoritesInCategory($_GET['cat_id']);
@@ -39,15 +33,14 @@ function search() {
                 $foundNodes = Locationsets::getInstance()->getLocations($_GET['id'], $_GET['cat_id']);
             }
         }
-    } else if (isset($_GET['tags']) && strstr($_GET['tags'], 'allwithtag:')) {
-        // shizzle
-        $tag = str_replace('allwithtag:', '', $_GET['tags']);
-        $foundNodes = Search::getInstance()->doSearch(array($tag), false, true, false);
     } else if ($single_location) {
         // we have been given a nid as a tag, let's show a single location
         $output['by_id'] = $_GET['tags'];
         $foundNodes[$_GET['tags']] = node_load($_GET['tags']);
-    } else if (isset($_GET['tags']) && $_GET['tags'] != '') {
+    } else if (isset($_GET['tags']) && $_GET['tags'] != '' && isset($_GET['type'])) {
+        
+        // NORMAL SEARCH
+        
         $tags = explode(' ', urldecode($_GET['tags']));
 
         $filteredTags = array();
@@ -57,10 +50,9 @@ function search() {
                 $filteredTags[] = $tag;
             }
         }
-
-
+        
         // get all the nodes based on the normal tags
-        $foundNodes = Search::getInstance()->doSearch($filteredTags, $check_city);
+        $foundNodes = Search::getInstance()->doSearch($filteredTags, $check_city, $_GET['type']);
 
         $output['tags'] = implode(', ', $filteredTags);
     } else {

@@ -12,8 +12,8 @@
   'POINT(',
   node.coordinates_x),' '), node.coordinates_y), ')')) WHERE  `nid`>0 and node.type = 'location';
 
-X - low value - Horizontal - Longitude
-Y - high value - vertical - latitude
+  X - low value - Horizontal - Longitude
+  Y - high value - vertical - latitude
 
 
  */
@@ -60,18 +60,14 @@ class Search {
                 $h .= t('You are searching in the area of %city%.', array('%city%' => $output['city_in_tag'])) . '<br />';
                 $h .= '<a id="search_own_area" href="/?tags=' . str_replace(' ', '', $_GET['tags']) . '&check_city=0" title="' . t('Search in your own area') . '">' . t('Search in your own area') . '</a>';
                 $h .= '</p>';
-            }else if ($output['city_in_tag'] && $output['check_city'] == true && !helper::userHasSubscribedRole()) {
+            } else if ($output['city_in_tag'] && $output['check_city'] == true && !helper::userHasSubscribedRole()) {
                 $h .= '<p class="info_text">';
                 $h .= t('You cannot search in other places unless you have a payed account.');
                 $h .= '</p>';
             }
             if ($output['resultcounttotal'] >= 1) {
                 $h .= '<p>';
-                if ($_GET['tags'] == 'favorites') {
-                    $h .= t('Your favorites') . ':';
-                } else {
-                    $h .= t('Found locations') . ':';
-                }
+                $h .= t('Found locations') . ':';
                 $h .= '</p>';
                 $h .= '<ul class="page_0 rl">';
                 foreach ($output['searchResults'] as $result) {
@@ -95,12 +91,12 @@ class Search {
                     $admin_info = '';
                     $title = $result['t'];
                     if ($output['user_is_admin']) {
-                        $admin_info = ($result['s']-$result['d']) . ' s:' . $result['s'] .' d:'.$result['d'];
+                        $admin_info = ($result['s'] - $result['d']) . ' s:' . $result['s'] . ' d:' . $result['d'];
                         $title = $result['t'];
                     }
 
                     $h .= '<li class="' . $admin_info . '">';
-                    $h .= '<a title="'.$title.'" id="loc_' . $result['n'] . '" href="' . $result['n'] . '" rel="' . $result['lo'] . ',' . $result['la'] . '">';
+                    $h .= '<a title="' . $title . '" id="loc_' . $result['n'] . '" href="' . $result['n'] . '" rel="' . $result['lo'] . ',' . $result['la'] . '">';
                     $h .= $title;
                     $h .= '</a>';
                     $h .= '</li>';
@@ -176,11 +172,11 @@ class Search {
 
         if (user_access(helper::PERMISSION_CORRECT_EXISTING_LOCATIONS)) {
             $inform = '<i class="fa fa-wrench"></i> Gegevens onjuist/onvolledig? <a href="/inform&nid=%nid%" title="Informeer ons">Informeer ons</a> of <a href="/location/correct&nid=%nid%" title="wijzig hier">wijzig hier</a>.';
-        }else{
+        } else {
             $inform = '<i class="fa fa-envelope-o"></i> Gegevens onjuist/onvolledig? <a href="/inform&nid=%nid%" title="Informeer ons">Informeer ons</a>.';
         }
 
-        $yournote = t('Your note:').'<br />';
+        $yournote = t('Your note:') . '<br />';
         $popupHtml = <<<EAT
 <div id="location_%nid%" class="search_result_wrapper">
   <div class="grouped">
@@ -253,10 +249,10 @@ EAT;
         $sFavorites = '';
         if (user_access(helper::PERMISSION_PERSONAL_LIST)) {
             $sOnList = 'false';
-            if(Favorite::getInstance()->isFavorite($foundNode->nid, $oCurrentLocation->nid)){
+            if (Favorite::getInstance()->isFavorite($foundNode->nid, $oCurrentLocation->nid)) {
                 $sOnList = 'true';
             }
-            $sFavorites = '<div class="favorites_switch"><a class="in_favorites '.$sOnList.'" title="Bepaal of deze zorgverlener in uw kaart zit.">In <i>Mijn kaart</i></a></div>';
+            $sFavorites = '<div class="favorites_switch"><a class="in_favorites ' . $sOnList . '" title="Bepaal of deze zorgverlener in uw kaart zit.">In <i>Mijn kaart</i></a></div>';
         }
 
         $category_txt = '';
@@ -270,7 +266,7 @@ EAT;
             $category_txt = '<p>' . t('This locations has no category.') . '</p>';
         }
 
-        $labels = Labels::draw($foundNode).Labels::drawMobileLabels($foundNode);
+        $labels = Labels::draw($foundNode) . Labels::drawMobileLabels($foundNode);
 
         // format the adres
         $adres = '';
@@ -280,22 +276,22 @@ EAT;
         $city = trim(helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD));
         $telephone = trim(helper::value($foundNode, GojiraSettings::CONTENT_TYPE_TELEPHONE_FIELD));
         $fax = trim(helper::value($foundNode, GojiraSettings::CONTENT_TYPE_FAX_FIELD));
-        if($street.$number !== ''){
-            $adres .= $street.' '.$number.'<br />';
+        if ($street . $number !== '') {
+            $adres .= $street . ' ' . $number . '<br />';
         }
-        if($postcode.$city !== ''){
-            $adres .= $postcode.' '.$city.'<br />';
+        if ($postcode . $city !== '') {
+            $adres .= $postcode . ' ' . $city . '<br />';
         }
-        if($telephone !== ''){
-            $adres .= 'Tel.'.$telephone.'<br />';
+        if ($telephone !== '') {
+            $adres .= 'Tel.' . $telephone . '<br />';
         }
-        if($fax !== ''){
-            $adres .= 'Fax.'.$fax.'<br />';
+        if ($fax !== '') {
+            $adres .= 'Fax.' . $fax . '<br />';
         }
-        if($email !== ''){
+        if ($email !== '') {
             $adres .= $email;
         }
-                    
+
         $html = str_replace(
                 array('%title%',
             '%adres%',
@@ -305,8 +301,7 @@ EAT;
             '%nid%',
             '%favorites%',
             '%category%',
-            '%note%'), 
-            array($foundNode->title,
+            '%note%'), array($foundNode->title,
             $adres,
             $url,
             $labels,
@@ -314,8 +309,8 @@ EAT;
             $foundNode->nid,
             $sFavorites,
             $category_txt,
-            nl2br(Location::getNote($foundNode->nid,' <a title="'.t('Edit note').'" class="fa fa-pencil" href="/editnote?nid='.$foundNode->nid.'"></a>',t('Empty'))),
-            ), $popupHtml);
+            nl2br(Location::getNote($foundNode->nid, ' <a title="' . t('Edit note') . '" class="fa fa-pencil" href="/editnote?nid=' . $foundNode->nid . '"></a>', t('Empty'))),
+                ), $popupHtml);
 
         return $html;
     }
@@ -325,7 +320,12 @@ EAT;
      *
      * @param array $labels
      */
-    public function doSearch($labels, $check_city = true, $force_global = false, $force_favorites = false) {
+    public function doSearch($labels, $check_city, $type = null) {
+
+        // set defaults
+        if (is_null($type)) {
+            $type = helper::SEARCH_TYPE_REGION;
+        }
 
         global $user;
         $oUser = user_load($user->uid);
@@ -350,7 +350,6 @@ EAT;
 
         // make lowercase of all tags
         // remove all the city names
-        // remove all the blacklisted words
         $lowerlabels = array();
         foreach ($labels as $label) {
             $label = strtolower($label);
@@ -359,7 +358,7 @@ EAT;
             // or checkcity is false, then always add the labels to search with
             if (($check_city && !$bIsCity) || !$check_city) {
                 $lowerlabels[] = self::cleanSearchTag($label);
-            }else if($check_city && $bIsCity && helper::userHasSubscribedRole()){
+            } else if ($check_city && $bIsCity && helper::userHasSubscribedRole()) {
                 $sCityLabel = $label;
             }
         }
@@ -372,11 +371,6 @@ EAT;
             return array();
         }
 
-        // for each tag:
-        // A) get all nodes that have it linked
-        // B) store them all in array with related score.
-        // C) if node is allready saved with a score from previous tag, add score
-        // also make a comma seporated string with the id's for in the other search query
         $foundNodes = array();
         $nidsSql = '0';
         foreach ($labels as $label) {
@@ -405,9 +399,17 @@ EAT;
 
         $location = $this->getCenterMap($check_city);
 
+
+        $distance = 0.09;
+        // SET GLOBAL SEARCH
+        if ($type == helper::SEARCH_TYPE_COUNTRY && user_access(helper::PERMISSION_SEARCH_GLOBAL)) {
+            $distance = 20.0;
+        }
+
         $favoriteFilter = '';
-        if ($force_favorites || helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_FAVORITES_FIELD)) {
+        if ($type == helper::SEARCH_TYPE_OWNLIST && user_access(helper::PERMISSION_PERSONAL_LIST)) {
             $favoriteFilter = " AND group_location_favorite.gid = " . Group::getGroupId();
+            $distance = 20.0; // only the locations from the Sk will be show, they can be outside the region
         }
 
         if (count($labels)) {
@@ -419,17 +421,12 @@ EAT;
 //        $order_by_sql = 'ORDER BY (score-distance) desc';
         $order_by_sql = 'ORDER BY score desc, distance asc';
 
-        $distance = 0.09;
-        if ($force_global || helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) {
-            $distance = 20.0;
-        }
-
         $visible_join = ' join field_data_field_visible_to_other_user on (node.nid = field_data_field_visible_to_other_user.entity_id) join field_data_field_address_city on (node.nid = field_data_field_address_city.entity_id) ';
         $visible_where = " AND field_data_field_visible_to_other_user.field_visible_to_other_user_value = 1 AND field_data_field_visible_to_other_user.bundle = 'location' AND field_data_field_visible_to_other_user.delta = 0 ";
 
         $sFilterCity = '';
         if ($sCityLabel) {
-            if(helper::userHasSubscribedRole()){
+            if (helper::userHasSubscribedRole()) {
                 $aParams[':city'] = $sCityLabel;
                 $sFilterCity = " AND field_data_field_address_city.field_address_city_value = :city ";
             }
@@ -445,19 +442,13 @@ EAT;
         $iMaxLatitude = ($location->latitude + $distance);
 
         $sql_max_distance = " AND (X(point) BETWEEN {$iMinLongitude} AND {$iMaxLongitude} AND Y(point) BETWEEN {$iMinLatitude} AND {$iMaxLatitude}) ";
-//        //$sDistanceField = "((ACOS(SIN({$location->latitude} * PI() / 180) * SIN(Y(point) * PI() / 180) + COS({$location->latitude} * PI() / 180) * COS(Y(point) * PI() / 180) * COS(({$location->longitude} - (point)) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) as distance ";
-//
-//$fDistanceFactor = 1200; // determs the weight of the distance to lower the score that determs the sort of the results
-//if ($force_global || helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) {
-//    // if we search global, the distance must weight less then normal
-//    $fDistanceFactor = 800;
-//}
 
-$lat1 = 'Y(point)';
-$lon1 = 'X(point)';
-$lat2 = $location->latitude;
-$lon2 = $location->longitude;
-$sDistanceField = <<<EOT
+
+        $lat1 = 'Y(point)';
+        $lon1 = 'X(point)';
+        $lat2 = $location->latitude;
+        $lon2 = $location->longitude;
+        $sDistanceField = <<<EOT
         (1200 * acos( cos( radians($lat1) )
       * cos( radians($lat2) )
       * cos( radians($lon2) - radians($lon1)) + sin(radians($lat1))
@@ -494,24 +485,24 @@ EOT;
         $latHigh = null;
         foreach ($results as $result) {
 
-            if(is_null($latLow) || $result->lat <= $latLow){
+            if (is_null($latLow) || $result->lat <= $latLow) {
                 $latLow = $result->lat;
             }
-            if(is_null($lonLow) || $result->lon <= $lonLow){
+            if (is_null($lonLow) || $result->lon <= $lonLow) {
                 $lonLow = $result->lon;
             }
-            if(is_null($latHigh) || $result->lat >= $latHigh){
+            if (is_null($latHigh) || $result->lat >= $latHigh) {
                 $latHigh = $result->lat;
             }
-            if(is_null($lonHigh) || $result->lon >= $lonHigh){
+            if (is_null($lonHigh) || $result->lon >= $lonHigh) {
                 $lonHigh = $result->lon;
             }
 
             Search::getInstance()->latLonRadiusInfo = array(
-              'latLow'  => $latLow,
-              'lonLow'  => $lonLow,
-              'latHigh'  => $latHigh,
-              'lonHigh'  => $lonHigh
+                'latLow' => $latLow,
+                'lonLow' => $lonLow,
+                'latHigh' => $latHigh,
+                'lonHigh' => $lonHigh
             );
 
             $distance = $result->distance;
@@ -751,7 +742,7 @@ EOT;
                 }
             }
         }
-        
+
         // return default user Location
         return Location::getCurrentLocationObjectOfUser(true);
     }
@@ -783,9 +774,49 @@ EOT;
 
     // cleans strings to be used as index words or search terms
     private static function cleanSearchTag($tag) {
-        return strtolower(
-                preg_replace("/[^A-Za-z0-9 .]/", '', str_replace(Search::$aSpecialChars, Search::$aSpecialCharsReplacements, $tag)
+        return trim(
+                strtolower(
+                        preg_replace("/[^A-Za-z0-9 .]/", '', str_replace(Search::$aSpecialChars, Search::$aSpecialCharsReplacements, $tag)
+                        )
                 )
         );
     }
+
+    public static function searchInOwnMap($tags) {
+        $currentPractice = Location::getCurrentLocationNodeObjectOfUser();
+        $ownlistLocations = Favorite::getInstance()->getAllFavoriteLocations($currentPractice->nid);
+
+        $foundNodes = array();
+        $nidsSql = '0';
+
+        if (!is_array($tags)) {
+            $tags = explode(' ', $tags);
+        }
+
+        $cleanTags = array();
+        foreach ($tags as $tag) {
+            $clean = self::cleanSearchTag($tag);
+            if ($clean != '') {
+                $cleanTags[] = self::cleanSearchTag($tag);
+            }
+        }
+
+        foreach ($cleanTags as $tag) {
+            $sql = "SELECT searchword_nid.node_nid AS nid, searchword.word AS word FROM {searchword} JOIN {searchword_nid} on (searchword.id = searchword_nid.searchword_id) WHERE word LIKE :label1 OR word LIKE :label2 GROUP BY searchword_nid.node_nid";
+            $result = db_query($sql, array(':label1' => $tag . '%', ':label2' => '%' . $tag))->fetchAll();
+            foreach ($result as $found) {
+                $foundNodes[$found->nid] = $found->nid;
+            }
+        }
+
+        $return = array();
+        foreach ($ownlistLocations as $ownlistLocation) {
+            if (array_key_exists($ownlistLocation->nid, $foundNodes)) {
+                $return[$ownlistLocation->nid] = $ownlistLocation;
+            }
+        }
+
+        return $return;
+    }
+
 }

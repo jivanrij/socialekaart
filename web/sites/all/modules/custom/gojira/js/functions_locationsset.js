@@ -66,6 +66,9 @@ function focusLocationsset(nid) {
 }
 
 function bindLocationsset() {
+    
+    bindLocationsetSearch();
+    
     jQuery(".locationset_show_cat").click(function (e) {
         e.preventDefault();
         jQuery("#ajax_search_results").html("");
@@ -84,7 +87,9 @@ function bindLocationsset() {
         jQuery(window).trigger('resize');
     });
 
-    jQuery("#locationsset_categories li:first-child a").trigger('click');
+    if(Drupal.settings.gojira.locationsset_has_filter == 0){
+        jQuery("#locationsset_categories li:first-child a").trigger('click');
+    }
 
     jQuery('a.locationset_show_loc').click(function (e) {
         e.preventDefault();
@@ -185,9 +190,6 @@ function getCategoryLocations(locationsset_id, cat_id) {
                 ]);
             }
 
-
-//                bindAfterSearch();
-
             if (data.single_location) {
                 jQuery('#loc_' + data.by_id).click();
                 jQuery('#search_results').hide();
@@ -198,5 +200,12 @@ function getCategoryLocations(locationsset_id, cat_id) {
         error: function (jqXHR, textStatus, errorThrown) {
             somethingWrongMessage();
         }
+    });
+}
+function bindLocationsetSearch(){
+    jQuery("#search_form form").submit(function (e) {
+        e.preventDefault();
+        openOverlay();
+        window.location = window.location.pathname + '?filter=' + encodeURIComponent(jQuery('#gojirasearch_search_term').val());
     });
 }

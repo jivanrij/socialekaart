@@ -22,7 +22,7 @@ class Favorite {
      * @return boolean
      */
     public static function isFavorite($nid, $iLocationPractice = null) {
-        $favorites = Favorite::getInstance()->getAllFavoriteLocations(false, $iLocationPractice);
+        $favorites = Favorite::getInstance()->getAllFavoriteLocations($iLocationPractice);
 
         if (array_key_exists($nid, $favorites)) {
             return true;
@@ -34,14 +34,12 @@ class Favorite {
 
     /**
      * Get's you all the favorite locations of the current logged in user's group
-     * If you order by title it get's ordered, else the keys will be the nid's
-     * Add a optional 2nd param with a practice id to only get the favorites of the current selected practice
+     * Add a optional param with a practice id to only get the favorites of the current selected practice
      * 
-     * @param boolean $order_by_title
      * @param integer Practice id
      * @return Array
      */
-    public function getAllFavoriteLocations($order_by_title = false, $iLocationPractice = null) {
+    public function getAllFavoriteLocations($iLocationPractice = null) {
         $favorites = array();
 
         if (count($this->favoriteLocations) == 0) {
@@ -53,11 +51,7 @@ class Favorite {
 
             $results = db_query("select group_location_favorite.nid from group_location_favorite join node on (node.nid = group_location_favorite.nid) where group_location_favorite.gid = :gid {$sPracticeString} order by node.title asc", array(':gid' => Group::getGroupId()))->fetchAll();
             foreach ($results as $nid) {
-                if ($order_by_title) {
-                    $this->favoriteLocations[] = node_load($nid->nid);
-                } else {
-                    $this->favoriteLocations[$nid->nid] = node_load($nid->nid);
-                }
+                $this->favoriteLocations[$nid->nid] = node_load($nid->nid);
             }
         }
 
@@ -74,7 +68,7 @@ class Favorite {
         
         $loc = Location::getCurrentLocationNodeObjectOfUser();
         
-        $favorites = self::getAllFavoriteLocations(false, $loc->nid);
+        $favorites = self::getAllFavoriteLocations($loc->nid);
 
         $return = array();
         foreach($favorites as $favorite){

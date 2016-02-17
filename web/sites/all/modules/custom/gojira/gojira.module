@@ -143,6 +143,10 @@ function gojira_permission() {
       'title' => t('Personal list'),
       'description' => t('These users can manage there personal list and filter on this.'),
     ),
+    helper::PERMISSION_SEARCH_GLOBAL => array(
+      'title' => t('Search globel'),
+      'description' => t('These users can search country wide.'),
+    ),
     helper::PERMISSION_LOCATIONSETS => array(
       'title' => t('Locationsets'),
       'description' => t('The user is able to use the locationsets in the frontend of the system.'),
