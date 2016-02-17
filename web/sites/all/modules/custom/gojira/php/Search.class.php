@@ -58,7 +58,7 @@ class Search {
             if ($output['city_in_tag'] && $output['check_city'] == true && helper::userHasSubscribedRole()) {
                 $h .= '<p class="info_text">';
                 $h .= t('You are searching in the area of %city%.', array('%city%' => $output['city_in_tag'])) . '<br />';
-                $h .= '<a id="search_own_area" href="/?tags=' . str_replace(' ', '', $_GET['tags']) . '&check_city=0" title="' . t('Search in your own area') . '">' . t('Search in your own area') . '</a>';
+                $h .= '<a id="search_own_area" href="/?s=' . str_replace(' ', '', $_GET['s']) . '&check_city=0" title="' . t('Search in your own area') . '">' . t('Search in your own area') . '</a>';
                 $h .= '</p>';
             } else if ($output['city_in_tag'] && $output['check_city'] == true && !helper::userHasSubscribedRole()) {
                 $h .= '<p class="info_text">';
@@ -759,7 +759,7 @@ EOT;
 
             $citys = Location::getKnownCitys();
 
-            $tags = explode(' ', urldecode($_GET['tags']));
+            $tags = explode(' ', urldecode($_GET['s']));
             foreach ($tags as $tag) {
                 $tag = trim($tag);
                 if ($tag != "") {
@@ -780,6 +780,18 @@ EOT;
                         )
                 )
         );
+    }
+    
+    public static function getSearchTypeBasedOnQuery(){
+        if(isset($_GET['type'])){
+            if($_GET['type'] == helper::SEARCH_TYPE_COUNTRY){
+                return helper::SEARCH_TYPE_COUNTRY;
+            }
+            if($_GET['type'] == helper::SEARCH_TYPE_OWNLIST){
+                return helper::SEARCH_TYPE_OWNLIST;
+            }
+        }
+        return helper::SEARCH_TYPE_REGION;
     }
 
     public static function searchInOwnMap($tags) {
@@ -812,6 +824,11 @@ EOT;
         $return = array();
         foreach ($ownlistLocations as $ownlistLocation) {
             if (array_key_exists($ownlistLocation->nid, $foundNodes)) {
+                $loc = Location::getLocationObjectOfNode($ownlistLocation->nid);
+                if($loc){
+                    $ownlistLocation->latitude = $loc->latitude;
+                    $ownlistLocation->longitude = $loc->longitude;
+                }
                 $return[$ownlistLocation->nid] = $ownlistLocation;
             }
         }

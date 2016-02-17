@@ -8,13 +8,12 @@
             <div id="search_type">
                 <label>Zoeken in:</label>
                 <select id="search_type_select">
-                    <option value="<?php echo helper::SEARCH_TYPE_REGION; ?>">praktijk regio</option>
-                    <?php if (user_access(helper::PERMISSION_PERSONAL_LIST)): ?><option <?php echo (Locationsets::onLocationsetOrOwnMap() ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_OWNLIST; ?>">uw kaart</option><?php endif; ?>
-                    <?php if (user_access(helper::PERMISSION_SEARCH_GLOBAL)): ?><option value="<?php echo helper::SEARCH_TYPE_COUNTRY; ?>">het hele land</option><?php endif; ?>
+                    <option <?php echo ((Search::getSearchTypeBasedOnQuery()==helper::SEARCH_TYPE_REGION) ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_REGION; ?>">praktijk regio</option>
+                    <?php if (user_access(helper::PERMISSION_PERSONAL_LIST)): ?><option <?php echo (Locationsets::onOwnMap() ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_OWNLIST; ?>">uw kaart</option><?php endif; ?>
+                    <?php if (user_access(helper::PERMISSION_SEARCH_GLOBAL)): ?><option <?php echo ((Search::getSearchTypeBasedOnQuery()==helper::SEARCH_TYPE_COUNTRY) ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_COUNTRY; ?>">het hele land</option><?php endif; ?>
                 </select>
             </div>
             
-                
             <ul class="maplist">
                 <li>
                     <?php if(Locationsets::getInstance()->userHasRightToLocationssets() && count(Locationsets::getInstance()->getMapSetsForCurrentUser())>0): ?>

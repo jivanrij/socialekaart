@@ -15,16 +15,16 @@ function search() {
         $check_city = false;
     }
 
-    $single_location = (isset($_GET['tags']) && is_numeric($_GET['tags']));
+    $single_location = (isset($_GET['s']) && is_numeric($_GET['s']));
 
-    $output['tags'] = '';
+    $output['s'] = '';
     $searchResults = array();
     $foundNodes = array();
     $output['has_tags'] = true;
     $output['by_id'] = false;
 
     
-    if (isset($_GET['tags']) && ($_GET['tags'] == 'locationsset')) {
+    if (isset($_GET['s']) && ($_GET['s'] == 'locationsset')) {
         // SHOW OWN LIST ON THE LOCATIONSSET TEMPLATE
         if (isset($_GET['cat_id']) && is_numeric($_GET['cat_id'])) {
             if ($_GET['id'] == 'favorites') { // display own list
@@ -35,13 +35,13 @@ function search() {
         }
     } else if ($single_location) {
         // we have been given a nid as a tag, let's show a single location
-        $output['by_id'] = $_GET['tags'];
-        $foundNodes[$_GET['tags']] = node_load($_GET['tags']);
-    } else if (isset($_GET['tags']) && $_GET['tags'] != '' && isset($_GET['type'])) {
+        $output['by_id'] = $_GET['s'];
+        $foundNodes[$_GET['s']] = node_load($_GET['s']);
+    } else if (isset($_GET['s']) && $_GET['s'] != '' && isset($_GET['type'])) {
         
         // NORMAL SEARCH
         
-        $tags = explode(' ', urldecode($_GET['tags']));
+        $tags = explode(' ', urldecode($_GET['s']));
 
         $filteredTags = array();
         foreach ($tags as $tag) {
@@ -54,7 +54,7 @@ function search() {
         // get all the nodes based on the normal tags
         $foundNodes = Search::getInstance()->doSearch($filteredTags, $check_city, $_GET['type']);
 
-        $output['tags'] = implode(', ', $filteredTags);
+        $output['s'] = implode(', ', $filteredTags);
     } else {
         $output['has_tags'] = false;
     }
@@ -111,7 +111,7 @@ function search() {
     $output['nothing_found_message'] = t('No results found based on the given terms.');
     if (helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_FAVORITES_FIELD)) {
         $output['nothing_found_message'] = t('No results found based on the given terms within your favorite locations. ');
-    } else if (isset($_GET['tags']) && $_GET['tags'] == 'favorites') {
+    } else if (isset($_GET['s']) && $_GET['s'] == 'favorites') {
         $output['nothing_found_message'] = t('You have no favorites. ');
     }
 
@@ -161,7 +161,7 @@ function search() {
 
     // determ the zoom level that is shown after a search result
     if(helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)){ // user searches on a country level
-        if (isset($_GET['tags']) && ($_GET['tags'] == 'ownlist')) { // country level == on, but also filters on favorites
+        if (isset($_GET['s']) && ($_GET['s'] == 'ownlist')) { // country level == on, but also filters on favorites
           $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_REGION; // show region level
         }else if( Search::getInstance()->getCityNameFromTags()){ // country level == on, but also searches with a city name
           $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_STREET;// show street level
@@ -172,12 +172,12 @@ function search() {
         $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_STREET; // show street level
     }
 
-    if (isset($_GET['tags']) && ($_GET['tags'] == 'favorites')) {
+    if (isset($_GET['s']) && ($_GET['s'] == 'favorites')) {
         $output['search_favorites'] = 1;
     }
 
 
-    if (isset($_GET['tags']) && ($_GET['tags'] == 'locationsset')){
+    if (isset($_GET['s']) && ($_GET['s'] == 'locationsset')){
         $output['results_html'] = '';
     }else{
         $output['results_html'] = Search::getInstance()->getResultListHtml($output);

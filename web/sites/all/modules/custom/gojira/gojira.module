@@ -303,8 +303,8 @@ function gojira_init() {
     }
 
     drupal_add_js(array('gojira' => array('doSearch' => 0)), 'setting');
-    if(isset($_GET['tags'])){
-      drupal_add_js(array('gojira' => array('doSearch' => $_GET['tags'])), 'setting');
+    if(isset($_GET['s'])){
+      drupal_add_js(array('gojira' => array('doSearch' => $_GET['s'])), 'setting');
     }
 
     drupal_add_js(array('gojira' => array('showLoc' => 0)), 'setting');

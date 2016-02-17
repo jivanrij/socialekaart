@@ -47,17 +47,17 @@ class Locationsets {
      * 
      * @return boolean
      */
-    public function onLocationsetOrOwnMap(){
+    public function onOwnMap(){
         
-        if (arg(0) == 'node' && is_numeric(arg(1))) {
-            $nid = arg(1);
-            $node = node_load($nid);
-            if (isset($node->type)) {
-                if ($node->type == GojiraSettings::CONTENT_TYPE_SET_OF_LOCATIONS) {
-                    return true;
-                }
-            }
-        }
+//        if (arg(0) == 'node' && is_numeric(arg(1))) {
+//            $nid = arg(1);
+//            $node = node_load($nid);
+//            if (isset($node->type)) {
+//                if ($node->type == GojiraSettings::CONTENT_TYPE_SET_OF_LOCATIONS) {
+//                    return true;
+//                }
+//            }
+//        }
         
         if(arg(0) == 'ownlist'){
             return true;

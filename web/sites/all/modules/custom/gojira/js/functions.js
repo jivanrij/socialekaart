@@ -382,6 +382,11 @@ function bindGojirasearch() {
 }
 
 function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
+    
+    if (jQuery("#search_type_select").val() == 'ownlist') {
+        doLocationsetSearchCall();
+        return;
+    }
 
     if (typeof extra_ajax_info == 'undefined') {
         var extra_ajax_info = "";
@@ -412,15 +417,13 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
     window.markers = new L.FeatureGroup();
     window.map.addLayer(window.markers);
 
-    var type = '&type=' + jQuery( "#search_type_select" ).val();
+    var type = '&type=' + jQuery("#search_type_select").val();
 
     jQuery.ajax({
-        url: '/?q=ajax/search&tags=' + searchFor + type + extra_ajax_info,
+        url: '/?q=ajax/search&s=' + searchFor + type + extra_ajax_info,
         type: 'GET',
         dataType: 'json',
         success: function (data) {
-
-            window.markerMapping = new Array(); // let's store the leaflet id's with the nid's
 
             if (typeof data.mapSearchResultsCount == 'undefined') {
                 somethingWrongMessage();
@@ -428,7 +431,7 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
 
             jQuery('#ajax_search_results').html(data.results_html);
 
-            if(data.mapSearchResultsCount == 1){
+            if (data.mapSearchResultsCount == 1) {
                 // no results, only our own practice
                 closeOverlay();
                 return;
@@ -621,7 +624,7 @@ function focusLocation(nid) {
 
             // move to it
             if (!onMobileView()) {
-                if(typeof data.latitude == 'string'){
+                if (typeof data.latitude == 'string') {
                     window.map.panTo([data.latitude, data.longitude]);
                 }
             }
@@ -786,17 +789,17 @@ function bindGlobal() {
 
     if (Drupal.settings.gojira.page == 'locationsset') {
         jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in uw sociale kaart');
-    }else{
+    } else {
         jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in de regio');
     }
-    jQuery("#search_type_select").change(function(){
-        if(jQuery(this).val() == 'ownlist'){
+    jQuery("#search_type_select").change(function () {
+        if (jQuery(this).val() == 'ownlist') {
             jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in uw sociale kaart');
         }
-        if(jQuery(this).val() == 'country'){
+        if (jQuery(this).val() == 'country') {
             jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in het gehele land');
         }
-        if(jQuery(this).val() == 'region'){
+        if (jQuery(this).val() == 'region') {
             jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in de regio');
         }
     });
@@ -1163,10 +1166,12 @@ function bindMobileMenu() {
 }
 
 function populateMap(searchresults, count) {
+    
+    window.markerMapping = new Array(); // let's store the leaflet id's with the nid's
+    
     for (var i = 0; i < count; i++) {
 
         var thisResult = searchresults[i];
-
         if (thisResult.x && thisResult.c > 0) {
             // I am a merged marker with self as a part of my items
             var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.mixedIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
@@ -1204,6 +1209,7 @@ function populateMap(searchresults, count) {
 
             window.markers.addLayer(marker);
         }
+        
         window.markerMapping[thisResult.n] = marker._leaflet_id;
     }
 }

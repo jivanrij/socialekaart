@@ -21,7 +21,7 @@
 <ul>
   <?php foreach($labels as $label): ?>
     <li>
-      <a target="_new" href="/?tags=allwithtag:<?php echo $label->name; ?>" /><?php echo $label->name; ?></a>
+      <a target="_new" href="/?s=allwithtag:<?php echo $label->name; ?>" /><?php echo $label->name; ?></a>
     </li>
   <?php endforeach; ?>
 </ul>

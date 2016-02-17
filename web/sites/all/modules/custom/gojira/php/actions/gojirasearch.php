@@ -1,7 +1,6 @@
 <?php
 // search route handler
 function gojirasearch() {
-  
   global $user;
   $user = user_load($user->uid);
   

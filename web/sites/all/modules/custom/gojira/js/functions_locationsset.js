@@ -66,74 +66,83 @@ function focusLocationsset(nid) {
 }
 
 function bindLocationsset() {
-    
+
     bindLocationsetSearch();
-    
-    jQuery(".locationset_show_cat").click(function (e) {
-        e.preventDefault();
-        jQuery("#ajax_search_results").html("");
-        jQuery("#locationsset_categories li").removeClass("active");
-        jQuery(this).closest("li").addClass("active");
-        var cat_id = jQuery(this).closest("li").attr("rel");
 
-        getCategoryLocations(Drupal.settings.gojira.locationsset_id, cat_id);
-
-        if (cat_id == "all") {
-            jQuery(".locationset_show_loc").closest("li").show();
-        } else {
-            jQuery(".locationset_show_loc").closest("li").hide();
-            jQuery("li[rel=" + cat_id + "]").show();
-        }
-        jQuery(window).trigger('resize');
-    });
-
-    if(Drupal.settings.gojira.locationsset_has_filter == 0){
-        jQuery("#locationsset_categories li:first-child a").trigger('click');
-    }
-
-    jQuery('a.locationset_show_loc').click(function (e) {
-        e.preventDefault();
+    if (Drupal.settings.gojira.locationsset_has_filter == 0) {
         
-        L.Marker.stopAllBouncingMarkers();
+        // ONLY BIND THE CATEGORY & LOCATION GETTERS WHEN THERE IS NO SEARCH DONE
+        // IN THE OWNLIST
         
-        var location_id = jQuery(this).attr('href').replace('#', '');
-        var button = this;
+        jQuery(".locationset_show_cat").click(function (e) {
+            e.preventDefault();
+            jQuery("#ajax_search_results").html("");
+            jQuery("#locationsset_categories li").removeClass("active");
+            jQuery(this).closest("li").addClass("active");
+            var cat_id = jQuery(this).closest("li").attr("rel");
 
-        openOverlay();
+            getCategoryLocations(Drupal.settings.gojira.locationsset_id, cat_id);
 
-        jQuery.ajax({
-            url: '/?q=ajax/singlesearchresult&wrap_it=1&nid=' + location_id,
-            type: 'POST',
-            dataType: 'json',
-            success: function (data) {
-
-                jQuery("#ajax_search_results").html(data.html);
-
-                correctHeightForLocationsetSearchResult();
-
-                jQuery('#locationsset_locations li').removeClass('active');
-                jQuery(button).closest("li").addClass('active');
-
-                if(typeof data.latitude == 'string'){
-                    window.map.panTo([data.latitude, data.longitude]);
-                    if ((window.markerMapping[location_id] !== undefined) && (window.markers._layers[window.markerMapping[location_id]] !== undefined)) {
-                        window.markers._layers[window.markerMapping[location_id]].toggleBouncing();
-                    }
-                }
-                
-                bindAfterSearch(false, true);
-
-                jQuery("#search_result_info").css('top', top + 'px');
-
-                jQuery(window).trigger('resize');
-
-                closeOverlay();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                somethingWrongMessage();
+            if (cat_id == "all") {
+                jQuery(".locationset_show_loc").closest("li").show();
+            } else {
+                jQuery(".locationset_show_loc").closest("li").hide();
+                jQuery("li[rel=" + cat_id + "]").show();
             }
+            jQuery(window).trigger('resize');
         });
-    });
+
+
+        jQuery("#locationsset_categories li:first-child a").trigger('click');
+
+
+        jQuery('a.locationset_show_loc').click(function (e) {
+            e.preventDefault();
+
+            L.Marker.stopAllBouncingMarkers();
+
+            var location_id = jQuery(this).attr('href').replace('#', '');
+            var button = this;
+
+            openOverlay();
+
+            jQuery.ajax({
+                url: '/?q=ajax/singlesearchresult&wrap_it=1&nid=' + location_id,
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+
+                    jQuery("#ajax_search_results").html(data.html);
+
+                    correctHeightForLocationsetSearchResult();
+
+                    jQuery('#locationsset_locations li').removeClass('active');
+                    jQuery(button).closest("li").addClass('active');
+
+                    if (typeof data.latitude == 'string') {
+                        window.map.panTo([data.latitude, data.longitude]);
+
+                        if ((window.markerMapping[location_id] !== undefined) && (window.markers._layers[window.markerMapping[location_id]] !== undefined)) {
+                            window.markers._layers[window.markerMapping[location_id]].toggleBouncing();
+                        }
+                    }
+
+                    bindAfterSearch(false, true);
+
+                    jQuery("#search_result_info").css('top', top + 'px');
+
+                    jQuery(window).trigger('resize');
+
+                    closeOverlay();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    somethingWrongMessage();
+                }
+            });
+        });
+    }else{
+        populateMap(Drupal.settings.gojira.locationsset_filter_results, Drupal.settings.gojira.locationsset_filter_results_count);
+    }
 
 }
 
@@ -157,7 +166,7 @@ function getCategoryLocations(locationsset_id, cat_id) {
 
 
     jQuery.ajax({
-        url: '/?q=ajax/search&tags=locationsset&id=' + locationsset_id + '&cat_id=' + cat_id,
+        url: '/?q=ajax/search&s=locationsset&id=' + locationsset_id + '&cat_id=' + cat_id,
         type: 'GET',
         dataType: 'json',
         success: function (data) {
@@ -173,7 +182,7 @@ function getCategoryLocations(locationsset_id, cat_id) {
 //                jQuery('#ajax_search_results').html(data.results_html);
 //            }
 
-            if(data.mapSearchResultsCount == 1){
+            if (data.mapSearchResultsCount == 1) {
                 // no results, only our own practice
                 closeOverlay();
                 return;
@@ -202,10 +211,30 @@ function getCategoryLocations(locationsset_id, cat_id) {
         }
     });
 }
-function bindLocationsetSearch(){
+function bindLocationsetSearch() {
     jQuery("#search_form form").submit(function (e) {
         e.preventDefault();
-        openOverlay();
-        window.location = window.location.pathname + '?filter=' + encodeURIComponent(jQuery('#gojirasearch_search_term').val());
+        doLocationsetSearchCall();
     });
+}
+
+function doLocationsetSearchCall() {
+    openOverlay();
+
+    var s = encodeURIComponent(jQuery('#gojirasearch_search_term').val());
+
+    var url = '';
+
+    if (jQuery("#search_type_select").val() == 'ownlist') {
+        url = '/?q=ownlist' + '&filter=' + s;
+        url_bak = window.location.pathname + '?filter=' + s;
+    }
+    if (jQuery("#search_type_select").val() == 'country') {
+        url = '/?s=' + s + '&type=country';
+    }
+    if (jQuery("#search_type_select").val() == 'region') {
+        url = '/?s=' + s + '&type=region';
+    }
+
+    window.location = url
 }

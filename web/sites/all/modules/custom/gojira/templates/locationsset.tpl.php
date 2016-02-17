@@ -8,12 +8,28 @@ if ($oLocationset) {
     drupal_add_js(array('gojira' => array('locationsset_id' => $oLocationset->nid)), 'setting');
 } else {
     $currentPractice = Location::getCurrentLocationNodeObjectOfUser();
-    if(isset($_GET['filter'])){
+    if (isset($_GET['filter'])) {
         $aLocations = Search::searchInOwnMap($_GET['filter']);
+
+        $plotInfo = array();
+        foreach ($aLocations as $aLocation) {
+            $plotInfo[] = array(
+                    'd' => 0,
+                    's' => 0,
+                    'n' => $aLocation->nid,
+                    'x' => 0,
+                    't' => $aLocation->title,
+                    'lo' => $aLocation->longitude,
+                    'la' => $aLocation->latitude
+            );
+        }
+        drupal_add_js(array('gojira' => array('locationsset_filter_results_count' => count($plotInfo))), 'setting');
+        drupal_add_js(array('gojira' => array('locationsset_filter_results' => $plotInfo)), 'setting');
         drupal_add_js(array('gojira' => array('locationsset_has_filter' => 1)), 'setting');
-    }else{
-        $aLocations = Favorite::getInstance()->getAllFavoriteLocations($currentPractice->nid);        
+    } else {
+        $aLocations = Favorite::getInstance()->getAllFavoriteLocations($currentPractice->nid);
     }
+
     $sBody = t('Your own personal map\'s decription.');
     $sTitle = 'Sociale kaart ' . $currentPractice->title;
     drupal_add_js(array('gojira' => array('locationsset_id' => "favorites")), 'setting');
@@ -40,9 +56,9 @@ drupal_add_js(array('gojira' => array('page' => 'locationsset')), 'setting');
                     <li rel="<?php echo $aCategorie->nid; ?>"><a class="locationset_show_cat"><?php echo $aCategorie->title; ?></a></li>
                 <?php endforeach; ?>
             </ul>
-        <?php elseif(!isset($_GET['filter'])): ?>
+        <?php elseif (!isset($_GET['filter'])): ?>
             <img style="border:1px #4d4d4d inset;" src="sites/all/modules/custom/gojira/img/search_result.png" alt="Zorgverlener" />
-        <?php elseif(isset($_GET['filter'])): ?>
+        <?php elseif (isset($_GET['filter'])): ?>
             <p><i><?php echo t("No locations found with this specific search term."); ?></i></p>
         <?php endif; ?>
 

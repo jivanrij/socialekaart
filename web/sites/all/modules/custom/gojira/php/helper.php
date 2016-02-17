@@ -505,7 +505,7 @@ class helper {
      * return Array
      */
     public static function getTagsFromQuery(){
-        return explode(' ', urldecode($_GET['tags']));
+        return explode(' ', urldecode($_GET['s']));
     }
     
     /**
