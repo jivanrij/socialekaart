@@ -743,33 +743,7 @@ function bindGlobal() {
 
     bindAutocompleteAllTags("#gojirasearch_search_term");
 
-    if (Drupal.settings.gojira.page == 'locationsset') {
-        if (typeof Drupal.settings.gojira.locationsset_title === 'undefined') {
-            jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in uw sociale kaart');
-        } else {
-            jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in ' + Drupal.settings.gojira.locationsset_title);
-        }
-    } else {
-        jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in de regio');
-    }
-    jQuery("#search_type_select").change(function () {
-        if (jQuery(this).val() == 'ownlist') {
-            jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in uw sociale kaart');
-        }
-        if (jQuery(this).val() == 'locationset') {
-            if (typeof Drupal.settings.gojira.locationsset_title === 'undefined') {
-                jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in de kaart');
-            } else {
-                jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in ' + Drupal.settings.gojira.locationsset_title);
-            }            
-        }
-        if (jQuery(this).val() == 'country') {
-            jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in het gehele land');
-        }
-        if (jQuery(this).val() == 'region') {
-            jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in de regio');
-        }
-    });
+    nameSearchformLabel();
 
     // prevent the menu with a dropdown option to do something on a click
     jQuery('ul.menu li.expanded > a, #maps_hover_icon').click(function (e) {
@@ -843,34 +817,6 @@ function bindLocationFinder() {
     });
 }
 
-
-//function bindOwnlist() {
-//    // select different category to filter on
-//    jQuery("a.ownlist_cat").click(function (e) {
-//        e.preventDefault();
-//
-//        jQuery("a.ownlist_cat").removeClass('active');
-//        jQuery(this).addClass('active');
-//
-//        if (jQuery(this).hasClass('show_all')) {
-//            jQuery("#ownlist_content ul li").css('display', 'block');
-//        } else {
-//            jQuery("ul li", "#ownlist_content").css('display', 'none');
-//            var cat_id = jQuery(this).attr('rel');
-//            jQuery("li.ownlist_cat_" + cat_id, "#ownlist_content").css('display', 'block');
-//        }
-//
-//        jQuery('a.location_category_list').removeClass('active');
-//        jQuery("#ajax_search_results").html('');
-//
-//        jQuery(window).trigger('resize');
-//    });
-//
-//    // show a location
-//
-//
-//    doSearchCall('ownlist', 0);
-//}
 
 /**
  * Bind the functions to show and hide the specific fields of the inform form
@@ -992,58 +938,6 @@ function bindMobileMenu() {
     jQuery('#mobileheader > div > button.suggestlocation').click(function () {
         window.location = '/suggestlocation';
     });
-
-
-    //  switch global search on or off for mobile menu
-    jQuery('a.search_global').click(function () {
-        if (jQuery(this).hasClass('on')) {
-            jQuery(this).addClass('off');
-            jQuery(this).removeClass('on');
-            jQuery.ajax({
-                url: '/?q=ajax/switchglobalsearch&turn=off',
-                type: 'POST',
-                dataType: 'json',
-                success: function (data) {
-                }
-            });
-        } else {
-            jQuery(this).addClass('on');
-            jQuery(this).removeClass('off');
-            jQuery.ajax({
-                url: '/?q=ajax/switchglobalsearch&turn=on',
-                type: 'POST',
-                dataType: 'json',
-                success: function (data) {
-                }
-            });
-        }
-    });
-
-    //  switch favorites search on or off for mobile menu
-    jQuery('a.search_favorite').click(function () {
-        if (jQuery(this).hasClass('on')) {
-            jQuery(this).addClass('off');
-            jQuery(this).removeClass('on');
-            jQuery.ajax({
-                url: '/?q=ajax/switchfavorites&turn=off',
-                type: 'POST',
-                dataType: 'json',
-                success: function (data) {
-                }
-            });
-        } else {
-            jQuery(this).addClass('on');
-            jQuery(this).removeClass('off');
-            jQuery.ajax({
-                url: '/?q=ajax/switchfavorites&turn=on',
-                type: 'POST',
-                dataType: 'json',
-                success: function (data) {
-                }
-            });
-        }
-    });
-
     // select another main location
     jQuery('#select_location_mobile').change(function () {
         jQuery.ajax({
@@ -1052,6 +946,13 @@ function bindMobileMenu() {
             data: {nid: jQuery(this).val()}
         });
     });
+
+    jQuery("#search_submit_mobile").on('click',function(){
+        var url = '/?s=' + encodeURIComponent(jQuery('#search_term_mobile').val()) + '&m=1&type=' + jQuery('#search_type_select_mobile').val();
+        console.log(url);
+        window.location = url;
+    });
+
 }
 
 function populateMap(searchresults, count) {
@@ -1105,4 +1006,34 @@ function populateMap(searchresults, count) {
             window.markerMapping[thisResult.n] = marker._leaflet_id;
         }
     }
+}
+
+function nameSearchformLabel(){
+    if (Drupal.settings.gojira.page == 'locationsset') {
+        if (typeof Drupal.settings.gojira.locationsset_title === 'undefined') {
+            jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in uw sociale kaart');
+        } else {
+            jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in ' + Drupal.settings.gojira.locationsset_title);
+        }
+    } else {
+        jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in de regio');
+    }
+    jQuery("#search_type_select, #search_type_select_mobile").change(function () {
+        if (jQuery(this).val() == 'ownlist') {
+            jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in uw sociale kaart');
+        }
+        if (jQuery(this).val() == 'locationset') {
+            if (typeof Drupal.settings.gojira.locationsset_title === 'undefined') {
+                jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in de kaart');
+            } else {
+                jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in ' + Drupal.settings.gojira.locationsset_title);
+            }            
+        }
+        if (jQuery(this).val() == 'country') {
+            jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in het gehele land');
+        }
+        if (jQuery(this).val() == 'region') {
+            jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in de regio');
+        }
+    });
 }

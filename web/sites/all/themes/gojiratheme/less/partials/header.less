@@ -32,21 +32,6 @@
             }
         }
 
-
-        label[for=location_selector]{
-            display:inline-block;
-            margin-left:10px;
-        }
-        #location_selector{
-            display:inline-block;
-            border-width: 1px;
-            height: 20px;
-            margin:0 0 0 0px;
-            padding:0;
-            width:100px;
-            background-color: @color-white;
-            border-radius: 0;
-        }
         .maplist{
             float: right;
             padding: 0;
@@ -90,7 +75,7 @@
                         &.subtitle{
                             line-height: 10px;
                             font-size:10px;
-                            margin:-5px 10px 5px 10px;
+                            margin:0px 10px 5px 10px;
                         }
                     }
                 }
@@ -101,7 +86,7 @@
                 }
             }
         }
-        #search_type{
+        .header_select{
             display: block;
             float: left;
             margin-top: 5px;
@@ -111,9 +96,10 @@
                 display: block;
                 float: left;
             }
-            .search_type_select{
+            select{
                 display: block;
-                float: left;                
+                float: left;
+                width:100px;
             }
         }
         .menu_bar_icon{

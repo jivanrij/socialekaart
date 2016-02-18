@@ -5,7 +5,7 @@
         ?>
         <div id="header_options">
                 
-            <div id="search_type">
+            <div class="header_select">
                 <label>Zoeken in:</label>
                 <select id="search_type_select">
                     <?php if (user_access(helper::PERMISSION_LOCATIONSETS) && Locationsets::onLocationset()): ?><option <?php echo (Locationsets::onLocationset() ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_LOCATIONSET; ?>"><?php echo Locationsets::getCurrentLocationsetTitle(); ?></option><?php endif; ?>
@@ -14,6 +14,19 @@
                     <?php if (user_access(helper::PERMISSION_SEARCH_GLOBAL)): ?><option <?php echo ((Search::getSearchTypeBasedOnQuery()==helper::SEARCH_TYPE_COUNTRY) ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_COUNTRY; ?>">het hele land</option><?php endif; ?>
                 </select>
             </div>
+            
+            <?php if (Subscriptions::currentGroupHasPayed() && Location::userHasMultipleLocationsStored()): ?>
+                <div class="header_select">
+                    <label for="location_selector"><?php echo t('select practice'); ?></label>
+                        <?php $oCurrentLocation = Location::getCurrentLocationObjectOfUser(); ?>
+                    <select id="location_selector" name="location_selector">
+                        <?php foreach (Location::getUsersLocations() as $oLocation): ?>
+                            <?php if ($oLocation->status): ?><option <?php echo ($oCurrentLocation->nid == $oLocation->nid ? 'selected="selected"' : ''); ?>value="<?php echo $oLocation->nid; ?>"><?php echo $oLocation->title; ?></option><?php endif; ?>
+                    <?php endforeach; ?>
+                    </select>
+                </div>
+            <?php endif; ?>
+            
             
             <ul class="maplist">
                 <li>
@@ -34,15 +47,6 @@
                     <?php endif; ?>
                 </li>
             </ul>
-            <?php if (Subscriptions::currentGroupHasPayed() && Location::userHasMultipleLocationsStored()): ?>
-                <label for="location_selector"><?php echo t('select practice'); ?></label>
-                    <?php $oCurrentLocation = Location::getCurrentLocationObjectOfUser(); ?>
-                <select id="location_selector" name="location_selector">
-                    <?php foreach (Location::getUsersLocations() as $oLocation): ?>
-                        <?php if ($oLocation->status): ?><option <?php echo ($oCurrentLocation->nid == $oLocation->nid ? 'selected="selected"' : ''); ?>value="<?php echo $oLocation->nid; ?>"><?php echo $oLocation->title; ?></option><?php endif; ?>
-                <?php endforeach; ?>
-                </select>
-        <?php endif; ?>
                 
         <div class="menu_bar_icon">
             <a href="/suggestlocation" title="<?php echo t('Add location if you are missing one.'); ?>"><?php echo t('Add location'); ?><i class="fa fa-plus-square"></i></a>

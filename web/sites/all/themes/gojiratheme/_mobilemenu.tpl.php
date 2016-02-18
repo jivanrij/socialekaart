@@ -2,16 +2,14 @@
     <div>
         <?php if (helper::agreedToConditions()): ?>
             <form action="/" method="GET" id="form-mobile-search">
-                <input type="text" placeholder="<?php echo t('Search'); ?>" name="tags" />
+                <input type="text" placeholder="<?php echo t('Search'); ?>" id="search_term_mobile" name="s" />
                 <input type="hidden" name="m" value="1" />
-                <i class="fa fa-search" onClick="jQuery(this).closest('form').submit();" title="Zoeken"></i>
+                <i class="fa fa-search" id="search_submit_mobile" title="Zoeken"></i>
             </form>
         <?php endif; ?>
         <?php if (user_access(helper::PERMISSION_PERSONAL_LIST)): ?>
             <button class="mymap" title="Naar mijn kaart" />
         <?php endif; ?>
-
-
         <button class="suggestlocation" title="Zorgverlener toevoegen" />    
         <button class="tomobilemenu" title="Menu" />
     </div>
@@ -19,7 +17,7 @@
 <div id="mobilemenu">
     <div class="options">
         <?php if (Subscriptions::currentGroupHasPayed() && Location::userHasMultipleLocationsStored()): ?>
-            <div>
+            <div class="select">
                 <label for="select_location_mobile"><?php echo t('select practice'); ?>:</label>
                 <?php $oCurrentLocation = Location::getCurrentLocationObjectOfUser(); ?>
                 <select id="select_location_mobile" name="select_location_mobile">
@@ -28,14 +26,16 @@
                     <?php endforeach; ?>
                 </select>
             </div>
-        <?php endif; ?>
-
-        <?php if (Subscriptions::currentGroupHasPayed()): ?>
-            <a class="search_global <?php echo (helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD) ? 'on' : 'off'); ?>" title="<?php echo t('Search over the entire country but limits the amount of results to 500'); ?>" >  <?php echo t('Search entire country'); ?></a>
-        <?php endif; ?>
-
-        <?php if (user_access(helper::PERMISSION_PERSONAL_LIST)): ?>
-            <a title="<?php echo t('Only search on your favorites'); ?>" class="search_favorite <?php echo (helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_FAVORITES_FIELD) ? 'on' : 'off'); ?>"> <?php echo t('Filter search on favorites'); ?></a>
+        
+            <div class="select">
+                <label>Zoeken in:</label>
+                <select id="search_type_select_mobile">
+                    <?php if (false && ser_access(helper::PERMISSION_LOCATIONSETS) && Locationsets::onLocationset()): ?><option <?php echo (Locationsets::onLocationset() ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_LOCATIONSET; ?>"><?php echo Locationsets::getCurrentLocationsetTitle(); ?></option><?php endif; ?>
+                    <option <?php echo ((Search::getSearchTypeBasedOnQuery()==helper::SEARCH_TYPE_REGION) ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_REGION; ?>">praktijk regio</option>
+                    <?php if (false && user_access(helper::PERMISSION_PERSONAL_LIST)): ?><option <?php echo ((Locationsets::onOwnMap() && !Locationsets::onLocationset()) ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_OWNLIST; ?>">uw kaart</option><?php endif; ?>
+                    <?php if (user_access(helper::PERMISSION_SEARCH_GLOBAL)): ?><option <?php echo ((Search::getSearchTypeBasedOnQuery()==helper::SEARCH_TYPE_COUNTRY) ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_COUNTRY; ?>">het hele land</option><?php endif; ?>
+                </select>
+            </div>
         <?php endif; ?>
 
     </div>
