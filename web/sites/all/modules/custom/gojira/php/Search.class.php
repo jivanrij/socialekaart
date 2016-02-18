@@ -323,23 +323,24 @@ EAT;
     public function doSearch($labels, $check_city, $type = null) {
 
         // set defaults
+        global $user;
+        $oUser = user_load($user->uid);
+
         if (is_null($type)) {
             $type = helper::SEARCH_TYPE_REGION;
         }
 
-        global $user;
-        $oUser = user_load($user->uid);
-
         $found = array();
+
         $foundNodes = array();
+
         $sCityLabel = null;
 
-        global $user;
-        $user = user_load($user->uid);
-
+        // set default return scenarios
         if (count($labels) == 0) {
             return array();
         }
+
 
         $limit = variable_get('SEARCH_MAX_RESULT_AMOUNT') + 1; // let's add one to the result, so we can check if we have more results the the max, afterwards remove it
 
@@ -350,6 +351,7 @@ EAT;
 
         // make lowercase of all tags
         // remove all the city names
+        // save city name
         $lowerlabels = array();
         foreach ($labels as $label) {
             $label = strtolower($label);
@@ -363,15 +365,13 @@ EAT;
             }
         }
 
-        $lowerlabels = helper::cleanArrayWithBlacklist($lowerlabels);
-
-        $labels = $lowerlabels;
+        $labels = helper::cleanArrayWithBlacklist($lowerlabels);
 
         if (count($labels) == 0) {
             return array();
         }
 
-        $foundNodes = array();
+        // get the nodes with there scores
         $nidsSql = '0';
         foreach ($labels as $label) {
             $sql = "SELECT searchword_nid.node_nid AS nid, searchword.word AS word, searchword_nid.score AS score FROM {searchword} JOIN {searchword_nid} on (searchword.id = searchword_nid.searchword_id) WHERE word LIKE :label1 OR word LIKE :label2";
@@ -397,19 +397,12 @@ EAT;
             $score_sql = ' 0 as score, ';
         }
 
+        // get the map center
         $location = $this->getCenterMap($check_city);
-
-
-        $distance = 0.09;
-        // SET GLOBAL SEARCH
-        if ($type == helper::SEARCH_TYPE_COUNTRY && user_access(helper::PERMISSION_SEARCH_GLOBAL)) {
-            $distance = 20.0;
-        }
 
         $favoriteFilter = '';
         if ($type == helper::SEARCH_TYPE_OWNLIST && user_access(helper::PERMISSION_PERSONAL_LIST)) {
             $favoriteFilter = " AND group_location_favorite.gid = " . Group::getGroupId();
-            $distance = 20.0; // only the locations from the Sk will be show, they can be outside the region
         }
 
         if (count($labels)) {
@@ -418,8 +411,6 @@ EAT;
             $relatedNids = ' 1=1 ';
         }
 
-//        $order_by_sql = 'ORDER BY (score-distance) desc';
-        $order_by_sql = 'ORDER BY score desc, distance asc';
 
         $visible_join = ' join field_data_field_visible_to_other_user on (node.nid = field_data_field_visible_to_other_user.entity_id) join field_data_field_address_city on (node.nid = field_data_field_address_city.entity_id) ';
         $visible_where = " AND field_data_field_visible_to_other_user.field_visible_to_other_user_value = 1 AND field_data_field_visible_to_other_user.bundle = 'location' AND field_data_field_visible_to_other_user.delta = 0 ";
@@ -432,28 +423,33 @@ EAT;
             }
         }
 
-        $filter = " AND node.source != 'spider' ";
-
         // query get's all the nodes in radius, maybe only from favorites, but surly visible, and filters them on the nodes with the related tags
-
+        $distance = 0.09;
         $iMinLongitude = ($location->longitude - ($distance * 2));
         $iMaxLongitude = ($location->longitude + ($distance * 2));
         $iMinLatitude = ($location->latitude - $distance);
         $iMaxLatitude = ($location->latitude + $distance);
 
-        $sql_max_distance = " AND (X(point) BETWEEN {$iMinLongitude} AND {$iMaxLongitude} AND Y(point) BETWEEN {$iMinLatitude} AND {$iMaxLatitude}) ";
+        // only on the region search type we have a limit
+        $sql_max_distance = ' ';
+        if ($type == helper::SEARCH_TYPE_REGION) {
+            $sql_max_distance = " AND (X(point) BETWEEN {$iMinLongitude} AND {$iMaxLongitude} AND Y(point) BETWEEN {$iMinLatitude} AND {$iMaxLatitude}) ";
+        }
 
-
-        $lat1 = 'Y(point)';
-        $lon1 = 'X(point)';
-        $lat2 = $location->latitude;
-        $lon2 = $location->longitude;
-        $sDistanceField = <<<EOT
+        //make the distance field for the coutry & region search, else distance will be 0
+        $sDistanceField = ' 0 as distance ';
+        if ($type == helper::SEARCH_TYPE_REGION || $type == helper::SEARCH_TYPE_COUNTRY) {
+            $lat1 = 'Y(point)';
+            $lon1 = 'X(point)';
+            $lat2 = $location->latitude;
+            $lon2 = $location->longitude;
+            $sDistanceField = <<<EOT
         (1200 * acos( cos( radians($lat1) )
       * cos( radians($lat2) )
       * cos( radians($lon2) - radians($lon1)) + sin(radians($lat1))
       * sin( radians($lat2) )))  as distance
 EOT;
+        }
 
         $sql = <<<EOT
 SELECT
@@ -471,12 +467,13 @@ WHERE status = 1 AND {$relatedNids}
 {$visible_where}
 {$sFilterCity}
 {$filter}
-GROUP BY node.nid {$order_by_sql} LIMIT {$limit}
+GROUP BY node.nid ORDER BY score desc, distance asc LIMIT {$limit}
 EOT;
 
 
         $results = db_query($sql, $aParams);
 
+        // put all the results in a nice to handle array
         $counter = 0;
         $resultNodes = array();
         $lonLow = null;
@@ -781,17 +778,17 @@ EOT;
                 )
         );
     }
-    
-    public static function getSearchTypeBasedOnQuery(){
-        if(isset($_GET['type'])){
-            if($_GET['type'] == helper::SEARCH_TYPE_COUNTRY){
+
+    public static function getSearchTypeBasedOnQuery() {
+        if (isset($_GET['type'])) {
+            if ($_GET['type'] == helper::SEARCH_TYPE_COUNTRY) {
                 return helper::SEARCH_TYPE_COUNTRY;
             }
-            if($_GET['type'] == helper::SEARCH_TYPE_OWNLIST){
+            if ($_GET['type'] == helper::SEARCH_TYPE_OWNLIST) {
                 return helper::SEARCH_TYPE_OWNLIST;
             }
         }
-        if(Locationsets::onLocationset()){
+        if (Locationsets::onLocationset()) {
             return helper::SEARCH_TYPE_OWNLIST;
         }
         return helper::SEARCH_TYPE_REGION;
@@ -828,7 +825,7 @@ EOT;
         foreach ($ownlistLocations as $ownlistLocation) {
             if (array_key_exists($ownlistLocation->nid, $foundNodes)) {
                 $loc = Location::getLocationObjectOfNode($ownlistLocation->nid);
-                if($loc){
+                if ($loc) {
                     $ownlistLocation->latitude = $loc->latitude;
                     $ownlistLocation->longitude = $loc->longitude;
                 }

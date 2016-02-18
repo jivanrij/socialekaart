@@ -97,7 +97,7 @@ class Locationsets {
      * @return type
      */
     public function getLocations($nid = null, $iFilterCategoryId = null, $sFilterWithTags = '') {
-
+        
         $filteredNodes = array();
         if (trim($sFilterWithTags) != '') {
             $tags = explode(' ', urldecode($sFilterWithTags));

@@ -2,7 +2,11 @@
 drupal_add_js(array('gojira' => array('locationsset_has_filter' => 0)), 'setting');
 $oLocationset = Locationsets::getInstance()->getCurrentLocationset();
 if ($oLocationset) {
-    $aLocations = Locationsets::getInstance()->getLocations();
+    $filter = null;
+    if(isset($_GET['filter'])){
+        $filter = $_GET['filter'];
+    }
+    $aLocations = Locationsets::getInstance()->getLocations(null,null,$filter);
     $sBody = $oLocationset->body[LANGUAGE_NONE][0]['value'];
     $sTitle = $oLocationset->title;
     drupal_add_js(array('gojira' => array('locationsset_title' => $sTitle)), 'setting');
