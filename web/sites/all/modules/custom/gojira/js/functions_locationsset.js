@@ -69,78 +69,74 @@ function bindLocationsset() {
 
     bindLocationsetSearch();
 
-    if (Drupal.settings.gojira.locationsset_has_filter == 0) {
-        
-        // ONLY BIND THE CATEGORY & LOCATION GETTERS WHEN THERE IS NO SEARCH DONE
-        // IN THE OWNLIST
-        
-        jQuery(".locationset_show_cat").click(function (e) {
-            e.preventDefault();
-            jQuery("#ajax_search_results").html("");
-            jQuery("#locationsset_categories li").removeClass("active");
-            jQuery(this).closest("li").addClass("active");
-            var cat_id = jQuery(this).closest("li").attr("rel");
+    jQuery(".locationset_show_cat").click(function (e) {
+        e.preventDefault();
+        jQuery("#ajax_search_results").html("");
+        jQuery("#locationsset_categories li").removeClass("active");
+        jQuery(this).closest("li").addClass("active");
+        var cat_id = jQuery(this).closest("li").attr("rel");
 
+        if (Drupal.settings.gojira.locationsset_has_filter == 0) {
             getCategoryLocations(Drupal.settings.gojira.locationsset_id, cat_id);
+        }
 
-            if (cat_id == "all") {
-                jQuery(".locationset_show_loc").closest("li").show();
-            } else {
-                jQuery(".locationset_show_loc").closest("li").hide();
-                jQuery("li[rel=" + cat_id + "]").show();
-            }
-            jQuery(window).trigger('resize');
-        });
+        if (cat_id == "all") {
+            jQuery(".locationset_show_loc").closest("li").show();
+        } else {
+            jQuery(".locationset_show_loc").closest("li").hide();
+            jQuery("li[rel=" + cat_id + "]").show();
+        }
+        jQuery(window).trigger('resize');
+    });
 
+    jQuery('a.locationset_show_loc').click(function (e) {
+        e.preventDefault();
 
-        jQuery("#locationsset_categories li:first-child a").trigger('click');
+        L.Marker.stopAllBouncingMarkers();
 
+        var location_id = jQuery(this).attr('href').replace('#', '');
+        var button = this;
 
-        jQuery('a.locationset_show_loc').click(function (e) {
-            e.preventDefault();
+        openOverlay();
 
-            L.Marker.stopAllBouncingMarkers();
+        jQuery.ajax({
+            url: '/?q=ajax/singlesearchresult&wrap_it=1&nid=' + location_id,
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
 
-            var location_id = jQuery(this).attr('href').replace('#', '');
-            var button = this;
+                jQuery("#ajax_search_results").html(data.html);
 
-            openOverlay();
+                correctHeightForLocationsetSearchResult();
 
-            jQuery.ajax({
-                url: '/?q=ajax/singlesearchresult&wrap_it=1&nid=' + location_id,
-                type: 'POST',
-                dataType: 'json',
-                success: function (data) {
+                jQuery('#locationsset_locations li').removeClass('active');
+                jQuery(button).closest("li").addClass('active');
 
-                    jQuery("#ajax_search_results").html(data.html);
+                if (typeof data.latitude == 'string') {
+                    window.map.panTo([data.latitude, data.longitude]);
 
-                    correctHeightForLocationsetSearchResult();
-
-                    jQuery('#locationsset_locations li').removeClass('active');
-                    jQuery(button).closest("li").addClass('active');
-
-                    if (typeof data.latitude == 'string') {
-                        window.map.panTo([data.latitude, data.longitude]);
-
-                        if ((window.markerMapping[location_id] !== undefined) && (window.markers._layers[window.markerMapping[location_id]] !== undefined)) {
-                            window.markers._layers[window.markerMapping[location_id]].toggleBouncing();
-                        }
+                    if ((window.markerMapping[location_id] !== undefined) && (window.markers._layers[window.markerMapping[location_id]] !== undefined)) {
+                        window.markers._layers[window.markerMapping[location_id]].toggleBouncing();
                     }
-
-                    bindAfterSearch(false, true);
-
-                    jQuery("#search_result_info").css('top', top + 'px');
-
-                    jQuery(window).trigger('resize');
-
-                    closeOverlay();
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    somethingWrongMessage();
                 }
-            });
+
+                bindAfterSearch(false, true);
+
+                jQuery("#search_result_info").css('top', top + 'px');
+
+                jQuery(window).trigger('resize');
+
+                closeOverlay();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                somethingWrongMessage();
+            }
         });
-    }else{
+    });
+
+    if (Drupal.settings.gojira.locationsset_has_filter == 0) {
+        jQuery("#locationsset_categories li:first-child a").trigger('click');
+    } else {
         populateMap(Drupal.settings.gojira.locationsset_filter_results, Drupal.settings.gojira.locationsset_filter_results_count);
     }
 

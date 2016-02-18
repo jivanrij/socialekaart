@@ -34,6 +34,7 @@ class helper {
     const SEARCH_TYPE_COUNTRY = 'country';
     const SEARCH_TYPE_REGION = 'region';
     const SEARCH_TYPE_OWNLIST = 'ownlist';
+    const SEARCH_TYPE_LOCATIONSET = 'locationset';
     
     public static function redirectTo404() {
         header('Location: /404');

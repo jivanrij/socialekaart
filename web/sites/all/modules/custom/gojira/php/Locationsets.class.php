@@ -41,26 +41,49 @@ class Locationsets {
         }
         return null;
     }
-    
+
+    /**
+     * Tells you if you are on your own map
+     * 
+     * @return boolean
+     */
+    public static function onOwnMap() {
+        if (arg(0) == 'ownlist') {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Tells you if you are on a locationset
      * 
      * @return boolean
      */
-    public function onOwnMap(){
-        
-//        if (arg(0) == 'node' && is_numeric(arg(1))) {
-//            $nid = arg(1);
-//            $node = node_load($nid);
-//            if (isset($node->type)) {
-//                if ($node->type == GojiraSettings::CONTENT_TYPE_SET_OF_LOCATIONS) {
-//                    return true;
-//                }
-//            }
-//        }
-        
-        if(arg(0) == 'ownlist'){
-            return true;
+    public static function onLocationset() {
+        if (arg(0) == 'node' && is_numeric(arg(1))) {
+            $nid = arg(1);
+            $node = node_load($nid);
+            if (isset($node->type)) {
+                if ($node->type == GojiraSettings::CONTENT_TYPE_SET_OF_LOCATIONS) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Gives you the current locationset title of false if you are not on a locationset
+     * 
+     * @return boolean
+     */
+    public function getCurrentLocationsetTitle() {
+        if (self::onLocationset()) {
+            if (arg(0) == 'node' && is_numeric(arg(1))) {
+                $nid = arg(1);
+                $node = node_load($nid);
+                return $node->title;
+            }
         }
         return false;
     }
@@ -174,11 +197,11 @@ class Locationsets {
         }
         return $aCategories;
     }
-    
+
     public function getOwnMapLocations() {
         $ownMapLocations = array();
         $currentPractice = Location::getCurrentLocationNodeObjectOfUser();
-        
+
         if (is_null($currentPractice)) {
             $sPracticeString = '';
         } else {
@@ -193,7 +216,7 @@ class Locationsets {
                 $ownMapLocations[$nid->nid] = node_load($nid->nid);
             }
         }
-        
+
         return $ownMapLocations;
     }
 

@@ -5,6 +5,7 @@ if ($oLocationset) {
     $aLocations = Locationsets::getInstance()->getLocations();
     $sBody = $oLocationset->body[LANGUAGE_NONE][0]['value'];
     $sTitle = $oLocationset->title;
+    drupal_add_js(array('gojira' => array('locationsset_title' => $sTitle)), 'setting');
     drupal_add_js(array('gojira' => array('locationsset_id' => $oLocationset->nid)), 'setting');
 } else {
     $currentPractice = Location::getCurrentLocationNodeObjectOfUser();
@@ -34,7 +35,7 @@ if ($oLocationset) {
     $sTitle = 'Sociale kaart ' . $currentPractice->title;
     drupal_add_js(array('gojira' => array('locationsset_id' => "favorites")), 'setting');
 }
-$aCategories = Locationsets::getCategoriesFromLocationsArray($aLocations);
+$aCategories = Locationsets::getInstance()->getCategoriesFromLocationsArray($aLocations);
 
 $aCategoriesSorted = array();
 foreach ($aCategories as $aCategorie) {

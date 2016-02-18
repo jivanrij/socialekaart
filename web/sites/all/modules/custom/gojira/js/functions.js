@@ -382,7 +382,7 @@ function bindGojirasearch() {
 }
 
 function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
-    
+
     if (jQuery("#search_type_select").val() == 'ownlist') {
         doLocationsetSearchCall();
         return;
@@ -438,50 +438,6 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
             }
 
             populateMap(data.mapSearchResults, data.mapSearchResultsCount);
-
-//            for (var i = 0; i < data.mapSearchResultsCount; i++) {
-//
-//                var thisResult = data.mapSearchResults[i];
-//
-//                if (thisResult.x && thisResult.c > 0) {
-//                    // I am a merged marker with self as a part of my items
-//                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.mixedIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
-//                    marker.bindPopup(thisResult.h).on('popupopen', function () {
-//                        window.map.panTo(this._latlng);
-//                    });
-//                    
-//                    window.markers.addLayer(marker);
-//                }
-//                if (thisResult.x && !thisResult.c) {
-//                    // I am just self, and not merged
-//                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.blackIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
-//                    marker.bindPopup('<span class="self_popup_link">' + data.your_location + '</span>').on('popupopen', function () {
-//                        jQuery('#selected_location_info > div').hide();
-//                    });
-//                    
-//                    window.markers.addLayer(marker);
-//                }
-//                if (!thisResult.x && thisResult.c > 0) {
-//                    // Not self, but i am a merged one
-//                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
-//                    marker.bindPopup(thisResult.h).on('popupopen', function () {
-//                        window.map.panTo(this._latlng);
-//                        jQuery('#selected_location_info > div').hide();
-//                    });
-//                    
-//                    window.markers.addLayer(marker);
-//                }
-//                if (!thisResult.x && !thisResult.c) {
-//                    // Not self, and not a merged one
-//                    var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
-//                    marker.bindPopup('<span class="hidden open_location_popup">' + thisResult.n + '</span>').on('popupopen', function () {
-//                        focusLocation();
-//                    });
-//                    
-//                    window.markers.addLayer(marker);
-//                }
-//                window.markerMapping[thisResult.n] = marker._leaflet_id;
-//            }
 
             if (data.boxInfo === null) {
                 window.map.setView([data.latitude, data.longitude], data.zoom);
@@ -788,13 +744,24 @@ function bindGlobal() {
     bindAutocompleteAllTags("#gojirasearch_search_term");
 
     if (Drupal.settings.gojira.page == 'locationsset') {
-        jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in uw sociale kaart');
+        if (typeof Drupal.settings.gojira.locationsset_title === 'undefined') {
+            jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in uw sociale kaart');
+        } else {
+            jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in ' + Drupal.settings.gojira.locationsset_title);
+        }
     } else {
         jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in de regio');
     }
     jQuery("#search_type_select").change(function () {
         if (jQuery(this).val() == 'ownlist') {
             jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in uw sociale kaart');
+        }
+        if (jQuery(this).val() == 'locationset') {
+            if (typeof Drupal.settings.gojira.locationsset_title === 'undefined') {
+                jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in de kaart');
+            } else {
+                jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in ' + Drupal.settings.gojira.locationsset_title);
+            }            
         }
         if (jQuery(this).val() == 'country') {
             jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in het gehele land');
@@ -808,84 +775,6 @@ function bindGlobal() {
     jQuery('ul.menu li.expanded > a, #maps_hover_icon').click(function (e) {
         e.preventDefault();
     });
-
-//    jQuery('a.global_search_header').click(function (e) {
-//
-//        e.preventDefault();
-//        if (!jQuery(this).hasClass('on')) {
-//            jQuery('a.global_search_header').addClass('on');
-//            jQuery('a.global_search_header').removeClass('off');
-//            jQuery.ajax({
-//                url: '/?q=ajax/switchglobalsearch&turn=on',
-//                type: 'POST',
-//                dataType: 'json',
-//                success: function (data) {
-//                    //window.map.setView([data.latitude, data.longitude], data.zoom);
-//                    jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek landelijk');
-//                    if (jQuery('#gojirasearch_search_term').val() != '') {
-//                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
-//                    }
-//                },
-//                error: function (jqXHR, textStatus, errorThrown) {
-//                    somethingWrongMessage();
-//                }
-//            });
-//        } else {
-//            jQuery('a.global_search_header').addClass('off');
-//            jQuery('a.global_search_header').removeClass('on');
-//            jQuery.ajax({
-//                url: '/?q=ajax/switchglobalsearch&turn=off',
-//                type: 'POST',
-//                dataType: 'json',
-//                success: function (data) {
-////                    window.map.setView([data.latitude, data.longitude], data.zoom);
-//                    jQuery("#gojirasearch_search_term").attr('placeholder', 'Zoek in de regio');
-//                    if (jQuery('#gojirasearch_search_term').val() != '') {
-//                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
-//                    }
-//                },
-//                error: function (jqXHR, textStatus, errorThrown) {
-//                    somethingWrongMessage();
-//                }
-//            });
-//
-//        }
-//    });
-//
-//    jQuery('a.favorite_header').click(function (e) {
-//        e.preventDefault();
-//        if (!jQuery(this).hasClass('on')) {
-//            jQuery('a.favorite_header').addClass('on');
-//            jQuery('a.favorite_header').removeClass('off');
-//            jQuery.ajax({
-//                url: '/?q=ajax/switchfavorites&turn=on',
-//                type: 'POST',
-//                success: function (data) {
-//                    if (jQuery('#gojirasearch_search_term').val() != '') {
-//                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
-//                    }
-//                },
-//                error: function (jqXHR, textStatus, errorThrown) {
-//                    somethingWrongMessage();
-//                }
-//            });
-//        } else {
-//            jQuery('a.favorite_header').addClass('off');
-//            jQuery('a.favorite_header').removeClass('on');
-//            jQuery.ajax({
-//                url: '/?q=ajax/switchfavorites&turn=off',
-//                type: 'POST',
-//                success: function (data) {
-//                    if (jQuery('#gojirasearch_search_term').val() != '') {
-//                        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
-//                    }
-//                },
-//                error: function (jqXHR, textStatus, errorThrown) {
-//                    somethingWrongMessage();
-//                }
-//            });
-//        }
-//    });
 
     jQuery('#edit-submit').click(function (e) {
         e.preventDefault();
@@ -1166,50 +1055,54 @@ function bindMobileMenu() {
 }
 
 function populateMap(searchresults, count) {
-    
+
     window.markerMapping = new Array(); // let's store the leaflet id's with the nid's
-    
+
     for (var i = 0; i < count; i++) {
 
         var thisResult = searchresults[i];
-        if (thisResult.x && thisResult.c > 0) {
-            // I am a merged marker with self as a part of my items
-            var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.mixedIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
-            marker.bindPopup(thisResult.h).on('popupopen', function () {
-                window.map.panTo(this._latlng);
-            });
 
-            window.markers.addLayer(marker);
-        }
-        if (thisResult.x && !thisResult.c) {
-            // I am just self, and not merged
-            var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.blackIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
-            marker.bindPopup('<span class="self_popup_link">Dit is uw eigen praktijk</span>').on('popupopen', function () {
-                jQuery('#selected_location_info > div').hide();
-            });
+        if (typeof thisResult.la == 'string') {
 
-            window.markers.addLayer(marker);
-        }
-        if (!thisResult.x && thisResult.c > 0) {
-            // Not self, but i am a merged one
-            var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
-            marker.bindPopup(thisResult.h).on('popupopen', function () {
-                window.map.panTo(this._latlng);
-                jQuery('#selected_location_info > div').hide();
-            });
+            if (thisResult.x && thisResult.c > 0) {
+                // I am a merged marker with self as a part of my items
+                var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.mixedIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+                marker.bindPopup(thisResult.h).on('popupopen', function () {
+                    window.map.panTo(this._latlng);
+                });
 
-            window.markers.addLayer(marker);
-        }
-        if (!thisResult.x && !thisResult.c) {
-            // Not self, and not a merged one
-            var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
-            marker.bindPopup('<span class="hidden open_location_popup">' + thisResult.n + '</span>').on('popupopen', function () {
-                focusLocation();
-            });
+                window.markers.addLayer(marker);
+            }
+            if (thisResult.x && !thisResult.c) {
+                // I am just self, and not merged
+                var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.blackIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+                marker.bindPopup('<span class="self_popup_link">Dit is uw eigen praktijk</span>').on('popupopen', function () {
+                    jQuery('#selected_location_info > div').hide();
+                });
 
-            window.markers.addLayer(marker);
+                window.markers.addLayer(marker);
+            }
+            if (!thisResult.x && thisResult.c > 0) {
+                // Not self, but i am a merged one
+                var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+                marker.bindPopup(thisResult.h).on('popupopen', function () {
+                    window.map.panTo(this._latlng);
+                    jQuery('#selected_location_info > div').hide();
+                });
+
+                window.markers.addLayer(marker);
+            }
+            if (!thisResult.x && !thisResult.c) {
+                // Not self, and not a merged one
+                var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+                marker.bindPopup('<span class="hidden open_location_popup">' + thisResult.n + '</span>').on('popupopen', function () {
+                    focusLocation();
+                });
+
+                window.markers.addLayer(marker);
+            }
+
+            window.markerMapping[thisResult.n] = marker._leaflet_id;
         }
-        
-        window.markerMapping[thisResult.n] = marker._leaflet_id;
     }
 }
