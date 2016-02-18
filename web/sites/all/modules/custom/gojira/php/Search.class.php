@@ -332,8 +332,6 @@ EAT;
 
         $found = array();
 
-        $foundNodes = array();
-
         $sCityLabel = null;
 
         // set default return scenarios
@@ -371,20 +369,37 @@ EAT;
             return array();
         }
 
-        // get the nodes with there scores
+        // get an array with all the nids related to the searchwords based on the labels
         $nidsSql = '0';
+        $sqlSearchWords = array();
+        $nodeCounter = array();
+        $foundNodes = array();
         foreach ($labels as $label) {
             $sql = "SELECT searchword_nid.node_nid AS nid, searchword.word AS word, searchword_nid.score AS score FROM {searchword} JOIN {searchword_nid} on (searchword.id = searchword_nid.searchword_id) WHERE word LIKE :label1 OR word LIKE :label2";
             $result = db_query($sql, array(':label1' => $label . '%', ':label2' => '%' . $label))->fetchAll();
             foreach ($result as $found) {
+                if(isset($nodeCounter[$found->nid])){
+                    $nodeCounter[$found->nid]++; // = $nodeCounter[$found->nid] + 1;
+                }else{
+                    $nodeCounter[$found->nid] = 1;
+                }
                 if (array_key_exists($found->nid, $foundNodes)) {
                     $foundNodes[$found->nid] = (int) ($found->score + $foundNodes[$found->nid]);
                 } else {
                     $foundNodes[$found->nid] = (int) $found->score;
-                    $nidsSql .= ',' . $found->nid;
                 }
             }
         }
+        // unset all the hits who do not have linkes based on all the labels
+        // fakes a AND search
+        foreach($nodeCounter as $nid => $amount){
+            if($amount < count($labels)){
+                unset($foundNodes[$nid]);
+            }else{
+                $nidsSql .= ',' . $nid;
+            }
+        }
+  
 
         // build the case to add the score field to the query
         if (count($foundNodes)) {
@@ -813,16 +828,29 @@ EOT;
             }
         }
 
+        // get an array with all the nids related to the searchwords based on the labels
+        $nodeCounter = array();
+        $foundNodes = array();
         foreach ($cleanTags as $tag) {
-            $sql = "SELECT searchword_nid.node_nid AS nid, searchword.word AS word FROM {searchword} JOIN {searchword_nid} on (searchword.id = searchword_nid.searchword_id) WHERE word LIKE :label1 OR word LIKE :label2 GROUP BY searchword_nid.node_nid";
+            $sql = "SELECT searchword_nid.node_nid AS nid, searchword.word AS word, searchword_nid.score AS score FROM {searchword} JOIN {searchword_nid} on (searchword.id = searchword_nid.searchword_id) WHERE word LIKE :label1 OR word LIKE :label2";
             $result = db_query($sql, array(':label1' => $tag . '%', ':label2' => '%' . $tag))->fetchAll();
             foreach ($result as $found) {
+                if(isset($nodeCounter[$found->nid])){
+                    $nodeCounter[$found->nid]++;
+                }else{
+                    $nodeCounter[$found->nid] = 1;
+                }
                 $foundNodes[$found->nid] = $found->nid;
             }
         }
 
         $return = array();
         foreach ($ownlistLocations as $ownlistLocation) {
+            // only return them if they had hits on all search tags
+            if($nodeCounter[$ownlistLocation->nid] < count($cleanTags)){
+                continue;
+            }            
+            
             if (array_key_exists($ownlistLocation->nid, $foundNodes)) {
                 $loc = Location::getLocationObjectOfNode($ownlistLocation->nid);
                 if ($loc) {
