@@ -221,12 +221,12 @@ function doLocationsetSearchCall() {
     var url = '';
 
     if (jQuery("#search_type_select").val() == 'locationset') {
-        url = '/?q=HW' + '&filter=' + s; // TODO REMOVE
-        url_bak = window.location.pathname + '?filter=' + s;
+        //url = '/?q=HW' + '&filter=' + s; // TODO REMOVE
+        url = window.location.pathname + '?filter=' + s;
     }
     if (jQuery("#search_type_select").val() == 'ownlist') {
-        url = '/?q=ownlist' + '&filter=' + s; // TODO REMOVE
-        url_bak = window.location.pathname + '?filter=' + s;
+        //url = '/?q=ownlist' + '&filter=' + s; // TODO REMOVE
+        url = window.location.pathname + '?filter=' + s;
     }
     if (jQuery("#search_type_select").val() == 'country') {
         url = '/?s=' + s + '&type=country';
