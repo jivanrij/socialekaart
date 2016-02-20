@@ -16,7 +16,7 @@ function locationedit() {
     $location = Location::getLocationObjectOfNode($id);
   } else {
     $output['type'] = 'add';
-    $location = Search::getInstance()->getCenterMap();
+    $location = Location::getCurrentLocationObjectOfUser(true);
   }
 
   drupal_add_js(array('gojira' => array('page' => 'locationedit')), 'setting');

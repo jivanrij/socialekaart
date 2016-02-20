@@ -10,7 +10,7 @@ function suggestlocation() {
     drupal_add_js(array('gojira' => array('draw_point' => 1)), 'setting');
   } else {
     drupal_add_js(array('gojira' => array('draw_point' => 0)), 'setting');
-    $location = Search::getInstance()->getCenterMap();
+    $location = Location::getCurrentLocationObjectOfUser(true);
   }
 
   if (!$location) {

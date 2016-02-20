@@ -194,11 +194,12 @@
     Put the Cron url in this form and run it. A javascript will continue running the cron until you push <a href="/admin/config/system/gojiratools" title="stop cron">stop cron</a> or after 500 times.
 </p>
 <p>
-    The cron:
+    The cron does the following things if you have them enabled in the gojira settings page:
     <ul>
-        <li>removes all the not linked taxonomy terms</li>
-        <li>imports locations from the adhocdata_addresses table that need importing (max 250 a time)</li>
-        <li>put's locations in the searchindex that need to be re-indexed (max 250 a time)</li>
+        <li>cron_remove_unlinked_tax_terms</li>
+        <li>cron_update_search_index_where_needed</li>
+        <li>cron_check_subscriptions</li>
+        <li>cron_restore_backup_locations</li>
 </ul>
 You can find the cron url <a href="/admin/config/system/cron" title="cron page">here</a>.
 </p>

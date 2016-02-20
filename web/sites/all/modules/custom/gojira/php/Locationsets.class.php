@@ -108,7 +108,7 @@ class Locationsets {
                     $filteredTags[] = $tag;
                 }
             }
-            $filteredNodes = Search::getInstance()->doSearch($filteredTags, false, helper::SEARCH_TYPE_COUNTRY);
+            $filteredNodes = Search::getInstance()->doSearch($filteredTags, helper::SEARCH_TYPE_COUNTRY);
         }
 
         if (is_null($nid)) {

@@ -13,7 +13,7 @@ class Map {
     $show_self = 1;
     
     // if we have a user with a selected location, focus on the region
-    $location = Search::getInstance()->getCenterMap();
+    $location = Location::getCurrentLocationObjectOfUser(true);
     
     if($location){
       $longitude = $location->longitude;

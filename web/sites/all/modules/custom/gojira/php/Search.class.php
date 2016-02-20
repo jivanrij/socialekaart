@@ -55,16 +55,6 @@ class Search {
         $h .= '<div id="search_result_info">';
         if ($output['has_tags'] || isset($output['loc'])) {
             $h .= '<div id="search_results" class="rounded"><div>';
-            if ($output['city_in_tag'] && $output['check_city'] == true && helper::userHasSubscribedRole()) {
-                $h .= '<p class="info_text">';
-                $h .= t('You are searching in the area of %city%.', array('%city%' => $output['city_in_tag'])) . '<br />';
-                $h .= '<a id="search_own_area" href="/?s=' . str_replace(' ', '', $_GET['s']) . '&check_city=0" title="' . t('Search in your own area') . '">' . t('Search in your own area') . '</a>';
-                $h .= '</p>';
-            } else if ($output['city_in_tag'] && $output['check_city'] == true && !helper::userHasSubscribedRole()) {
-                $h .= '<p class="info_text">';
-                $h .= t('You cannot search in other places unless you have a payed account.');
-                $h .= '</p>';
-            }
             if ($output['resultcounttotal'] >= 1) {
                 $h .= '<p>';
                 $h .= t('Found locations') . ':';
@@ -218,19 +208,6 @@ EAT;
             $favoriteClass = "yes";
         }
 
-//        $adminLink = '';
-//        if (user_access(helper::PERMISSION_SHOW_DEBUG)) {
-//
-//            $search_index_info = '';
-//            $index_info = db_query('select word, score from searchword join searchword_nid on (searchword.id = searchword_nid.searchword_id) where searchword_nid.node_nid = ' . $foundNode->nid);
-//            foreach ($index_info as $info) {
-//                $search_index_info .= 'score:' . $info->score . ' word:' . $info->word . '<br />';
-//            }
-//            $search_index_info = '<p class="admin_info">' . $search_index_info . '</p>';
-//
-//            $adminLink = $search_index_info . '<div class="admin_info"><a href="?q=/admin/config/system/gojiratools&redirect_to_view=1&index_some=' . $foundNode->nid . '">Reindex location</a> <a href="/showlocation&loc=' . $foundNode->nid . '" title="weergeven in frontend">weergeven</a> <a href="/location/edit&id=' . $foundNode->nid . '" title="beheren in frontend">frontend</a> <a title="beheren in de backend" href="/node/' . $foundNode->nid . '/edit&destination=admin/content">backend</a> <!-- &nbsp; <a target="_blank" href="https://maps.google.com/maps?q=' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD) . '+' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD) . ',' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD) . ',' . helper::value($foundNode, GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD) . '" title="weergeven in google maps">google maps</a>--></div>';
-//        }
-
         $url = helper::value($foundNode, GojiraSettings::CONTENT_TYPE_URL_FIELD);
         $email = helper::value($foundNode, GojiraSettings::CONTENT_TYPE_EMAIL_FIELD);
         $note = helper::value($foundNode, GojiraSettings::CONTENT_TYPE_NOTE_FIELD);
@@ -297,7 +274,6 @@ EAT;
             '%adres%',
             '%url%',
             '%labels%',
-            //'%admin%',
             '%nid%',
             '%favorites%',
             '%category%',
@@ -305,7 +281,6 @@ EAT;
             $adres,
             $url,
             $labels,
-            //$adminLink,
             $foundNode->nid,
             $sFavorites,
             $category_txt,
@@ -320,7 +295,7 @@ EAT;
      *
      * @param array $labels
      */
-    public function doSearch($labels, $check_city, $type = null) {
+    public function doSearch($labels, $type = null) {
 
         // set defaults
         global $user;
@@ -347,42 +322,25 @@ EAT;
         // make from jantje, piet en klaas -=> jantje, piet, en, klaas
         $labels = explode(' ', implode(' ', $labels));
 
-        // make lowercase of all tags
-        // remove all the city names
-        // save city name
-        $lowerlabels = array();
+        // clean all tags
+        $cleanTags = array();
         foreach ($labels as $label) {
-            $label = strtolower($label);
-            $bIsCity = Location::isKnownCity($label);
-            // it's no city and checkcity is true add the label to the labels to search on
-            // or checkcity is false, then always add the labels to search with
-            if (($check_city && !$bIsCity) || !$check_city) {
-                $lowerlabels[] = self::cleanSearchTag($label);
-            } else if ($check_city && $bIsCity && helper::userHasSubscribedRole()) {
-                $sCityLabel = $label;
-            }
+            $cleanTags[] = self::cleanSearchTag($label);
         }
-
-        $labels = helper::cleanArrayWithBlacklist($lowerlabels);
+        $labels = helper::cleanArrayWithBlacklist($cleanTags);
 
         if (count($labels) == 0) {
             return array();
         }
 
-        // get an array with all the nids related to the searchwords based on the labels
-        $nidsSql = '0';
-        $sqlSearchWords = array();
+        // get an array with all the nids related to the searchwords based on the labels$nidsSql = '0';
         $nodeCounter = array();
         $foundNodes = array();
         foreach ($labels as $label) {
             $sql = "SELECT searchword_nid.node_nid AS nid, searchword.word AS word, searchword_nid.score AS score FROM {searchword} JOIN {searchword_nid} on (searchword.id = searchword_nid.searchword_id) WHERE word LIKE :label1 OR word LIKE :label2";
             $result = db_query($sql, array(':label1' => $label . '%', ':label2' => '%' . $label))->fetchAll();
             foreach ($result as $found) {
-                if(isset($nodeCounter[$found->nid])){
-                    $nodeCounter[$found->nid]++; // = $nodeCounter[$found->nid] + 1;
-                }else{
-                    $nodeCounter[$found->nid] = 1;
-                }
+                $nodeCounter[$label.$found->nid] = true;
                 if (array_key_exists($found->nid, $foundNodes)) {
                     $foundNodes[$found->nid] = (int) ($found->score + $foundNodes[$found->nid]);
                 } else {
@@ -390,17 +348,24 @@ EAT;
                 }
             }
         }
-        // unset all the hits who do not have linkes based on all the labels
-        // fakes a AND search
-        foreach($nodeCounter as $nid => $amount){
-            if($amount < count($labels)){
-                unset($foundNodes[$nid]);
-            }else{
-                $nidsSql .= ',' . $nid;
+        // clean the resultset of all nodes that do not have hits on all the labels
+        // this part makes a AND function of the search
+        foreach($foundNodes as $nid=>$foundNode){
+            foreach ($labels as $label) {
+                if(!isset($nodeCounter[$label.$nid])){
+                    // node has no hits on one of the labels, remove it
+                    if(isset($foundNodes[$nid])){
+                        unset($foundNodes[$nid]);
+                    }
+                }
             }
         }
-  
-
+        // make nid's part for the sql query
+        $nidsSql = '0';
+        foreach($foundNodes as $nid=>$foundNode){
+            $nidsSql .= ',' . $nid;
+        }
+        
         // build the case to add the score field to the query
         if (count($foundNodes)) {
             $score_sql = ' (CASE ';
@@ -412,8 +377,9 @@ EAT;
             $score_sql = ' 0 as score, ';
         }
 
+
         // get the map center
-        $location = $this->getCenterMap($check_city);
+        $location = Location::getCurrentLocationObjectOfUser(true);
 
         $favoriteFilter = '';
         if ($type == helper::SEARCH_TYPE_OWNLIST && user_access(helper::PERMISSION_PERSONAL_LIST)) {
@@ -484,7 +450,6 @@ WHERE status = 1 AND {$relatedNids}
 {$filter}
 GROUP BY node.nid ORDER BY score desc, distance asc LIMIT {$limit}
 EOT;
-
 
         $results = db_query($sql, $aParams);
 
@@ -575,6 +540,7 @@ EOT;
 
     /**
      * This function updates the nodes that need updating of there indexes
+     * This is the case when the last updated timestamp is != with the indexed timestamp
      *
      * @param integer $max
      */
@@ -587,7 +553,7 @@ EOT;
         set_time_limit(10000000);
         ini_set('memory_limit', '128M');
 
-        $results = db_query('SELECT nid FROM node JOIN field_data_field_visible_to_other_user ON (node.nid = field_data_field_visible_to_other_user.entity_id) WHERE field_data_field_visible_to_other_user.field_visible_to_other_user_value = 1 AND field_data_field_visible_to_other_user.bundle = \'location\' AND field_data_field_visible_to_other_user.delta = 0 AND indexed != changed limit ' . $max)->fetchAll();
+        $results = db_query('SELECT nid FROM node WHERE node.type = \'location\' AND indexed != changed limit ' . $max)->fetchAll();
 
         foreach ($results as $result) {
             $this->updateSearchIndex($result->nid);
@@ -671,6 +637,8 @@ EOT;
         $aText = array();
         $aBlacklist = explode(',', variable_get('gojira_blacklist_search_words'));
 
+        $aText[helper::value($oNode,  GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD)] = 1;
+        
         // add the labels to the search, let the labels with more likes weight more
         if (isset($oNode->field_location_labels)) {
             $aField = $oNode->field_location_labels;
@@ -689,7 +657,7 @@ EOT;
         }
 
         // cut up the title based on spaces and add the words if they are not allready there from the labels
-
+        // so if the city name is allready there and it's in the title it won't be added again
         $aTitles = explode(' ', $oNode->title);
         foreach ($aTitles as $sTitlePart) {
             $sTitle = self::cleanSearchTag($oNode->title);
@@ -744,17 +712,7 @@ EOT;
      *
      * @return Location
      */
-    public function getCenterMap($checkForCity = true) {
-        if ($checkForCity) {
-            $city = $this->getCityNameFromTags();
-            if ($city && helper::userHasSubscribedRole()) {
-                $location = Location::getLocationForAddress($city . ',the netherlands');
-                if ($location) {
-                    return $location;
-                }
-            }
-        }
-
+    public function getCenterMap() {
         // return default user Location
         return Location::getCurrentLocationObjectOfUser(true);
     }
@@ -835,22 +793,25 @@ EOT;
             $sql = "SELECT searchword_nid.node_nid AS nid, searchword.word AS word, searchword_nid.score AS score FROM {searchword} JOIN {searchword_nid} on (searchword.id = searchword_nid.searchword_id) WHERE word LIKE :label1 OR word LIKE :label2";
             $result = db_query($sql, array(':label1' => $tag . '%', ':label2' => '%' . $tag))->fetchAll();
             foreach ($result as $found) {
-                if(isset($nodeCounter[$found->nid])){
-                    $nodeCounter[$found->nid]++;
-                }else{
-                    $nodeCounter[$found->nid] = 1;
-                }
+                $nodeCounter[$label.$found->nid] = true;
                 $foundNodes[$found->nid] = $found->nid;
+            }
+        }
+        // clean the resultset of all nodes that do not have hits on all the labels
+        // this part makes a AND function of the search
+        foreach($foundNodes as $nid=>$foundNode){
+            foreach ($labels as $label) {
+                if(!isset($nodeCounter[$label.$nid])){
+                    // node has no hits on one of the labels, remove it
+                    if(isset($foundNodes[$nid])){
+                        unset($foundNodes[$nid]);
+                    }
+                }
             }
         }
 
         $return = array();
         foreach ($ownlistLocations as $ownlistLocation) {
-            // only return them if they had hits on all search tags
-            if($nodeCounter[$ownlistLocation->nid] < count($cleanTags)){
-                continue;
-            }            
-            
             if (array_key_exists($ownlistLocation->nid, $foundNodes)) {
                 $loc = Location::getLocationObjectOfNode($ownlistLocation->nid);
                 if ($loc) {
@@ -863,5 +824,4 @@ EOT;
 
         return $return;
     }
-
 }

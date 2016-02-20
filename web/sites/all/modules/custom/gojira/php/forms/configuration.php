@@ -56,12 +56,6 @@ function gojira_configuration_form($form, &$form_state) {
         '#options' => array(0 => 'no', 1 => 'yes'),
         '#default_value' => variable_get('cron_check_subscriptions', 1),
     );
-    $form['cron']['cron_remove_unconditional_users'] = array(
-        '#title' => t('Remove users that are added by SSO & have not accepted the agreement'),
-        '#type' => 'select',
-        '#options' => array(0 => 'no', 1 => 'yes'),
-        '#default_value' => variable_get('cron_remove_unconditional_users', 1),
-    );
     $form['cron']['cron_restore_backup_locations'] = array(
         '#title' => t('Restores up to 200 locations from the backup table.'),
         '#type' => 'select',
@@ -353,7 +347,6 @@ function gojira_configuration_form_submit($form, &$form_state) {
     variable_set('cron_remove_unlinked_tax_terms', $_POST['cron_remove_unlinked_tax_terms']);
     variable_set('cron_update_search_index_where_needed', $_POST['cron_update_search_index_where_needed']);
     variable_set('cron_check_subscriptions', $_POST['cron_check_subscriptions']);
-    variable_set('cron_remove_unconditional_users', $_POST['cron_remove_unconditional_users']);
     variable_set('cron_restore_backup_locations', $_POST['cron_restore_backup_locations']);
     variable_set('gojira_ideal_return_url', $_POST['gojira_ideal_return_url']);
     variable_set('gojira_user_amount_with_discount', $_POST['gojira_user_amount_with_discount']);

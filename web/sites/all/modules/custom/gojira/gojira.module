@@ -135,10 +135,6 @@ function gojira_permission() {
       'title' => t('Can manage multiple locations'),
       'description' => t('The user can manage multiple locations.'),
     ),
-    helper::PERMISSION_SHOW_DEBUG => array(
-      'title' => t('Debug'),
-      'description' => t('Show debug information.'),
-    ),
     helper::PERMISSION_PERSONAL_LIST => array(
       'title' => t('Personal list'),
       'description' => t('These users can manage there personal list and filter on this.'),

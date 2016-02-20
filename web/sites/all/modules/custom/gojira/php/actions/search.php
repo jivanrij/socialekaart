@@ -10,10 +10,6 @@ function search() {
         $user_is_admin = true;
     }
 
-    $check_city = true;
-    if (isset($_GET['check_city']) && $_GET['check_city'] == '0') {
-        $check_city = false;
-    }
 
     $single_location = (isset($_GET['s']) && is_numeric($_GET['s']));
 
@@ -52,7 +48,7 @@ function search() {
         }
         
         // get all the nodes based on the normal tags
-        $foundNodes = Search::getInstance()->doSearch($filteredTags, $check_city, $_GET['type']);
+        $foundNodes = Search::getInstance()->doSearch($filteredTags, $_GET['type']);
 
         $output['s'] = implode(', ', $filteredTags);
     } else {
@@ -122,9 +118,6 @@ function search() {
         $output['page_length'] = 10;
     }
 
-    $output['city_in_tag'] = Search::getInstance()->getCityNameFromTags();
-    $output['check_city'] = $check_city;
-
 
     $output['to_much_results_found'] = Search::getInstance()->toMuchResults;
     $output['user_is_admin'] = $user_is_admin;
@@ -132,7 +125,7 @@ function search() {
     if ($output['by_id']) {
         $location = Location::getLocationObjectOfNode($output['by_id']);
     } else {
-        $location = Search::getInstance()->getCenterMap($check_city);
+        $location = Location::getCurrentLocationObjectOfUser(true);
     }
 
     if ($location) {

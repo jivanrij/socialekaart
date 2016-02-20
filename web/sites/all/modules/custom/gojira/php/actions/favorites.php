@@ -8,7 +8,7 @@ function favorites(){
   $self->distance = 0;
   $self->title = 'own location';
   
-  $location = Search::getInstance()->getCenterMap($check_city);
+  $location = Location::getCurrentLocationObjectOfUser(true);
   
   drupal_add_js(array('gojira' => array('page' => 'favorites')), 'setting');
   

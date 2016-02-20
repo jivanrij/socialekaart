@@ -11,7 +11,7 @@ function inform(){
   }
   $output['location'] = $node;
   
-  $location = Search::getInstance()->getCenterMap();
+  $location = Location::getCurrentLocationObjectOfUser(true);
   
   drupal_add_js(array('gojira' => array('url' => '/')), 'setting');
   
