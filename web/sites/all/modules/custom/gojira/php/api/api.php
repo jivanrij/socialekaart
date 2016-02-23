@@ -3,7 +3,7 @@
  * check is address exists via ajax
  */
 function api_locations() {
-    
+    exit;
 header('Access-Control-Allow-Credentials:true');
 header('Access-Control-Allow-Origin:*');
 header('Cache-Control:no-cache');

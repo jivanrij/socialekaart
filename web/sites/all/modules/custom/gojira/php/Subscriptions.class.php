@@ -571,30 +571,10 @@ EOT;
         $oUser = user_load($user->uid);
 
         $aInfo['user'] = $oUser;
-
-        $fAmount = variable_get('SUBSCRIPTION_PRICE');
-        $iDiscount = 0;
-
-        $aInfo['amount'] = $fAmount;
-
-        if (!helper::value($oUser, GojiraSettings::CONTENT_TYPE_USER_NOT_IMPORTED)) {
-            $iDiscount = variable_get('SUBSCRIPTION_PRICE_DISCOUNT');
-        }
-
-        $aInfo['discount'] = $iDiscount;
-
-        $fAmountWithDiscount = $fAmount - $iDiscount;
-
-        $aInfo['amount_with_discount'] = $fAmountWithDiscount;
-
-        $fTax = $fAmountWithDiscount * (variable_get('gojira_percentage_tax', 21) / 100);
-
-        $aInfo['tax'] = $fTax;
-
-        $fTotal = $fAmountWithDiscount + $fTax;
-
-        $aInfo['total'] = $fTotal;
-
+        
+        $aInfo['amount'] = variable_get('gojira_subscription_year_price');
+        $aInfo['tax'] = variable_get('gojira_subscription_year_tax');
+        $aInfo['total'] = variable_get('gojira_subscription_year_total');
 
         $tCurrentEnd = Subscriptions::getEndCurrentPeriod();
         if (!$tCurrentEnd) {
@@ -619,7 +599,6 @@ EOT;
         $aInfo['new_end'] = $tNewEnd;
         $aInfo['new_start'] = $tNewStart;
 
-        //$sDescription = substr(helper::value($oUser, GojiraSettings::CONTENT_TYPE_USER_TITLE), 0, 40) . ' ' . Group::getGroupId() . ' ' . date('d-m', $tNewStart);
         $sDescription = 'SocialeKaartAbonnement';
         $aInfo['description'] = $sDescription;
 
@@ -637,7 +616,7 @@ EOT;
 
         $iFreePeriodeGiven = db_query("select count(id) from `gojira_payments` where uid = {$account->uid} and description = '" . GojiraSettings::IDEAL_FREE_PERIOD_DESCRIPTION . "'")->fetchField();
         if ($iFreePeriodeGiven > 0) {
-            watchdog(GojiraSettings::WATCHDOG_HAWEB_SSO, 'user ' . $account->uid . ' allready has gotten a free period. Kill the setNewFreePeriodUser rights/payments proces.');
+            watchdog(GojiraSettings::WATCHDOG_IDEAL, 'user ' . $account->uid . ' allready has gotten a free period. Kill the setNewFreePeriodUser rights/payments proces.');
             return;
         }
 

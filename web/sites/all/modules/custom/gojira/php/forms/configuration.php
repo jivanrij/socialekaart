@@ -62,14 +62,30 @@ function gojira_configuration_form($form, &$form_state) {
         '#options' => array(0 => 'no', 1 => 'yes'),
         '#default_value' => variable_get('cron_restore_backup_locations', 0),
     );
-    
-    $form['algemene_instellingen']['gojira_user_amount_with_discount'] = array(
-        '#title' => t('Amount of users what get a discount.'),
+    $form['algemene_instellingen']['gojira_subscription_month_price'] = array(
+        '#title' => t('Subscription price per month'),
         '#type' => 'textfield',
-        '#description' => 'This is the amount of users that get a discount when registering. If it\'s put on 300 a new user will get a discount if there are less then 300 users registered that have accepted the conditions & are not from Haweb.',
-        '#default_value' => variable_get('gojira_user_amount_with_discount', 300),
+        '#default_value' => variable_get('gojira_subscription_month_price', 5),
+        '#description' => 'This value is just for show.<br />!!!If you change the price, don\'t forget to change the price in the following TEXT nodes: PAYED_TEXT_SUBSCRIBED_PAGE/NOT_PAYED_TEXT_SUBSCRIBED_PAGE/CANNOT_PAY_2_YEARS_AHEAD!!!',
     );
-    
+    $form['algemene_instellingen']['gojira_subscription_year_price'] = array(
+        '#title' => t('Subscription price per year'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('gojira_subscription_year_price', 60),
+        '#description' => '!!!If you change the price, don\'t forget to change the price in the following TEXT nodes: PAYED_TEXT_SUBSCRIBED_PAGE/NOT_PAYED_TEXT_SUBSCRIBED_PAGE/CANNOT_PAY_2_YEARS_AHEAD!!!',
+    );
+    $form['algemene_instellingen']['gojira_subscription_year_tax'] = array(
+        '#title' => t('Subscription tax per year'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('gojira_subscription_year_tax', 12.60),
+        '#description' => '!!!If you change the price, don\'t forget to change the price in the following TEXT nodes: PAYED_TEXT_SUBSCRIBED_PAGE/NOT_PAYED_TEXT_SUBSCRIBED_PAGE/CANNOT_PAY_2_YEARS_AHEAD!!!',
+    );
+    $form['algemene_instellingen']['gojira_subscription_year_total'] = array(
+        '#title' => t('Subscription price total (inc. tax) per year'),
+        '#type' => 'textfield',
+        '#default_value' => variable_get('gojira_subscription_year_total', 72.60),
+        '#description' => '!!!If you change the price, don\'t forget to change the price in the following TEXT nodes: PAYED_TEXT_SUBSCRIBED_PAGE/NOT_PAYED_TEXT_SUBSCRIBED_PAGE/CANNOT_PAY_2_YEARS_AHEAD!!!',
+    );
     $form['algemene_instellingen']['gojira_check_coordinates_on_update_node'] = array(
         '#title' => t('Check coordinates on saving of nodes.'),
         '#type' => 'select',
@@ -106,24 +122,6 @@ function gojira_configuration_form($form, &$form_state) {
         '#default_value' => variable_get('SUBSCRIPTION_PERIOD', 365),
         '#description' => 'Het aantal dagen van de lengte van een abonnement.'
     );
-    $form['algemene_instellingen']['SUBSCRIPTION_PRICE'] = array(
-        '#title' => t('Standaard prijs voor een abonnement'),
-        '#type' => 'textfield',
-        '#default_value' => variable_get('SUBSCRIPTION_PRICE', 24),
-        '#description' => 'Het standaard abonnement\'s bedrag.'
-    );
-    $form['algemene_instellingen']['SUBSCRIPTION_PRICE_DISCOUNT'] = array(
-        '#title' => t('Kortingsbedrag'),
-        '#type' => 'textfield',
-        '#default_value' => variable_get('SUBSCRIPTION_PRICE_DISCOUNT', 10),
-        '#description' => 'Het kortingsbedrag, zal optioneel afgetrokken worden van de prijs.'
-    );
-    $form['algemene_instellingen']['gojira_percentage_tax'] = array(
-        '#title' => t('The amount of tax in percentages the employee needs to pay.'),
-        '#type' => 'textfield',
-        '#default_value' => variable_get('gojira_percentage_tax', '21'),
-    );
-
     $form['teksten']['meta_global_description'] = array(
         '#title' => t('Meta description on the homepage'),
         '#type' => 'textfield',
@@ -140,7 +138,6 @@ function gojira_configuration_form($form, &$form_state) {
         '#default_value' => variable_get('gojira_blacklist_search_words', 'de,het,een'),
         '#description' => 'Here you can save several words to be put on the blacklist for the searchindex.<br />The input should be: word1,word1,shit,bla,bloody,blacklist<br />When building the index of a location, these words will be left out. So new words in the blacklist will be removed from the searchindex after a reindex of the location(s).'
     );
-
     $form['api']['postocde_nl_key'] = array(
         '#title' => t('Postcode.nl key'),
         '#type' => 'textfield',
@@ -188,7 +185,6 @@ function gojira_configuration_form($form, &$form_state) {
         '#type' => 'textfield',
         '#default_value' => variable_get('mapbox_projectid', ''),
     );
-
     $form['zoek_instellingen']['SEARCH_MAX_RESULT_AMOUNT'] = array(
         '#title' => t('Maximum of searchresults to display'),
         '#type' => 'textfield',
@@ -206,7 +202,6 @@ function gojira_configuration_form($form, &$form_state) {
         '#default_value' => variable_get('CENTER_COUNTRY_LONGITUDE', 5.6300203),
         '#description' => 'Deze longitude wordt gebruikt als er geen bekend is. Voorbeeld: <i>5.6300203</i>.'
     );
-
     $form['email']['gojira_invoice_email'] = array(
         '#title' => t('Invoice e-mail template'),
         '#type' => 'textarea',
@@ -314,21 +309,16 @@ function gojira_configuration_form_submit($form, &$form_state) {
     variable_set('gojira_subscribe_activate_user', $_POST['gojira_subscribe_activate_user']);
     variable_set('gojira_new_employer_email', $_POST['gojira_new_employer_email']);
     variable_set('gojira_new_employee_email', $_POST['gojira_new_employee_email']);
-    //variable_set('gojira_invoice_template', $_POST['gojira_invoice_template']);
-    variable_set('gojira_percentage_tax', $_POST['gojira_percentage_tax']);
     variable_set('gojira_invoice_email', $_POST['gojira_invoice_email']);
     variable_set('gojira_blacklist_search_words', $_POST['gojira_blacklist_search_words']);
     variable_set('IDEAL_MERCHANT_ID', $_POST['IDEAL_MERCHANT_ID']);
     variable_set('IDEAL_MERCHANT_KEY', $_POST['IDEAL_MERCHANT_KEY']);
     variable_set('IDEAL_MERCHANT_SECRET', $_POST['IDEAL_MERCHANT_SECRET']);
     variable_set('SUBSCRIPTION_PERIOD', $_POST['SUBSCRIPTION_PERIOD']);
-    variable_set('SUBSCRIPTION_PRICE', $_POST['SUBSCRIPTION_PRICE']);
-    variable_set('SUBSCRIPTION_PRICE_DISCOUNT', $_POST['SUBSCRIPTION_PRICE_DISCOUNT']);
     variable_set('CENTER_COUNTRY_LATITUDE', $_POST['CENTER_COUNTRY_LATITUDE']);
     variable_set('CENTER_COUNTRY_LONGITUDE', $_POST['CENTER_COUNTRY_LONGITUDE']);
     variable_set('SEARCH_MAX_RESULT_AMOUNT', $_POST['SEARCH_MAX_RESULT_AMOUNT']);
     variable_set('gojira_amount_calls_to_google', $_POST['gojira_amount_calls_to_google']);
-//    variable_set('gojira_search_in', $_POST['gojira_search_in']);
     variable_set('gojira_subscription_expire_warning', $_POST['gojira_subscription_expire_warning']);
     variable_set('gojira_subscription_ended', $_POST['gojira_subscription_ended']);
     variable_set('gojira_check_coordinates_on_update_node', $_POST['gojira_check_coordinates_on_update_node']);
@@ -349,7 +339,9 @@ function gojira_configuration_form_submit($form, &$form_state) {
     variable_set('cron_check_subscriptions', $_POST['cron_check_subscriptions']);
     variable_set('cron_restore_backup_locations', $_POST['cron_restore_backup_locations']);
     variable_set('gojira_ideal_return_url', $_POST['gojira_ideal_return_url']);
-    variable_set('gojira_user_amount_with_discount', $_POST['gojira_user_amount_with_discount']);
-    
+    variable_set('gojira_subscription_year_total', $_POST['gojira_subscription_year_total']);
+    variable_set('gojira_subscription_year_tax', $_POST['gojira_subscription_year_tax']);
+    variable_set('gojira_subscription_year_price', $_POST['gojira_subscription_year_price']);
+    variable_set('gojira_subscription_month_price', $_POST['gojira_subscription_month_price']);    
     drupal_set_message(t('Saved all the settings.'), 'status');
 }
