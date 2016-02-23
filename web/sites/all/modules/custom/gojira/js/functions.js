@@ -439,7 +439,7 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
 
             populateMap(data.mapSearchResults, data.mapSearchResultsCount);
 
-            if (data.boxInfo === null) {
+            if (data.boxInfo === null || typeof data.boxInfo == 'undefined') {
                 window.map.setView([data.latitude, data.longitude], data.zoom);
             } else {
                 window.map.fitBounds([

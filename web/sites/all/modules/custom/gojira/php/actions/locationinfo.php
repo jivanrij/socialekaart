@@ -1,11 +1,10 @@
 <?php
 /**
- * Ajax action to switch the users show_hints field
+ * Ajax action
  *
  * @global type $user
  */
 function locationinfo() {
-    
     
   if(is_numeric($_GET['nid'])){
     $nLocation = node_load($_GET['nid']);

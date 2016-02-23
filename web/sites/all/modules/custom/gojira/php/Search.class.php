@@ -496,9 +496,12 @@ EOT;
             $node->score = $score;
             $node->self = false;
             $node->distance = $distance;
+            $node->latitude = $lat;
+            $node->longitude = $lon;
 
             $resultNodes[$result->nid] = $node;
         }
+        
         return $resultNodes;
     }
 

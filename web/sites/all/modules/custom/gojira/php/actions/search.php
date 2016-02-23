@@ -10,7 +10,6 @@ function search() {
         $user_is_admin = true;
     }
 
-
     $single_location = (isset($_GET['s']) && is_numeric($_GET['s']));
 
     $output['s'] = '';
@@ -19,7 +18,6 @@ function search() {
     $output['has_tags'] = true;
     $output['by_id'] = false;
 
-    
     if (isset($_GET['s']) && ($_GET['s'] == 'locationsset')) {
         // SHOW OWN LIST ON THE LOCATIONSSET TEMPLATE
         if (isset($_GET['cat_id']) && is_numeric($_GET['cat_id'])) {
@@ -62,43 +60,28 @@ function search() {
     $latHigh = null;
     $lonHigh = null;
     
-    // format the results
+    // format the results to smaller data
     foreach ($foundNodes as $key => $foundNode) {
-        if ($foundNode) {
+        
+        if(is_null($foundNode->longitude) && is_null($foundNode->latitude)){
             $location = Location::getLocationObjectOfNode($foundNode->nid);
-
-            if ($location) {
-
-                $title = $foundNode->title;
-
-                $searchResults[] = array(
-                    'd' => $foundNode->distance,
-                    's' => $foundNode->score,
-                    'n' => $foundNode->nid,
-                    'x' => $foundNode->self,
-                    't' => $title,
-                    'lo' => $location->getLongitude(),
-                    'la' => $location->getLatitude()
-                );
-                
-                //get the lowest & highest lat & lon
-                if($latLow == null || $latLow >= $location->getLatitude()){
-                    $latLow = $location->getLatitude();
-                }
-                if($latHigh == null || $latHigh <= $location->getLatitude()){
-                    $latHigh = $location->getLatitude();
-                }
-                if($lonLow == null || $lonLow >= $location->getLongitude()){
-                    $lonLow = $location->getLongitude();
-                }
-                if($lonHigh == null || $lonHigh <= $location->getLongitude()){
-                    $lonHigh = $location->getLongitude();
-                }
-                
+            if($location){
+                $foundNode->latitude = $location->getLatitude();
+                $foundNode->longitude = $location->getLongitude();
             }
         }
+        
+        $searchResults[] = array(
+            'd' => $foundNode->distance,
+            's' => $foundNode->score,
+            'n' => $foundNode->nid,
+            'x' => $foundNode->self,
+            't' => $foundNode->title,
+            'lo' => $foundNode->longitude,
+            'la' => $foundNode->latitude
+        );
     }
-
+    
     $searchResultsJavascript = _merge_and_strip_searchresults_for_js($searchResults, $output['has_tags']);
 
     $output['searchResults'] = $searchResults;
@@ -124,19 +107,15 @@ function search() {
 
     if ($output['by_id']) {
         $location = Location::getLocationObjectOfNode($output['by_id']);
-    } else {
+    }
+    
+    if(!$location){
         $location = Location::getCurrentLocationObjectOfUser(true);
     }
 
     if ($location) {
-        // search global && i do NOT have a city name, let's focus on center country
-        if (helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD) && !Search::getInstance()->getCityNameFromTags()) {
-            $output['longitude'] = variable_get('CENTER_COUNTRY_LONGITUDE');
-            $output['latitude'] = variable_get('CENTER_COUNTRY_LATITUDE');
-        }else{
-            $output['longitude'] = $location->longitude;
-            $output['latitude'] = $location->latitude;
-        }
+        $output['longitude'] = $location->longitude;
+        $output['latitude'] = $location->latitude;
     }
 
     $output['mapSearchResults'] = array_values($searchResultsJavascript);
@@ -179,14 +158,23 @@ function search() {
 
     $output['single_location'] = $single_location;
 
-    Search::getInstance()->latLonRadiusInfo = array(
-      'latLow'  => $latLow,
-      'lonLow'  => $lonLow,
-      'latHigh'  => $latHigh,
-      'lonHigh'  => $lonHigh
-    );
-    
-    $output['boxInfo'] = Search::getInstance()->latLonRadiusInfo;
+    if($latLow && $lonLow && $latHigh && $lonHigh){
+//        Search::getInstance()->latLonRadiusInfo = array(
+//          'latLow'  => $latLow,
+//          'lonLow'  => $lonLow,
+//          'latHigh'  => $latHigh,
+//          'lonHigh'  => $lonHigh
+//        );
+
+        $output['boxInfo'] = Search::getInstance()->latLonRadiusInfo;
+    }
+//    }else{
+//        $output['latitude'] = ;
+//        $output['longitude'] = ;
+//        
+//        $output['boxInfo'] = null;
+//    }
+        
     
     echo json_encode($output, true);
     exit;

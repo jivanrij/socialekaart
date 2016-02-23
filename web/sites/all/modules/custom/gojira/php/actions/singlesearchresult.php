@@ -20,17 +20,6 @@ function singlesearchresult() {
 
     $location = Location::getLocationObjectOfNode($locationNode->nid);
 
-//    $locationInfo = array(
-//      'city'=>helper::value($locationNode, GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD),
-//      'email'=>helper::value($locationNode, GojiraSettings::CONTENT_TYPE_EMAIL_FIELD),
-//      'street'=>helper::value($locationNode, GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD),
-//      'number'=>helper::value($locationNode, GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD),
-//      'telephone'=>helper::value($locationNode, GojiraSettings::CONTENT_TYPE_TELEPHONE_FIELD),
-//      'url'=>helper::value($locationNode, GojiraSettings::CONTENT_TYPE_URL_FIELD),
-//      'labels'->Label
-//
-//    );
-
     echo json_encode(array('html'=>$before_html.$html.$after_html,'longitude'=>$location->longitude,'latitude'=>$location->latitude, 'zoom'=>  GojiraSettings::MAP_ZOOMLEVEL_STREET));
     exit;
   }

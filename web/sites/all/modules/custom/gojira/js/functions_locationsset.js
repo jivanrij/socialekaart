@@ -185,7 +185,7 @@ function getCategoryLocations(locationsset_id, cat_id) {
 
             populateMap(data.mapSearchResults, data.mapSearchResultsCount);
 
-            if (data.boxInfo === null) {
+            if (data.boxInfo === null || typeof data.boxInfo == 'undefined') {
                 window.map.setView([data.latitude, data.longitude], data.zoom);
             } else {
                 window.map.fitBounds([
