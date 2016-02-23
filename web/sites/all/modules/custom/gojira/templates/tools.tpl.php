@@ -184,14 +184,9 @@
 
 
 
-
-
-
-
-
 <?php // RUN CRON  ?>
 <p>
-    Put the Cron url in this form and run it. A javascript will continue running the cron until you push <a href="/admin/config/system/gojiratools" title="stop cron">stop cron</a> or after 500 times.
+    Put the Cron url in this form and run it. A javascript will continue running the cron until you push <a href="/admin/config/system/gojiratools" title="stop cron">stop cron</a> or after 2000 times.
 </p>
 <p>
     The cron does the following things if you have them enabled in the gojira settings page:
@@ -225,7 +220,7 @@ You can find the cron url <a href="/admin/config/system/cron" title="cron page">
       var run_times = parseInt(jQuery("#cron_run").text())+1;
       jQuery("#cron_run").html(run_times);
       setTimeout(function(){
-        if(run_times < 501){
+        if(run_times < 2001){
           run_gojira_cron();
         }else{
           alert('Stopped cron after 500 times.');

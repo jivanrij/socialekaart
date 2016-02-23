@@ -8,10 +8,24 @@
             <div class="header_select">
                 <label>Zoeken in:</label>
                 <select id="search_type_select">
-                    <?php if (user_access(helper::PERMISSION_LOCATIONSETS) && Locationsets::onLocationset()): ?><option <?php echo (Locationsets::onLocationset() ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_LOCATIONSET; ?>"><?php echo Locationsets::getCurrentLocationsetTitle(); ?></option><?php endif; ?>
-                    <option <?php echo ((Search::getSearchTypeBasedOnQuery()==helper::SEARCH_TYPE_REGION) ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_REGION; ?>">praktijk regio</option>
-                    <?php if (user_access(helper::PERMISSION_PERSONAL_LIST)): ?><option <?php echo ((Locationsets::onOwnMap() && !Locationsets::onLocationset()) ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_OWNLIST; ?>">uw kaart</option><?php endif; ?>
-                    <?php if (user_access(helper::PERMISSION_SEARCH_GLOBAL)): ?><option <?php echo ((Search::getSearchTypeBasedOnQuery()==helper::SEARCH_TYPE_COUNTRY) ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_COUNTRY; ?>">het hele land</option><?php endif; ?>
+                    <?php if (user_access(helper::PERMISSION_LOCATIONSETS) && Locationsets::onLocationset()): ?>
+                        <option <?php echo (Search::searchTypeIsSelected(helper::SEARCH_TYPE_LOCATIONSET) ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_LOCATIONSET; ?>">
+                            <?php echo Locationsets::getCurrentLocationsetTitle(); ?>
+                        </option>
+                    <?php endif; ?>
+                    <option <?php echo (Search::searchTypeIsSelected(helper::SEARCH_TYPE_REGION) ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_REGION; ?>">
+                        <?php echo t('Practice region'); ?>
+                    </option>
+                    <?php if (user_access(helper::PERMISSION_PERSONAL_LIST)): ?>
+                        <option <?php echo (Search::searchTypeIsSelected(helper::SEARCH_TYPE_OWNLIST) ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_OWNLIST; ?>">
+                            <?php echo t('Your own map'); ?>
+                        </option>
+                    <?php endif; ?>
+                    <?php if (user_access(helper::PERMISSION_SEARCH_GLOBAL)): ?>
+                        <option <?php echo (Search::searchTypeIsSelected(helper::SEARCH_TYPE_COUNTRY) ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_COUNTRY; ?>">
+                            <?php echo t('The howl country'); ?>
+                        </option>
+                    <?php endif; ?>
                 </select>
             </div>
             

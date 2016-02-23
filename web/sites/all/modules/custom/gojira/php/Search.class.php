@@ -340,7 +340,7 @@ EAT;
             $sql = "SELECT searchword_nid.node_nid AS nid, searchword.word AS word, searchword_nid.score AS score FROM {searchword} JOIN {searchword_nid} on (searchword.id = searchword_nid.searchword_id) WHERE word LIKE :label1 OR word LIKE :label2";
             $result = db_query($sql, array(':label1' => $label . '%', ':label2' => '%' . $label))->fetchAll();
             foreach ($result as $found) {
-                $nodeCounter[$label.$found->nid] = true;
+                $nodeCounter[$label . $found->nid] = true;
                 if (array_key_exists($found->nid, $foundNodes)) {
                     $foundNodes[$found->nid] = (int) ($found->score + $foundNodes[$found->nid]);
                 } else {
@@ -350,11 +350,11 @@ EAT;
         }
         // clean the resultset of all nodes that do not have hits on all the labels
         // this part makes a AND function of the search
-        foreach($foundNodes as $nid=>$foundNode){
+        foreach ($foundNodes as $nid => $foundNode) {
             foreach ($labels as $label) {
-                if(!isset($nodeCounter[$label.$nid])){
+                if (!isset($nodeCounter[$label . $nid])) {
                     // node has no hits on one of the labels, remove it
-                    if(isset($foundNodes[$nid])){
+                    if (isset($foundNodes[$nid])) {
                         unset($foundNodes[$nid]);
                     }
                 }
@@ -362,10 +362,10 @@ EAT;
         }
         // make nid's part for the sql query
         $nidsSql = '0';
-        foreach($foundNodes as $nid=>$foundNode){
+        foreach ($foundNodes as $nid => $foundNode) {
             $nidsSql .= ',' . $nid;
         }
-        
+
         // build the case to add the score field to the query
         if (count($foundNodes)) {
             $score_sql = ' (CASE ';
@@ -637,8 +637,8 @@ EOT;
         $aText = array();
         $aBlacklist = explode(',', variable_get('gojira_blacklist_search_words'));
 
-        $aText[helper::value($oNode,  GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD)] = 1;
-        
+        $aText[helper::value($oNode, GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD)] = 1;
+
         // add the labels to the search, let the labels with more likes weight more
         if (isset($oNode->field_location_labels)) {
             $aField = $oNode->field_location_labels;
@@ -767,6 +767,44 @@ EOT;
         return helper::SEARCH_TYPE_REGION;
     }
 
+    /**
+     * Tells you if you can show the given search type
+     * 
+     * @param string $type
+     * @return boolean
+     */
+    public static function searchTypeIsSelected($type) {
+        switch ($type) {
+            case helper::SEARCH_TYPE_COUNTRY:
+                if (user_access(helper::PERMISSION_SEARCH_GLOBAL)) {
+                    if (self::getSearchTypeBasedOnQuery() == helper::SEARCH_TYPE_COUNTRY) {
+                        return true;
+                    }
+                }
+                break;
+            case helper::SEARCH_TYPE_LOCATIONSET:
+                if (user_access(helper::PERMISSION_LOCATIONSETS)) {
+                    if (self::getSearchTypeBasedOnQuery() == helper::SEARCH_TYPE_LOCATIONSET || Locationsets::onLocationset()) {
+                        return true;
+                    }
+                }
+                break;
+            case helper::SEARCH_TYPE_OWNLIST:
+                if (user_access(helper::PERMISSION_PERSONAL_LIST)) {
+                    if (self::getSearchTypeBasedOnQuery() == helper::SEARCH_TYPE_OWNLIST && Locationsets::onOwnMap() && !Locationsets::onLocationset()) {
+                        return true;
+                    }
+                }
+                break;
+        }
+
+        if (self::getSearchTypeBasedOnQuery() == helper::SEARCH_TYPE_REGION &&  helper::SEARCH_TYPE_REGION == $type) {
+            return true;
+        }
+
+        return false;
+    }
+
     public static function searchInOwnMap($tags) {
         $currentPractice = Location::getCurrentLocationNodeObjectOfUser();
         $ownlistLocations = Favorite::getInstance()->getAllFavoriteLocations($currentPractice->nid);
@@ -793,17 +831,17 @@ EOT;
             $sql = "SELECT searchword_nid.node_nid AS nid, searchword.word AS word, searchword_nid.score AS score FROM {searchword} JOIN {searchword_nid} on (searchword.id = searchword_nid.searchword_id) WHERE word LIKE :label1 OR word LIKE :label2";
             $result = db_query($sql, array(':label1' => $tag . '%', ':label2' => '%' . $tag))->fetchAll();
             foreach ($result as $found) {
-                $nodeCounter[$label.$found->nid] = true;
+                $nodeCounter[$label . $found->nid] = true;
                 $foundNodes[$found->nid] = $found->nid;
             }
         }
         // clean the resultset of all nodes that do not have hits on all the labels
         // this part makes a AND function of the search
-        foreach($foundNodes as $nid=>$foundNode){
+        foreach ($foundNodes as $nid => $foundNode) {
             foreach ($labels as $label) {
-                if(!isset($nodeCounter[$label.$nid])){
+                if (!isset($nodeCounter[$label . $nid])) {
                     // node has no hits on one of the labels, remove it
-                    if(isset($foundNodes[$nid])){
+                    if (isset($foundNodes[$nid])) {
                         unset($foundNodes[$nid]);
                     }
                 }
@@ -824,4 +862,5 @@ EOT;
 
         return $return;
     }
+
 }
