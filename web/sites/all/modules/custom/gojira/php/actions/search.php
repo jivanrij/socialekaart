@@ -32,9 +32,9 @@ function search() {
         $output['by_id'] = $_GET['s'];
         $foundNodes[$_GET['s']] = node_load($_GET['s']);
     } else if (isset($_GET['s']) && $_GET['s'] != '' && isset($_GET['type'])) {
-        
+
         // NORMAL SEARCH
-        
+
         $tags = explode(' ', urldecode($_GET['s']));
 
         $filteredTags = array();
@@ -44,7 +44,7 @@ function search() {
                 $filteredTags[] = $tag;
             }
         }
-        
+
         // get all the nodes based on the normal tags
         $foundNodes = Search::getInstance()->doSearch($filteredTags, $_GET['type']);
 
@@ -54,23 +54,34 @@ function search() {
     }
 
     $popupHtml = '';
-
-    $latLow = null;
     $lonLow = null;
-    $latHigh = null;
     $lonHigh = null;
-    
+    $latLow = null;
+    $latHigh = null;
     // format the results to smaller data
     foreach ($foundNodes as $key => $foundNode) {
-        
-        if(is_null($foundNode->longitude) && is_null($foundNode->latitude)){
+
+        if (is_null($foundNode->longitude) && is_null($foundNode->latitude)) {
             $location = Location::getLocationObjectOfNode($foundNode->nid);
-            if($location){
+            if ($location) {
                 $foundNode->latitude = $location->getLatitude();
                 $foundNode->longitude = $location->getLongitude();
+
+                if (is_null($latLow) || $foundNode->latitude <= $latLow) {
+                    $latLow = $foundNode->latitude;
+                }
+                if (is_null($lonLow) || $foundNode->longitude <= $lonLow) {
+                    $lonLow = $foundNode->longitude;
+                }
+                if (is_null($latHigh) || $foundNode->latitude >= $latHigh) {
+                    $latHigh = $foundNode->latitude;
+                }
+                if (is_null($lonHigh) || $foundNode->longitude >= $lonHigh) {
+                    $lonHigh = $foundNode->longitude;
+                }
             }
         }
-        
+
         $searchResults[] = array(
             'd' => $foundNode->distance,
             's' => $foundNode->score,
@@ -81,7 +92,7 @@ function search() {
             'la' => $foundNode->latitude
         );
     }
-    
+
     $searchResultsJavascript = _merge_and_strip_searchresults_for_js($searchResults, $output['has_tags']);
 
     $output['searchResults'] = $searchResults;
@@ -108,8 +119,8 @@ function search() {
     if ($output['by_id']) {
         $location = Location::getLocationObjectOfNode($output['by_id']);
     }
-    
-    if(!$location){
+
+    if (!$location) {
         $location = Location::getCurrentLocationObjectOfUser(true);
     }
 
@@ -132,13 +143,13 @@ function search() {
     $output['tags_not_changed_message'] = t('Failed to modify tags');
 
     // determ the zoom level that is shown after a search result
-    if(helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)){ // user searches on a country level
+    if (helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) { // user searches on a country level
         if (isset($_GET['s']) && ($_GET['s'] == 'ownlist')) { // country level == on, but also filters on favorites
-          $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_REGION; // show region level
-        }else if( Search::getInstance()->getCityNameFromTags()){ // country level == on, but also searches with a city name
-          $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_STREET;// show street level
-        }else{ // country == on
-          $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_COUNTRY; // show country level
+            $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_REGION; // show region level
+        } else if (Search::getInstance()->getCityNameFromTags()) { // country level == on, but also searches with a city name
+            $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_STREET; // show street level
+        } else { // country == on
+            $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_COUNTRY; // show country level
         }
     } else { // normal search result
         $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_STREET; // show street level
@@ -149,33 +160,33 @@ function search() {
     }
 
 
-    if (isset($_GET['s']) && ($_GET['s'] == 'locationsset')){
+    if (isset($_GET['s']) && ($_GET['s'] == 'locationsset')) {
         $output['results_html'] = '';
-    }else{
+    } else {
         $output['results_html'] = Search::getInstance()->getResultListHtml($output);
     }
 
 
     $output['single_location'] = $single_location;
 
-    if($latLow && $lonLow && $latHigh && $lonHigh){
-//        Search::getInstance()->latLonRadiusInfo = array(
-//          'latLow'  => $latLow,
-//          'lonLow'  => $lonLow,
-//          'latHigh'  => $latHigh,
-//          'lonHigh'  => $lonHigh
-//        );
-
-        $output['boxInfo'] = Search::getInstance()->latLonRadiusInfo;
+    if (!is_null($latLow) && !is_null($lonLow) && !is_null($latHigh) && !is_null($lonHigh)) {
+        Search::getInstance()->latLonRadiusInfo = array(
+            'latLow' => $latLow,
+            'lonLow' => $lonLow,
+            'latHigh' => $latHigh,
+            'lonHigh' => $lonHigh
+        );
+    }else{
+        Search::getInstance()->latLonRadiusInfo = array(
+            'latLow' => $location->latitude,
+            'lonLow' => $location->longitude,
+            'latHigh' => $location->latitude,
+            'lonHigh' => $location->longitude
+        );
     }
-//    }else{
-//        $output['latitude'] = ;
-//        $output['longitude'] = ;
-//        
-//        $output['boxInfo'] = null;
-//    }
-        
-    
+
+    $output['boxInfo'] = Search::getInstance()->latLonRadiusInfo;
+
     echo json_encode($output, true);
     exit;
 }

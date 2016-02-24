@@ -456,31 +456,24 @@ EOT;
         // put all the results in a nice to handle array
         $counter = 0;
         $resultNodes = array();
-        $lonLow = null;
-        $lonHigh = null;
-        $latLow = null;
-        $latHigh = null;
+//        $lonLow = null;
+//        $lonHigh = null;
+//        $latLow = null;
+//        $latHigh = null;
         foreach ($results as $result) {
 
-            if (is_null($latLow) || $result->lat <= $latLow) {
-                $latLow = $result->lat;
-            }
-            if (is_null($lonLow) || $result->lon <= $lonLow) {
-                $lonLow = $result->lon;
-            }
-            if (is_null($latHigh) || $result->lat >= $latHigh) {
-                $latHigh = $result->lat;
-            }
-            if (is_null($lonHigh) || $result->lon >= $lonHigh) {
-                $lonHigh = $result->lon;
-            }
-
-            Search::getInstance()->latLonRadiusInfo = array(
-                'latLow' => $latLow,
-                'lonLow' => $lonLow,
-                'latHigh' => $latHigh,
-                'lonHigh' => $lonHigh
-            );
+//            if (is_null($latLow) || $result->lat <= $latLow) {
+//                $latLow = $result->lat;
+//            }
+//            if (is_null($lonLow) || $result->lon <= $lonLow) {
+//                $lonLow = $result->lon;
+//            }
+//            if (is_null($latHigh) || $result->lat >= $latHigh) {
+//                $latHigh = $result->lat;
+//            }
+//            if (is_null($lonHigh) || $result->lon >= $lonHigh) {
+//                $lonHigh = $result->lon;
+//            }
 
             $distance = $result->distance;
             $score = $result->score;
@@ -501,7 +494,14 @@ EOT;
 
             $resultNodes[$result->nid] = $node;
         }
-        
+
+//        Search::getInstance()->latLonRadiusInfo = array(
+//            'latLow' => $latLow,
+//            'lonLow' => $lonLow,
+//            'latHigh' => $latHigh,
+//            'lonHigh' => $lonHigh
+//        );
+
         return $resultNodes;
     }
 
@@ -801,7 +801,7 @@ EOT;
                 break;
         }
 
-        if (self::getSearchTypeBasedOnQuery() == helper::SEARCH_TYPE_REGION &&  helper::SEARCH_TYPE_REGION == $type) {
+        if (self::getSearchTypeBasedOnQuery() == helper::SEARCH_TYPE_REGION && helper::SEARCH_TYPE_REGION == $type) {
             return true;
         }
 
