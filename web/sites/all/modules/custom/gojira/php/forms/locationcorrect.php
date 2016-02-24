@@ -18,7 +18,7 @@ function gojira_locationcorrect_form($form, &$form_state) {
     if ($node) {
         $id = $_GET['nid'];
     }
-    
+
     $form['nid'] = array(
         '#title' => t('nid'),
         '#type' => 'hidden',
@@ -28,7 +28,11 @@ function gojira_locationcorrect_form($form, &$form_state) {
 
     $form = gojira_get_core_location_form($form, $form_state, $node, 'locationedit');
     $form[GojiraSettings::CONTENT_TYPE_TELEPHONE_FIELD]['#required'] = false; // got this one from the core location form
-    
+    $form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#required'] = false;
+    $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#required'] = false;
+    $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#required'] = false;
+    $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#required'] = false;
+
     $categorys = db_query("select title, nid from node where type = 'category' and status = 1 and title != 'Huisarts' order by title");
     foreach ($categorys as $category) {
         $cat_options[$category->nid] = $category->title;
@@ -41,17 +45,17 @@ function gojira_locationcorrect_form($form, &$form_state) {
         '#options' => $cat_options,
         '#default_value' => $iCategory,
     );
-    
+
     $form[GojiraSettings::CONTENT_TYPE_URL_FIELD] = array(
         '#title' => t('Website'),
         '#type' => 'textfield',
         '#required' => false,
         '#default_value' => ($node ? helper::value($node, GojiraSettings::CONTENT_TYPE_URL_FIELD) : ''),
     );
-    
+
     $form['submit'] = array(
         '#type' => 'submit',
-        '#prefix' => '<div class="gbutton_wrapper"><a class="gbutton rounded noshadow left" href="\?loc='.$id.'" title="' . t('Show location') . '"><span>' . t('Show location') . '</span></a><span class="gbutton rounded noshadow right">',
+        '#prefix' => '<div class="gbutton_wrapper"><a class="gbutton rounded noshadow left" href="\?loc=' . $id . '" title="' . t('Show location') . '"><span>' . t('Show location') . '</span></a><span class="gbutton rounded noshadow right">',
         '#value' => t('Submit'),
         '#suffix' => '</span></div>'
     );
@@ -83,7 +87,7 @@ function gojira_locationcorrect_form_submit($form, &$form_state) {
 
     $faxfield = GojiraSettings::CONTENT_TYPE_URL_FIELD;
     $node->$faxfield = array('und' => array(0 => array('value' => $form[GojiraSettings::CONTENT_TYPE_URL_FIELD]['#value'])));
-    
+
 //  $employeesfield = GojiraSettings::CONTENT_TYPE_NOTE_FIELD;
 //  $node->$employeesfield = array(LANGUAGE_NONE => array(0 => array('value' => $form[GojiraSettings::CONTENT_TYPE_NOTE_FIELD]['#value'])));
 
@@ -93,9 +97,9 @@ function gojira_locationcorrect_form_submit($form, &$form_state) {
 
     $catfield = GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD;
     $node->$catfield = array('und' => array(0 => array('nid' => $form[GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD]['#value'])));
-    
+
     node_save($node);
-    
+
     $location = Location::getLocationForAddress(
                     Location::formatAddress(
                             $form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#value']
@@ -106,11 +110,11 @@ function gojira_locationcorrect_form_submit($form, &$form_state) {
         $node->status = 0;
         node_save($node);
         Mailer::locationWithoutCoordinatesAdded($node);
-    }else{
+    } else {
         Location::storeLocatioInNode($location, $node->nid);
         drupal_set_message(t('Location information successfully stored.'), 'status');
     }
 
-    header('Location: /location/correct&nid='.$id);
+    header('Location: /location/correct&nid=' . $id);
     exit;
 }

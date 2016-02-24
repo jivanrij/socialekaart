@@ -40,6 +40,10 @@ function gojira_settings_form($form, &$form_state) {
             $locations = Location::getUsersLocations(false);
             $locationNode = array_shift($locations);
             $form = gojira_get_core_location_form($form, $form_state, $locationNode, 'settings');
+            $form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#required'] = true;
+            $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#required'] = true;
+            $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#required'] = true;
+            $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#required'] = true;
         }
 
         // user is allowed to manage multiple locations yes/no

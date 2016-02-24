@@ -74,6 +74,10 @@ function gojira_get_core_location_form($form, &$form_state, $node, $caller) {
     }
 
     helper::addAddressFormPart($form, $node);
+    $form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#required'] = true;
+    $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#required'] = true;
+    $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#required'] = true;
+    $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#required'] = true;
 
     $form[GojiraSettings::CONTENT_TYPE_TELEPHONE_FIELD] = array(
         '#title' => t('Telephone'),
@@ -180,15 +184,15 @@ function gojira_locationedit_form_submit($form, &$form_state) {
     foreach (Location::getAddressFields() as $field) {
         $node->$field = array(LANGUAGE_NONE => array(0 => array('value' => $form[$field]['#value'])));
     }
-    
+
     node_save($node);
-    
+
     if ($id == 'new') {
         // save the new location to the default one to load
         $oUser->field_selected_location = array(LANGUAGE_NONE => array(0 => array('nid' => $node->nid)));
         user_save($oUser);
     }
-    
+
     $location = Location::getLocationForAddress(
                     Location::formatAddress(
                             $form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#value']
@@ -199,7 +203,7 @@ function gojira_locationedit_form_submit($form, &$form_state) {
         $node->status = 0;
         node_save($node);
         Mailer::locationWithoutCoordinatesAdded($node);
-    }else{
+    } else {
         Location::storeLocatioInNode($location, $node->nid);
         drupal_set_message(t('Practice information successfully stored.'), 'status');
     }

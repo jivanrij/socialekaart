@@ -839,7 +839,6 @@ EOT;
             }
         }
 
-        
         // clean the resultset of all nodes that do not have hits on all the labels
         // this part makes a AND function of the search
         foreach ($foundNodes as $nid => $foundNode) {
