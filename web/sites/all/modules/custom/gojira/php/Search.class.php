@@ -834,15 +834,17 @@ EOT;
             $sql = "SELECT searchword_nid.node_nid AS nid, searchword.word AS word, searchword_nid.score AS score FROM {searchword} JOIN {searchword_nid} on (searchword.id = searchword_nid.searchword_id) WHERE word LIKE :label1 OR word LIKE :label2";
             $result = db_query($sql, array(':label1' => $tag . '%', ':label2' => '%' . $tag))->fetchAll();
             foreach ($result as $found) {
-                $nodeCounter[$label . $found->nid] = true;
+                $nodeCounter[$tag . $found->nid] = true;
                 $foundNodes[$found->nid] = $found->nid;
             }
         }
+
+        
         // clean the resultset of all nodes that do not have hits on all the labels
         // this part makes a AND function of the search
         foreach ($foundNodes as $nid => $foundNode) {
-            foreach ($labels as $label) {
-                if (!isset($nodeCounter[$label . $nid])) {
+            foreach ($cleanTags as $tag) {
+                if (!isset($nodeCounter[$tag . $nid])) {
                     // node has no hits on one of the labels, remove it
                     if (isset($foundNodes[$nid])) {
                         unset($foundNodes[$nid]);

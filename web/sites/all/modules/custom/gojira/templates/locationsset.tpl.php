@@ -14,6 +14,7 @@ if ($oLocationset) {
 } else {
     $currentPractice = Location::getCurrentLocationNodeObjectOfUser();
     if (isset($_GET['filter'])) {
+        
         $aLocations = Search::searchInOwnMap($_GET['filter']);
 
         $plotInfo = array();
