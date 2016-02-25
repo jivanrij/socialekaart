@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This page generates a form to crud a employee
+ * 
  *
  * @return string
  */
@@ -22,9 +22,20 @@ function idealcallback() {
 //Een Salt. Dit is een willekeurig nummer tussen de 10000 en 999999
 //Een checksum. Deze bestaat uit Transactie ID + Transactie Code + Status + Salt
 
-    watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal callback: callback begins for id: ' . $_GET['id']);
+//    watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal callback: callback begins for id: ' . $_GET['id']);
     
     if (isset($_GET['id']) && isset($_GET['status']) && isset($_GET['salt']) && isset($_GET['checksum1'])) {
+        
+        $newStatus = 0;
+        if (is_numeric($_GET['status'])) {
+            $newStatus = $_GET['status'];
+        }
+
+        $uniqid = uniqid();
+        
+        watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal callback: pid'.$uniqid.' id:' . $_GET['id'].' status:'.$_GET['status'].' salt:'.$_GET['salt'].' checksum1:'.$_GET['checksum1']);
+        
+        
         $oQantani = Qantani::CreateInstance(variable_get('IDEAL_MERCHANT_ID'), variable_get('IDEAL_MERCHANT_KEY'), variable_get('IDEAL_MERCHANT_SECRET'));
 
         //ideal_id, ideal_code, gid, uid,
@@ -33,7 +44,7 @@ function idealcallback() {
 
             // checksup sha1 get's checked by the getPaymentStatus function
             if(SHA1($_GET['id'].$oInfo->ideal_code.$_GET['status'].$_GET['salt']) !== $_GET['checksum1']){
-                watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal callback: checksum failed for ideal_id '.$_GET['id']);
+                watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal callback: pid'.$uniqid.' checksum failed for ideal_id '.$_GET['id']);
                 exit;
             }
             
@@ -41,28 +52,31 @@ function idealcallback() {
                 return 'x'; // this will tell ideal that the payment is succesfull done
                 exit;
             }
-            
 
-            $iLowestIncrement = date('Y') . '00001'; // get the lowest possible increment for this year
-            $iIncrement = db_query("SELECT increment FROM gojira_payments ORDER BY increment DESC")->fetchField();
-            if ($iLowestIncrement > $iIncrement) { // is the last increment is lower then the lowest possible this must be the first of the year, use the lowest possible
-                $iIncrement = $iLowestIncrement;
-            } else {
-                $iIncrement++; // increase the increment: 201500009 to 201500010
+
+            if($newStatus == 0){
+                $iIncrement = 0;
+            }else{
+                $iLowestIncrement = date('Y') . '00001'; // get the lowest possible increment for this year
+                $iIncrement = db_query("SELECT increment FROM gojira_payments ORDER BY increment DESC")->fetchField();
+                if ($iLowestIncrement > $iIncrement) { // is the last increment is lower then the lowest possible this must be the first of the year, use the lowest possible
+                    $iIncrement = $iLowestIncrement;
+                } else {
+                    $iIncrement++; // increase the increment: 201500009 to 201500010
+                }
             }
-            watchdog(GojiraSettings::WATCHDOG_IDEAL, gettype($oInfo->callback_times).$oInfo->callback_times);
             
             $iCallbackTimes = $oInfo->callback_times + 1;
             
-            watchdog(GojiraSettings::WATCHDOG_IDEAL, gettype($iCallbackTimes).$iCallbackTimes);
+            watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal callback: pid'.$uniqid.' updating gojira_payments table with increment & callback times');
             
-            db_query("UPDATE {gojira_payments} SET `callback_times` = :callback_times, `status`=1, `increment`=:increment WHERE `ideal_id`=:id AND `ideal_code`=:code ", array(':id' => $_GET['id'], ':code' => $oInfo->ideal_code, ':increment' => $iIncrement, ':callback_times' => $iCallbackTimes));
+            db_query("UPDATE {gojira_payments} SET `callback_times` = :callback_times, `status`=:status, `increment`=:increment WHERE `ideal_id`=:id AND `ideal_code`=:code ", array(':id' => $_GET['id'], ':code' => $oInfo->ideal_code, ':increment' => $iIncrement, ':callback_times' => $iCallbackTimes,':status' => $newStatus));
             Subscriptions::subscribe($oInfo->ideal_id);
             return 'x'; // this will tell ideal that the payment is succesfull done
             exit;
 
         }else{
-            watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal callback: unable to find payment info, no valid ideal_id given: '.$_GET['id']);
+            watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal callback: pid'.$uniqid.' unable to find payment info, no valid ideal_id given: '.$_GET['id']);
             exit;
         }
     }

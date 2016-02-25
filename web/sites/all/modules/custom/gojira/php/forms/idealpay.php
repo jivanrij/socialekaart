@@ -24,10 +24,10 @@ function gojira_idealpay_form($form, &$form_state) {
 
     $paymentConditions = t('Payment conditions');
     $form['agree_terms_conditions'] = array(
-        '#title' => t('Agree with payment conditions'),
+//        '#title' => t('Agree with payment conditions'),
         '#type' => 'checkbox',
         '#required' => true,
-        '#description' => 'Ik ga akkoord met de <a href="https://socialekaart.care/sites/default/skfiles/Algemene_Voorwaarden.pdf" title="algemene voorwaarden" target="_new">algemene voorwaarden</a>.',
+        '#title' => 'Ik ga akkoord met de <a href="https://socialekaart.care/sites/default/skfiles/Algemene_Voorwaarden.pdf" title="algemene voorwaarden" target="_new">algemene voorwaarden</a>.',
     );
     
     $form['submit'] = array(
@@ -65,7 +65,7 @@ function gojira_idealpay_form_submit($form, &$form_state) {
         $transactionId = $qantani->GetLastTransactionId();
         $transactionCode = $qantani->GetLastTransactionCode();
 
-        Subscriptions::addPaymentLog($user->uid, $info['amount'], $info['description'], $transactionId, $transactionCode, $info['new_start'], $info['new_end'], $info['discount'], $info['tax'], $info['total'], 0, $_POST['ideal_bank']);
+        Subscriptions::addPaymentLog($user->uid, $info['amount'], $info['description'], $transactionId, $transactionCode, $info['new_start'], $info['new_end'], 0, $info['tax'], $info['total'], 0, $_POST['ideal_bank']);
         
         header('location: ' . $url);
         exit;

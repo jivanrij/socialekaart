@@ -537,6 +537,13 @@ div.password-confirm {
   color: #b7072a;
   cursor: pointer;
 }
+#crud_holder #gojira-idealpay-form div.form-item-agree-terms-conditions input {
+  float: left;
+}
+#crud_holder #gojira-idealpay-form div.form-item-agree-terms-conditions label {
+  float: right;
+  width: 95%;
+}
 @media (max-width: 710px) {
   body.mobile-form #map {
     display: none;
