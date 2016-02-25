@@ -49,7 +49,7 @@ function idealcallback() {
             }
             
             if ($oInfo->status == 1) {
-                return 'x'; // this will tell ideal that the payment is succesfull done
+                return 'x'; // this will tell ideal that the callback is succesfull done
                 exit;
             }
 
@@ -71,8 +71,13 @@ function idealcallback() {
             watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal callback: pid'.$uniqid.' updating gojira_payments table with increment & callback times');
             
             db_query("UPDATE {gojira_payments} SET `callback_times` = :callback_times, `status`=:status, `increment`=:increment WHERE `ideal_id`=:id AND `ideal_code`=:code ", array(':id' => $_GET['id'], ':code' => $oInfo->ideal_code, ':increment' => $iIncrement, ':callback_times' => $iCallbackTimes,':status' => $newStatus));
+
+            if($newStatus == 0){
+                return 'x';
+                exit;                
+            }
             Subscriptions::subscribe($oInfo->ideal_id);
-            return 'x'; // this will tell ideal that the payment is succesfull done
+            return 'x'; // this will tell ideal that the callback is succesfull done
             exit;
 
         }else{
