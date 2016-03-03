@@ -764,6 +764,9 @@ EOT;
                 return helper::SEARCH_TYPE_OWNLIST;
             }
         }
+        if ($_GET['q'] == helper::SEARCH_TYPE_OWNLIST) {
+            return helper::SEARCH_TYPE_OWNLIST;
+        }
         if (Locationsets::onLocationset()) {
             return helper::SEARCH_TYPE_OWNLIST;
         }
