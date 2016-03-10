@@ -6,15 +6,14 @@
     <hr />
     <div id="faq_sections">
         <section>
-            <h1>Welke voordelen heeft een abonnement voor mij?</h1>
+            <h1>Welke voornaamste voordelen heeft een abonnement voor mij?</h1>
             <p class="accordion_content">
                 Met een abonnement kunt u:
             </p>
             <ul class="accordion_content">
                 <li>uw assistent en/of waarnemend huisarts toegang geven tot socialekaart.care</li>
-                <li>een andere praktijk opvoeren en deze gebruiken als centraal punt voor uw zoekopdrachten</li>
-                <li>zoeken naar zorgverleners in heel Nederland</li>
-                <li>reclame vrij gebruik maken van socialekaart.care</li>
+                <li>meerdere praktijken opvoeren om vanuit te werken</li>
+                <li>uw eigen sociale kaart beheren</li>
             </ul>
         </section>
         <section>
@@ -28,13 +27,19 @@
         <section>
             <h1>Hoe kan ik mijn assistent of waarnemer toevoegen? *</h1>
             <p class="accordion_content">
-                Via het menu <i>Account/Gebruikers</i> kunt u deze (en andere gebruikers binnen uw praktijk) toevoegen. U kunt lees- en/of schrijfrechten toekennen. Leesrechten geeft de gebruiker de mogelijkheid zorglocaties te zoeken en gebruik te maken van <i>mijn kaart</i>. Met schrijfrechten heeft de gebruiker de mogelijkheid de gegevens te beheren. Dit houdt in: zorglocaties toevoegen, het toekennen van kenmerken aan de zorglocaties  en punten hieraan toekennen.
+                Via het menu <i>Account/Gebruikers</i> kunt u deze (en andere gebruikers binnen uw praktijk) toevoegen. U kunt lees- en/of schrijfrechten toekennen. Leesrechten geeft de gebruiker de mogelijkheid zorgverleners te zoeken en gebruik te maken van <i>mijn kaart</i>. Met schrijfrechten heeft de gebruiker de mogelijkheid de gegevens te beheren. Dit houdt in: zorgverleners toevoegen, het toekennen van kenmerken aan de zorgverleners en punten hieraan toekennen.
             </p>
         </section>
         <section>
-            <h1>Hoe zoek ik naar zorgaanbieders?</h1>
+            <h1>Wat kunnen de gebruikers die ik aanmaak?</h1>
             <p class="accordion_content">
-                Typ één of meerdere zoektermen in de zoekbalk en klik op het vergrootglas (of druk op Enter). Standaard wordt er gezocht binnen een straal van enkele kilometers vanaf uw praktijk. 
+                Zij kunnen dezelfde gegevens als u inzien en eventueel aanpassen (afhankelijk van de rechten die u toekent). Deze gegevens zijn: A) uw sociale kaart(en) B) uw notities op de zorgverleners C) algemeen zoeken in het systeem.
+            </p>
+        </section>
+        <section>
+            <h1>Hoe zoek ik naar zorgverleners?</h1>
+            <p class="accordion_content">
+                Typ één of meerdere zoektermen in de zoekbalk en klik op het vergrootglas (of druk op Enter). Standaard wordt er gezocht binnen een straal van enkele kilometers vanaf uw praktijk.
             </p>
         </section>
         <section>
@@ -44,45 +49,57 @@
             </p>
         </section>
         <section>
-            <h1>Hoe zoek ik naar zorglocaties in andere steden/dorpen?</h1>
+            <h1>Hoe zoek ik naar zorgverleners in andere steden/dorpen?</h1>
             <p class="accordion_content">
-                Typ de de naam van een stad of dorp achter de zoekterm. De zoekfunctie beperkt zich nu tot de opgegeven locatie.
+                Een naam van een stad of dorp kan ook als zoekterm gebruikt worden. Als u bijvoorbeeld een fysiotherapeut in Zwolle zoekt kunt u zoeken op:"fysiotherapie zwolle".
             </p>
         </section>
         <section>
             <h1>Kan ik een lijst samenstellen van veelgebruikte zorgverleners binnen mijn praktijk?</h1>
             <p class="accordion_content">
-                Ja, u kunt uw eigen persoonlijke lijst van zorgverleners samenstellen. In de detailinformatie van de zorgverlener heeft u de mogelijkheid deze toe te voegen aan uw favorietenlijst. Deze lijst wordt <i>mijn kaart</i> genoemd en is alleen benaderbaar voor de gebruikers binnen uw praktijk.
+                Ja dit noemen we binnen het systeem uw sociale kaart. Als u een zorgverlener hebt gevonden kunt in het raampje met de gegevens van de zorgverlener het vinkje <i>In mijn kaart</i> aanvinken. Deze zorgverlener zal dan voortaan op uw eigen sociale kaart verschijnen.
             </p>
         </section>
         <section>
-            <h1>Kan ik zoeken binnen mijn <i>mijn kaart</i>?</h1>
+            <h1>Kan ik zoeken binnen mijn sociale kaart?</h1>
             <p class="accordion_content">
-                U kunt ook zoeken binnen uw eigen kaart. Dit doet u door de knop <i>Zoeken binnen uw kaart</i> aan te klikken. De zoekresultaten worden dan beperkt tot de favorieten.
+                Door in de rode balk bij <i>Zoeken in</i> te kiezen voor <i>Mijn sociale kaart</i> zult u via het standaard zoekformulier kunnen zoeken in uw sociale kaart. Als u via de knop <i>Mijn sociale kaart</i> naar uw kaart bent genavigeerd zal <i>Zoeken in</i> zich automatisch aanpassen naar het zoeken in uw sociale kaart.
             </p>
         </section>
         <section>
-            <h1>Hoe kan ik <i>mijn kaart</i> in het geheel bekijken?</h1>
+            <h1>Hoe kan ik <i>mijn sociale kaart</i> in het geheel bekijken?</h1>
             <p class="accordion_content">
-                Als u op <i>mijn kaart</i>  klikt in de menubalk dan wordt uw kaart getoond. Vanuit deze lijst kunt u categorieën aanklikken of individuele zorgverleners.
+                Als u op <i>Mijn sociale kaart</i> klikt dan wordt uw sociale kaart getoond. Vanuit deze lijst kunt u categorieën aanklikken of individuele zorgverleners. Ook kunt u vanuit deze weergave direct via het standaard zoekformulier uw sociale kaart doorzoeken.
             </p>
         </section>
         <section>
-            <h1>Kan ik landelijk zoeken? *</h1>
+            <h1>Hoe kan ik landelijk zoeken? *</h1>
             <p class="accordion_content">
-                Klik op de knop <i>Landelijk zoeken</i> in de menubalk om uw zoekopdracht toe te passen op alle zorgverleners in Nederland. Vanwege praktische redenen zullen de getoonde zoekresultaten worden beperkt tot 500. 
+                Door in de rode balk bij <i>Zoeken in</i> te kiezen voor <i>Het hele land</i> zult u via het standaard zoekformulier het hele land kunnen doorzoeken.
             </p>
         </section>
         <section>
             <h1>Ik werk in verschillende praktijken, hoe gaat het socialekaart.care hiermee om? *</h1>
             <p class="accordion_content">
-                Als u werkzaam bent bij meerdere praktijken kunt u deze invoeren. Dit heeft als voordeel dat de zoekfunctie de betreffende praktijk waar u op dat moment werkt als uitgangspunt neemt. Klik in het menu <i>Account</i> op <i>Instellingen</i> om de praktijken op te voeren. U kunt dan vervolgens vanuit de menubalk één van de praktijken selecteren die als centraal punt dient voor de zoekmachine.
+                Als u werkzaam bent bij meerdere praktijken kunt u deze opvoeren. Dit heeft als voordeel dat de zoekfunctie de betreffende praktijk waar u op dat moment werkt als uitgangspunt neemt. Klik in het menu <i>Account</i> op <i>Instellingen</i> om de praktijken op te voeren. Als u dit gedaan heeft kunt u vervolgens vanuit de menubalk één van de praktijken selecteren die als centraal punt dient voor de zoekmachine.
+                <br />
+                <br />
+                Ook zullen de zorgverleners die u toevoegd aan uw sociale kaart allee weergegeven worden als u de praktijk hebt geselecteerd van waar u ze hebt toegevoegd. U kunt zo per praktijk een aparte eigen sociale kaart beheren.
             </p>
         </section>
         <section>
-            <h1>Waar worden persoonlijke e-mailadressen voor gebruikt?</h1>
+            <h1>Waar worden e-mailadressen voor gebruikt?</h1>
             <p class="accordion_content">
-                Als u een gebruiker aanmaakt moet u ook een e-mailadres opgeven zodat we deze gebruiker een login link kunnen sturen. Via deze link kan de gebruiker zijn/haar wachtwoord instellen. Ook als uw abonnement verloopt zal deze gebruiker een e-mail krijgen met de de boodschap dat hij/zij niet meer kan inloggen in het systeem.
+                E-mailadressen die u op een zorgverlener opslaat worden weergegeven bij de zoekresultaten.
+                <br />
+                <br />
+                E-mailadressen die u opgeeft voor nieuwe gebruikers zullen alleen gebruikt worden om deze nieuwe gebruikers informatie te sturen over hun account.
+            </p>
+        </section>
+        <section>
+            <h1>Wie kan de notitie zien die ik toevoeg aan een zorgverlener?</h1>
+            <p class="accordion_content">
+                Alleen u en de gebruikers die u eventueel aanmaakt.
             </p>
         </section>
         <section>
