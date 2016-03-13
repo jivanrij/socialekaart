@@ -312,8 +312,8 @@ function setupMapDefault() {
     window.blackIcon = L.icon({
         iconUrl: '/sites/all/modules/custom/gojira/js/images/gojira_marker_self.png',
         shadowUrl: '/sites/all/modules/custom/gojira/js/images/markers-shadow.png',
-        iconSize: [22, 30], // size of the icon
-        shadowSize: [24, 15], // size of the shadow
+        iconSize: [24, 32], // size of the icon
+        shadowSize: [26, 17], // size of the shadow
         iconAnchor: [11, 23], // point of the icon which will correspond to marker's location
         shadowAnchor: [4, 8], // the same for the shadow
         popupAnchor: [-2, -23] // point from which the popup should open relative to the iconAnchor
@@ -359,18 +359,21 @@ function setupMapDefault() {
     window.markers = new L.FeatureGroup();
     window.map.addLayer(window.markers);
 
-    // let's add self to the map, but not to the featuregroup, self will always be displayed
+    window.self_marker = new L.FeatureGroup();
+    window.map.addLayer(window.self_marker);
+
     if (Drupal.settings.gojira.show_self) {
-        var marker = L.marker([Drupal.settings.gojira.latitude, Drupal.settings.gojira.longitude], {icon: window.blackIcon})
+        var self_marker = L.marker([Drupal.settings.gojira.latitude, Drupal.settings.gojira.longitude], {icon: window.blackIcon})
                 .setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150})
                 .on('click', function () {
                     this.toggleBouncing();
                 }).addTo(window.map);
 
-        window.markers.addLayer(marker);
+        window.self_marker.addLayer(self_marker);
     }
     jQuery(window).trigger('resize');
 }
+
 
 // trigger the ajax search call & handle it and then binds new func. by calling the bind function.
 // Also set's the map up with the setupMapDefault function
@@ -382,7 +385,7 @@ function bindGojirasearch() {
 }
 
 function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
-
+    
     if (jQuery("#search_type_select").val() == 'ownlist') {
         doLocationsetSearchCall();
         return;
@@ -430,12 +433,6 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
             }
 
             jQuery('#ajax_search_results').html(data.results_html);
-
-            if (data.mapSearchResultsCount == 1) {
-                // no results, only our own practice
-                closeOverlay();
-                return;
-            }
 
             populateMap(data.mapSearchResults, data.mapSearchResultsCount);
 
@@ -966,6 +963,8 @@ function populateMap(searchresults, count) {
         if (typeof thisResult.la == 'string') {
 
             if (thisResult.x && thisResult.c > 0) {
+                alert('I am a merged marker with self as a part of my items. populateMap function fail.');
+                return;
                 // I am a merged marker with self as a part of my items
                 var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.mixedIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
                 marker.bindPopup(thisResult.h).on('popupopen', function () {
@@ -975,6 +974,7 @@ function populateMap(searchresults, count) {
                 window.markers.addLayer(marker);
             }
             if (thisResult.x && !thisResult.c) {
+                alert('I am just self, and not merged. populateMap function fail.');
                 // I am just self, and not merged
                 var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.blackIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
                 marker.bindPopup('<span class="self_popup_link">Dit is uw eigen praktijk</span>').on('popupopen', function () {
