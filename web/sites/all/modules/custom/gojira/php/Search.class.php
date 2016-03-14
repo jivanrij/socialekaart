@@ -21,7 +21,6 @@ class Search {
 
     public static $instance = null;
     public $toMuchResults = false;
-    public $latLonRadiusInfo = null;
 
     /**
      * Lists of characters thac will be replaced in the searchindex & search terms.
@@ -473,7 +472,7 @@ EOT;
 
             $resultNodes[$result->nid] = $node;
         }
-        
+
         return $resultNodes;
     }
 

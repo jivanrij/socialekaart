@@ -23,7 +23,6 @@ if ($oLocationset) {
                     'd' => 0,
                     's' => 0,
                     'n' => $aLocation->nid,
-                    'x' => 0,
                     't' => $aLocation->title,
                     'lo' => $aLocation->longitude,
                     'la' => $aLocation->latitude

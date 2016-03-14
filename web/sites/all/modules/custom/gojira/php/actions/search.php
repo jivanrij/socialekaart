@@ -63,23 +63,21 @@ function search() {
 
         if (is_null($foundNode->longitude) && is_null($foundNode->latitude)) {
             $location = Location::getLocationObjectOfNode($foundNode->nid);
-            if ($location) {
-                $foundNode->latitude = $location->getLatitude();
-                $foundNode->longitude = $location->getLongitude();
+            $foundNode->latitude = $location->getLatitude();
+            $foundNode->longitude = $location->getLongitude();
+        }
 
-                if (is_null($latLow) || $foundNode->latitude <= $latLow) {
-                    $latLow = $foundNode->latitude;
-                }
-                if (is_null($lonLow) || $foundNode->longitude <= $lonLow) {
-                    $lonLow = $foundNode->longitude;
-                }
-                if (is_null($latHigh) || $foundNode->latitude >= $latHigh) {
-                    $latHigh = $foundNode->latitude;
-                }
-                if (is_null($lonHigh) || $foundNode->longitude >= $lonHigh) {
-                    $lonHigh = $foundNode->longitude;
-                }
-            }
+        if (is_null($latLow) || $foundNode->latitude <= $latLow) {
+            $latLow = $foundNode->latitude;
+        }
+        if (is_null($lonLow) || $foundNode->longitude <= $lonLow) {
+            $lonLow = $foundNode->longitude;
+        }
+        if (is_null($latHigh) || $foundNode->latitude >= $latHigh) {
+            $latHigh = $foundNode->latitude;
+        }
+        if (is_null($lonHigh) || $foundNode->longitude >= $lonHigh) {
+            $lonHigh = $foundNode->longitude;
         }
 
         $searchResults[] = array(
@@ -168,22 +166,20 @@ function search() {
     $output['single_location'] = $single_location;
 
     if (!is_null($latLow) && !is_null($lonLow) && !is_null($latHigh) && !is_null($lonHigh)) {
-        Search::getInstance()->latLonRadiusInfo = array(
+        $output['boxInfo'] = array(
             'latLow' => $latLow,
             'lonLow' => $lonLow,
             'latHigh' => $latHigh,
             'lonHigh' => $lonHigh
         );
-    }else{
-        Search::getInstance()->latLonRadiusInfo = array(
+    } else {
+        $output['boxInfo'] = array(
             'latLow' => $location->latitude,
             'lonLow' => $location->longitude,
             'latHigh' => $location->latitude,
             'lonHigh' => $location->longitude
         );
     }
-
-    $output['boxInfo'] = Search::getInstance()->latLonRadiusInfo;
 
     echo json_encode($output, true);
     exit;
