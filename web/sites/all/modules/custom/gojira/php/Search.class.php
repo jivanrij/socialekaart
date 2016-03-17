@@ -21,7 +21,6 @@ class Search {
 
     public static $instance = null;
     public $toMuchResults = false;
-    public $latLonRadiusInfo = null;
 
     /**
      * Lists of characters thac will be replaced in the searchindex & search terms.
@@ -74,9 +73,6 @@ class Search {
                     // m merged
                     // h merged_html
 
-                    if ($result['x']) {
-                        continue;
-                    }
                     $lastEntry = ($counter == $output['resultcounttotal']);
                     $admin_info = '';
                     $title = $result['t'];
@@ -460,24 +456,7 @@ EOT;
         // put all the results in a nice to handle array
         $counter = 0;
         $resultNodes = array();
-//        $lonLow = null;
-//        $lonHigh = null;
-//        $latLow = null;
-//        $latHigh = null;
         foreach ($results as $result) {
-
-//            if (is_null($latLow) || $result->lat <= $latLow) {
-//                $latLow = $result->lat;
-//            }
-//            if (is_null($lonLow) || $result->lon <= $lonLow) {
-//                $lonLow = $result->lon;
-//            }
-//            if (is_null($latHigh) || $result->lat >= $latHigh) {
-//                $latHigh = $result->lat;
-//            }
-//            if (is_null($lonHigh) || $result->lon >= $lonHigh) {
-//                $lonHigh = $result->lon;
-//            }
 
             $distance = $result->distance;
             $score = $result->score;
@@ -491,20 +470,12 @@ EOT;
 
             $node = node_load($result->nid);
             $node->score = $score;
-            $node->self = false;
             $node->distance = $distance;
-            $node->latitude = $lat;
-            $node->longitude = $lon;
+            $node->latitude = $result->lat;
+            $node->longitude = $result->lon;
 
             $resultNodes[$result->nid] = $node;
         }
-
-//        Search::getInstance()->latLonRadiusInfo = array(
-//            'latLow' => $latLow,
-//            'lonLow' => $lonLow,
-//            'latHigh' => $latHigh,
-//            'lonHigh' => $lonHigh
-//        );
 
         return $resultNodes;
     }
@@ -767,6 +738,9 @@ EOT;
             if ($_GET['type'] == helper::SEARCH_TYPE_OWNLIST) {
                 return helper::SEARCH_TYPE_OWNLIST;
             }
+        }
+        if ($_GET['q'] == helper::SEARCH_TYPE_OWNLIST) {
+            return helper::SEARCH_TYPE_OWNLIST;
         }
         if (Locationsets::onLocationset()) {
             return helper::SEARCH_TYPE_OWNLIST;

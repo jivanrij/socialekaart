@@ -392,7 +392,11 @@ function gojira_user_login(&$edit, $account) {
   user_save($account);
 
   if(!strstr($_GET['q'], 'user/reset')){
-    drupal_goto('/');
+      if(count(Locationsets::getInstance()->getOwnMapLocations()) > 0){
+          drupal_goto('ownlist');
+      }else{
+          drupal_goto('/');
+      }
   }
 }
 

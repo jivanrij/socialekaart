@@ -97,7 +97,7 @@ class Locationsets {
      * @return type
      */
     public function getLocations($nid = null, $iFilterCategoryId = null, $sFilterWithTags = '') {
-        
+
         $filteredNodes = array();
         if (trim($sFilterWithTags) != '') {
             $tags = explode(' ', urldecode($sFilterWithTags));
@@ -198,26 +198,33 @@ class Locationsets {
         return $aCategories;
     }
 
+    /**
+     * Get's the locations on the current practice based own map
+     * 
+     * @return array
+     */
     public function getOwnMapLocations() {
-        $ownMapLocations = array();
-        $currentPractice = Location::getCurrentLocationNodeObjectOfUser();
+        if (is_null($this->ownMapLocations)) {
+            $ownMapLocations = array();
+            $currentPractice = Location::getCurrentLocationNodeObjectOfUser();
 
-        if (is_null($currentPractice)) {
-            $sPracticeString = '';
-        } else {
-            $sPracticeString = ' and group_location_favorite.pid = ' . $currentPractice->nid . ' ';
-        }
-
-        $results = db_query("select group_location_favorite.nid from group_location_favorite join node on (node.nid = group_location_favorite.nid) where group_location_favorite.gid = :gid {$sPracticeString} order by node.title asc", array(':gid' => Group::getGroupId()))->fetchAll();
-        foreach ($results as $nid) {
-            if ($order_by_title) {
-                $ownMapLocations[] = node_load($nid->nid);
+            if (is_null($currentPractice)) {
+                $sPracticeString = '';
             } else {
-                $ownMapLocations[$nid->nid] = node_load($nid->nid);
+                $sPracticeString = ' and group_location_favorite.pid = ' . $currentPractice->nid . ' ';
             }
-        }
 
-        return $ownMapLocations;
+            $results = db_query("select group_location_favorite.nid from group_location_favorite join node on (node.nid = group_location_favorite.nid) where group_location_favorite.gid = :gid {$sPracticeString} order by node.title asc", array(':gid' => Group::getGroupId()))->fetchAll();
+            foreach ($results as $nid) {
+                if ($order_by_title) {
+                    $ownMapLocations[] = node_load($nid->nid);
+                } else {
+                    $ownMapLocations[$nid->nid] = node_load($nid->nid);
+                }
+            }
+            $this->ownMapLocations = $ownMapLocations;
+        }
+        return $this->ownMapLocations;
     }
 
 }

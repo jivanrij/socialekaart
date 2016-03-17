@@ -63,30 +63,27 @@ function search() {
 
         if (is_null($foundNode->longitude) && is_null($foundNode->latitude)) {
             $location = Location::getLocationObjectOfNode($foundNode->nid);
-            if ($location) {
-                $foundNode->latitude = $location->getLatitude();
-                $foundNode->longitude = $location->getLongitude();
+            $foundNode->latitude = $location->getLatitude();
+            $foundNode->longitude = $location->getLongitude();
+        }
 
-                if (is_null($latLow) || $foundNode->latitude <= $latLow) {
-                    $latLow = $foundNode->latitude;
-                }
-                if (is_null($lonLow) || $foundNode->longitude <= $lonLow) {
-                    $lonLow = $foundNode->longitude;
-                }
-                if (is_null($latHigh) || $foundNode->latitude >= $latHigh) {
-                    $latHigh = $foundNode->latitude;
-                }
-                if (is_null($lonHigh) || $foundNode->longitude >= $lonHigh) {
-                    $lonHigh = $foundNode->longitude;
-                }
-            }
+        if (is_null($latLow) || $foundNode->latitude <= $latLow) {
+            $latLow = $foundNode->latitude;
+        }
+        if (is_null($lonLow) || $foundNode->longitude <= $lonLow) {
+            $lonLow = $foundNode->longitude;
+        }
+        if (is_null($latHigh) || $foundNode->latitude >= $latHigh) {
+            $latHigh = $foundNode->latitude;
+        }
+        if (is_null($lonHigh) || $foundNode->longitude >= $lonHigh) {
+            $lonHigh = $foundNode->longitude;
         }
 
         $searchResults[] = array(
             'd' => $foundNode->distance,
             's' => $foundNode->score,
             'n' => $foundNode->nid,
-            'x' => $foundNode->self,
             't' => $foundNode->title,
             'lo' => $foundNode->longitude,
             'la' => $foundNode->latitude
@@ -96,7 +93,7 @@ function search() {
     $searchResultsJavascript = _merge_and_strip_searchresults_for_js($searchResults, $output['has_tags']);
 
     $output['searchResults'] = $searchResults;
-    $output['resultcounttotal'] = count($searchResults); // minus one because of self
+    $output['resultcounttotal'] = count($searchResults);
     // give the no results found message
     $output['nothing_found_message'] = t('No results found based on the given terms.');
     if (helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_FAVORITES_FIELD)) {
@@ -111,7 +108,6 @@ function search() {
     } else {
         $output['page_length'] = 10;
     }
-
 
     $output['to_much_results_found'] = Search::getInstance()->toMuchResults;
     $output['user_is_admin'] = $user_is_admin;
@@ -170,22 +166,20 @@ function search() {
     $output['single_location'] = $single_location;
 
     if (!is_null($latLow) && !is_null($lonLow) && !is_null($latHigh) && !is_null($lonHigh)) {
-        Search::getInstance()->latLonRadiusInfo = array(
+        $output['boxInfo'] = array(
             'latLow' => $latLow,
             'lonLow' => $lonLow,
             'latHigh' => $latHigh,
             'lonHigh' => $lonHigh
         );
-    }else{
-        Search::getInstance()->latLonRadiusInfo = array(
+    } else {
+        $output['boxInfo'] = array(
             'latLow' => $location->latitude,
             'lonLow' => $location->longitude,
             'latHigh' => $location->latitude,
             'lonHigh' => $location->longitude
         );
     }
-
-    $output['boxInfo'] = Search::getInstance()->latLonRadiusInfo;
 
     echo json_encode($output, true);
     exit;
@@ -213,18 +207,6 @@ function _merge_and_strip_searchresults_for_js($searchResults, $hasTags) {
     // m merged
     // h merged_html
     // always have your own location on the map
-    //$self = Location::getCurrentLocationNodeObjectOfUser();
-    $selfLocation = Location::getCurrentLocationObjectOfUser();
-
-    $searchResults[] = array(
-        'd' => 0,
-        's' => 100,
-        'n' => 1,
-        'x' => 1,
-        't' => 'self',
-        'lo' => $selfLocation->getLongitude(),
-        'la' => $selfLocation->getLatitude()
-    );
 
     $returnArray = array();
 
@@ -281,10 +263,7 @@ function _merge_and_strip_searchresults_for_js($searchResults, $hasTags) {
         if ($return['c'] > 1) {
             $mergedHtml = '';
             foreach ($return['m'] as $mergedOne) {
-                if (isset($mergedOne['x']) && $mergedOne['x'] == '1') {
-                    $selfHtml = '<li class="self_popup_link">' . t('Your own location is also on this spot') . '</li>';
-                    $returnArray[$key]['x'] = '1';
-                } else if ($hasTags) {
+                if ($hasTags) {
                     $iCounter++;
                     $mergedHtml .= '<li id="map_link_to_' . $mergedOne['n'] . '" class="map_link_to "><a onClick="focusLocation(' . $mergedOne['n'] . ');return false;" href="#' . $mergedOne['n'] . '" title="' . $mergedOne['t'] . '">' . $mergedOne['t'] . '</a></li>';
                     $aNodes[] = $mergedOne['n'];

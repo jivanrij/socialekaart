@@ -312,8 +312,8 @@ function setupMapDefault() {
     window.blackIcon = L.icon({
         iconUrl: '/sites/all/modules/custom/gojira/js/images/gojira_marker_self.png',
         shadowUrl: '/sites/all/modules/custom/gojira/js/images/markers-shadow.png',
-        iconSize: [22, 30], // size of the icon
-        shadowSize: [24, 15], // size of the shadow
+        iconSize: [24, 32], // size of the icon
+        shadowSize: [26, 17], // size of the shadow
         iconAnchor: [11, 23], // point of the icon which will correspond to marker's location
         shadowAnchor: [4, 8], // the same for the shadow
         popupAnchor: [-2, -23] // point from which the popup should open relative to the iconAnchor
@@ -359,18 +359,21 @@ function setupMapDefault() {
     window.markers = new L.FeatureGroup();
     window.map.addLayer(window.markers);
 
-    // let's add self to the map, but not to the featuregroup, self will always be displayed
+    window.self_marker = new L.FeatureGroup();
+    window.map.addLayer(window.self_marker);
+
     if (Drupal.settings.gojira.show_self) {
-        var marker = L.marker([Drupal.settings.gojira.latitude, Drupal.settings.gojira.longitude], {icon: window.blackIcon})
+        var self_marker = L.marker([Drupal.settings.gojira.latitude, Drupal.settings.gojira.longitude], {icon: window.blackIcon})
                 .setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150})
                 .on('click', function () {
                     this.toggleBouncing();
                 }).addTo(window.map);
 
-        window.markers.addLayer(marker);
+        window.self_marker.addLayer(self_marker);
     }
     jQuery(window).trigger('resize');
 }
+
 
 // trigger the ajax search call & handle it and then binds new func. by calling the bind function.
 // Also set's the map up with the setupMapDefault function
@@ -430,12 +433,6 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
             }
 
             jQuery('#ajax_search_results').html(data.results_html);
-
-            if (data.mapSearchResultsCount == 1) {
-                // no results, only our own practice
-                closeOverlay();
-                return;
-            }
 
             populateMap(data.mapSearchResults, data.mapSearchResultsCount);
 
@@ -762,15 +759,27 @@ function bindGlobal() {
 
     jQuery('#location_selector').change(function () {
         openOverlay();
+      
         jQuery.ajax({
             type: "POST",
-            url: '/?q=ajax/picklocation',
-            data: {nid: jQuery(this).val()}
-        }).done(function (msg) {
-            if (Drupal.settings.gojira.page == 'ownlist' || jQuery("#gojirasearch_search_term").val().trim().length <= 0) {
-                location.reload();
-            } else {
-                jQuery("#search_form form").trigger('submit');
+            url: '/?q=ajax/picklocation&nid=' + jQuery(this).val(),
+            dataType: 'json',
+            success: function (data) {
+                if (Drupal.settings.gojira.page == 'ownlist' || jQuery("#gojirasearch_search_term").val().trim().length <= 0) {
+                    location.reload();
+                } else {
+                    window.map.removeLayer(window.self_marker);
+                    window.self_marker = new L.FeatureGroup();
+
+                    var self_marker = L.marker([data.latitude, data.longitude], {icon: window.blackIcon})
+                            .setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+                    window.self_marker.addLayer(self_marker);
+
+                    jQuery("#search_form form").trigger('submit');
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                somethingWrongMessage();
             }
         });
     });
@@ -947,7 +956,7 @@ function bindMobileMenu() {
         });
     });
 
-    jQuery("#search_submit_mobile").on('click',function(){
+    jQuery("#search_submit_mobile").on('click', function () {
         var url = '/?s=' + encodeURIComponent(jQuery('#search_term_mobile').val()) + '&m=1&type=' + jQuery('#search_type_select_mobile').val();
         console.log(url);
         window.location = url;
@@ -964,26 +973,33 @@ function populateMap(searchresults, count) {
         var thisResult = searchresults[i];
 
         if (typeof thisResult.la == 'string') {
-
-            if (thisResult.x && thisResult.c > 0) {
-                // I am a merged marker with self as a part of my items
-                var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.mixedIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
-                marker.bindPopup(thisResult.h).on('popupopen', function () {
-                    window.map.panTo(this._latlng);
-                });
-
-                window.markers.addLayer(marker);
-            }
-            if (thisResult.x && !thisResult.c) {
-                // I am just self, and not merged
-                var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.blackIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
-                marker.bindPopup('<span class="self_popup_link">Dit is uw eigen praktijk</span>').on('popupopen', function () {
-                    jQuery('#selected_location_info > div').hide();
-                });
-
-                window.markers.addLayer(marker);
-            }
-            if (!thisResult.x && thisResult.c > 0) {
+//            if (thisResult.x && thisResult.c > 0) {
+//                console.log(thisResult);
+//                alert('I am a merged marker with self as a part of my items. populateMap function fail.');
+//
+//                // I am a merged marker with self as a part of my items
+//                var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.mixedIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+//                marker.bindPopup(thisResult.h).on('popupopen', function () {
+//                    window.map.panTo(this._latlng);
+//                });
+//
+//                window.markers.addLayer(marker);
+//            }
+//            if (thisResult.x && !thisResult.c) {
+//
+//                console.log(thisResult);
+//
+//                alert('I am just self, and not merged. populateMap function fail.');
+//
+//                // I am just self, and not merged
+//                var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.blackIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
+//                marker.bindPopup('<span class="self_popup_link">Dit is uw eigen praktijk</span>').on('popupopen', function () {
+//                    jQuery('#selected_location_info > div').hide();
+//                });
+//
+//                window.markers.addLayer(marker);
+//            }
+            if (thisResult.c > 0) {
                 // Not self, but i am a merged one
                 var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
                 marker.bindPopup(thisResult.h).on('popupopen', function () {
@@ -993,7 +1009,7 @@ function populateMap(searchresults, count) {
 
                 window.markers.addLayer(marker);
             }
-            if (!thisResult.x && !thisResult.c) {
+            if (!thisResult.c) {
                 // Not self, and not a merged one
                 var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
                 marker.bindPopup('<span class="hidden open_location_popup">' + thisResult.n + '</span>').on('popupopen', function () {
@@ -1008,7 +1024,7 @@ function populateMap(searchresults, count) {
     }
 }
 
-function nameSearchformLabel(){
+function nameSearchformLabel() {
     if (Drupal.settings.gojira.page == 'locationsset') {
         if (typeof Drupal.settings.gojira.locationsset_title === 'undefined') {
             jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in uw sociale kaart');
@@ -1027,7 +1043,7 @@ function nameSearchformLabel(){
                 jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in de kaart');
             } else {
                 jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in ' + Drupal.settings.gojira.locationsset_title);
-            }            
+            }
         }
         if (jQuery(this).val() == 'country') {
             jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in het gehele land');
