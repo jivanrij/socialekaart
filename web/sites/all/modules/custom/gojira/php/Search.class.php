@@ -323,7 +323,7 @@ EAT;
         foreach ($labels as $label) {
             $c = self::cleanSearchTag($label);
             if($c !== ''){
-                $cleanTags[] = self::cleanSearchTag($label);
+                $cleanTags[] = $c;
             }
         }
         
