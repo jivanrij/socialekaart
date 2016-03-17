@@ -325,10 +325,14 @@ EAT;
         // clean all tags
         $cleanTags = array();
         foreach ($labels as $label) {
-            $cleanTags[] = self::cleanSearchTag($label);
+            $c = self::cleanSearchTag($label);
+            if($c !== ''){
+                $cleanTags[] = self::cleanSearchTag($label);
+            }
         }
+        
         $labels = helper::cleanArrayWithBlacklist($cleanTags);
-
+        
         if (count($labels) == 0) {
             return array();
         }

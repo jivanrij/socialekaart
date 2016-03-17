@@ -94,11 +94,13 @@ class helper {
     public static function cleanArrayWithBlacklist($words) {
         $blacklist = explode(',', variable_get('gojira_blacklist_search_words'));
         $clean = array();
+        
         foreach ($words as $word) {
             if (!in_array($word, $blacklist)) {
                 $clean[] = $word;
             }
         }
+
         return $clean;
     }
 

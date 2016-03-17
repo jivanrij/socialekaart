@@ -136,7 +136,7 @@ function gojira_configuration_form($form, &$form_state) {
         '#title' => t('Blacklist of words'),
         '#type' => 'textarea',
         '#default_value' => variable_get('gojira_blacklist_search_words', 'de,het,een'),
-        '#description' => 'Here you can save several words to be put on the blacklist for the searchindex.<br />The input should be: word1,word1,shit,bla,bloody,blacklist<br />When building the index of a location, these words will be left out. So new words in the blacklist will be removed from the searchindex after a reindex of the location(s).'
+        '#description' => 'Here you can save several words to be put on the blacklist for the searchindex.<br />The input should be: word1,word1,shit,bla,bloody,blacklist<br />When building the index of a location, these words will be left out. So new words in the blacklist will be removed from the searchindex after a reindex of the location(s). These words will also be stript from the search.'
     );
     $form['api']['postocde_nl_key'] = array(
         '#title' => t('Postcode.nl key'),
