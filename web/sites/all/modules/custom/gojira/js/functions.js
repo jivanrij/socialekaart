@@ -508,12 +508,9 @@ function bindAfterSearch(bind_list, bind_details) {
             e.preventDefault();
             addNewLabel(this);
         });
-
-        jQuery("a.close_button").click(function () {
-            jQuery("#selected_location_info").html('');
-        });
-
     }
+    
+    bindCloseButtons();
 
     jQuery("input.new_label").click(function () {
         if (jQuery(this).val() == 'label toevoegen') {
@@ -759,7 +756,7 @@ function bindGlobal() {
 
     jQuery('#location_selector').change(function () {
         openOverlay();
-      
+
         jQuery.ajax({
             type: "POST",
             url: '/?q=ajax/picklocation&nid=' + jQuery(this).val(),
@@ -783,7 +780,20 @@ function bindGlobal() {
             }
         });
     });
+}
 
+function bindCloseButtons(){
+    jQuery(".close_box").click(function () {
+        if(jQuery(this).parent().hasClass('search_result_wrapper')){
+            // search result close button
+            jQuery("#selected_location_info").html('');
+        }else if(jQuery(this).parent().parent().attr('id') == 'locationset_wrapper'){
+            jQuery("#locationset_wrapper").remove();
+        }else{
+            // result list close button
+            jQuery("#search_results").html('');
+        }
+    });
 }
 
 function bindSuggestlocation() {

@@ -1,0 +1,32 @@
+button.close_box{
+    position: absolute; 
+    right:5px;
+    top:5px;
+    display: inline-block;
+    font: normal normal normal 16px/1 FontAwesome;
+    font-size: 16px;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    border: none;
+    background-color: @color-white;
+    padding:0;
+    &:before{
+        content: "\f00d";
+    }
+    &:hover{
+        color: @color-main;
+    }
+    @media (max-width: @screen-xs-max) {
+        background-color: @color-lightest-grey;
+        right:5px;
+        top:5px;
+    }
+}
+#locationset_wrapper{
+    button.close_box{
+        @media (max-width: @screen-xs-max) {
+            right:10px;
+            top:10px;
+        }
+    }
+}

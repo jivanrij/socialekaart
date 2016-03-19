@@ -883,6 +883,9 @@ body.questions a.active.topic {
     margin-top: 0;
   }
 }
+#selected_location_info .search_result_wrapper {
+  position: relative;
+}
 #selected_location_info .search_result_wrapper br {
   clear: both;
 }
@@ -1195,18 +1198,6 @@ body.questions a.active.topic {
 }
 #selected_location_info .search_result_wrapper .mobile_labels > div.score_20 {
   background-color: #b7072a;
-}
-#selected_location_info .search_result_wrapper a.close_button {
-  position: absolute;
-  right: 20px;
-  top: 10px;
-  font-size: 18px;
-  cursor: pointer;
-}
-@media (min-width: 710px) {
-  #selected_location_info .search_result_wrapper a.close_button {
-    display: none;
-  }
 }
 @media (max-width: 710px) {
   #selected_location_info .search_result_wrapper {
@@ -1576,6 +1567,38 @@ ul.ui-autocomplete li a {
     box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
     -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
     -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  }
+}
+button.close_box {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  display: inline-block;
+  font: normal normal normal 16px/1 FontAwesome;
+  font-size: 16px;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  border: none;
+  background-color: #ffffff;
+  padding: 0;
+}
+button.close_box:before {
+  content: "\f00d";
+}
+button.close_box:hover {
+  color: #b7072a;
+}
+@media (max-width: 710px) {
+  button.close_box {
+    background-color: #f8f8f8;
+    right: 5px;
+    top: 5px;
+  }
+}
+@media (max-width: 710px) {
+  #locationset_wrapper button.close_box {
+    right: 10px;
+    top: 10px;
   }
 }
 /* buttons */

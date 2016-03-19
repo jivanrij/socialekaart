@@ -52,6 +52,7 @@ drupal_add_js(array('gojira' => array('page' => 'locationsset')), 'setting');
 ?>
 <div id="locationset_wrapper" class="rounded">
     <div>
+        <button class="close_box" title="Sluiten"></button>
         <h2><?php echo $sTitle; ?></h2>
         <p><?php echo $sBody; ?></p>
         <?php if (count($aCategories) > 0): ?>

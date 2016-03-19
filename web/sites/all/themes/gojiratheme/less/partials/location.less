@@ -36,8 +36,10 @@
     }
 
     .search_result_wrapper{
-
-        br{
+        
+        position:relative;
+        
+        br{ 
             clear:both;
         }
 
@@ -305,16 +307,6 @@
                 &.score_18{background-color: @color-score-a-lot;}
                 &.score_19{background-color: @color-score-a-lot;}
                 &.score_20{background-color: @color-score-a-lot;}
-            }
-        }
-        a.close_button{
-            position:absolute;
-            right:20px;
-            top:10px;
-            font-size:18px;
-            cursor:pointer;
-            @media (min-width: @screen-xs-max) {
-                display: none;
             }
         }
         @media (max-width: @screen-xs-max) {

@@ -52,8 +52,10 @@ class Search {
 
         $h = '';
         $h .= '<div id="search_result_info">';
+        
         if ($output['has_tags'] || isset($output['loc'])) {
             $h .= '<div id="search_results" class="rounded"><div>';
+            $h .= '<button class="close_box" title="Sluiten"></button>';
             if ($output['resultcounttotal'] >= 1) {
                 $h .= '<p>';
                 $h .= t('Found locations') . ':';
@@ -165,6 +167,7 @@ class Search {
         $yournote = t('Your note:') . '<br />';
         $popupHtml = <<<EAT
 <div id="location_%nid%" class="search_result_wrapper">
+  <button class="close_box" title="Sluiten"></button>
   <div class="grouped">
     <div class="title">
       <h2>%title%</h2>
@@ -190,7 +193,6 @@ class Search {
   <div class="inform">
     {$inform}
   </div>
-  <a class="fa fa-times close_button"></a>
 </div>
 EAT;
 

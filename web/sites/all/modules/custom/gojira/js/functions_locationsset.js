@@ -139,6 +139,8 @@ function bindLocationsset() {
         populateMap(Drupal.settings.gojira.locationsset_filter_results, Drupal.settings.gojira.locationsset_filter_results_count);
     }
 
+    bindCloseButtons();
+
 }
 
 /**
