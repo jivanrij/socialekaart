@@ -55,7 +55,7 @@ class Search {
         
         if ($output['has_tags'] || isset($output['loc'])) {
             $h .= '<div id="search_results" class="rounded"><div>';
-            $h .= '<button class="close_box" title="Sluiten"></button>';
+//            $h .= '<button class="close_box" title="Sluiten"></button>';
             if ($output['resultcounttotal'] >= 1) {
                 $h .= '<p>';
                 $h .= t('Found locations') . ':';
@@ -454,7 +454,7 @@ GROUP BY node.nid ORDER BY score desc, distance asc LIMIT {$limit}
 EOT;
 
         $results = db_query($sql, $aParams);
-
+        
         // put all the results in a nice to handle array
         $counter = 0;
         $resultNodes = array();

@@ -896,6 +896,9 @@ body.questions a.active.topic {
 #selected_location_info .search_result_wrapper > div > div.title {
   margin-top: 10px;
 }
+#selected_location_info .search_result_wrapper > div > div.title h2 {
+  max-width: 350px;
+}
 #selected_location_info .search_result_wrapper > div.adres {
   width: 90%;
   float: left;
@@ -1580,6 +1583,7 @@ button.close_box {
   -webkit-font-smoothing: antialiased;
   border: none;
   background-color: #ffffff;
+  color: #dbdbdb;
   padding: 0;
 }
 button.close_box:before {
