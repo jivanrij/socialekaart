@@ -106,7 +106,7 @@ function search() {
     if ($mobileDetect->isTablet()) {
         $output['page_length'] = 5;
     } else {
-        $output['page_length'] = 5; // TODO make 10
+        $output['page_length'] = 10; // TODO make 10
     }
 
     $output['to_much_results_found'] = Search::getInstance()->toMuchResults;
