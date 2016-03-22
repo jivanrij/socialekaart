@@ -30,11 +30,6 @@ function gojira_theme() {
         'doublelocations' => array('template' => 'templates/doublelocations'),
         'favorites' => array('template' => 'templates/favorites'),
         'passwordthanks' => array('template' => 'templates/passwordthanks'),
-//      'gojirareport_suggested_inactive_locations' => array('template' => 'templates/gojirareport_suggested_inactive_locations'),
-//      'gojirareport_suggested_active_locations' => array('template' => 'templates/gojirareport_suggested_active_locations'),
-//      'gojirareport_double_locations' => array('template' => 'templates/gojirareport_double_locations'),
-//      'gojirareport_location_by_tag' => array('template' => 'templates/gojirareport_location_by_tag'),
-//      'gojirareport_location_by_category' => array('template' => 'templates/gojirareport_location_by_category'),
         'tools' => array('template' => 'templates/tools'),
         'idealreport' => array('template' => 'templates/idealreport'),
         'docu' => array('template' => 'templates/docu'),
@@ -45,7 +40,6 @@ function gojira_theme() {
         'paymentconditions' => array('template' => 'templates/paymentconditions'),
         'locationcheck' => array('template' => 'templates/locationcheck'),
         'subscribe' => array('template' => 'templates/subscribe'),
-        //'practicecheck' => array('template' => 'templates/practicecheck'),
         'idealpay' => array('template' => 'templates/idealpay'),
         'idealreturn' => array('template' => 'templates/idealreturn'),
         'idealfail' => array('template' => 'templates/idealfail'),
@@ -86,7 +80,6 @@ function gojira_menu() {
     $items['ownlist'] = array('access arguments' => array(helper::PERMISSION_PERSONAL_LIST), 'page callback' => 'ownlist', 'title' => t('Own list'), 'type' => MENU_NORMAL_ITEM, 'description' => t('The personal list of the docter'));
     $items['favorites'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'favorites', 'title' => t('Favorites'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Shows all the favorites'));
     $items['register'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'register', 'title' => t('Register'), 'description' => t('Register an account.'));
-    //$items['practicecheck'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'practicecheck', 'title' => t('Practice check'), 'description' => t('Check if your practice is known in socialekaart.care.'));
     $items['conditions'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'conditions', 'title' => t('Terms & Conditions'), 'description' => t('Terms & conditions page.'));
     $items['paymentconditions'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'paymentconditions', 'title' => t('Payment terms & conditions'), 'description' => t('Payment terms & conditions page.'));
     $items['locationcheck'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'locationcheck', 'title' => t('Check location'), 'description' => t('Check the availibility of a location.'));
@@ -109,7 +102,6 @@ function gojira_menu() {
     // AJAX
     $items['ajax/search'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'search', 'title' => t('Search'), 'type' => MENU_NORMAL_ITEM);
     $items['ajax/locationtags'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'locationtags', 'title' => t('Set tags'), 'type' => MENU_NORMAL_ITEM);
-    $items['ajax/switchfavorites'] = array('access arguments' => array(helper::PERMISSION_PERSONAL_LIST), 'page callback' => 'switchfavorites', 'title' => t('Switch only show favorites'), 'type' => MENU_NORMAL_ITEM);
     $items['ajax/postcodesuggest'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'postcodesuggest', 'title' => t('Postcode suggest'), 'type' => MENU_NORMAL_ITEM);
     $items['ajax/checklocation'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'checklocation', 'title' => t('Check location info'), 'type' => MENU_NORMAL_ITEM);
     $items['ajax/showtutorial'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'showtutorial', 'title' => t('Show the tutorial'), 'type' => MENU_NORMAL_ITEM);

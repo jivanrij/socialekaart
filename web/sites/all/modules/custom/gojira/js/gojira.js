@@ -23,6 +23,7 @@ jQuery(function () {
 
         if (Drupal.settings.gojira.page == 'locationsset') {
             bindLocationsset();
+            bindGojirasearch();
         }
 
         if (Drupal.settings.gojira.page == 'showlocation') {

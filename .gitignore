@@ -7,3 +7,4 @@ web/sites/*/private
 /web/nbproject/private/
 /nbproject/private/
 nbproject
+tmp

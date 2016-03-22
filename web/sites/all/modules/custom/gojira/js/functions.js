@@ -380,21 +380,19 @@ function setupMapDefault() {
 function bindGojirasearch() {
     jQuery("#search_form form").submit(function (e) {
         e.preventDefault();
-        doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 0);
+        if(Drupal.settings.gojira.page !== 'locationsset'){
+            // not on my map
+           doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()));
+        }else{
+            // on my map, so go off it because this is a normal search action
+            var s = encodeURIComponent(jQuery('#gojirasearch_search_term').val());
+            window.location = '/?s=' + s;
+        }
+        
     });
 }
 
-function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
-
-    if (jQuery("#search_type_select").val() == 'ownlist') {
-        doLocationsetSearchCall();
-        return;
-    }
-
-    if (typeof extra_ajax_info == 'undefined') {
-        var extra_ajax_info = "";
-    }
-
+function doSearchCall(searchFor) {
     openOverlay();
 
     if (searchFor == 'ownlist') {
@@ -407,23 +405,12 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
         jQuery('#search_result_info').hide();
     }
 
-    // force a search in the area of the user
-    if (search_own_area) {
-        searchFor = searchFor + '&check_city=0';
-    }
-
-    if (searchFor != 'favorites') {
-        jQuery('ul.menu li a.active').removeClass('active');
-    }
-
     window.map.removeLayer(window.markers);
     window.markers = new L.FeatureGroup();
     window.map.addLayer(window.markers);
 
-    var type = '&type=' + jQuery("#search_type_select").val();
-
     jQuery.ajax({
-        url: '/?q=ajax/search&s=' + searchFor + type + extra_ajax_info,
+        url: '/?q=ajax/search&s=' + searchFor,
         type: 'GET',
         dataType: 'json',
         success: function (data) {
@@ -445,7 +432,7 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
                 ]);
             }
 
-            bindAfterSearch();
+            bindAfterSearch(true,true,data.s);
 
             if (data.single_location) {
                 jQuery('#loc_' + data.by_id).click();
@@ -461,7 +448,7 @@ function doSearchCall(searchFor, search_own_area, extra_ajax_info) {
 }
 
 // function to bind everything after a search is done
-function bindAfterSearch(bind_list, bind_details) {
+function bindAfterSearch(bind_list, bind_details, query) {
 
     if (typeof bind_list == 'undefined') {
         bind_list = true;
@@ -491,6 +478,15 @@ function bindAfterSearch(bind_list, bind_details) {
             e.preventDefault();
             doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 1);
         });
+        
+        jQuery("#switch_to_region_search").on('click',function(e){
+            e.preventDefault();
+            window.location = '/?s='+query+'&search_type=region';
+        });
+        jQuery("#switch_to_country_search").on('click',function(e){
+            e.preventDefault();
+            window.location = '/?s='+query+'&search_type=country';
+        });        
     }
 
     if (bind_details) {
@@ -737,8 +733,6 @@ function bindGlobal() {
 
     bindAutocompleteAllTags("#gojirasearch_search_term");
 
-    nameSearchformLabel();
-
     // prevent the menu with a dropdown option to do something on a click
     jQuery('ul.menu li.expanded > a, #maps_hover_icon').click(function (e) {
         e.preventDefault();
@@ -967,7 +961,7 @@ function bindMobileMenu() {
     });
 
     jQuery("#search_submit_mobile").on('click', function () {
-        var url = '/?s=' + encodeURIComponent(jQuery('#search_term_mobile').val()) + '&m=1&type=' + jQuery('#search_type_select_mobile').val();
+        var url = '/?s=' + encodeURIComponent(jQuery('#search_term_mobile').val()) + '&m=1';
         console.log(url);
         window.location = url;
     });
@@ -983,32 +977,6 @@ function populateMap(searchresults, count) {
         var thisResult = searchresults[i];
 
         if (typeof thisResult.la == 'string') {
-//            if (thisResult.x && thisResult.c > 0) {
-//                console.log(thisResult);
-//                alert('I am a merged marker with self as a part of my items. populateMap function fail.');
-//
-//                // I am a merged marker with self as a part of my items
-//                var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.mixedIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
-//                marker.bindPopup(thisResult.h).on('popupopen', function () {
-//                    window.map.panTo(this._latlng);
-//                });
-//
-//                window.markers.addLayer(marker);
-//            }
-//            if (thisResult.x && !thisResult.c) {
-//
-//                console.log(thisResult);
-//
-//                alert('I am just self, and not merged. populateMap function fail.');
-//
-//                // I am just self, and not merged
-//                var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.blackIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
-//                marker.bindPopup('<span class="self_popup_link">Dit is uw eigen praktijk</span>').on('popupopen', function () {
-//                    jQuery('#selected_location_info > div').hide();
-//                });
-//
-//                window.markers.addLayer(marker);
-//            }
             if (thisResult.c > 0) {
                 // Not self, but i am a merged one
                 var marker = L.marker([thisResult.la, thisResult.lo], {icon: window.redIcon}).setBouncingOptions({bounceHeight: 1, contractHeight: 3, bounceSpeed: 20, contractSpeed: 150}).addTo(window.map);
@@ -1032,34 +1000,4 @@ function populateMap(searchresults, count) {
             window.markerMapping[thisResult.n] = marker._leaflet_id;
         }
     }
-}
-
-function nameSearchformLabel() {
-    if (Drupal.settings.gojira.page == 'locationsset') {
-        if (typeof Drupal.settings.gojira.locationsset_title === 'undefined') {
-            jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in uw sociale kaart');
-        } else {
-            jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in ' + Drupal.settings.gojira.locationsset_title);
-        }
-    } else {
-        jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in de regio');
-    }
-    jQuery("#search_type_select, #search_type_select_mobile").change(function () {
-        if (jQuery(this).val() == 'ownlist') {
-            jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in uw sociale kaart');
-        }
-        if (jQuery(this).val() == 'locationset') {
-            if (typeof Drupal.settings.gojira.locationsset_title === 'undefined') {
-                jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in de kaart');
-            } else {
-                jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in ' + Drupal.settings.gojira.locationsset_title);
-            }
-        }
-        if (jQuery(this).val() == 'country') {
-            jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in het gehele land');
-        }
-        if (jQuery(this).val() == 'region') {
-            jQuery("#gojirasearch_search_term, #form-mobile-search input[name=s]").attr('placeholder', 'Zoek in de regio');
-        }
-    });
 }

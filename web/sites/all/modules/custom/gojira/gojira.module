@@ -81,7 +81,6 @@ include ('php/actions/settings_thanks.php');
 include ('php/actions/showtutorial.php');
 include ('php/actions/suggestlocation.php');
 include ('php/actions/suggestlocationthanks.php');
-include ('php/actions/switchfavorites.php');
 include ('php/actions/singlesearchresult.php');
 include ('php/actions/switchglobalsearch.php');
 include ('php/actions/unlikelabel.php');
@@ -175,7 +174,7 @@ function gojira_css_alter(&$css) {
 function gojira_init() {
 
   global $user;
-
+  
   if(!user_is_logged_in() && (helper::getIEVersion() == 8 OR helper::getIEVersion() == 9))
   {
     drupal_add_js(array('gojira' => array('browserwarning' => 1)), 'setting');
@@ -307,6 +306,19 @@ function gojira_init() {
     if(isset($_GET['loc']) && is_numeric($_GET['loc'])){
       drupal_add_js(array('gojira' => array('showLoc' => $_GET['loc'])), 'setting');
     }
+    
+    if(isset($_GET['search_type'])){
+        $user = user_load($user->uid);
+        $field = GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD;
+        $fieldValue = $user->$field;
+        if($_GET['search_type'] == 'region'){
+            $fieldValue[LANGUAGE_NONE][0]['value'] = 0;
+        }else{
+            $fieldValue[LANGUAGE_NONE][0]['value'] = 1;
+        }
+        $user->$field = $fieldValue;
+        user_save($user);
+    }
 
     Map::setMapInfo($_GET['q']);
   }
@@ -387,8 +399,7 @@ function gojira_user_login(&$edit, $account) {
   // by remiving this, remember! -> put it to 0 when unsubscribing..
   $searchGlobalField = GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD;
   $account->$searchGlobalField = array(LANGUAGE_NONE => array(0 => array('value' => 0)));
-  $searchFavoritesField = GojiraSettings::CONTENT_TYPE_SEARCH_FAVORITES_FIELD;
-  $account->$searchFavoritesField = array(LANGUAGE_NONE => array(0 => array('value' => 0)));
+
   user_save($account);
 
   if(!strstr($_GET['q'], 'user/reset')){

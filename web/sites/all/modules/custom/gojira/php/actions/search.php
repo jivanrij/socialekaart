@@ -31,7 +31,7 @@ function search() {
         // we have been given a nid as a tag, let's show a single location
         $output['by_id'] = $_GET['s'];
         $foundNodes[$_GET['s']] = node_load($_GET['s']);
-    } else if (isset($_GET['s']) && $_GET['s'] != '' && isset($_GET['type'])) {
+    } else if (isset($_GET['s']) && $_GET['s'] != '') {
 
         // NORMAL SEARCH
 
@@ -44,11 +44,11 @@ function search() {
                 $filteredTags[] = $tag;
             }
         }
-
+        
         // get all the nodes based on the normal tags
-        $foundNodes = Search::getInstance()->doSearch($filteredTags, $_GET['type']);
+        $foundNodes = Search::getInstance()->doSearch($filteredTags);
 
-        $output['s'] = implode(', ', $filteredTags);
+        $output['s'] = implode(' ', $filteredTags);
     } else {
         $output['has_tags'] = false;
     }
@@ -63,20 +63,25 @@ function search() {
 
         if (is_null($foundNode->longitude) && is_null($foundNode->latitude)) {
             $location = Location::getLocationObjectOfNode($foundNode->nid);
-            $foundNode->latitude = $location->getLatitude();
-            $foundNode->longitude = $location->getLongitude();
+            if($location){
+                $foundNode->latitude = $location->getLatitude();
+                $foundNode->longitude = $location->getLongitude();
+            }else{
+                $foundNode->latitude = null;
+                $foundNode->longitude = null;
+            }
         }
 
-        if (is_null($latLow) || $foundNode->latitude <= $latLow) {
+        if ((is_null($latLow) || $foundNode->latitude <= $latLow) && !is_null($foundNode->latitude)) {
             $latLow = $foundNode->latitude;
         }
-        if (is_null($lonLow) || $foundNode->longitude <= $lonLow) {
+        if ((is_null($lonLow) || $foundNode->longitude <= $lonLow)  && !is_null($foundNode->longitude)) {
             $lonLow = $foundNode->longitude;
         }
-        if (is_null($latHigh) || $foundNode->latitude >= $latHigh) {
+        if ((is_null($latHigh) || $foundNode->latitude >= $latHigh)  && !is_null($foundNode->latitude)) {
             $latHigh = $foundNode->latitude;
         }
-        if (is_null($lonHigh) || $foundNode->longitude >= $lonHigh) {
+        if ((is_null($lonHigh) || $foundNode->longitude >= $lonHigh)  && !is_null($foundNode->longitude)) {
             $lonHigh = $foundNode->longitude;
         }
 
@@ -96,17 +101,12 @@ function search() {
     $output['resultcounttotal'] = count($searchResults);
     // give the no results found message
     $output['nothing_found_message'] = t('No results found based on the given terms.');
-    if (helper::value($user, GojiraSettings::CONTENT_TYPE_SEARCH_FAVORITES_FIELD)) {
-        $output['nothing_found_message'] = t('No results found based on the given terms within your favorite locations. ');
-    } else if (isset($_GET['s']) && $_GET['s'] == 'favorites') {
-        $output['nothing_found_message'] = t('You have no favorites. ');
-    }
 
     $mobileDetect = new Mobile_Detect();
     if ($mobileDetect->isTablet()) {
         $output['page_length'] = 5;
     } else {
-        $output['page_length'] = 10;
+        $output['page_length'] = 5; // TODO make 10
     }
 
     $output['to_much_results_found'] = Search::getInstance()->toMuchResults;
@@ -151,17 +151,11 @@ function search() {
         $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_STREET; // show street level
     }
 
-    if (isset($_GET['s']) && ($_GET['s'] == 'favorites')) {
-        $output['search_favorites'] = 1;
-    }
-
-
     if (isset($_GET['s']) && ($_GET['s'] == 'locationsset')) {
         $output['results_html'] = '';
     } else {
         $output['results_html'] = Search::getInstance()->getResultListHtml($output);
     }
-
 
     $output['single_location'] = $single_location;
 
@@ -180,7 +174,6 @@ function search() {
             'lonHigh' => $location->longitude
         );
     }
-
     echo json_encode($output, true);
     exit;
 }

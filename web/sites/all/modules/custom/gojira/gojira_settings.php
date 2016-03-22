@@ -5,7 +5,6 @@ class GojiraSettings
     
     // watchdog options types
     const WATCHDOG_IDEAL = 'iDeal issue';
-    const WATCHDOG_HAWEB_SSO = 'HAweb SSO issue';
     const WATCHDOG_SUBSCRIPTIONS = 'Sunbscription issue';
     const WATCHDOG_LOCATION = 'Location related';
     
@@ -66,7 +65,6 @@ class GojiraSettings
     const CONTENT_TYPE_USER_TITLE = 'field_user_title'; // the user is a doctor
     const CONTENT_TYPE_IS_DOCTOR_FIELD = 'field_is_doctor'; // the user is a doctor
     const CONTENT_TYPE_CONDITIONS_AGREE_FIELD = 'field_agree_conditions'; // the user has agreed to the conditions
-    const CONTENT_TYPE_SEARCH_FAVORITES_FIELD = 'field_search_favorites'; // user want's to search in the favorites
     const CONTENT_TYPE_SEARCH_GLOBAL_FIELD = 'field_search_global'; // user want's to search on a global level
     const CONTENT_TYPE_HAS_MULTIPLE_LOCATIONS_FIELD = 'field_has_multiple_locations'; // user want's to handle multiple locations on his account
     const CONTENT_TYPE_BIG_FIELD = 'field_big'; // users big number

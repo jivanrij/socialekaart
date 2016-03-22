@@ -54,6 +54,12 @@ drupal_add_js(array('gojira' => array('page' => 'locationsset')), 'setting');
     <div>
         <button class="close_box" title="Sluiten"></button>
         <h2><?php echo $sTitle; ?></h2>
+        
+        <form id="search_ownmap_form">
+            <input class="rounded unshadow" placeholder="Zoek in uw sociale kaart" name="search_ownmap" id="search_ownmap" />
+            <button class="fa"></button>
+        </form>
+        
         <p><?php echo $sBody; ?></p>
         <?php if (count($aCategories) > 0): ?>
             <label id="locations"><?php echo t("Show locations of specific category:"); ?></label>

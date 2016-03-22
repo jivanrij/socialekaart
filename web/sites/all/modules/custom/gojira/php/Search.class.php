@@ -137,6 +137,11 @@ class Search {
                 $h .= '<p>' . $output['nothing_found_message'] . '</p>';
             }
 
+            if (helper::value($oUser, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) { // user searches on a country level
+                $h .= '<div id="search_radius_switcher">U zoekt landelijk, klik <a id="switch_to_region_search">hier</a> om in uw regio te zoeken.</div>'; 
+            }else{
+                $h .= '<div id="search_radius_switcher">U zoekt regionaal, klik <a id="switch_to_country_search">hier</a> om landelijk te zoeken.</div>'; 
+            }
 
             $h .= '</div></div>';
         }
@@ -293,19 +298,21 @@ EAT;
      *
      * @param array $labels
      */
-    public function doSearch($labels, $type = null) {
-
+    public function doSearch($labels, $search_type = null) {
+        
         // set defaults
         global $user;
         $oUser = user_load($user->uid);
 
-        if (is_null($type)) {
-            $type = helper::SEARCH_TYPE_REGION;
+        if (is_null($search_type)) {
+            if (helper::value($oUser, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) {
+                $search_type = helper::SEARCH_TYPE_COUNTRY;
+            }else{
+                $search_type = helper::SEARCH_TYPE_REGION;
+            }
         }
 
         $found = array();
-
-        $sCityLabel = null;
 
         // set default return scenarios
         if (count($labels) == 0) {
@@ -384,7 +391,7 @@ EAT;
         $location = Location::getCurrentLocationObjectOfUser(true);
 
         $favoriteFilter = '';
-        if ($type == helper::SEARCH_TYPE_OWNLIST && user_access(helper::PERMISSION_PERSONAL_LIST)) {
+        if ($search_type == helper::SEARCH_TYPE_OWNLIST && user_access(helper::PERMISSION_PERSONAL_LIST)) {
             $favoriteFilter = " AND group_location_favorite.gid = " . Group::getGroupId();
         }
 
@@ -398,14 +405,6 @@ EAT;
         $visible_join = ' join field_data_field_visible_to_other_user on (node.nid = field_data_field_visible_to_other_user.entity_id) join field_data_field_address_city on (node.nid = field_data_field_address_city.entity_id) ';
         $visible_where = " AND field_data_field_visible_to_other_user.field_visible_to_other_user_value = 1 AND field_data_field_visible_to_other_user.bundle = 'location' AND field_data_field_visible_to_other_user.delta = 0 ";
 
-        $sFilterCity = '';
-        if ($sCityLabel) {
-            if (helper::userHasSubscribedRole()) {
-                $aParams[':city'] = $sCityLabel;
-                $sFilterCity = " AND field_data_field_address_city.field_address_city_value = :city ";
-            }
-        }
-
         // query get's all the nodes in radius, maybe only from favorites, but surly visible, and filters them on the nodes with the related tags
         $distance = 0.09;
         $iMinLongitude = ($location->longitude - ($distance * 2));
@@ -415,13 +414,13 @@ EAT;
 
         // only on the region search type we have a limit
         $sql_max_distance = ' ';
-        if ($type == helper::SEARCH_TYPE_REGION) {
+        if ($search_type == helper::SEARCH_TYPE_REGION) {
             $sql_max_distance = " AND (X(point) BETWEEN {$iMinLongitude} AND {$iMaxLongitude} AND Y(point) BETWEEN {$iMinLatitude} AND {$iMaxLatitude}) ";
         }
 
         //make the distance field for the coutry & region search, else distance will be 0
         $sDistanceField = ' 0 as distance ';
-        if ($type == helper::SEARCH_TYPE_REGION || $type == helper::SEARCH_TYPE_COUNTRY) {
+        if ($search_type == helper::SEARCH_TYPE_REGION || $search_type == helper::SEARCH_TYPE_COUNTRY) {
             $lat1 = 'Y(point)';
             $lon1 = 'X(point)';
             $lat2 = $location->latitude;
@@ -448,7 +447,6 @@ WHERE status = 1 AND {$relatedNids}
 {$sql_max_distance}
 {$favoriteFilter}
 {$visible_where}
-{$sFilterCity}
 {$filter}
 GROUP BY node.nid ORDER BY score desc, distance asc LIMIT {$limit}
 EOT;
@@ -791,7 +789,7 @@ EOT;
     public static function searchInOwnMap($tags) {
         $currentPractice = Location::getCurrentLocationNodeObjectOfUser();
         $ownlistLocations = Favorite::getInstance()->getAllFavoriteLocations($currentPractice->nid);
-
+        
         $foundNodes = array();
         $nidsSql = '0';
 

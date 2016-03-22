@@ -27,6 +27,7 @@
                 </select>
             </div>
         
+        <?php if(false): ?>
             <div class="select">
                 <label>Zoeken in:</label>
                 <select id="search_type_select_mobile">
@@ -36,6 +37,8 @@
                     <?php if (user_access(helper::PERMISSION_SEARCH_GLOBAL)): ?><option <?php echo ((Search::getSearchTypeBasedOnQuery()==helper::SEARCH_TYPE_COUNTRY) ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_COUNTRY; ?>">het hele land</option><?php endif; ?>
                 </select>
             </div>
+        <?php endif; ?>
+        
         <?php endif; ?>
 
     </div>

@@ -121,7 +121,7 @@ function bindLocationsset() {
 
                 bindAfterSearch(false, true);
 
-                jQuery("#search_result_info").css('top', top + 'px');
+                //jQuery("#search_result_info").css('top', top + 'px');
 
                 jQuery(window).trigger('resize');
 
@@ -147,7 +147,7 @@ function bindLocationsset() {
  * Corrects the height of the searchresult of the locationset
  */
 function correctHeightForLocationsetSearchResult() {
-    var top = 90 + parseInt(jQuery('#locationset_wrapper').css('height').replace('px', ''));
+    var top = 54 + parseInt(jQuery('#locationset_wrapper').css('height').replace('px', ''));
     jQuery("#search_result_info").css("top", top + "px");
 }
 
@@ -209,33 +209,14 @@ function getCategoryLocations(locationsset_id, cat_id) {
     });
 }
 function bindLocationsetSearch() {
-    jQuery("#search_form form").submit(function (e) {
+    jQuery("form#search_ownmap_form").on('submit', function(e){
         e.preventDefault();
-        doLocationsetSearchCall();
+        
+        var s = encodeURIComponent(jQuery('#search_ownmap').val());
+        url = window.location.pathname + '?filter=' + s;
+
+        url = '/?q=ownlist&filter=' + s; // TODO remove
+
+        window.location = url;
     });
-}
-
-function doLocationsetSearchCall() {
-    openOverlay();
-
-    var s = encodeURIComponent(jQuery('#gojirasearch_search_term').val());
-
-    var url = '';
-
-    if (jQuery("#search_type_select").val() == 'locationset') {
-        url = '/?q=HW' + '&filter=' + s; // TODO REMOVE
-        //url = window.location.pathname + '?filter=' + s;
-    }
-    if (jQuery("#search_type_select").val() == 'ownlist') {
-        url = '/?q=ownlist' + '&filter=' + s; // TODO REMOVE
-        //url = window.location.pathname + '?filter=' + s;
-    }
-    if (jQuery("#search_type_select").val() == 'country') {
-        url = '/?s=' + s + '&type=country';
-    }
-    if (jQuery("#search_type_select").val() == 'region') {
-        url = '/?s=' + s + '&type=region';
-    }
-
-    window.location = url
 }

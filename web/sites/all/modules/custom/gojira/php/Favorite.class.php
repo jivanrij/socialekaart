@@ -50,6 +50,7 @@ class Favorite {
             }
 
             $results = db_query("select group_location_favorite.nid from group_location_favorite join node on (node.nid = group_location_favorite.nid) where group_location_favorite.gid = :gid {$sPracticeString} order by node.title asc", array(':gid' => Group::getGroupId()))->fetchAll();
+            
             foreach ($results as $nid) {
                 $this->favoriteLocations[$nid->nid] = node_load($nid->nid);
             }
@@ -114,30 +115,6 @@ class Favorite {
     public function removeFromFavorite($nid) {
         $params = array(':nid' => $nid, ':gid' => Group::getGroupId());
         db_query("DELETE FROM `group_location_favorite` WHERE `nid`=:nid AND `gid`=:gid;", $params);
-    }
-
-    /**
-     * Turns filtering on favorites for the user on or off
-     * 
-     * @global uid $user
-     * @param boolean $status
-     */
-    public function turnFavoriteFilter($status) {
-        global $user;
-        $user = user_load($user->uid);
-
-        $field = GojiraSettings::CONTENT_TYPE_SEARCH_FAVORITES_FIELD;
-        $fieldValue = $user->$field;
-
-        if ($status) {
-            $fieldValue[LANGUAGE_NONE][0]['value'] = 1;
-        } else {
-            $fieldValue[LANGUAGE_NONE][0]['value'] = 0;
-        }
-
-        $user->$field = $fieldValue;
-
-        user_save($user);
     }
 
     /**

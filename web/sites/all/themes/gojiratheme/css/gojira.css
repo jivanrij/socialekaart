@@ -746,8 +746,16 @@ a.gbutton:hover {
   overflow: hidden;
 }
 #search_result_info #search_results p {
-  padding: 5px 15px 15px 15px;
+  padding: 10px 15px 15px 15px;
   margin: 0;
+}
+#search_result_info #search_results #search_radius_switcher {
+  padding: 0px 15px 10px 15px;
+  margin: 0;
+}
+#search_result_info #search_results #search_radius_switcher a {
+  text-decoration: underline;
+  cursor: pointer;
 }
 #search_result_info #search_results p.info_text {
   font-size: 11px;
@@ -824,14 +832,20 @@ a.gbutton:hover {
   font-weight: bold;
   padding-left: 5px;
 }
-#search_form form input[type=submit] {
+#search_form form button {
   height: 25px;
-  width: 50px;
+  width: 30px;
   padding: 0;
   float: right;
   margin: 0;
   border: 0;
-  background: url(../img/magnify.png) 10px no-repeat #b7072a;
+  background-color: #b7072a;
+  color: #ffffff;
+  font-size: 14px;
+  padding-left: 0px !important;
+  /*            &:before{
+              content: '\f002';   
+            }*/
 }
 body.questions #questions_content section {
   font-weight: normal;
@@ -1485,7 +1499,7 @@ ul.ui-autocomplete li a {
 #locationset_wrapper {
   left: 10px;
   position: absolute;
-  top: 76px;
+  top: 40px;
   width: 500px;
   z-index: 100;
   background-color: white;
@@ -1537,6 +1551,45 @@ ul.ui-autocomplete li a {
 }
 #locationset_wrapper div #locationsset_locations li:hover {
   text-decoration: underline;
+}
+#locationset_wrapper div form {
+  display: block;
+  clear: both;
+  overflow: hidden;
+  margin-top: 10px;
+}
+#locationset_wrapper div form input {
+  border-width: 1px;
+  border-style: solid;
+  float: left;
+  height: 22px;
+  width: 60%;
+  line-height: 22px;
+  -moz-border-radius-bottomright: 0px;
+  -webkit-border-bottom-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  -moz-border-radius-topright: 0px;
+  -webkit-border-top-right-radius: 0px;
+  border-top-right-radius: 0px;
+}
+#locationset_wrapper div form button {
+  float: left;
+  height: 26px;
+  width: 28px;
+  display: block;
+  background-color: #b7072a;
+  border-width: 0px;
+  color: #ffffff;
+  -moz-border-radius-bottomright: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -webkit-border-top-right-radius: 3px;
+  border-top-right-radius: 3px;
+  font-size: 14px;
+}
+#locationset_wrapper div form button:before {
+  content: '\f002';
 }
 @media (max-width: 710px) {
   #locationset_wrapper {

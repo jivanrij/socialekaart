@@ -136,8 +136,6 @@ function gojira_employeeedit_form_submit($form, &$form_state) {
         );
         $employee = user_save('', $fields);
 
-        $searchFavoritesField = GojiraSettings::CONTENT_TYPE_SEARCH_FAVORITES_FIELD;
-        $employee->$searchFavoritesField = array(LANGUAGE_NONE => array(0 => array('value' => 0)));
         $searchGlobalField = GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD;
         $employee->$searchGlobalField = array(LANGUAGE_NONE => array(0 => array('value' => 0)));
         $conditionsField = GojiraSettings::CONTENT_TYPE_CONDITIONS_AGREE_FIELD;

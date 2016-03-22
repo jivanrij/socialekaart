@@ -1,7 +1,7 @@
 #locationset_wrapper{
     left: 10px;
     position: absolute;
-    top: 76px;
+    top: 40px;
     width: @block-width-md;
     z-index: 100;
     background-color: white;
@@ -53,6 +53,46 @@
             }
             overflow:hidden;
             cursor: pointer;
+        }
+        form{
+            display:block;
+            clear: both;
+            overflow:hidden;
+            margin-top:10px;
+            input{
+                border-width:1px;
+                border-style: solid;
+                float:left;
+                height: 22px;
+                width:60%;
+                line-height: 22px;
+                -moz-border-radius-bottomright: 0px;
+                -webkit-border-bottom-right-radius: 0px;
+                border-bottom-right-radius: 0px;
+                -moz-border-radius-topright: 0px;
+                -webkit-border-top-right-radius: 0px;
+                border-top-right-radius: 0px;
+            }
+            button{
+                float:left;
+                height: 26px;
+                width: 28px;
+                display:block;
+                background-color: @color-main;
+                border-width:0px;
+                color: @color-white;
+                -moz-border-radius-bottomright: 3px;
+                -webkit-border-bottom-right-radius: 3px;
+                border-bottom-right-radius: 3px;
+                -moz-border-radius-topright: 3px;
+                -webkit-border-top-right-radius: 3px;
+                border-top-right-radius: 3px;
+                font-size: 14px;
+                &:before{
+                  content: '\f002';   
+                }
+                
+            }
         }
     }
 
