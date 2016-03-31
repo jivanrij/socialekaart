@@ -142,8 +142,8 @@ class Mailer {
         $sBody = variable_get('gojira_invoice_email', '');
         $sBody = str_replace(array('%invoice_id%', '%doctor%'), array($payment->increment, helper::value($main_doctor, GojiraSettings::CONTENT_TYPE_USER_TITLE)), $sBody);
 
-        if ($invoice_file) {
-            //$email->AddAttachment($invoice_file, 'Factuur_Socialekaart_' . $payment->increment . '.pdf');
+        
+        if (false && $invoice_file) { // let's skip mandril for now
             $attachment = file_get_contents($invoice_file);
             $attachment_encoded = base64_encode($attachment);
             $aInfo['attachments'] = array(
@@ -167,8 +167,26 @@ class Mailer {
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'bcc'
         );
-        $oMailer = new Mailer();
-        $oMailer->send($aInfo);
+
+        
+        if (true) { // let's skip mandril for now dont forget the file_get_contents mandril check
+            $attachment['path'] = $invoice_file;
+            $attachment['name'] = 'Factuur_Socialekaart_' . $payment->increment . '.pdf';
+            Mailer::sendMail(
+                    $send_to_address, // to
+                    variable_get('site_mail', 'info@socialekaart.care'), // from
+                    t('Invoice SocialeKaart.care').' '.$payment->increment, // subject
+                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
+                    $sBody, // content
+                    $attachment,
+                    variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'), // bcc
+                    false // html
+                    );
+        } else {
+            $oMailer = new Mailer();
+            $oMailer->send($aInfo);
+        }
+
     }
 
     /**
@@ -204,8 +222,21 @@ class Mailer {
         );
 
 
-        $oMailer = new Mailer();
-        $oMailer->send($aInfo);
+        if (true) { // let's skip mandril for now
+            Mailer::sendMail(
+                    $aInfo['to'][0]['email'], // to
+                    $aInfo['from_email'], // from
+                    $aInfo['subject'], // subject
+                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
+                    $aInfo['text'], // content
+                    false,
+                    $aInfo['to'][1]['email'], // bcc
+                    false // html
+                    );
+        } else {
+            $oMailer = new Mailer();
+            $oMailer->send($aInfo);
+        }
     }
 
     /**
@@ -240,8 +271,22 @@ class Mailer {
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'bcc'
         );
-        $oMailer = new Mailer();
-        $oMailer->send($aInfo);
+        
+        if (true) { // let's skip mandril for now dont forget the file_get_contents mandril check
+            Mailer::sendMail(
+                    $aInfo['to'][0]['email'], // to
+                    $aInfo['from_email'], // from
+                    $aInfo['subject'], // subject
+                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
+                    $aInfo['text'], // content
+                    false,
+                    $aInfo['to'][1]['email'], // bcc
+                    false // html
+                    );
+        } else {
+            $oMailer = new Mailer();
+            $oMailer->send($aInfo);
+        }
     }
 
     /**
@@ -274,8 +319,22 @@ class Mailer {
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'bcc'
         );
-        $oMailer = new Mailer();
-        $oMailer->send($aInfo);
+        
+        if (true) { // let's skip mandril for now
+            Mailer::sendMail(
+                    $aInfo['to'][0]['email'], // to
+                    $aInfo['from_email'], // from
+                    $aInfo['subject'], // subject
+                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
+                    $aInfo['text'], // content
+                    false,
+                    $aInfo['to'][1]['email'], // bcc
+                    false // html
+                    );
+        } else {
+            $oMailer = new Mailer();
+            $oMailer->send($aInfo);
+        }
     }
 
     /**
@@ -308,8 +367,23 @@ class Mailer {
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'bcc'
         );
-        $oMailer = new Mailer();
-        $oMailer->send($aInfo);
+        
+        
+        if (true) { // let's skip mandril for now
+            Mailer::sendMail(
+                    $aInfo['to'][0]['email'], // to
+                    $aInfo['from_email'], // from
+                    $aInfo['subject'], // subject
+                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
+                    $aInfo['text'], // content
+                    false, // attachment
+                    $aInfo['to'][1]['email'], // bcc
+                    false // html
+                    );
+        } else {
+            $oMailer = new Mailer();
+            $oMailer->send($aInfo);
+        }
     }
 
     /**
@@ -338,8 +412,22 @@ class Mailer {
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'bcc'
         );
-        $oMailer = new Mailer();
-        $oMailer->send($aInfo);
+        
+        if (true) { // let's skip mandril for now
+            Mailer::sendMail(
+                    $aInfo['to'][0]['email'], // to
+                    $aInfo['from_email'], // from
+                    $aInfo['subject'], // subject
+                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
+                    $aInfo['html'], // content
+                    false, // attachment
+                    $aInfo['to'][1]['email'], // bcc
+                    true // html
+                    );
+        } else {
+            $oMailer = new Mailer();
+            $oMailer->send($aInfo);
+        }
     }
 
     /**
@@ -366,8 +454,21 @@ class Mailer {
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'bcc'
         );
-        $oMailer = new Mailer();
-        $oMailer->send($aInfo);
+        if (true) { // let's skip mandril for now
+            Mailer::sendMail(
+                    $aInfo['to'][0]['email'], // to
+                    $aInfo['from_email'], // from
+                    $aInfo['subject'], // subject
+                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
+                    $aInfo['html'], // content
+                    false, // attachment
+                    $aInfo['to'][1]['email'], // bcc
+                    true // html
+                    );
+        } else {
+            $oMailer = new Mailer();
+            $oMailer->send($aInfo);
+        }
     }
 
     /**
@@ -380,7 +481,7 @@ class Mailer {
         $aInfo['from_email'] = 'no-reply@socialekaart.care';
         $aInfo['from_name'] = 'SocialeKaart.care';
         $aInfo['subject'] = 'Vraag van gebruiker ' . $oUser->name . ' over ' . $sTopic;
-        $aInfo['text'] = 'User: ' . helper::value($oUser, GojiraSettings::CONTENT_TYPE_USER_TITLE) . ' with uid: ' . $oUser->uid . '<br /><br />' . $sQuestion;
+
         $aInfo['html'] = 'User: ' . helper::value($oUser, GojiraSettings::CONTENT_TYPE_USER_TITLE) . ' with uid: ' . $oUser->uid . '<br /><br />' . $sQuestion;
         $aInfo['to'][] = array(
             'email' => variable_get('site_mail', 'info@socialekaart.care'),
@@ -392,8 +493,22 @@ class Mailer {
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'bcc'
         );
-        $oMailer = new Mailer();
-        $oMailer->send($aInfo);
+        
+        if (true) { // let's skip mandril for now
+            Mailer::sendMail(
+                    $aInfo['to'][0]['email'], // to
+                    $aInfo['from_email'], // from
+                    $aInfo['subject'], // subject
+                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
+                    $aInfo['html'], // content text/html
+                    false, // attachment
+                    $aInfo['to'][1]['email'], // bcc
+                    true // html
+                    );
+        } else {
+            $oMailer = new Mailer();
+            $oMailer->send($aInfo);
+        }
     }
 
     /**
@@ -424,8 +539,22 @@ EOT;
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'to'
         );
-        $oMailer = new Mailer();
-        $oMailer->send($aInfo);
+        
+        if (true) { // let's skip mandril for now
+            Mailer::sendMail(
+                    $aInfo['to'][0]['email'], // to
+                    $aInfo['from_email'], // from
+                    $aInfo['subject'], // subject
+                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
+                    $aInfo['html'], // content text/html
+                    false, // attachment
+                    false, // bcc
+                    true // html
+                    );
+        } else {
+            $oMailer = new Mailer();
+            $oMailer->send($aInfo);
+        }
     }
 
     /**
@@ -452,8 +581,21 @@ EOT;
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'to'
         );
-        $oMailer = new Mailer();
-        $oMailer->send($aInfo);
+        if (true) { // let's skip mandril for now
+            Mailer::sendMail(
+                    $aInfo['to'][0]['email'], // to
+                    $aInfo['from_email'], // from
+                    $aInfo['subject'], // subject
+                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
+                    $aInfo['text'], // content text/html
+                    false, // attachment
+                    false, // bcc
+                    false // html
+                    );
+        } else {
+            $oMailer = new Mailer();
+            $oMailer->send($aInfo);
+        }
     }
     
     /**
@@ -487,8 +629,22 @@ EOT;
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'to'
         );
-        $oMailer = new Mailer();
-        $oMailer->send($aInfo);
+        
+        if (true) { // let's skip mandril for now
+            Mailer::sendMail(
+                    $aInfo['to'][0]['email'], // to
+                    $aInfo['from_email'], // from
+                    $aInfo['subject'], // subject
+                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
+                    $aInfo['html'], // content text/html
+                    false, // attachment
+                    false, // bcc
+                    true // html
+                    );
+        } else {
+            $oMailer = new Mailer();
+            $oMailer->send($aInfo);
+        }
     }
     
 
@@ -534,8 +690,22 @@ EOT;
                 'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
                 'type' => 'bcc'
             );
+            
+        if (true) { // let's skip mandril for now
+            Mailer::sendMail(
+                    $aInfo['to'][0]['email'], // to
+                    $aInfo['from_email'], // from
+                    $aInfo['subject'], // subject
+                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
+                    $aInfo['text'], // content text/html
+                    false, // attachment
+                    $aInfo['to'][1]['email'], // bcc
+                    false // html
+                    );
+        } else {
             $oMailer = new Mailer();
             $oMailer->send($aInfo);
+        }
 
     }
 
@@ -558,8 +728,21 @@ EOT;
             'type' => 'to'
         );
 
-        $oMailer = new Mailer();
-        $oMailer->send($aInfo);
+        if (true) { // let's skip mandril for now
+            Mailer::sendMail(
+                    $aInfo['to'][0]['email'], // to
+                    $aInfo['from_email'], // from
+                    $aInfo['subject'], // subject
+                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
+                    $aInfo['html'], // content text/html
+                    false, // attachment
+                    false, // bcc
+                    true // html
+                    );
+        } else {
+            $oMailer = new Mailer();
+            $oMailer->send($aInfo);
+        }
     }
     
     /**
@@ -605,8 +788,21 @@ EOT;
             'type' => 'bcc'
         );
 
-        $oMailer = new Mailer();
-        $oMailer->send($aInfo);
+        if (true) { // let's skip mandril for now
+            Mailer::sendMail(
+                    $aInfo['to'][0]['email'], // to
+                    $aInfo['from_email'], // from
+                    $aInfo['subject'], // subject
+                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
+                    $aInfo['html'], // content text/html
+                    false, // attachment
+                    $aInfo['to'][1]['email'], // bcc
+                    true // html
+                    );
+        } else {
+            $oMailer = new Mailer();
+            $oMailer->send($aInfo);
+        }
 
     }
     
@@ -626,8 +822,21 @@ EOT;
         );
 
 
-        $oMailer = new Mailer();
-        $oMailer->send($aInfo);
+        if (true) { // let's skip mandril for now
+            Mailer::sendMail(
+                    $aInfo['to'][0]['email'], // to
+                    $aInfo['from_email'], // from
+                    $aInfo['subject'], // subject
+                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
+                    $aInfo['text'], // content text/html
+                    false, // attachment
+                    false, // bcc
+                    false // html
+                    );
+        } else {
+            $oMailer = new Mailer();
+            $oMailer->send($aInfo);
+        }
     }
     
     /**
@@ -673,8 +882,21 @@ EOT;
         );
 
 
-        $oMailer = new Mailer();
-        $oMailer->send($aInfo);
+        if (true) { // let's skip mandril for now
+            Mailer::sendMail(
+                    $aInfo['to'][0]['email'], // to
+                    $aInfo['from_email'], // from
+                    $aInfo['subject'], // subject
+                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
+                    $aInfo['html'], // content text/html
+                    false, // attachment
+                    false, // bcc
+                    true // html
+                    );
+        } else {
+            $oMailer = new Mailer();
+            $oMailer->send($aInfo);
+        }
     }
 
     /**
@@ -684,6 +906,50 @@ EOT;
      */
     public static function subscribeToMailchimp($sEmail) {
         mailchimp_subscribe(variable_get('gojira_mailchimp_list_key'), $sEmail, null, false, false, 'html', true, true);
+    }
+
+    
+    
+    /**
+     * Sends a HTML mail
+     * Note: NOT trough Mandril
+     * 
+     * @param string $to
+     * @param string $from
+     * @param string $subject
+     * @param string $replyto
+     * @param string $message
+     * @param string $bcc Default false
+     * @param boolean $bcc Default true
+     * @return boolean
+     */
+    public static function sendMail($to, $from, $subject, $replyto, $message, $attachment = false, $bcc = false, $html = true) {
+        require_once getcwd().'/'.drupal_get_path('module', 'gojira').'/inc/PHPMailer/class.phpmailer.php';
+
+        $mail = new PHPMailer;
+
+        $mail->From = $from;
+        $mail->FromName = $from;
+
+        $mail->addAddress($to);
+        $mail->addReplyTo($replyto, "SocialeKaart.care");
+
+        $mail->addBCC($bcc);
+
+        $mail->isHTML($html);
+
+        $mail->Subject = $subject;
+        $mail->Body = $message;
+
+        if(is_array($attachment)){
+            $mail->AddAttachment($attachment['path'], $attachment['name']);
+        }
+        
+        if (!$mail->send()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 }
