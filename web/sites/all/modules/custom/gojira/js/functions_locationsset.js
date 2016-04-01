@@ -179,11 +179,11 @@ function getCategoryLocations(locationsset_id, cat_id) {
 //                jQuery('#ajax_search_results').html(data.results_html);
 //            }
 
-            if (data.mapSearchResultsCount == 1) {
-                // no results, only our own practice
-                closeOverlay();
-                return;
-            }
+//            if (data.mapSearchResultsCount == 1) {
+//                // no results, only our own practice
+//                closeOverlay();
+//                return;
+//            }
 
             populateMap(data.mapSearchResults, data.mapSearchResultsCount);
 
