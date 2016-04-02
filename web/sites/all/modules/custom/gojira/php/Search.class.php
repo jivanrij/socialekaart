@@ -42,6 +42,7 @@ class Search {
      * @param type $output
      */
     public function getResultListHtml($output) {
+        
         $pageLength = $output['page_length'];
         $counter = 1;
         $previousPage = 0;
@@ -58,7 +59,7 @@ class Search {
 //            $h .= '<button class="close_box" title="Sluiten"></button>';
             if ($output['resultcounttotal'] >= 1) {
                 $h .= '<p>';
-                $h .= t('Found locations') . ':';
+                $h .= t("Found the following locations with").' <span class="display_query">'.$output['s'].'</span> :';
                 $h .= '</p>';
                 $h .= '<ul class="page_0 rl">';
                 foreach ($output['searchResults'] as $result) {
@@ -134,7 +135,7 @@ class Search {
                     $counter++;
                 }
             } else {
-                $h .= '<p>' . $output['nothing_found_message'] . '</p>';
+                $h .= '<p>'.t("No locations found with searchterm").': <span class="display_query">'.$output['s'].'</span>.</p>';
             }
 
             if (helper::value($oUser, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) { // user searches on a country level
@@ -320,7 +321,7 @@ EAT;
         }
 
 
-        $limit = variable_get('SEARCH_MAX_RESULT_AMOUNT') + 1; // let's add one to the result, so we can check if we have more results the the max, afterwards remove it
+        $limit = variable_get('SEARCH_MAX_RESULT_AMOUNT'); // let's add one to the result, so we can check if we have more results the the max, afterwards remove it
 
         $aParams = array();
 
@@ -844,5 +845,4 @@ EOT;
 
         return $return;
     }
-
 }

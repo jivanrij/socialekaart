@@ -745,6 +745,10 @@ a.gbutton:hover {
   background-color: white;
   overflow: hidden;
 }
+#search_result_info #search_results .display_query {
+  font-style: italic;
+  color: #b7072a;
+}
 #search_result_info #search_results p {
   padding: 10px 15px 15px 15px;
   margin: 0;

@@ -99,8 +99,6 @@ function search() {
 
     $output['searchResults'] = $searchResults;
     $output['resultcounttotal'] = count($searchResults);
-    // give the no results found message
-    $output['nothing_found_message'] = t('No results found based on the given terms.');
 
     $mobileDetect = new Mobile_Detect();
     if ($mobileDetect->isTablet()) {
