@@ -38,9 +38,11 @@
                 </li>
             </ul>
                 
-        <div class="menu_bar_icon">
-            <a href="/suggestlocation" title="<?php echo t('Add location if you are missing one.'); ?>"><?php echo t('Add location'); ?><i class="fa fa-plus-square"></i></a>
-        </div>
+        <?php if (user_access(helper::PERMISSION_MODERATE_LOCATION_CONTENT)): ?>
+            <div class="menu_bar_icon">
+                <a href="/suggestlocation" title="<?php echo t('Add location if you are missing one.'); ?>"><?php echo t('Add location'); ?><i class="fa fa-plus-square"></i></a>
+            </div>
+        <?php endif; ?>
                 
         </div>
     <?php endif; ?>

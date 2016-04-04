@@ -202,7 +202,7 @@ class Subscriptions {
                 %date%
             </div>
             <div id="about">
-                <b>Betreft:</b> Factuur voor Sociale Kaart abonnement
+                <b>Betreft:</b> Factuur voor SocialeKaart.care abonnement
             </div>
             <div id="period">
                 <b>Periode:</b> %period_start% t/m %period_end%
@@ -220,33 +220,6 @@ class Subscriptions {
             </div>
             <div class="line">
                 <hr />
-            </div>
-            <div class="table">
-                <table>
-                    <tr>
-                        <td class="left">Subtotaal</td>
-                        <td class="right">€ %amount%</td>
-                    </tr>
-                </table>
-            </div>
-            <div class="table">
-                <table>
-                    <tr>
-                        <td class="left">Korting via HAweb</td>
-                        <td class="right">- € %discount%</td>
-                    </tr>
-                </table>
-            </div>
-            <div class="line">
-                <hr />
-            </div>
-            <div class="table">
-                <table>
-                    <tr>
-                        <td class="left">Subtotaal</td>
-                        <td class="right">€ %amount_with_discount%</td>
-                    </tr>
-                </table>
             </div>
             <div class="table">
                 <table>
