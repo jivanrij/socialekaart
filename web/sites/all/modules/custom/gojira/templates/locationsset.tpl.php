@@ -22,10 +22,10 @@ if ($oLocationset) {
             $plotInfo[] = array(
                     'd' => 0,
                     's' => 0,
-                    'n' => $aLocation->nid,
-                    't' => $aLocation->title,
-                    'lo' => $aLocation->longitude,
-                    'la' => $aLocation->latitude
+                    'n' => $aLocation['nid'],
+                    't' => $aLocation['title'],
+                    'lo' => $aLocation['longitude'],
+                    'la' => $aLocation['latitude']
             );
         }
         drupal_add_js(array('gojira' => array('locationsset_filter_results_count' => count($plotInfo))), 'setting');
@@ -77,9 +77,9 @@ drupal_add_js(array('gojira' => array('page' => 'locationsset')), 'setting');
         <?php if (count($aLocations) > 0): ?>
             <label id="locations"><?php echo t("Select a location:"); ?></label>
             <ul id="locationsset_locations">
-                <?php foreach ($aLocations as $oLocation): $oCategory = Category::getCategoryOfLocation($oLocation); ?>
+                <?php foreach ($aLocations as $aLocation): $oCategory = Category::getCategoryOfLocation($aLocation['node']); ?>
                     <li rel="<?php echo $oCategory->nid; ?>">
-                        <a class="locationset_show_loc" href="#<?php echo $oLocation->nid; ?>"><?php echo $oLocation->title; ?></a>
+                        <a class="locationset_show_loc" href="#<?php echo $aLocation['nid']; ?>"><?php echo $aLocation['title']; ?></a>
                     </li>
                 <?php endforeach; ?>
             </ul>
