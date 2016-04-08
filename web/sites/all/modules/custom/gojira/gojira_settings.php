@@ -91,3 +91,121 @@ class GojiraSettings
     
     const IDEAL_FREE_PERIOD_DESCRIPTION = 'Free intro Period';
 }
+
+//CREATE TABLE `address_cache` (
+//`id` int(10) NOT NULL AUTO_INCREMENT,
+//  `address` varchar(100) NOT NULL,
+//  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+//  `street` varchar(200) DEFAULT NULL,
+//  `houseNumber` varchar(10) DEFAULT NULL,
+//  `houseNumberAddition` varchar(10) DEFAULT NULL,
+//  `postcode` varchar(7) DEFAULT NULL,
+//  `city` varchar(200) DEFAULT NULL,
+//  `municipality` varchar(100) DEFAULT NULL,
+//  `addressType` varchar(100) DEFAULT NULL,
+//  `coordinates_x` varchar(32) NOT NULL,
+//  `coordinates_y` varchar(32) NOT NULL,
+//  PRIMARY KEY (`id`)
+//) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+//
+//CREATE TABLE `gojira_payments` (
+//`id` int(11) NOT NULL AUTO_INCREMENT,
+//  `uid` int(11) NOT NULL DEFAULT '0',
+//  `name` varchar(50) NOT NULL DEFAULT '0',
+//  `description` varchar(50) NOT NULL,
+//  `amount` float NOT NULL DEFAULT '0',
+//  `gid` int(11) NOT NULL,
+//  `ideal_id` varchar(50) NOT NULL,
+//  `ideal_code` varchar(50) NOT NULL,
+//  `status` int(11) DEFAULT NULL COMMENT '0=open, 1=completed, 2=failed',
+//  `period_start` int(11) NOT NULL,
+//  `period_end` int(11) NOT NULL,
+//  `warning_send` int(11) NOT NULL DEFAULT '0' COMMENT 'The system has send a warning the the subscription is going to end',
+//  `callback_times` int(11) NOT NULL DEFAULT '0' COMMENT 'Amount of times the callback was used for this payment. Max is 6 times after 5, 10, 30, 60, 120 and 300 minutes.',
+//  `warning_ended` int(11) NOT NULL DEFAULT '0' COMMENT 'The system has send a warning the subscription is ended',
+//  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+//  `increment` int(11) DEFAULT NULL,
+//  `discount` float NOT NULL DEFAULT '0',
+//  `tax` float NOT NULL DEFAULT '0',
+//  `payed` float NOT NULL DEFAULT '0',
+//  `bank` varchar(50) NOT NULL DEFAULT '' COMMENT 'Bank of the user',
+//  PRIMARY KEY (`id`)
+//) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8 COMMENT='stores all the payments done';
+//
+//CREATE TABLE `group_location_favorite` (
+//`id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id of the row',
+//  `gid` int(11) unsigned NOT NULL COMMENT 'id of the group this note belongs to',
+//  `nid` int(11) unsigned NOT NULL COMMENT 'id of the location node this note belongs to',
+//  `pid` int(11) unsigned NOT NULL COMMENT 'id of the location/practice the user makes the favorite from',
+//  PRIMARY KEY (`id`),
+//  KEY `id` (`id`),
+//  KEY `FK_group_location_note_node` (`gid`),
+//  KEY `FK_group_location_note_node_2` (`nid`),
+//  CONSTRAINT `FK_group_location_note_node` FOREIGN KEY (`gid`) REFERENCES `node` (`nid`) ON DELETE CASCADE ON UPDATE CASCADE,
+//  CONSTRAINT `FK_group_location_note_node_2` FOREIGN KEY (`nid`) REFERENCES `node` (`nid`) ON DELETE CASCADE ON UPDATE CASCADE
+//) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
+//
+//CREATE TABLE `group_location_note` (
+//`nid` int(10) unsigned NOT NULL COMMENT 'the location',
+//  `gid` int(10) unsigned NOT NULL COMMENT 'the group',
+//  `note` text COMMENT 'the note',
+//  UNIQUE KEY `nid_gid` (`nid`,`gid`)
+//) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='A note on a location by a group member';
+//
+//CREATE TABLE `group_location_term` (
+//`id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id of the row',
+//  `gid` int(10) unsigned DEFAULT NULL COMMENT 'link to the group',
+//  `nid` int(10) unsigned DEFAULT NULL COMMENT 'link to the location',
+//  `tid` int(10) unsigned DEFAULT NULL COMMENT 'link to term',
+//  PRIMARY KEY (`id`),
+//  UNIQUE KEY `gid_nid_tid` (`gid`,`nid`,`tid`),
+//  KEY `id` (`id`),
+//  KEY `FK_group_location_term_node_2` (`nid`),
+//  KEY `FK_group_location_term_taxonomy_term_data` (`tid`),
+//  CONSTRAINT `FK_group_location_term_node` FOREIGN KEY (`gid`) REFERENCES `node` (`nid`) ON DELETE CASCADE ON UPDATE CASCADE,
+//  CONSTRAINT `FK_group_location_term_node_2` FOREIGN KEY (`nid`) REFERENCES `node` (`nid`) ON DELETE CASCADE ON UPDATE CASCADE,
+//  CONSTRAINT `FK_group_location_term_taxonomy_term_data` FOREIGN KEY (`tid`) REFERENCES `taxonomy_term_data` (`tid`) ON DELETE CASCADE ON UPDATE CASCADE
+//) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=utf8 COMMENT='Link between a group, location & tag';
+//
+//
+//CREATE TABLE `practices_backup` (
+//`id` int(11) NOT NULL AUTO_INCREMENT,
+//  `title` varchar(256) DEFAULT NULL,
+//  `email` varchar(256) DEFAULT NULL,
+//  `city` varchar(256) DEFAULT NULL,
+//  `street` varchar(256) DEFAULT NULL,
+//  `number` varchar(256) DEFAULT NULL,
+//  `postcode` varchar(256) DEFAULT NULL,
+//  `telephone` varchar(256) DEFAULT NULL,
+//  `fax` varchar(256) DEFAULT NULL,
+//  `url` varchar(256) DEFAULT NULL,
+//  `labels` varchar(512) DEFAULT NULL,
+//  `category` varchar(256) DEFAULT NULL,
+//  `note` varchar(256) DEFAULT NULL,
+//  `latitude` varchar(256) DEFAULT NULL,
+//  `longitude` varchar(256) DEFAULT NULL,
+//  `group_id` varchar(256) DEFAULT NULL,
+//  `visible` varchar(256) DEFAULT NULL,
+//  `nid` varchar(256) DEFAULT NULL,
+//  `source` varchar(256) DEFAULT NULL,
+//  `import_it` int(1) DEFAULT NULL COMMENT 'Flag for importer. Imports all locations with import_it = 1',
+//  UNIQUE KEY `id` (`id`),
+//  KEY `id_b` (`id`)
+//) ENGINE=MyISAM AUTO_INCREMENT=2447 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='This table backs up all the practices into one table.';
+//
+//CREATE TABLE `searchword` (
+//`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+//  `word` varchar(128) NOT NULL,
+//  UNIQUE KEY `word` (`word`),
+//  KEY `id` (`id`)
+//) ENGINE=InnoDB AUTO_INCREMENT=739 DEFAULT CHARSET=latin1 COMMENT='The search index holding all the words.';
+//
+//CREATE TABLE `searchword_nid` (
+//`node_nid` int(10) unsigned NOT NULL,
+//  `searchword_id` int(10) unsigned NOT NULL,
+//  `score` double unsigned NOT NULL,
+//  PRIMARY KEY (`node_nid`,`searchword_id`),
+//  KEY `searchword link` (`searchword_id`),
+//  CONSTRAINT `location link` FOREIGN KEY (`node_nid`) REFERENCES `node` (`nid`) ON DELETE CASCADE ON UPDATE CASCADE,
+//  CONSTRAINT `searchword link` FOREIGN KEY (`searchword_id`) REFERENCES `searchword` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+//) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Connection betweet a word in the index & the location';

@@ -481,6 +481,8 @@ EOT;
         return $resultNodes;
     }
 
+    
+
     /**
      * Index all the locations for the search
      */
