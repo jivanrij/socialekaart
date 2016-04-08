@@ -558,15 +558,21 @@ EOT;
         db_query('DELETE FROM `searchword_nid` WHERE  `node_nid`=' . $nid);
 
         // add the new ones
+        $text_string = '';
         foreach ($text_array as $word => $score) {
+            $text_string .= ' '.$word;
             $word_id = $this->addUpdateWordToindex($word);
             if ($word_id) {
                 $this->linkWordToLocation($word_id, $nid, $score);
             }
         }
 
+
+        $text_string = self::cleanSearchTag($text_string);
         // tell the system the node is indexed
-        db_query('UPDATE `node` SET `changed`=' . time() . ', `indexed`=' . time() . ' WHERE  `nid`=' . $nid . ';');
+
+
+        db_query('UPDATE `node` SET `search`= \'' . $text_string . '\', `changed`=' . time() . ', `indexed`=' . time() . ' WHERE  `nid`=' . $nid . ';');
     }
 
     /**
@@ -725,7 +731,7 @@ EOT;
     private static function cleanSearchTag($tag) {
         return trim(
                 strtolower(
-                        preg_replace("/[^A-Za-z0-9 .]/", '', str_replace(Search::$aSpecialChars, Search::$aSpecialCharsReplacements, $tag)
+                        preg_replace("/[^A-Za-z0-9 '.]/", '', str_replace(Search::$aSpecialChars, Search::$aSpecialCharsReplacements, $tag)
                         )
                 )
         );

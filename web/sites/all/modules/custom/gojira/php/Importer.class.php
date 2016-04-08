@@ -2,11 +2,6 @@
 
 /**
  * Description of Importer
- *
- * 
- * Set everything rdy to be imported:
- UPDATE `locations` SET `imported`=0, `double`=0, `notallowed`=0 WHERE  `id`>0;
- UPDATE `adhocdata_addresses` SET `ready_to_import`=1, `imported`=0, `double`=0, `attempts`=0 WHERE  `id`>0;
  * 
  * 
  * @author jivanrij
