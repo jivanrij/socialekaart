@@ -31,15 +31,35 @@ if ($oLocationset) {
         drupal_add_js(array('gojira' => array('locationsset_filter_results_count' => count($plotInfo))), 'setting');
         drupal_add_js(array('gojira' => array('locationsset_filter_results' => $plotInfo)), 'setting');
         drupal_add_js(array('gojira' => array('locationsset_has_filter' => 1)), 'setting');
+
+        $oLocations = array();
+        foreach($aLocations as $aLocation){
+            $oLocations = node_load($aLocation['nid']);
+        }
+
+        $aCategories = Locationsets::getInstance()->getCategoriesFromLocationsArray($oLocations);
     } else {
-        $aLocations = Favorite::getInstance()->getAllFavoriteLocations($currentPractice->nid);
+        $oLocations = Favorite::getInstance()->getAllFavoriteLocations($currentPractice->nid);
+        $aLocations = array();
+
+
+        foreach($oLocations as $oLocation)
+        {
+            $aLocations[$oLocation->nid]['node'] = $oLocation;
+            $aLocations[$oLocation->nid]['title'] = $oLocation->title;
+            $aLocations[$oLocation->nid]['nid'] = $oLocation->nid;
+//            $aLocations[$oLocation->nid]['longitude'] = $oLocation->longitude;
+//            $aLocations[$oLocation->nid]['latitude'] = $oLocation->latitude;
+        }
+
+        $aCategories = Locationsets::getInstance()->getCategoriesFromLocationsArray($oLocations);
     }
 
     $sBody = t('Your own personal map\'s decription.');
     $sTitle = 'Sociale kaart ' . $currentPractice->title;
     drupal_add_js(array('gojira' => array('locationsset_id' => "favorites")), 'setting');
 }
-$aCategories = Locationsets::getInstance()->getCategoriesFromLocationsArray($aLocations);
+
 
 $aCategoriesSorted = array();
 foreach ($aCategories as $aCategorie) {
