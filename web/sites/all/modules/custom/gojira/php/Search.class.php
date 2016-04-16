@@ -42,7 +42,7 @@ class Search {
      * @param type $output
      */
     public function getResultListHtml($output) {
-        
+
         $pageLength = $output['page_length'];
         $counter = 1;
         $previousPage = 0;
@@ -53,7 +53,7 @@ class Search {
 
         $h = '';
         $h .= '<div id="search_result_info">';
-        
+
         if ($output['has_tags'] || isset($output['loc'])) {
             $h .= '<div id="search_results" class="rounded"><div>';
 //            $h .= '<button class="close_box" title="Sluiten"></button>';
@@ -139,9 +139,9 @@ class Search {
             }
 
             if (helper::value($oUser, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) { // user searches on a country level
-                $h .= '<div id="search_radius_switcher">U zoekt landelijk, klik <a id="switch_to_region_search">hier</a> om in uw regio te zoeken.</div>'; 
+                $h .= '<div id="search_radius_switcher">U zoekt landelijk, klik <a id="switch_to_region_search">hier</a> om in uw regio te zoeken.</div>';
             }else{
-                $h .= '<div id="search_radius_switcher">U zoekt regionaal, klik <a id="switch_to_country_search">hier</a> om landelijk te zoeken.</div>'; 
+                $h .= '<div id="search_radius_switcher">U zoekt regionaal, klik <a id="switch_to_country_search">hier</a> om landelijk te zoeken.</div>';
             }
 
             $h .= '</div></div>';
@@ -346,11 +346,10 @@ EAT;
             $locationNids .= ','.$location['nid'];
         }
 
-
         $foundNodes = array();
         foreach ($labels as $label) {
             $sql = <<<EOT
-SELECT searchword_nid.node_nid AS nid, searchword_nid.score AS score, searchword.word FROM searchword JOIN searchword_nid on (searchword.id = searchword_nid.searchword_id) 
+SELECT searchword_nid.node_nid AS nid, searchword_nid.score AS score, searchword.word FROM searchword JOIN searchword_nid on (searchword.id = searchword_nid.searchword_id)
 WHERE (word LIKE :label1 OR word LIKE :label2) AND searchword_nid.node_nid in ({$locationNids})
 EOT;
             $result = db_query($sql, array(':label1' => $label . '%', ':label2' => '%' . $label))->fetchAll();
@@ -358,12 +357,16 @@ EOT;
                 if (array_key_exists($found->nid, $foundNodes)) {
                     $foundNodes[$found->nid]['score'] = (int) ($found->score + $foundNodes[$found->nid]['score']);
                 } else {
-                    $foundNodes[$found->nid] = $locations[$found->nid];
                     $node = node_load($found->nid);
                     $node->longitude = $locations[$found->nid]['longitude'];
                     $node->latitude = $locations[$found->nid]['latitude'];
+                    $node->score = (int) $found->score;
+                    $node->distance = $locations[$found->nid]['distance'];
+
+                    $foundNodes[$found->nid] = $locations[$found->nid];
+                    $foundNodes[$found->nid]['score'] = $node->score;
+                    $foundNodes[$found->nid]['distance'] = $node->distance;
                     $foundNodes[$found->nid]['node'] = $node;
-                    $foundNodes[$found->nid]['score'] = (int) $found->score;
                 }
             }
         }
@@ -406,7 +409,7 @@ EOT;
 
         // define the sql part for the distance limit in the WHERE
         $sql_max_distance = '1=1';
-        if($limitByRadius & $centerLocation)
+        if($limitByRadius && $centerLocation)
         {
             // query get's all the nodes in radius, maybe only from favorites, but surly visible, and filters them on the nodes with the related tags
             $distance = 0.09;
@@ -439,15 +442,15 @@ EOT;
 
         $sql = <<<EOT
 SELECT node.title, node.nid, {$distanceField}, X(point) as longitude, Y(point) as latitude
-FROM node 
-join field_data_field_visible_to_other_user on (node.nid = field_data_field_visible_to_other_user.entity_id) 
-{$favJoin} 
-WHERE {$matchAgainsts} 
-AND {$sql_max_distance} 
-AND field_data_field_visible_to_other_user.field_visible_to_other_user_value = 1 
-AND field_data_field_visible_to_other_user.bundle = 'location' 
-AND field_data_field_visible_to_other_user.delta = 0 
-AND {$favWhere} 
+FROM node
+join field_data_field_visible_to_other_user on (node.nid = field_data_field_visible_to_other_user.entity_id)
+{$favJoin}
+WHERE {$matchAgainsts}
+AND {$sql_max_distance}
+AND field_data_field_visible_to_other_user.field_visible_to_other_user_value = 1
+AND field_data_field_visible_to_other_user.bundle = 'location'
+AND field_data_field_visible_to_other_user.delta = 0
+AND {$favWhere}
 LIMIT {$limit}
 EOT;
 
@@ -745,7 +748,7 @@ EOT;
 
     /**
      * Tells you if you can show the given search type
-     * 
+     *
      * @param string $type
      * @return boolean
      */
@@ -881,10 +884,10 @@ function sort_locations($loc1,$loc2)
     }
     if($loc1['score'] < $loc2['score'])
     {
-        return -1;
+        return 1;
     }
     if($loc1['score'] < $loc2['score'])
     {
-        return 1;
+        return -1;
     }
 }
