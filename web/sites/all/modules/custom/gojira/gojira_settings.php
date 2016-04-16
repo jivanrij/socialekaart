@@ -2,12 +2,12 @@
 class GojiraSettings
 {
     // http://www.easy-ideal.com/api-implementeren/
-    
+
     // watchdog options types
     const WATCHDOG_IDEAL = 'iDeal issue';
     const WATCHDOG_SUBSCRIPTIONS = 'Sunbscription issue';
     const WATCHDOG_LOCATION = 'Location related';
-    
+
     // CONTENT TYPES
     const CONTENT_TYPE_LOCATION = 'location'; // a medical location of the location of the users
     const CONTENT_TYPE_TEXT = 'text'; // node holding text usable by the system
@@ -36,31 +36,31 @@ class GojiraSettings
     const CONTENT_TYPE_MODERATED_STATUS_FIELD = 'field_moderated_status';
     const CONTENT_TYPE_URL_FIELD = 'field_url';
     const CONTENT_TYPE_CATEGORY_FIELD = 'field_category';
-    
+
     // CONTENT TYPE TEXT FIELDS
     const CONTENT_TYPE_CODE_FIELD = 'field_code';
-    
+
     // CONTENT TYPE PUBLIC PAGE FIELDS
     const CONTENT_TYPE_META_TAGS_FIELD = 'field_meta_tags';
     const CONTENT_TYPE_META_DESCRIPTION_FIELD = 'field_meta_description';
-    
+
     // ADD FIELDS
     const CONTENT_TYPE_ADD_IMAGE_FIELD = 'field_add_image'; // holds the add image
     const CONTENT_TYPE_ADD_SHOWFROM_FIELD = 'field_showfrom'; // timestamp
     const CONTENT_TYPE_ADD_SHOWUNTILL_FIELD = 'field_showuntill'; // timestamp
     const CONTENT_TYPE_ADD_URL_FIELD = 'field_url'; // url to link to
-    
+
     // zorgverlenersset FIELDS
     const CONTENT_TYPE_LOCATIONSET_POSTCODES = 'field_postcodeareas';
     const CONTENT_TYPE_LOCATIONSET_LOCATIONS = 'field_setlocations';
     const CONTENT_TYPE_LOCATIONSET_SUBTITLE = 'field_subtitel';
-    
+
     // postcodearea FIELDS
     const CONTENT_TYPE_POSTCODE_NUMBER = 'field_postcodenumber';
-    
+
     // vocabulairy related fields
     const VOCABULARY_LOCATION = 'gojira_labels';
-    
+
     // USER FIELDS
     const CONTENT_TYPE_USER_TITLE = 'field_user_title'; // the user is a doctor
     const CONTENT_TYPE_IS_DOCTOR_FIELD = 'field_is_doctor'; // the user is a doctor
@@ -71,24 +71,24 @@ class GojiraSettings
     const CONTENT_TYPE_TUTORIAL_FIELD = 'field_seen_tutorial'; // the user has seen the tutorial
     const CONTENT_TYPE_USER_NOT_IMPORTED = 'field_user_not_imported';
     const CONTENT_TYPE_USER_LAST_SELECTED_LOCATION = 'field_selected_location'; // the last selected location of the user
-    
+
     // GROUP FIELDS
     const CONTENT_TYPE_ORIGINAL_DOCTOR = 'field_original_doctor'; // the original doctor who used this group, when the payed period is over, this is the only person who can have access
     const CONTENT_TYPE_PAYED_STATUS = 'field_payed_status'; // boolean - does the group has a payed status on the moment?
-    
+
     // USER AND LOCATION FIELDS
     const CONTENT_TYPE_GROUP_FIELD = 'field_gojira_group';
-    
+
     // IMAGE STYLES
     const IMAGE_STYLE_ADD_SMALL = 'add_small';
     const IMAGE_STYLE_ADD_WIDE = 'add_wide';
-    
+
     const MAP_ZOOMLEVEL_STREET = 14;
     const MAP_ZOOMLEVEL_REGION = 12;
     const MAP_ZOOMLEVEL_COUNTRY = 8;
-    
+
     const SYSTEM_WWW_ROOT_FOLDER = 'wwwroot';
-    
+
     const IDEAL_FREE_PERIOD_DESCRIPTION = 'Free intro Period';
 }
 
@@ -209,3 +209,8 @@ class GojiraSettings
 //  CONSTRAINT `location link` FOREIGN KEY (`node_nid`) REFERENCES `node` (`nid`) ON DELETE CASCADE ON UPDATE CASCADE,
 //  CONSTRAINT `searchword link` FOREIGN KEY (`searchword_id`) REFERENCES `searchword` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 //) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Connection betweet a word in the index & the location';
+// CREATE TABLE `remove_locations` (
+//   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+//   `nid` int(11) unsigned NOT NULL COMMENT 'This id is from a node that needs to be removed.',
+//   PRIMARY KEY (`id`)
+// ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

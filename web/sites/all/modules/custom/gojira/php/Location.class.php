@@ -17,7 +17,7 @@ class Location {
     private static $_knownLocations = null;
 
     /**
-     * 
+     *
      * @param Float $x
      * @param Float $y
      * @param String $street
@@ -59,7 +59,7 @@ class Location {
 
     /**
      * Get's a Location object of the linked node
-     * 
+     *
      * @param integer $nid
      * @return \Location
      */
@@ -75,7 +75,7 @@ class Location {
 
     /**
      * Tells you if the current user has multiple locations stored in the dtb
-     * 
+     *
      * @return boolean
      */
     public static function userHasMultipleLocationsStored() {
@@ -90,16 +90,16 @@ class Location {
     /**
      * Get's you a location object to use as a base location of the currently logged in user.
      * if fallback is true, you will get a default Location if there is no location found
-     * 
+     *
      * @param boolean $fallback
      * @return \Location|boolean
      */
     public static function getCurrentLocationObjectOfUser($bFallback = false) {
 
         $aLocations = Location::getUsersLocations(true);
-        
+
         $iAmount = count($aLocations);
-        
+
         if ($iAmount == 0) { // no location found, let's check fallback option
             if ($bFallback) {
                 return new Location(variable_get('CENTER_COUNTRY_LONGITUDE'), variable_get('CENTER_COUNTRY_LATITUDE'));
@@ -117,7 +117,7 @@ class Location {
                 }
             }
         }
-        
+
         // let's just return one if ther is just one found or no known preference for one
         $oLocationNode = array_shift($aLocations);
         $oLocation = Location::getLocationObjectOfNode($oLocationNode->nid);
@@ -125,13 +125,13 @@ class Location {
             $oLocation->nid = $oLocationNode->nid;
             return $oLocation;
         }
-        
+
         return false;
     }
 
     /**
      * Get's the current location node of the logged in user.
-     * 
+     *
      * @return Location
      */
     public static function getCurrentLocationNodeObjectOfUser() {
@@ -173,11 +173,11 @@ class Location {
     public static function getCoordinatesCustom($address) {
         $address = str_replace(" ", "+", $address); // replace all the white space with "+" sign to match with google search pattern
         $url = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=$address";
-        
+
         $response = file_get_contents($url);
-        
+
         $json = json_decode($response, TRUE); //generate array object from the response from the web
-        
+
         if(($json['status'] !== 'ZERO_RESULTS') && isset($json['results'][0])){
             return array('latitude'=>$json['results'][0]['geometry']['location']['lat'], 'longitude'=>$json['results'][0]['geometry']['location']['lng']);
         }
@@ -187,7 +187,7 @@ class Location {
 
     /**
      * Gives you the 4 fields used for getting the location/geo information in gojira
-     * 
+     *
      * @return Array
      */
     public static function getAddressFields() {
@@ -240,7 +240,7 @@ class Location {
 
     /**
      * stores the location coordinates found in the node fields address in the node table
-     * 
+     *
      * @param stdClass $node
      */
     public static function checkAndSaveLocation($node) {
@@ -268,7 +268,7 @@ class Location {
     /**
      * Return's all the linked location nodes from the given/current user.
      * By default without a status check. Use the boolean to change this.
-     * 
+     *
      * @global type $user
      * @param boolean $bCheckPublished
      * @return array|Locations
@@ -278,7 +278,7 @@ class Location {
 
             self::$_userLocations = array();
             self::$_userLocationsWithCheck = array();
-            
+
             global $user;
             $uid = $user->uid;
 
@@ -309,7 +309,7 @@ class Location {
                 }
             }
         }
-                
+
         if ($bCheckPublished) {
             return self::$_userLocationsWithCheck;
         }
@@ -318,7 +318,7 @@ class Location {
 
     /**
      * Removes a user location from database and userlocation array in static location object
-     * 
+     *
      * @param type $nid
      */
     public static function removeUserLocation($nid) {
@@ -331,7 +331,7 @@ class Location {
 
     /**
      * This function tells you if the given coordinates are close to eachother
-     * 
+     *
      * @param float $a_long
      * @param float $a_lat
      * @param float $b_long
@@ -365,7 +365,7 @@ class Location {
     /**
      * Get's you all the known Location objects of all the known city's
      * The key in the array is the name of the city in lowercase
-     * 
+     *
      * @return array of city names
      */
     public static function getKnownCitys() {
@@ -383,7 +383,7 @@ class Location {
 
     /**
      * Tels you if the given name is a city
-     * 
+     *
      * @param string $name
      * @return boolean
      */
@@ -393,35 +393,43 @@ class Location {
         }
         return false;
     }
-    
+
     /**
      * Get's the note a user's group has on a location
-     * 
+     *
      * @param integer $nid
      * @return boolean
      */
     public static function getNote($nid, $postfix = '', $default = ''){
         $gid = Group::getGroupId();
-        
+
         $note = db_query("select note from group_location_note where nid = :nid and gid = :gid", array(':nid' => $nid, ':gid' => $gid))->fetchField();
-        
+
         if(trim($note) !== ''){
             return $note.$postfix;
         }
         return $default.$postfix;
     }
-    
+
     /**
      * Adds a note for a group on a location
-     * 
+     *
      * @param integer $nid
      * @param string $note
      */
     public static function setNote($nid, $note){
         $gid = Group::getGroupId();
-        
+
         db_query("delete from group_location_note where nid = :nid and gid = :gid", array(':nid' => $nid, ':gid' => $gid));
-        
+
         db_query("INSERT INTO `group_location_note` (`nid`, `gid`, `note`) VALUES (:nid,:gid,:note)", array(':nid' => $nid, ':gid' => $gid, ':note' => $note));
+    }
+
+    public static function removeUselessDumbLocations() {
+        $result = db_query('SELECT id, nid FROM {remove_locations} limit 500');
+        foreach ($result as $entity) {
+            node_delete($entity->nid);
+            db_query('delete from {remove_locations} where id = '.$entity->id);
+        }
     }
 }

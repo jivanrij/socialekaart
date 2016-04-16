@@ -167,9 +167,9 @@ function gojira_css_alter(&$css) {
 
 // boodstrap shizzle
 function gojira_init() {
-   
+
   global $user;
-  
+
   if(!user_is_logged_in() && (helper::getIEVersion() == 8 OR helper::getIEVersion() == 9))
   {
     drupal_add_js(array('gojira' => array('browserwarning' => 1)), 'setting');
@@ -187,7 +187,7 @@ function gojira_init() {
   }
 
   drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/font-awesome-4.5.0/css/font-awesome.min.css');
-  
+
   if (Template::shouldWeIncludeMapFrontendFiles()) {
 
     drupal_add_js(array('gojira' => array('mapbox_accesstoken' => variable_get('mapbox_accesstoken', ''))), 'setting');
@@ -208,7 +208,7 @@ function gojira_init() {
 
     drupal_add_css(drupal_get_path('module', 'gojira') . '/css/leaflet.css', array('group' => CSS_DEFAULT,'every_page' => TRUE));
     drupal_add_css(drupal_get_path('module', 'gojira') . '/css/colorbox.css', array('group' => CSS_DEFAULT,'every_page' => TRUE));
-    
+
     preg_match('/MSIE (.*?);/', $_SERVER['HTTP_USER_AGENT'], $matches);
     if(count($matches)<2){
       preg_match('/Trident\/\d{1,2}.\d{1,2}; rv:([0-9]*)/', $_SERVER['HTTP_USER_AGENT'], $matches);
@@ -301,7 +301,7 @@ function gojira_init() {
     if(isset($_GET['loc']) && is_numeric($_GET['loc'])){
       drupal_add_js(array('gojira' => array('showLoc' => $_GET['loc'])), 'setting');
     }
-    
+
     if(isset($_GET['search_type'])){
         $user = user_load($user->uid);
         $field = GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD;
@@ -407,6 +407,8 @@ function gojira_user_login(&$edit, $account) {
 }
 
 function gojira_cron() {
+  Location::removeUselessDumbLocations();
+
   if(variable_get('cron_remove_unlinked_tax_terms')){
     /** removes all the not linked taxonomy terms **/
     $result = db_query("select tid, name from {taxonomy_term_data} where tid not in (select tid from group_location_term) and tid not in (select field_location_labels_tid from field_data_field_location_labels)");

@@ -22,24 +22,44 @@ if ($oLocationset) {
             $plotInfo[] = array(
                     'd' => 0,
                     's' => 0,
-                    'n' => $aLocation->nid,
-                    't' => $aLocation->title,
-                    'lo' => $aLocation->longitude,
-                    'la' => $aLocation->latitude
+                    'n' => $aLocation['nid'],
+                    't' => $aLocation['title'],
+                    'lo' => $aLocation['longitude'],
+                    'la' => $aLocation['latitude']
             );
         }
         drupal_add_js(array('gojira' => array('locationsset_filter_results_count' => count($plotInfo))), 'setting');
         drupal_add_js(array('gojira' => array('locationsset_filter_results' => $plotInfo)), 'setting');
         drupal_add_js(array('gojira' => array('locationsset_has_filter' => 1)), 'setting');
+
+        $oLocations = array();
+        foreach($aLocations as $aLocation){
+            $oLocations = node_load($aLocation['nid']);
+        }
+
+        $aCategories = Locationsets::getInstance()->getCategoriesFromLocationsArray($oLocations);
     } else {
-        $aLocations = Favorite::getInstance()->getAllFavoriteLocations($currentPractice->nid);
+        $oLocations = Favorite::getInstance()->getAllFavoriteLocations($currentPractice->nid);
+        $aLocations = array();
+
+
+        foreach($oLocations as $oLocation)
+        {
+            $aLocations[$oLocation->nid]['node'] = $oLocation;
+            $aLocations[$oLocation->nid]['title'] = $oLocation->title;
+            $aLocations[$oLocation->nid]['nid'] = $oLocation->nid;
+//            $aLocations[$oLocation->nid]['longitude'] = $oLocation->longitude;
+//            $aLocations[$oLocation->nid]['latitude'] = $oLocation->latitude;
+        }
+
+        $aCategories = Locationsets::getInstance()->getCategoriesFromLocationsArray($oLocations);
     }
 
     $sBody = t('Your own personal map\'s decription.');
     $sTitle = 'Sociale kaart ' . $currentPractice->title;
     drupal_add_js(array('gojira' => array('locationsset_id' => "favorites")), 'setting');
 }
-$aCategories = Locationsets::getInstance()->getCategoriesFromLocationsArray($aLocations);
+
 
 $aCategoriesSorted = array();
 foreach ($aCategories as $aCategorie) {
@@ -77,9 +97,9 @@ drupal_add_js(array('gojira' => array('page' => 'locationsset')), 'setting');
         <?php if (count($aLocations) > 0): ?>
             <label id="locations"><?php echo t("Select a location:"); ?></label>
             <ul id="locationsset_locations">
-                <?php foreach ($aLocations as $oLocation): $oCategory = Category::getCategoryOfLocation($oLocation); ?>
+                <?php foreach ($aLocations as $aLocation): $oCategory = Category::getCategoryOfLocation($aLocation['node']); ?>
                     <li rel="<?php echo $oCategory->nid; ?>">
-                        <a class="locationset_show_loc" href="#<?php echo $oLocation->nid; ?>"><?php echo $oLocation->title; ?></a>
+                        <a class="locationset_show_loc" href="#<?php echo $aLocation['nid']; ?>"><?php echo $aLocation['title']; ?></a>
                     </li>
                 <?php endforeach; ?>
             </ul>

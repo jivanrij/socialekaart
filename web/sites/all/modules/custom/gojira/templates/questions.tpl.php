@@ -6,25 +6,6 @@
     <hr />
     <div id="faq_sections">
         <section>
-            <h1>Welke voornaamste voordelen heeft een abonnement voor mij?</h1>
-            <p class="accordion_content">
-                Met een abonnement kunt u:
-            </p>
-            <ul class="accordion_content">
-                <li>uw assistent en/of waarnemend huisarts toegang geven tot socialekaart.care</li>
-                <li>meerdere praktijken opvoeren om vanuit te werken</li>
-                <li>uw eigen sociale kaart beheren</li>
-            </ul>
-        </section>
-        <section>
-            <h1>Hoe kan ik een abonnement afsluiten?</h1>
-            <p class="accordion_content">In het menu <i>Account</i> kunt u de optie <i>Abonneren</i> kiezen. Het abonnement is geldig voor 1 jaar en de betaling vindt plaats via ideal.</p>
-        </section>
-        <section>
-            <h1>Wordt mijn abonnement automatisch verlengd?</h1>
-            <p class="accordion_content">Nee, wij informeren u enkele weken voordat uw abonnement verloopt hierover en u krijgt daarbij de mogelijkheid om het abonnement te verlengen.</p>
-        </section>
-        <section>
             <h1>Hoe kan ik mijn assistent of waarnemer toevoegen? *</h1>
             <p class="accordion_content">
                 Via het menu <i>Account/Gebruikers</i> kunt u deze (en andere gebruikers binnen uw praktijk) toevoegen. U kunt lees- en/of schrijfrechten toekennen. Leesrechten geeft de gebruiker de mogelijkheid zorgverleners te zoeken en gebruik te maken van <i>mijn kaart</i>. Met schrijfrechten heeft de gebruiker de mogelijkheid de gegevens te beheren. Dit houdt in: zorgverleners toevoegen, het toekennen van kenmerken aan de zorgverleners en punten hieraan toekennen.
@@ -39,13 +20,14 @@
         <section>
             <h1>Hoe zoek ik naar zorgverleners?</h1>
             <p class="accordion_content">
-                Typ één of meerdere zoektermen in de zoekbalk en klik op het vergrootglas (of druk op Enter). Standaard wordt er gezocht binnen een straal van enkele kilometers vanaf uw praktijk.
+                Typ één of meerdere zoektermen in de zoekbalk en klik op het vergrootglas (of druk op Enter). Standaard wordt er gezocht binnen een straal van enkele kilometers vanaf uw praktijk.<br />
+                Als u meerdere zoektermen opgeeft zult u alleen zorgverleners krijgen die gevonden worden op beide zoektermen.
             </p>
         </section>
         <section>
             <h1>Waar zoekt SocialeKaart.care op?</h1>
             <p class="accordion_content">
-                SocialeKaart.care zoekt met een geavanceerd algoritme in de beschikbare gegevens van de zorgverlener. De kenmerken die door alle gebruikers van SocialeKaart.care zijn opgegeven worden daarbij ook gebruikt. Hoe hoger zorgverleners in de zoekresultaten verschijnen hoe beter de match. 
+                SocialeKaart.care zoekt met een geavanceerd algoritme in de beschikbare gegevens van de zorgverlener. De kenmerken die door alle gebruikers van SocialeKaart.care zijn opgegeven worden daarbij ook gebruikt.
             </p>
         </section>
         <section>
@@ -63,7 +45,7 @@
         <section>
             <h1>Kan ik zoeken binnen mijn sociale kaart?</h1>
             <p class="accordion_content">
-                Door in de rode balk bij <i>Zoeken in</i> te kiezen voor <i>Mijn sociale kaart</i> zult u via het standaard zoekformulier kunnen zoeken in uw sociale kaart. Als u via de knop <i>Mijn sociale kaart</i> naar uw kaart bent genavigeerd zal <i>Zoeken in</i> zich automatisch aanpassen naar het zoeken in uw sociale kaart.
+                Door in de rode balk op <i>Mijn sociale kaart te klikken. Daar krijgt u een apart zoek formulier om te zoeken binnen uw eigen sociale kaart.</i>
             </p>
         </section>
         <section>
@@ -73,9 +55,9 @@
             </p>
         </section>
         <section>
-            <h1>Hoe kan ik landelijk zoeken? *</h1>
+            <h1>Hoe kan ik landelijk zoeken?</h1>
             <p class="accordion_content">
-                Door in de rode balk bij <i>Zoeken in</i> te kiezen voor <i>Het hele land</i> zult u via het standaard zoekformulier het hele land kunnen doorzoeken.
+                Bij het zoeken krijgt u altijd onder de zoekresultaten de optie om te wisselen tussen het zoeken in uw regio of in het gehele land.
             </p>
         </section>
         <section>
@@ -107,6 +89,25 @@
             <p class="accordion_content">
                 Heeft u nog wel een succesvolle betaling kunnen doen en ging er daarna iets mis? Zo ja, wacht nog 2 uur, binnen deze tijd zal uw betaling waarschijnlijk alsnog worden afgerond binnen socialekaart.care. Als dit niet gebeurd of er ging iets anders mis neem dan contact met ons op via <a href="mailto:info@socialekaart.care">info@socialekaart.care</a>.
             </p>
+        </section>
+        <section>
+            <h1>Hoe kan ik een abonnement afsluiten?</h1>
+            <p class="accordion_content">In het menu <i>Account</i> kunt u de optie <i>Abonneren</i> kiezen. Het abonnement is geldig voor 1 jaar en de betaling vindt plaats via ideal.</p>
+        </section>
+        <section>
+            <h1>Wordt mijn abonnement automatisch verlengd?</h1>
+            <p class="accordion_content">Nee, wij informeren u enkele weken voordat uw abonnement verloopt hierover en u krijgt daarbij de mogelijkheid om het abonnement te verlengen.</p>
+        </section>
+        <section>
+            <h1>Welke voornaamste voordelen heeft een abonnement voor mij?</h1>
+            <p class="accordion_content">
+                Met een abonnement kunt u:
+            </p>
+            <ul class="accordion_content">
+                <li>uw assistent en/of waarnemend huisarts toegang geven tot socialekaart.care</li>
+                <li>meerdere praktijken opvoeren om vanuit te werken</li>
+                <li>uw eigen sociale kaart beheren</li>
+            </ul>
         </section>
         <p style="font-size:10px;">
             * = Deze functionaliteiten zijn door u te gebruiken als u beschikt over een abonnement.

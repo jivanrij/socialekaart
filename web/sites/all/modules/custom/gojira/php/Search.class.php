@@ -300,34 +300,10 @@ EAT;
      * @param array $labels
      */
     public function doSearch($labels, $search_type = null) {
-        
-        // set defaults
-        global $user;
-        $oUser = user_load($user->uid);
 
-        if (is_null($search_type)) {
-            if (helper::value($oUser, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) {
-                $search_type = helper::SEARCH_TYPE_COUNTRY;
-            }else{
-                $search_type = helper::SEARCH_TYPE_REGION;
-            }
-        }
-
-        $found = array();
-
-        // set default return scenarios
-        if (count($labels) == 0) {
-            return array();
-        }
-
-
-        $limit = variable_get('SEARCH_MAX_RESULT_AMOUNT'); // let's add one to the result, so we can check if we have more results the the max, afterwards remove it
-
-        $aParams = array();
-
+        // Clean up the labels
         // make from jantje, piet en klaas -=> jantje, piet, en, klaas
         $labels = explode(' ', implode(' ', $labels));
-
         // clean all tags
         $cleanTags = array();
         foreach ($labels as $label) {
@@ -336,97 +312,91 @@ EAT;
                 $cleanTags[] = $c;
             }
         }
-        
         $labels = helper::cleanArrayWithBlacklist($cleanTags);
-        
+
         if (count($labels) == 0) {
             return array();
         }
 
-        // get an array with all the nids related to the searchwords based on the labels$nidsSql = '0';
-        $nodeCounter = array();
-        $foundNodes = array();
-        foreach ($labels as $label) {
-            $sql = "SELECT searchword_nid.node_nid AS nid, searchword.word AS word, searchword_nid.score AS score FROM {searchword} JOIN {searchword_nid} on (searchword.id = searchword_nid.searchword_id) WHERE word LIKE :label1 OR word LIKE :label2";
-            $result = db_query($sql, array(':label1' => $label . '%', ':label2' => '%' . $label))->fetchAll();
-            foreach ($result as $found) {
-                $nodeCounter[$label . $found->nid] = true;
-                if (array_key_exists($found->nid, $foundNodes)) {
-                    $foundNodes[$found->nid] = (int) ($found->score + $foundNodes[$found->nid]);
-                } else {
-                    $foundNodes[$found->nid] = (int) $found->score;
-                }
-            }
-        }
-        // clean the resultset of all nodes that do not have hits on all the labels
-        // this part makes a AND function of the search
-        foreach ($foundNodes as $nid => $foundNode) {
-            foreach ($labels as $label) {
-                if (!isset($nodeCounter[$label . $nid])) {
-                    // node has no hits on one of the labels, remove it
-                    if (isset($foundNodes[$nid])) {
-                        unset($foundNodes[$nid]);
-                    }
-                }
-            }
-        }
-        // make nid's part for the sql query
-        $nidsSql = '0';
-        foreach ($foundNodes as $nid => $foundNode) {
-            $nidsSql .= ',' . $nid;
-        }
-
-        // build the case to add the score field to the query
-        if (count($foundNodes)) {
-            $score_sql = ' (CASE ';
-            foreach ($foundNodes as $nid => $score) {
-                $score_sql .= " WHEN node.nid = {$nid} THEN {$score} ";
-            }
-            $score_sql .= " ELSE 0 END) AS score, ";
-        } else {
-            $score_sql = ' 0 as score, ';
-        }
-
-
         // get the map center
         $location = Location::getCurrentLocationObjectOfUser(true);
 
-        $favoriteFilter = '';
-        if ($search_type == helper::SEARCH_TYPE_OWNLIST && user_access(helper::PERMISSION_PERSONAL_LIST)) {
-            $favoriteFilter = " AND group_location_favorite.gid = " . Group::getGroupId();
+        // set defaults
+        global $user;
+        $oUser = user_load($user->uid);
+
+        $limitToRegion = false;
+
+        // get search type
+        if (is_null($search_type)) {
+            if (helper::value($oUser, GojiraSettings::CONTENT_TYPE_SEARCH_GLOBAL_FIELD)) {
+                $search_type = helper::SEARCH_TYPE_COUNTRY;
+            }else{
+                $search_type = helper::SEARCH_TYPE_REGION;
+                $limitToRegion = true;
+            }
         }
 
-        if (count($labels)) {
-            $relatedNids = ' node.nid in (' . $nidsSql . ') ';
-        } else {
-            $relatedNids = ' 1=1 ';
+
+        $locations = self::findLocations($labels, variable_get('SEARCH_MAX_RESULT_AMOUNT'), $location, $limitToRegion, false);
+
+        $locationNids = '0';
+        foreach($locations as $location)
+        {
+            $locationNids .= ','.$location['nid'];
         }
 
 
-        $visible_join = ' join field_data_field_visible_to_other_user on (node.nid = field_data_field_visible_to_other_user.entity_id) join field_data_field_address_city on (node.nid = field_data_field_address_city.entity_id) ';
-        $visible_where = " AND field_data_field_visible_to_other_user.field_visible_to_other_user_value = 1 AND field_data_field_visible_to_other_user.bundle = 'location' AND field_data_field_visible_to_other_user.delta = 0 ";
-
-        // query get's all the nodes in radius, maybe only from favorites, but surly visible, and filters them on the nodes with the related tags
-        $distance = 0.09;
-        $iMinLongitude = ($location->longitude - ($distance * 2));
-        $iMaxLongitude = ($location->longitude + ($distance * 2));
-        $iMinLatitude = ($location->latitude - $distance);
-        $iMaxLatitude = ($location->latitude + $distance);
-
-        // only on the region search type we have a limit
-        $sql_max_distance = ' ';
-        if ($search_type == helper::SEARCH_TYPE_REGION) {
-            $sql_max_distance = " AND (X(point) BETWEEN {$iMinLongitude} AND {$iMaxLongitude} AND Y(point) BETWEEN {$iMinLatitude} AND {$iMaxLatitude}) ";
+        $foundNodes = array();
+        foreach ($labels as $label) {
+            $sql = <<<EOT
+SELECT searchword_nid.node_nid AS nid, searchword_nid.score AS score, searchword.word FROM searchword JOIN searchword_nid on (searchword.id = searchword_nid.searchword_id) 
+WHERE (word LIKE :label1 OR word LIKE :label2) AND searchword_nid.node_nid in ({$locationNids})
+EOT;
+            $result = db_query($sql, array(':label1' => $label . '%', ':label2' => '%' . $label))->fetchAll();
+            foreach ($result as $found) {
+                if (array_key_exists($found->nid, $foundNodes)) {
+                    $foundNodes[$found->nid]['score'] = (int) ($found->score + $foundNodes[$found->nid]['score']);
+                } else {
+                    $foundNodes[$found->nid] = $locations[$found->nid];
+                    $node = node_load($found->nid);
+                    $node->longitude = $locations[$found->nid]['longitude'];
+                    $node->latitude = $locations[$found->nid]['latitude'];
+                    $foundNodes[$found->nid]['node'] = $node;
+                    $foundNodes[$found->nid]['score'] = (int) $found->score;
+                }
+            }
         }
 
-        //make the distance field for the coutry & region search, else distance will be 0
-        $sDistanceField = ' 0 as distance ';
-        if ($search_type == helper::SEARCH_TYPE_REGION || $search_type == helper::SEARCH_TYPE_COUNTRY) {
-            $lat1 = 'Y(point)';
-            $lon1 = 'X(point)';
-            $lat2 = $location->latitude;
-            $lon2 = $location->longitude;
-            $sDistanceField = <<<EOT
+        usort($foundNodes,"sort_locations");
+
+        return $foundNodes;
+    }
+
+    /**
+     * Finds the locations eligable for the searchresults based on the labels & distance
+     *
+     * @param array of labels
+     * @param integer Search limit
+     * @param bool Locations object of the users practice
+     * @param bool Limit by radius if we search from practice
+     * @return array
+     */
+    public function findLocations($labels, $limit, $centerLocation = false, $limitByRadius = false, $filterFavorites = false)
+    {
+        if(!is_array($labels))
+        {
+            return array();
+        }
+
+        // define the sql part for the distance result SELECT field to order on
+        $distanceField = ' 0 as distance ';
+        if ($limitByRadius) {
+            $lat1 = 'Y(node.point)';
+            $lon1 = 'X(node.point)';
+            $lat2 = $centerLocation->latitude;
+            $lon2 = $centerLocation->longitude;
+            $distanceField = <<<EOT
         (1200 * acos( cos( radians($lat1) )
       * cos( radians($lat2) )
       * cos( radians($lon2) - radians($lon1)) + sin(radians($lat1))
@@ -434,54 +404,70 @@ EAT;
 EOT;
         }
 
-        $sql = <<<EOT
-SELECT
-node.nid, node.title,
-{$score_sql}
-{$sDistanceField},
-Y(point) as lat,
-X(point) as lon
-FROM node
-{$visible_join}
-left join group_location_favorite on (group_location_favorite.nid = node.nid)
-WHERE status = 1 AND {$relatedNids}
-{$sql_max_distance}
-{$favoriteFilter}
-{$visible_where}
-{$filter}
-GROUP BY node.nid ORDER BY score desc, distance asc LIMIT {$limit}
-EOT;
+        // define the sql part for the distance limit in the WHERE
+        $sql_max_distance = '1=1';
+        if($limitByRadius & $centerLocation)
+        {
+            // query get's all the nodes in radius, maybe only from favorites, but surly visible, and filters them on the nodes with the related tags
+            $distance = 0.09;
+            $iMinLongitude = ($centerLocation->longitude - ($distance * 2));
+            $iMaxLongitude = ($centerLocation->longitude + ($distance * 2));
+            $iMinLatitude = ($centerLocation->latitude - $distance);
+            $iMaxLatitude = ($centerLocation->latitude + $distance);
 
-        $results = db_query($sql, $aParams);
-        
-        // put all the results in a nice to handle array
-        $counter = 0;
-        $resultNodes = array();
-        foreach ($results as $result) {
-
-            $distance = $result->distance;
-            $score = $result->score;
-
-            // we got one extra to check if we are above the max amount of results, let's check that here, and remove the one the is to much
-            $counter++;
-            if ($counter > variable_get('SEARCH_MAX_RESULT_AMOUNT')) {
-                Search::getInstance()->toMuchResults = true;
-                break;
-            }
-
-            $node = node_load($result->nid);
-            $node->score = $score;
-            $node->distance = $distance;
-            $node->latitude = $result->lat;
-            $node->longitude = $result->lon;
-
-            $resultNodes[$result->nid] = $node;
+            $sql_max_distance = " (X(point) BETWEEN {$iMinLongitude} AND {$iMaxLongitude} AND Y(point) BETWEEN {$iMinLatitude} AND {$iMaxLatitude}) ";
         }
 
-        return $resultNodes;
-    }
+        // define the sql part for the labels
+        $matchAgainsts = array();
+        foreach($labels as $label)
+        {
+            $matchAgainsts[] =  "MATCH(node.search) AGAINST('{$label}*' IN BOOLEAN MODE)"; // is nog een optie als het veel in tijd uitmaakt
+            //$matchAgainsts[] =  "MATCH(node.search) AGAINST('{$label}*' IN BOOLEAN MODE) AND MATCH(node.search) AGAINST('*{$label}' IN BOOLEAN MODE)";
+        }
+        $matchAgainsts = '('.implode(' AND ', $matchAgainsts).')';
 
-    
+        // favorites filter
+        $favJoin = "";
+        $favWhere = "1=1";
+        if($filterFavorites)
+        {
+            $gid = Group::getGroupId();
+            $favJoin = "join group_location_favorite on (group_location_favorite.nid = node.nid)";
+            $favWhere = "group_location_favorite.gid = {$gid}";
+        }
+
+        $sql = <<<EOT
+SELECT node.title, node.nid, {$distanceField}, X(point) as longitude, Y(point) as latitude
+FROM node 
+join field_data_field_visible_to_other_user on (node.nid = field_data_field_visible_to_other_user.entity_id) 
+{$favJoin} 
+WHERE {$matchAgainsts} 
+AND {$sql_max_distance} 
+AND field_data_field_visible_to_other_user.field_visible_to_other_user_value = 1 
+AND field_data_field_visible_to_other_user.bundle = 'location' 
+AND field_data_field_visible_to_other_user.delta = 0 
+AND {$favWhere} 
+LIMIT {$limit}
+EOT;
+
+        $result = db_query($sql);
+
+        $results = array();
+        foreach($result as $loc)
+        {
+            $results[$loc->nid] = array(
+                'nid'=>$loc->nid,
+                'title'=>$loc->title,
+                'distance'=>$loc->distance,
+                'longitude'=>$loc->longitude,
+                'latitude'=>$loc->latitude
+            );
+        }
+
+        return $results;
+
+    }
 
     /**
      * Index all the locations for the search
@@ -796,12 +782,12 @@ EOT;
     }
 
     public static function searchInOwnMap($tags) {
-        $currentPractice = Location::getCurrentLocationNodeObjectOfUser();
-        $ownlistLocations = Favorite::getInstance()->getAllFavoriteLocations($currentPractice->nid);
-        
-        $foundNodes = array();
-        $nidsSql = '0';
-
+//        $currentPractice = Location::getCurrentLocationNodeObjectOfUser();
+//        $ownlistLocations = Favorite::getInstance()->getAllFavoriteLocations($currentPractice->nid);
+//
+//        $foundNodes = array();
+//        $nidsSql = '0';
+//
         if (!is_array($tags)) {
             $tags = explode(' ', $tags);
         }
@@ -814,43 +800,91 @@ EOT;
             }
         }
 
-        // get an array with all the nids related to the searchwords based on the labels
-        $nodeCounter = array();
-        $foundNodes = array();
-        foreach ($cleanTags as $tag) {
-            $sql = "SELECT searchword_nid.node_nid AS nid, searchword.word AS word, searchword_nid.score AS score FROM {searchword} JOIN {searchword_nid} on (searchword.id = searchword_nid.searchword_id) WHERE word LIKE :label1 OR word LIKE :label2";
-            $result = db_query($sql, array(':label1' => $tag . '%', ':label2' => '%' . $tag))->fetchAll();
-            foreach ($result as $found) {
-                $nodeCounter[$tag . $found->nid] = true;
-                $foundNodes[$found->nid] = $found->nid;
-            }
+        $foundLocations = self::findLocations($cleanTags, 1000, false, false, true);
+
+        foreach ($foundLocations as $foundLocation) {
+            $foundLocation['node'] = node_load($foundLocation['nid']);
         }
 
-        // clean the resultset of all nodes that do not have hits on all the labels
-        // this part makes a AND function of the search
-        foreach ($foundNodes as $nid => $foundNode) {
-            foreach ($cleanTags as $tag) {
-                if (!isset($nodeCounter[$tag . $nid])) {
-                    // node has no hits on one of the labels, remove it
-                    if (isset($foundNodes[$nid])) {
-                        unset($foundNodes[$nid]);
-                    }
-                }
-            }
-        }
+//        foreach ($ownlistLocations as $ownlistLocation) {
+//            if (array_key_exists($ownlistLocation->nid, $foundLocations)) {
+//                $return[$ownlistLocation->nid] = $foundLocations;
+//            }
+//        }
 
-        $return = array();
-        foreach ($ownlistLocations as $ownlistLocation) {
-            if (array_key_exists($ownlistLocation->nid, $foundNodes)) {
-                $loc = Location::getLocationObjectOfNode($ownlistLocation->nid);
-                if ($loc) {
-                    $ownlistLocation->latitude = $loc->latitude;
-                    $ownlistLocation->longitude = $loc->longitude;
-                }
-                $return[$ownlistLocation->nid] = $ownlistLocation;
-            }
-        }
+//        // get an array with all the nids related to the searchwords based on the labels
+//        $nodeCounter = array();
+//        $foundNodes = array();
+//        foreach ($cleanTags as $tag) {
+//            $sql = "SELECT searchword_nid.node_nid AS nid, searchword.word AS word, searchword_nid.score AS score FROM {searchword} JOIN {searchword_nid} on (searchword.id = searchword_nid.searchword_id) WHERE word LIKE :label1 OR word LIKE :label2";
+//            $result = db_query($sql, array(':label1' => $tag . '%', ':label2' => '%' . $tag))->fetchAll();
+//            foreach ($result as $found) {
+//                $nodeCounter[$tag . $found->nid] = true;
+//                $foundNodes[$found->nid] = $found->nid;
+//            }
+//        }
+//
+//        // clean the resultset of all nodes that do not have hits on all the labels
+//        // this part makes a AND function of the search
+//        foreach ($foundNodes as $nid => $foundNode) {
+//            foreach ($cleanTags as $tag) {
+//                if (!isset($nodeCounter[$tag . $nid])) {
+//                    // node has no hits on one of the labels, remove it
+//                    if (isset($foundNodes[$nid])) {
+//                        unset($foundNodes[$nid]);
+//                    }
+//                }
+//            }
+//        }
+//
+//        $return = array();
+//        foreach ($ownlistLocations as $ownlistLocation) {
+//            if (array_key_exists($ownlistLocation->nid, $foundNodes)) {
+//                $loc = Location::getLocationObjectOfNode($ownlistLocation->nid);
+//                if ($loc) {
+//                    $ownlistLocation->latitude = $loc->latitude;
+//                    $ownlistLocation->longitude = $loc->longitude;
+//                }
+//                $return[$ownlistLocation->nid] = $ownlistLocation;
+//            }
+//        }
 
-        return $return;
+        return $foundLocations;
+    }
+}
+
+/**
+ * Sort the search results
+ *
+ * @param array $loc1
+ * @param array $loc2
+ * @return int
+ */
+function sort_locations($loc1,$loc2)
+{
+
+    if($loc1['score'] == $loc2['score'])
+    {
+        // if the score is equal, base the sort on the distance
+        if($loc1['distance'] == $loc2['distance'])
+        {
+            return 0;
+        }
+        if($loc1['distance'] < $loc2['distance'])
+        {
+            return -1;
+        }
+        if($loc1['distance'] > $loc2['distance'])
+        {
+            return 1;
+        }
+    }
+    if($loc1['score'] < $loc2['score'])
+    {
+        return -1;
+    }
+    if($loc1['score'] < $loc2['score'])
+    {
+        return 1;
     }
 }
