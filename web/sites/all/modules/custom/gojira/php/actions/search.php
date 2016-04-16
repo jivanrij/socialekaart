@@ -44,7 +44,7 @@ function search() {
                 $filteredTags[] = $tag;
             }
         }
-        
+
         // get all the nodes based on the normal tags
         $foundNodes = Search::getInstance()->doSearch($filteredTags);
 

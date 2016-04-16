@@ -125,7 +125,7 @@ class Mailer {
 
     /**
      * This email get's send when a invoice needs to be send after a payment
-     * 
+     *
      * @param string $send_to_address
      * @param string $invoice_file
      * @param integer $ideal_id
@@ -142,7 +142,7 @@ class Mailer {
         $sBody = variable_get('gojira_invoice_email', '');
         $sBody = str_replace(array('%invoice_id%', '%doctor%'), array($payment->increment, helper::value($main_doctor, GojiraSettings::CONTENT_TYPE_USER_TITLE)), $sBody);
 
-        
+
         if (false && $invoice_file) { // let's skip mandril for now
             $attachment = file_get_contents($invoice_file);
             $attachment_encoded = base64_encode($attachment);
@@ -168,7 +168,7 @@ class Mailer {
             'type' => 'bcc'
         );
 
-        
+
         if (true) { // let's skip mandril for now dont forget the file_get_contents mandril check
             $attachment['path'] = $invoice_file;
             $attachment['name'] = 'Factuur_Socialekaart_' . $payment->increment . '.pdf';
@@ -191,7 +191,7 @@ class Mailer {
 
     /**
      * This email will be send after a new employee user is made by the main doctor
-     * 
+     *
      * @param stdClass $account
      */
     public static function sendWelcomeMailToEmployee($account) {
@@ -241,7 +241,7 @@ class Mailer {
 
     /**
      * This email will be send after a new employer user is made by the main doctor
-     * 
+     *
      * @param stdClass $account
      */
     public static function sendWelcomeMailToEmployer($account) {
@@ -271,7 +271,7 @@ class Mailer {
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'bcc'
         );
-        
+
         if (true) { // let's skip mandril for now dont forget the file_get_contents mandril check
             Mailer::sendMail(
                     $aInfo['to'][0]['email'], // to
@@ -291,7 +291,7 @@ class Mailer {
 
     /**
      * Thie e-mail will be send when a user get's disabled due to a unsubscription
-     * 
+     *
      * @param stdClass $user
      */
     public static function sendUnsubscribeMail($user) {
@@ -319,7 +319,7 @@ class Mailer {
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'bcc'
         );
-        
+
         if (true) { // let's skip mandril for now
             Mailer::sendMail(
                     $aInfo['to'][0]['email'], // to
@@ -339,7 +339,7 @@ class Mailer {
 
     /**
      * Thie e-mail will be send when a user get's enabled due to a subscription
-     * 
+     *
      * @param stdClass $user
      */
     public static function sendSubscribeActivationMail($user) {
@@ -367,8 +367,8 @@ class Mailer {
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'bcc'
         );
-        
-        
+
+
         if (true) { // let's skip mandril for now
             Mailer::sendMail(
                     $aInfo['to'][0]['email'], // to
@@ -388,13 +388,13 @@ class Mailer {
 
     /**
      * Thie e-mail will be send when a group's subscription is going to end in 30 days from now
-     * 
+     *
      * @param stdClass $user
      */
     public static function sendSubscriptionEndWarning($main_doctor) {
 
         $title = helper::value($main_doctor, GojiraSettings::CONTENT_TYPE_USER_TITLE);
-        
+
         $body = variable_get('gojira_subscription_expire_warning', '');
         $body = str_replace(array('%title%'), array($title), $body);
 
@@ -412,7 +412,7 @@ class Mailer {
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'bcc'
         );
-        
+
         if (true) { // let's skip mandril for now
             Mailer::sendMail(
                     $aInfo['to'][0]['email'], // to
@@ -432,7 +432,7 @@ class Mailer {
 
     /**
      * Sends the e-mail for a doctor to tell him the subscription is ended
-     * 
+     *
      * @param stdClass $main_doctor
      * @return boolean
      */
@@ -473,7 +473,7 @@ class Mailer {
 
     /**
      * Sends a e-mail to the admins of the site with a question of the user
-     * 
+     *
      * @param stdClass $main_doctor
      * @return boolean
      */
@@ -493,7 +493,7 @@ class Mailer {
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'bcc'
         );
-        
+
         if (true) { // let's skip mandril for now
             Mailer::sendMail(
                     $aInfo['to'][0]['email'], // to
@@ -513,7 +513,7 @@ class Mailer {
 
     /**
      * Informs the admin about a improvement suggestion from a user
-     * 
+     *
      * @return boolean
      */
     public static function sendImproveSuggestion($title, $url, $user, $user_url, $type_of_problem, $info, $better_title = '') {
@@ -532,24 +532,24 @@ EOT;
 
         $aInfo['from_email'] = 'no-reply@socialekaart.care';
         $aInfo['from_name'] = 'SocialeKaart.care';
-        $aInfo['subject'] = '[' . $title . '] - Verbetersuggestie voor locatie - ' . $type_of_problem;
+        $aInfo['subject'] = '[' . $title . '] - Verbetersuggestie voor locatie - ' . $type_of_problem . ' on ' . date('d-m-Y H:i');
         $aInfo['text'] = $body;
         $aInfo['to'][] = array(
             'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'to'
         );
-        
+
         if (true) { // let's skip mandril for now
             Mailer::sendMail(
                     $aInfo['to'][0]['email'], // to
                     $aInfo['from_email'], // from
                     $aInfo['subject'], // subject
                     variable_get('site_mail', 'info@socialekaart.care'), // reply to
-                    $aInfo['html'], // content text/html
+                    $aInfo['text'], // content text/html
                     false, // attachment
                     false, // bcc
-                    true // html
+                    false // html
                     );
         } else {
             $oMailer = new Mailer();
@@ -559,7 +559,7 @@ EOT;
 
     /**
      * Sends the e-mail to the admin with the information that a user has added a location
-     * 
+     *
      * @return boolean
      */
     public static function sendLocationAddedByUserToAdmin($oLocation, $oUser) {
@@ -571,7 +571,7 @@ https://www.socialekaart.care/node/{$oLocation->nid}/edit
 Aangemaakt door gebruiker {$oUser->name}
 https://www.socialekaart.care/user/{$oUser->uid}/edit
 EOT;
-        
+
         $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
         $aInfo['from_name'] = 'SocialeKaart.care';
         $aInfo['subject'] = 'Locatie '.$oLocation->title.' is door een gebruiker aangemaakt';
@@ -597,7 +597,7 @@ EOT;
             $oMailer->send($aInfo);
         }
     }
-    
+
     /**
      * This e-mail informs the admin that there is a new account added and it need validation
      */
@@ -607,9 +607,9 @@ EOT;
         $sEmail = $oUser->mail;
         $sBig = helper::value($oUser, GojiraSettings::CONTENT_TYPE_BIG_FIELD);
         $sAccount = 'https://www.socialekaart.care/user/' . $oUser->uid . '/edit';
-        
+
         $sUrl = "https://www.socialekaart.care/admin/config/system/gojiraactivateuser";
-        
+
         $sBody = <<<EOT
 Er is een account aangemaakt door {$sTitle}.<br />
 Van deze account moet het BIG nummer worden gecontrolleerd en dan kan hij <a href="{$sUrl}">geactiveerd</a> worden.<br />
@@ -629,7 +629,7 @@ EOT;
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'type' => 'to'
         );
-        
+
         if (true) { // let's skip mandril for now
             Mailer::sendMail(
                     $aInfo['to'][0]['email'], // to
@@ -646,16 +646,16 @@ EOT;
             $oMailer->send($aInfo);
         }
     }
-    
+
 
     /**
      * Informs the user he has logged on to SocialeKaart for the first time and had has given a free period
-     * 
+     *
      */
     public static function newAccountWithFreePeriod($oUser) {
-        
+
             $sEmail = $oUser->mail;
-  
+
             $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
             $aInfo['from_name'] = 'SocialeKaart.care';
             $aInfo['subject'] = 'Gefeliciteerd!';
@@ -690,7 +690,7 @@ EOT;
                 'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
                 'type' => 'bcc'
             );
-            
+
         if (true) { // let's skip mandril for now
             Mailer::sendMail(
                     $aInfo['to'][0]['email'], // to
@@ -711,10 +711,10 @@ EOT;
 
     /**
      * get's send to an account that has been activated by the admin through the backend tools page. Mosly used for users who register through the frontend, not HAweb.
-     * 
+     *
      */
     public static function accountActivatedByAdmin($oUser) {
-        
+
         $sUrl = user_pass_reset_url($oUser);
         $sBody = variable_get('account_activated_by_admin', '');
 
@@ -744,19 +744,19 @@ EOT;
             $oMailer->send($aInfo);
         }
     }
-    
+
     /**
      * Informs the admin that there is a location added without coordinates
-     * 
+     *
      */
     public static function locationWithoutCoordinatesAdded($oLocation) {
-        
+
 //        $sUrl = user_pass_reset_url($oUser);
         $sAddress = Location::getAddressString($oLocation).'<br />'.$oLocation->title;
-        
+
         $sCategory = Category::getCategoryName($oLocation);
         $iLocation = $oLocation->nid;
-        
+
         $sBody = <<<EOT
 Voor de volgende locatie heeft google geen coordinaten gevonden.<br />
 Deze moeten opgezocht worden en toegevoegd worden.<br />
@@ -805,10 +805,10 @@ EOT;
         }
 
     }
-    
+
     /**
      * Informs the admin that there is a group flagged as payed without payment info
-     * 
+     *
      */
     public static function checkSubscriptionFail($iGroup) {
         $aInfo['from_email'] = 'no-reply@socialekaart.care';
@@ -838,14 +838,14 @@ EOT;
             $oMailer->send($aInfo);
         }
     }
-    
+
     /**
      * Informs the admin that a user thinks there are double locations
      */
     public static function informAdminAboutDoubleLocations($sLocationIds) {
-        
+
         $aLocations = explode(',',$sLocationIds);
-        
+
         $sHtmlLinks = '';
         $ids = array();
         foreach($aLocations as $iLocation){
@@ -855,19 +855,19 @@ EOT;
                 $ids[] = $iLocation;
             }
         }
-        
+
         $ids = implode(',', $ids);
         //auto_login_url_create($user->uid, '/?q=loginlink/but/fake', true)
-        
+
         if($sHtmlLinks == ''){
             $sHtmlLinks = 'mmm... no numeric ids or nodes found...';
         }
-        
+
         global $user;
         $oUser = user_load($user->uid);
         $aInfo['from_email'] = 'no-reply@socialekaart.care';
         $aInfo['from_name'] = 'SocialeKaart.care';
-        $aInfo['subject'] = 'SocialeKaart.care ISSUE - double locations reported by user '.$oUser->name;
+        $aInfo['subject'] = 'Double locations reported by user '.$oUser->name.' on '.date('d-m-Y H:i');
         $aInfo['html'] = <<<EOT
 User {$oUser->name} ({$oUser->uid}) thinks the following locations are double.<br />
 {$sHtmlLinks}<br />
@@ -901,19 +901,19 @@ EOT;
 
     /**
      * Add given e-mail to the mailchimp list
-     * 
+     *
      * @param String $sEmail
      */
     public static function subscribeToMailchimp($sEmail) {
         mailchimp_subscribe(variable_get('gojira_mailchimp_list_key'), $sEmail, null, false, false, 'html', true, true);
     }
 
-    
-    
+
+
     /**
      * Sends a HTML mail
      * Note: NOT trough Mandril
-     * 
+     *
      * @param string $to
      * @param string $from
      * @param string $subject
@@ -924,6 +924,12 @@ EOT;
      * @return boolean
      */
     public static function sendMail($to, $from, $subject, $replyto, $message, $attachment = false, $bcc = false, $html = true) {
+
+// if(user_access('administer')) {
+//     var_dump(func_get_args());
+//     die('exit');
+// }
+
         require_once getcwd().'/'.drupal_get_path('module', 'gojira').'/inc/PHPMailer/class.phpmailer.php';
 
         $mail = new PHPMailer;
@@ -944,7 +950,7 @@ EOT;
         if(is_array($attachment)){
             $mail->AddAttachment($attachment['path'], $attachment['name']);
         }
-        
+
         if (!$mail->send()) {
             return false;
         } else {
