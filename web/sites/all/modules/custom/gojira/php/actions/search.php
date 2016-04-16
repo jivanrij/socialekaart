@@ -44,7 +44,7 @@ function search() {
                 $filteredTags[] = $tag;
             }
         }
-
+        
         // get all the nodes based on the normal tags
         $foundNodes = Search::getInstance()->doSearch($filteredTags);
 
@@ -59,7 +59,14 @@ function search() {
     $latLow = null;
     $latHigh = null;
     // format the results to smaller data
-    foreach ($foundNodes as $key => $foundNode) {
+    foreach ($foundNodes as $key => $found) {
+
+        if(is_object($found)){
+            $foundNode = $found;
+        }else {
+            $foundNode = $found['node'];
+        }
+
 
         if (is_null($foundNode->longitude) && is_null($foundNode->latitude)) {
             $location = Location::getLocationObjectOfNode($foundNode->nid);
