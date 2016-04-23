@@ -30,7 +30,8 @@ function search() {
     } else if ($single_location) {
         // we have been given a nid as a tag, let's show a single location
         $output['by_id'] = $_GET['s'];
-        $foundNodes[$_GET['s']] = node_load($_GET['s']);
+        $node = node_load($_GET['s']);
+        $foundNodes[$_GET['s']] = $node;
     } else if (isset($_GET['s']) && $_GET['s'] != '') {
 
         // NORMAL SEARCH
@@ -68,8 +69,8 @@ function search() {
             $foundNode = $found['node'];
         }
 
-
-        if (is_null($foundNode->longitude) && is_null($foundNode->latitude)) {
+        if ((!isset($foundNode->longitude) && !isset($foundNode->latitude)) OR
+            (is_null($foundNode->longitude) && is_null($foundNode->latitude))) {
             $location = Location::getLocationObjectOfNode($foundNode->nid);
             if($location){
                 $foundNode->latitude = $location->getLatitude();
@@ -91,6 +92,13 @@ function search() {
         }
         if ((is_null($lonHigh) || $foundNode->longitude >= $lonHigh)  && !is_null($foundNode->longitude)) {
             $lonHigh = $foundNode->longitude;
+        }
+
+        if(!isset($foundNode->score)) {
+            $foundNode->score = 1;
+        }
+        if(!isset($foundNode->distance)) {
+            $foundNode->distance = 1;
         }
 
         $searchResults[] = array(

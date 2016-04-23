@@ -78,23 +78,21 @@ function getHeightPx() {
 
 // show the first step of the tutorial
 function showTutorial() {
-    var width = '600px';
-    if (onMobileView()) {
-        var width = '80%';
+    if (!onMobileView()) {
+        jQuery.colorbox({
+            href: '/?q=ajax/showtutorial',
+            closeButton: false,
+            escKey: false,
+            overlayClose: false,
+            width: '600px',
+            opacity: 0.5,
+            onComplete: function () {
+                bindTutorialButtons();
+            }
+        });
     }
-
-    jQuery.colorbox({
-        href: '/?q=ajax/showtutorial',
-        closeButton: false,
-        escKey: false,
-        overlayClose: false,
-        width: width,
-        opacity: 0.5,
-        onComplete: function () {
-            bindTutorialButtons();
-        }
-    });
 }
+
 // bind the tutorial buttons
 function bindTutorialButtons() {
     jQuery("#cboxLoadedContent #close_tutorial_button").click(function (e) {
@@ -388,7 +386,7 @@ function bindGojirasearch() {
             var s = encodeURIComponent(jQuery('#gojirasearch_search_term').val());
             window.location = '/?s=' + s;
         }
-        
+
     });
 }
 
@@ -478,7 +476,7 @@ function bindAfterSearch(bind_list, bind_details, query) {
             e.preventDefault();
             doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()), 1);
         });
-        
+
         jQuery("#switch_to_region_search").on('click',function(e){
             e.preventDefault();
             window.location = '/?s='+query+'&search_type=region';
@@ -486,7 +484,7 @@ function bindAfterSearch(bind_list, bind_details, query) {
         jQuery("#switch_to_country_search").on('click',function(e){
             e.preventDefault();
             window.location = '/?s='+query+'&search_type=country';
-        });        
+        });
     }
 
     if (bind_details) {
@@ -505,7 +503,7 @@ function bindAfterSearch(bind_list, bind_details, query) {
             addNewLabel(this);
         });
     }
-    
+
     bindCloseButtons();
 
     jQuery("input.new_label").click(function () {

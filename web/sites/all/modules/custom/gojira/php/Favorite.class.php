@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This class acts as a function wrapper for all kinds of favorite related tasks. 
+ * This class acts as a function wrapper for all kinds of favorite related tasks.
  */
 class Favorite {
 
@@ -16,7 +16,7 @@ class Favorite {
 
     /**
      * Tells you if the given location is a favorite of the user
-     * 
+     *
      * @param integer $nid
      * @param integer optional practice to filter on
      * @return boolean
@@ -35,7 +35,7 @@ class Favorite {
     /**
      * Get's you all the favorite locations of the current logged in user's group
      * Add a optional param with a practice id to only get the favorites of the current selected practice
-     * 
+     *
      * @param integer Practice id
      * @return Array
      */
@@ -50,7 +50,7 @@ class Favorite {
             }
 
             $results = db_query("select group_location_favorite.nid from group_location_favorite join node on (node.nid = group_location_favorite.nid) where group_location_favorite.gid = :gid {$sPracticeString} order by node.title asc", array(':gid' => Group::getGroupId()))->fetchAll();
-            
+
             foreach ($results as $nid) {
                 $this->favoriteLocations[$nid->nid] = node_load($nid->nid);
             }
@@ -58,17 +58,17 @@ class Favorite {
 
         return $this->favoriteLocations;
     }
-    
+
     /**
      * Get's you all the favorite locations from a specific category
-     * 
+     *
      * @param integer $filter_category_nid
      * @return array
      */
     public function getAllFavoritesInCategory($filter_category_nid){
-        
+
         $loc = Location::getCurrentLocationNodeObjectOfUser();
-        
+
         $favorites = self::getAllFavoriteLocations($loc->nid);
 
         $return = array();
@@ -83,16 +83,16 @@ class Favorite {
 
     /**
      * Saves the personalized info of the given location (nid) for the given user's group
-     * 
+     *
      * @param integer $nid
      * @param boolean $favorite
      */
     public function setFavorite($nid, $gid = null, $pid = null) {
-        
+
         if($gid === null){
             $gid = Group::getGroupId();
         }
-        
+
         $favoriteLocations = self::getInstance()->getAllFavoriteLocations();
 
         if (array_key_exists($nid, $favoriteLocations)) {
@@ -101,7 +101,7 @@ class Favorite {
             if($pid === null){
                 $oCurrentLocation = Location::getCurrentLocationObjectOfUser();
                 $pid = $oCurrentLocation->nid;
-            }            
+            }
             $params = array(':gid' => $gid, ':nid' => $nid, ':pid' => $pid);
             return db_query("INSERT INTO `group_location_favorite` (`gid`, `nid`, `pid`) VALUES (:gid, :nid, :pid)", $params);
         }
@@ -109,7 +109,7 @@ class Favorite {
 
     /**
      * This function removes a locations from the favorites of the current selected group of the user
-     * 
+     *
      * @param integer $nid
      */
     public function removeFromFavorite($nid) {
@@ -119,7 +119,7 @@ class Favorite {
 
     /**
      * Gets all the groups that have favorited this locations
-     * 
+     *
      * returns array with combined gid & pid
      */
     public function getAllFaviritedGroupsByPractices($nid) {
