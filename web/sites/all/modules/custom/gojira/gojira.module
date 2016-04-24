@@ -421,6 +421,7 @@ function gojira_cron() {
     Search::getInstance()->indexNeeded(250);
   }
 
+
   if(variable_get('cron_check_subscriptions')){
     Subscriptions::checkSubscriptions();
   }

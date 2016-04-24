@@ -519,7 +519,6 @@ EOT;
      * @param integer $max
      */
     public function indexNeeded($max = null) {
-
         if (is_null($max)) {
             $max = variable_get('search_cron_limit', 1000);
         }

@@ -191,11 +191,11 @@
 <p>
     The cron does the following things if you have them enabled in the gojira settings page:
     <ul>
-        <li>cron_remove_unlinked_tax_terms</li>
-        <li>cron_update_search_index_where_needed</li>
-        <li>cron_check_subscriptions</li>
-        <li>cron_restore_backup_locations</li>
-</ul>
+        <li>Removes the unused taxonomy terms (search tags)</li>
+        <li>Updates the search index for the locations with node.indexed = 0</li>
+        <li>Checks the subscriptions, and disables them if the subscription period is over</li>
+        <li>Restores locations from the backup table if there are any. Table&flag: practices_backup.import_it</li>
+    </ul>
 You can find the cron url <a href="/admin/config/system/cron" title="cron page">here</a>.
 </p>
 <form method="get" id="cron" accept-charset="UTF-8">
@@ -214,7 +214,7 @@ You can find the cron url <a href="/admin/config/system/cron" title="cron page">
     jQuery("#cron_run").html(run_times);
     run_gojira_cron();
   });
-  
+
   function run_gojira_cron(){
     jQuery.get(jQuery("#cron_url").val(),function(data,status) {
       var run_times = parseInt(jQuery("#cron_run").text())+1;
@@ -248,11 +248,11 @@ You can find the cron url <a href="/admin/config/system/cron" title="cron page">
         <a href="/?q=admin/reports/gojirareport_location_by_category&category=<?php echo $_GET['change_category_nid']; ?>" title="category linked locations report">here</a>.
       </span>
       <?php else: ?>
-      <span style="color:red;"> 
+      <span style="color:red;">
         Changed <?php echo $_GET['change_category_nid']; ?> into <?php echo $_GET['new_category_name']; ?>.
         Changed the following locations for this:
       <?php foreach($changed_category_locations as $changed_category_location): ?>
-        <?php echo $changed_category_location->nid; ?>, 
+        <?php echo $changed_category_location->nid; ?>,
       <?php endforeach; ?>
       </span>
     <?php endif; ?>
@@ -424,4 +424,3 @@ You can find the cron url <a href="/admin/config/system/cron" title="cron page">
   <input name="labels" value="" style='border:1px; border-style: solid;' />
   <input class="form-submit" type="submit" />
 </form>-->
-

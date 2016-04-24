@@ -214,3 +214,14 @@ class GojiraSettings
 //   `nid` int(11) unsigned NOT NULL COMMENT 'This id is from a node that needs to be removed.',
 //   PRIMARY KEY (`id`)
 // ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+//April 2016 -- add search to node
+// ALTER TABLE `node` ADD `search` TEXT NULL COMMENT 'Holds the labels related to this location for full text search' ;
+// ZET HIER EEN FULL TEXT INDEX OP
+
+//APRIL 2016
+// CREATE TABLE `remove_locations` (
+//   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+//   `nid` int(11) unsigned NOT NULL COMMENT 'This id is from a node that needs to be removed.',
+//   PRIMARY KEY (`id`)
+// ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
