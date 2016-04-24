@@ -337,7 +337,6 @@ EAT;
             }
         }
 
-
         $locations = self::findLocations($labels, variable_get('SEARCH_MAX_RESULT_AMOUNT'), $location, $limitToRegion, false);
 
         $locationNids = '0';
@@ -455,6 +454,11 @@ LIMIT {$limit}
 EOT;
 
         $result = db_query($sql);
+
+        // if (user_access('administer site configuration')) {
+        //     var_dump($result);
+        //     die;
+        // }
 
         $results = array();
         foreach($result as $loc)
@@ -575,7 +579,7 @@ EOT;
      */
     private function addUpdateWordToindex($word) {
         $word = self::cleanSearchTag($word);
-        if ($word != '') {
+        if ($word !== '') {
             $id = db_query("SELECT id FROM searchword WHERE word = '{$word}'")->fetchField();
             if (!$id) {
                 db_query("INSERT INTO `searchword` (`word`) VALUES ('{$word}')");
@@ -624,8 +628,10 @@ EOT;
                         $iLikes = Labels::getLikes($aLabel['tid'], $oNode->nid);
                         $oTerm = taxonomy_term_load($aLabel['tid']);
                         $sTerm = self::cleanSearchTag($oTerm->name);
-                        for ($i = 0; $i <= $iLikes; $i++) {
-                            $aText[$sTerm] = $iLikes + 1;
+                        if($sTerm !== ''){
+                            for ($i = 0; $i <= $iLikes; $i++) {
+                                $aText[$sTerm] = $iLikes + 1;
+                            }
                         }
                     }
                 }
@@ -720,12 +726,16 @@ EOT;
 
     // cleans strings to be used as index words or search terms
     private static function cleanSearchTag($tag) {
-        return trim(
+        $tag = trim(
                 strtolower(
                         preg_replace("/[^A-Za-z0-9 '.]/", '', str_replace(Search::$aSpecialChars, Search::$aSpecialCharsReplacements, $tag)
                         )
                 )
         );
+        if(strlen($tag) > 2){
+            return $tag;
+        }
+        return '';
     }
 
     public static function getSearchTypeBasedOnQuery() {
