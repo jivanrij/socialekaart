@@ -35,7 +35,6 @@ function gojira_theme() {
         'docu' => array('template' => 'templates/docu'),
         'websites' => array('template' => 'templates/websites'),
         'configuration' => array('template' => 'templates/configuration'),
-        'ownlist' => array('template' => 'templates/ownlist'),
         'conditions' => array('template' => 'templates/conditions'),
         'paymentconditions' => array('template' => 'templates/paymentconditions'),
         'locationcheck' => array('template' => 'templates/locationcheck'),
@@ -118,7 +117,7 @@ function gojira_menu() {
     $items['ajax/doublehandler_checked'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'doublehandler_checked', 'title' => t('Make double location checked'), 'type' => MENU_NORMAL_ITEM);
     $items['ajax/doublehandler_merge'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'doublehandler_merge', 'title' => t('Merge double location'), 'type' => MENU_NORMAL_ITEM);
     $items['ajax/doublehandler_remove'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'doublehandler_remove', 'title' => t('Remove double location'), 'type' => MENU_NORMAL_ITEM);
-    
+
     $items['api/locations'] = array('access arguments' => array('access content'), 'page callback' => 'api_locations', 'title' => t('Gives some locations in JSON'), 'type' => MENU_NORMAL_ITEM);
 
     // ADMIN

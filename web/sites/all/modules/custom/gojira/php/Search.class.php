@@ -812,7 +812,7 @@ EOT;
             }
         }
 
-        $foundLocations = self::findLocations($cleanTags, 1000, false, false, true);
+        $foundLocations = Search::getInstance()->findLocations($cleanTags, 1000, false, false, true);
 
         foreach ($foundLocations as $foundLocation) {
             $foundLocation['node'] = node_load($foundLocation['nid']);
