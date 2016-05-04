@@ -225,3 +225,7 @@ class GojiraSettings
 //   `nid` int(11) unsigned NOT NULL COMMENT 'This id is from a node that needs to be removed.',
 //   PRIMARY KEY (`id`)
 // ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+// MAART 2016 - implementatie van mollie
+// ALTER TABLE `gojira_payments` DROP `ideal_code`;
+// ALTER TABLE `gojira_payments` CHANGE `status` `status` VARCHAR(11)  NULL  DEFAULT NULL;

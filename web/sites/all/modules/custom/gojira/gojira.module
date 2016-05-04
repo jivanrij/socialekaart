@@ -2,7 +2,8 @@
 
 // todo make autoloader
 include ('inc/ClassQantani.php');
-include ('inc/Mandrill.php');
+include ('inc/Mollie/API/Autoloader.php');
+//include ('inc/Mandrill.php');
 
 include ('gojira_settings.php');
 include ('php/helper.php');

@@ -160,21 +160,26 @@ function gojira_configuration_form($form, &$form_state) {
         '#default_value' => variable_get('mandrill_api_key'),
         '#description' => 'This is the API key used for sending mails with Mandrill.'
     );
-    $form['api']['IDEAL_MERCHANT_ID'] = array(
-        '#title' => t('iDeal merchant ID'),
+    $form['api']['MOLLIE_API_KEY'] = array(
+        '#title' => t('Mollie API key'),
         '#type' => 'textfield',
-        '#default_value' => variable_get('IDEAL_MERCHANT_ID', '2836'),
+        '#default_value' => variable_get('MOLLIE_API_KEY', ''),
     );
-    $form['api']['IDEAL_MERCHANT_KEY'] = array(
-        '#title' => t('iDeal merchant key'),
-        '#type' => 'textfield',
-        '#default_value' => variable_get('IDEAL_MERCHANT_KEY', 'aOEUoPH'),
-    );
-    $form['api']['IDEAL_MERCHANT_SECRET'] = array(
-        '#title' => t('iDeal merchant secret'),
-        '#type' => 'textfield',
-        '#default_value' => variable_get('IDEAL_MERCHANT_SECRET', 'wt0OZLRYHkZiln4dmftgker3k'),
-    );
+    // $form['api']['IDEAL_MERCHANT_ID'] = array(
+    //     '#title' => t('iDeal merchant ID'),
+    //     '#type' => 'textfield',
+    //     '#default_value' => variable_get('IDEAL_MERCHANT_ID', '2836'),
+    // );
+    // $form['api']['IDEAL_MERCHANT_KEY'] = array(
+    //     '#title' => t('iDeal merchant key'),
+    //     '#type' => 'textfield',
+    //     '#default_value' => variable_get('IDEAL_MERCHANT_KEY', 'aOEUoPH'),
+    // );
+    // $form['api']['IDEAL_MERCHANT_SECRET'] = array(
+    //     '#title' => t('iDeal merchant secret'),
+    //     '#type' => 'textfield',
+    //     '#default_value' => variable_get('IDEAL_MERCHANT_SECRET', 'wt0OZLRYHkZiln4dmftgker3k'),
+    // );
     $form['api']['mapbox_accesstoken'] = array(
         '#title' => t('Mapbox access token'),
         '#type' => 'textfield',
@@ -268,7 +273,7 @@ function gojira_configuration_form($form, &$form_state) {
 //Deze e-mail ontvangt u omdat wij denken dat u zojuist heeft geprobeerd in te loggen op SocialeKaart.care vanuit uw Haweb.nl omgeving.
 //
 //We hebben alleen geconstateerd dat u voor beide omgevingen 2 losse accounts heeft met hetzelfde e-mailadres. Wilt u toch graag met 1 en hetzelfde account inloggen op beide omgevingen? Dan kunt u het volgende doen:
-//1. Pas uw e-mailadres aan van uw SocialeKaart.care account. 
+//1. Pas uw e-mailadres aan van uw SocialeKaart.care account.
 //2. Log daarna uit uit SocialeKaart.care en log in in Haweb.nl.
 //3. Klik nu in Haweb.nl op de link naar SocialeKaart.care, er zal nu een nieuwe gekoppelde account in SocialeKaart.care aangemaakt worden.
 //4. Wij kunnen dan als u wilt alle gegevens van uw originele SocialeKaart.care account overzetten naar uw nieuwe account. Als u ons een e-mail stuurd met dit verzoek zetten wij voor u graag deze gegevens over. U kunt ons met dit verzoek e-mailen op info@socialekaart.care.
@@ -311,9 +316,10 @@ function gojira_configuration_form_submit($form, &$form_state) {
     variable_set('gojira_new_employee_email', $_POST['gojira_new_employee_email']);
     variable_set('gojira_invoice_email', $_POST['gojira_invoice_email']);
     variable_set('gojira_blacklist_search_words', $_POST['gojira_blacklist_search_words']);
-    variable_set('IDEAL_MERCHANT_ID', $_POST['IDEAL_MERCHANT_ID']);
-    variable_set('IDEAL_MERCHANT_KEY', $_POST['IDEAL_MERCHANT_KEY']);
-    variable_set('IDEAL_MERCHANT_SECRET', $_POST['IDEAL_MERCHANT_SECRET']);
+    variable_set('MOLLIE_API_KEY', $_POST['MOLLIE_API_KEY']);
+    // variable_set('IDEAL_MERCHANT_ID', $_POST['IDEAL_MERCHANT_ID']);
+    // variable_set('IDEAL_MERCHANT_KEY', $_POST['IDEAL_MERCHANT_KEY']);
+    // variable_set('IDEAL_MERCHANT_SECRET', $_POST['IDEAL_MERCHANT_SECRET']);
     variable_set('SUBSCRIPTION_PERIOD', $_POST['SUBSCRIPTION_PERIOD']);
     variable_set('CENTER_COUNTRY_LATITUDE', $_POST['CENTER_COUNTRY_LATITUDE']);
     variable_set('CENTER_COUNTRY_LONGITUDE', $_POST['CENTER_COUNTRY_LONGITUDE']);
@@ -342,6 +348,6 @@ function gojira_configuration_form_submit($form, &$form_state) {
     variable_set('gojira_subscription_year_total', $_POST['gojira_subscription_year_total']);
     variable_set('gojira_subscription_year_tax', $_POST['gojira_subscription_year_tax']);
     variable_set('gojira_subscription_year_price', $_POST['gojira_subscription_year_price']);
-    variable_set('gojira_subscription_month_price', $_POST['gojira_subscription_month_price']);    
+    variable_set('gojira_subscription_month_price', $_POST['gojira_subscription_month_price']);
     drupal_set_message(t('Saved all the settings.'), 'status');
 }

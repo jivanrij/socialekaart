@@ -1,91 +1,47 @@
 <?php
 
 /**
- * 
+ *  This function is called after the user has payed, right before the user
+ * get's back to the site
+ *
+ * implements the callback page described in https://www.qantani.com/documentatie/api/statuswijzigingen/?lang=cURL
  *
  * @return string
  */
 function idealcallback() {
-    $oQantani = null;
-    $oInfo = null;
-    $oQantani = null;
-    $bStatus = false;
-    $bDetails = null;
 
-    //http://www.mijnwebsite.nl/bedankt.php?id=[transaction_id]&status=[status]&salt=[salt]&checksum1=[checksum]&checksum2=[checksum2]&desc=[description]
-    //&id=725563&status=1&salt=34385&checksum=4e61737c9cd27f387e9a35cbb996a6b5342f6461
-//    http://www.mijnwebsite.nl/bedankt-voor-uw-betaling?id=[transaction_id]&status=[status]&salt=[salt]&checksum=[checksum]
-//
-//Hiermee worden de volgende gegevens toegevoegd aan de URL:
-//De transactie ID
-//De status van de betaling (1 = betaald, 0 = mislukt)
-//Een Salt. Dit is een willekeurig nummer tussen de 10000 en 999999
-//Een checksum. Deze bestaat uit Transactie ID + Transactie Code + Status + Salt
+    try{
+        if (!empty($_GET['testByMollie']))
+    	{
+    		die('OK');
+    	}
 
-//    watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal callback: callback begins for id: ' . $_GET['id']);
-    
-    if (isset($_GET['id']) && isset($_GET['status']) && isset($_GET['salt']) && isset($_GET['checksum1'])) {
-        
-        $newStatus = 0;
-        if (is_numeric($_GET['status'])) {
-            $newStatus = $_GET['status'];
-        }
+        $mollie = new Mollie_API_Client;
+        $mollie->setApiKey(variable_get('MOLLIE_API_KEY'));
 
-        $uniqid = uniqid();
-        
-        watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal callback: pid'.$uniqid.' id:' . $_GET['id'].' status:'.$_GET['status'].' salt:'.$_GET['salt'].' checksum1:'.$_GET['checksum1']);
-        
-        
-        $oQantani = Qantani::CreateInstance(variable_get('IDEAL_MERCHANT_ID'), variable_get('IDEAL_MERCHANT_KEY'), variable_get('IDEAL_MERCHANT_SECRET'));
+        $payment  = $mollie->payments->get($_POST["id"]);
+    	$order_id = $payment->metadata->order_id;
 
-        //ideal_id, ideal_code, gid, uid,
-        $oInfo = db_query("SELECT status, callback_times, ideal_code, ideal_id FROM {gojira_payments} WHERE ideal_id = :id", array(':id' => $_GET['id']))->fetchObject();
-        if ($oInfo) {
+        db_query("UPDATE {gojira_payments} SET `status`=:status  WHERE `ideal_id`=:id", array(':id' => $order_id,':status' => $payment->status));
 
-            // checksup sha1 get's checked by the getPaymentStatus function
-            if(SHA1($_GET['id'].$oInfo->ideal_code.$_GET['status'].$_GET['salt']) !== $_GET['checksum1']){
-                watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal callback: pid'.$uniqid.' checksum failed for ideal_id '.$_GET['id']);
-                exit;
+        if ($payment->isPaid() == true) {
+            // success, let's register this user as payed one
+            $iLowestIncrement = date('Y') . '00001'; // get the lowest possible increment for this year
+            $iIncrement = db_query("SELECT increment FROM gojira_payments ORDER BY increment DESC")->fetchField();
+            if ($iLowestIncrement > $iIncrement) { // is the last increment is lower then the lowest possible this must be the first of the year, use the lowest possible
+                $iIncrement = $iLowestIncrement;
+            } else {
+                $iIncrement++; // increase the increment: 201500009 to 201500010
             }
-            
-            if ($oInfo->status == 1) {
-                return 'x'; // this will tell ideal that the callback is succesfull done
-                exit;
-            }
-
-
-            if($newStatus == 0){
-                $iIncrement = 0;
-            }else{
-                $iLowestIncrement = date('Y') . '00001'; // get the lowest possible increment for this year
-                $iIncrement = db_query("SELECT increment FROM gojira_payments ORDER BY increment DESC")->fetchField();
-                if ($iLowestIncrement > $iIncrement) { // is the last increment is lower then the lowest possible this must be the first of the year, use the lowest possible
-                    $iIncrement = $iLowestIncrement;
-                } else {
-                    $iIncrement++; // increase the increment: 201500009 to 201500010
-                }
-            }
-            
-            $iCallbackTimes = $oInfo->callback_times + 1;
-            
-            watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal callback: pid'.$uniqid.' updating gojira_payments table with increment & callback times');
-            
-            db_query("UPDATE {gojira_payments} SET `callback_times` = :callback_times, `status`=:status, `increment`=:increment WHERE `ideal_id`=:id AND `ideal_code`=:code ", array(':id' => $_GET['id'], ':code' => $oInfo->ideal_code, ':increment' => $iIncrement, ':callback_times' => $iCallbackTimes,':status' => $newStatus));
-
-            if($newStatus == 0){
-                return 'x';
-                exit;                
-            }
-            Subscriptions::subscribe($oInfo->ideal_id);
-            return 'x'; // this will tell ideal that the callback is succesfull done
+            db_query("UPDATE {gojira_payments} SET `increment`=:increment WHERE `ideal_id`=:id", array(':id' => $oInfo->ideal_id, ':increment' => $iIncrement));
+            Subscriptions::subscribe($order_id);
+        } elseif ($payment->isOpen() == false) {
+            watchdog(GojiraSettings::WATCHDOG_IDEAL, "Payment {$order_id} has gone wrong.");
             exit;
+         }
 
-        }else{
-            watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal callback: pid'.$uniqid.' unable to find payment info, no valid ideal_id given: '.$_GET['id']);
-            exit;
-        }
+    } catch (Mollie_API_Exception $e) {
+        watchdog(GojiraSettings::WATCHDOG_IDEAL, $e->getMessage());
+        drupal_goto('idealfail');
     }
-
-    watchdog(GojiraSettings::WATCHDOG_IDEAL, 'ideal callback: missing ideal information');
-    exit;
 }

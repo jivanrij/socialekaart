@@ -51,7 +51,7 @@ class Subscriptions {
 
     /**
      * Get's you some information about the ideal payment
-     * 
+     *
      * @param integer $ideal_id
      * @return stdClass
      */
@@ -288,7 +288,7 @@ EOT;
 
     /**
      * Set the payed status to false & set's the roles for the groups users to not payed functions
-     * 
+     *
      * @param integer $group_nid
      * @param stdClass $payment
      */
@@ -357,7 +357,7 @@ EOT;
                         $group = node_load($group->nid);
                         $groups_main_doctor_uid = helper::value($group, GojiraSettings::CONTENT_TYPE_ORIGINAL_DOCTOR, 'uid');
                         $main_doctor = user_load($groups_main_doctor_uid);
-                        
+
                         Mailer::sendSubscriptionEndWarning($main_doctor);
                         db_query("UPDATE `gojira_payments` SET `warning_send`=1 WHERE  `id`={$payment->id}");
                     }
@@ -396,7 +396,7 @@ EOT;
     /**
      * Adds the payment to the payment log of gojira
      */
-    public static function addPaymentLog($uid, $amount, $description, $ideal_id, $ideal_code, $start_date, $end_date, $discount, $tax, $payed, $status = 0, $bank) {
+    public static function addPaymentLog($uid, $amount, $description, $ideal_id, $start_date, $end_date, $discount, $tax, $payed, $status = 0, $method) {
 
         foreach (func_get_args() as $sValue) {
             if (is_null($sValue)) {
@@ -406,7 +406,7 @@ EOT;
         }
 
         $user = user_load($uid);
-        $sql = "INSERT INTO `gojira_payments` (`uid`, `name`, `description`, `amount`, `gid`, `ideal_id`, `ideal_code`, `period_start`, `status`, `period_end`,`discount`,`tax`,`payed`,`bank`) VALUES ({$uid}, '{$user->name}', '{$description}', " . str_replace(',', '.', $amount) . ", " . Group::getGroupId($uid) . ", '{$ideal_id}', '{$ideal_code}', {$start_date}, $status, {$end_date},{$discount},{$tax},{$payed},'{$bank}')";
+        $sql = "INSERT INTO `gojira_payments` (`uid`, `name`, `description`, `amount`, `gid`, `ideal_id`, `period_start`, `status`, `period_end`,`discount`,`tax`,`payed`,`method`) VALUES ({$uid}, '{$user->name}', '{$description}', " . str_replace(',', '.', $amount) . ", " . Group::getGroupId($uid) . ", '{$ideal_id}', {$start_date}, $status, {$end_date},{$discount},{$tax},{$payed},'{$method}')";
         db_query($sql);
     }
 
@@ -459,7 +459,7 @@ EOT;
 
     /**
      * Gives a true back when the current logged in group had a payed status on this moment
-     * 
+     *
      * @return boolean
      */
     public static function currentGroupHasPayed() {
@@ -479,7 +479,7 @@ EOT;
 
         // get the lates payment row thas is payed for of a specified groep
         $period_end = db_query("SELECT period_end FROM gojira_payments WHERE gid = {$gid} AND status = 1 ORDER BY period_end DESC")->fetchField();
-        
+
         if (!$period_end) {
             return false;
         }
@@ -492,7 +492,7 @@ EOT;
 
     /**
      * Get's you the latest valid payment information of a group
-     * 
+     *
      * @param integer $gid
      * @return boolean|stdClass
      */
@@ -509,7 +509,7 @@ EOT;
 
     /**
      * Tell's you if the current user can extend a subscription
-     * 
+     *
      * @return boolean
      */
     public static function canExtend() {
@@ -532,7 +532,7 @@ EOT;
 
     /**
      * Get's you the required info for a new payment
-     * 
+     *
      * @global stdClass $user
      * @return array
      */
@@ -544,7 +544,7 @@ EOT;
         $oUser = user_load($user->uid);
 
         $aInfo['user'] = $oUser;
-        
+
         $aInfo['amount'] = variable_get('gojira_subscription_year_price');
         $aInfo['tax'] = variable_get('gojira_subscription_year_tax');
         $aInfo['total'] = variable_get('gojira_subscription_year_total');
@@ -580,9 +580,9 @@ EOT;
 
     /**
      * Adds crucial information/roles/stuff to a new created user NOT from the HAWeb SSO
-     * 
+     *
      * Do NOT run this function on allready existing accounts
-     * 
+     *
      * @param stdClass $account
      */
     public static function giveNewUserDiscount(&$account) {
@@ -594,15 +594,15 @@ EOT;
         }
 
         $group = node_load(Group::getGroupId($account->uid));
-        
+
         $group->field_payed_status[LANGUAGE_NONE][0]['value'] = 1;
         node_save($group);
-        
+
         Subscriptions::setRolesForPayed($group, false);
         // add a payment log so the group will have a payed period of 3 months
         $sql = "INSERT INTO `gojira_payments` (`uid`, `name`, `description`, `amount`, `gid`, `ideal_id`, `ideal_code`, `period_start`, `status`, `period_end`,`discount`,`tax`,`payed`) VALUES ({$account->uid}, '{$account->name}', '" . GojiraSettings::IDEAL_FREE_PERIOD_DESCRIPTION . "', 0, " . $group->nid . ", '0', '0', " . helper::getTime() . ", 1, " . strtotime("+3 months", helper::getTime()) . ",0,0,0)";
 
         db_query($sql);
     }
-    
+
 }
