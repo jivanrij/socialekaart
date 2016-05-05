@@ -455,12 +455,11 @@ function file_prepare_directory(&$directory, $options = FILE_MODIFY_PERMISSIONS)
  * Creates a .htaccess file in each Drupal files directory if it is missing.
  */
 function file_ensure_htaccess() {
-    // GOJIRA SOCIALEKAART
-//  file_create_htaccess('public://', FALSE);
-//  if (variable_get('file_private_path', FALSE)) {
-//    file_create_htaccess('private://', TRUE);
-//  }
-//  file_create_htaccess('temporary://', TRUE);
+  file_create_htaccess('public://', FALSE);
+  if (variable_get('file_private_path', FALSE)) {
+    file_create_htaccess('private://', TRUE);
+  }
+  file_create_htaccess('temporary://', TRUE);
 }
 
 /**
@@ -492,13 +491,13 @@ function file_create_htaccess($directory, $private = TRUE, $force_overwrite = FA
   $htaccess_lines = file_htaccess_lines($private);
 
   // Write the .htaccess file.
-//  if (file_put_contents($htaccess_path, $htaccess_lines)) {
-    //drupal_chmod($htaccess_path, 0444);
-//  }
-//  else {
-//    $variables = array('%directory' => $directory, '!htaccess' => '<br />' . nl2br(check_plain($htaccess_lines)));
-//    watchdog('security', "Security warning: Couldn't write .htaccess file. Please create a .htaccess file in your %directory directory which contains the following lines: <code>!htaccess</code>", $variables, WATCHDOG_ERROR);
-//  }
+  if (file_put_contents($htaccess_path, $htaccess_lines)) {
+    drupal_chmod($htaccess_path, 0444);
+  }
+  else {
+    $variables = array('%directory' => $directory, '!htaccess' => '<br />' . nl2br(check_plain($htaccess_lines)));
+    watchdog('security', "Security warning: Couldn't write .htaccess file. Please create a .htaccess file in your %directory directory which contains the following lines: <code>!htaccess</code>", $variables, WATCHDOG_ERROR);
+  }
 }
 
 /**
@@ -1786,7 +1785,7 @@ function file_validate_is_image(stdClass $file) {
 /**
  * Verifies that image dimensions are within the specified maximum and minimum.
  *
- * Non-image files will be ignored. If a image toolkit is available the image
+ * Non-image files will be ignored. If an image toolkit is available the image
  * will be scaled to fit within the desired maximum dimensions.
  *
  * @param $file
