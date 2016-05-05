@@ -516,7 +516,7 @@ EOT;
 
         $group_id = Group::getGroupId();
 
-        $payment = db_query("SELECT ideal_id, ideal_code, gid, uid, increment, period_start, period_end, amount FROM {gojira_payments} WHERE gid = :gid AND status = 1 ORDER BY increment DESC", array(':gid' => $group_id))->fetchObject();
+        $payment = db_query("SELECT period_end FROM {gojira_payments} WHERE gid = :gid AND status = 1 ORDER BY increment DESC", array(':gid' => $group_id))->fetchObject();
 
         if ($payment) {
             $endYear = date('Y', $payment->period_end);
