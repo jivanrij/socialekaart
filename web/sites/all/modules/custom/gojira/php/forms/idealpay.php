@@ -9,21 +9,16 @@ function gojira_idealpay_form($form, &$form_state) {
     //     '#markup' => '<p>' . t('Select the bank to do your payment with and push the pay button. You will then be redirected to an iDeal page to complete the transaction.') . '</p>',
     // );
 
+    $methods = array();
+
     try{
         $mollie = new Mollie_API_Client;
         $mollie->setApiKey(variable_get('MOLLIE_API_KEY'));
 
         $methods = $mollie->methods->all();
 
-        $methods = array();
-        foreach ($methods as $method)
+        foreach ($methods->data as $method)
         {
-    		// echo '<div style="line-height:40px; vertical-align:top">';
-            //
-    		// echo '<img src="' . htmlspecialchars($method->image->normal) . '"> ';
-    		// echo htmlspecialchars($method->description) . ' (' .  htmlspecialchars($method->id) . ')';
-            //
-    		// echo '</div>';
             $methods[$method->id] = $method->description;
     	}
     } catch (Mollie_API_Exception $e) {
