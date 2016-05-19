@@ -222,7 +222,7 @@ EAT;
         }
 
         if (trim($email) != '') {
-            $email = '<a mailto="' . $email . '" id="mailto">' . $email . '</a>';
+            $email = '<a href="mailto:' . $email . '" id="mailto">' . $email . '</a>';
         }
 
         $oCurrentLocation = Location::getCurrentLocationObjectOfUser();
