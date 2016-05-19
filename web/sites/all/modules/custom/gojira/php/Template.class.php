@@ -13,7 +13,7 @@ class Template {
 
     /**
      * Gives you the type of rendering needed for the page
-     * 
+     *
      * @return string
      */
 
@@ -120,14 +120,14 @@ class Template {
                 }
             }
         }
-        
+
         $locationsset_pages[] = 'ownlist';
         foreach ($locationsset_pages as $url) {
             if ($_GET['q'] == $url) {
                 return Template::VIEWTYPE_LOCATIONSSET;
             }
         }
-        
+
         // custom pages that need to be rendered like the page big nodes
         $big_pages[] = 'locationcheck';
         $big_pages[] = 'conditions';
@@ -150,7 +150,7 @@ class Template {
 
     /**
      * Gives true if the current splashpage needs to render the content
-     * 
+     *
      * @return boolean
      */
     public static function getFrontPage() {
@@ -189,6 +189,10 @@ class Template {
             return 'front/page.tpl.php';
         }
 
+        if (strstr($_GET['q'], 'introduction')) {
+            return 'front/introduction.tpl.php';
+        }
+
         if (arg(0) == 'node' && is_numeric(arg(1))) {
             $nid = arg(1);
             $node = node_load($nid);
@@ -202,7 +206,7 @@ class Template {
 
     /**
      * Tells you if you need to include the frontend css/js files for the map
-     * 
+     *
      * @return boolean
      */
     public static function shouldWeIncludeMapFrontendFiles() {
@@ -220,7 +224,7 @@ class Template {
 
     /**
      * Returns true if the page is 404
-     * 
+     *
      * @return boolean
      */
     public static function statusNotFound() {
@@ -232,7 +236,7 @@ class Template {
 
     /**
      * Returns true if the page is 403
-     * 
+     *
      * @return boolean
      */
     public static function statusForbidden() {
@@ -244,7 +248,7 @@ class Template {
 
     /**
      * Get the correct class for the body so the mobile css can hook on to it
-     * 
+     *
      * @return string
      */
     public static function getMobileType() {

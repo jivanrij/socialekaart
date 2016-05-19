@@ -32,11 +32,10 @@ function gojira_passwordreset_form() {
     $form['actions']['submit'] = array('#type' => 'submit', '#value' => t('Submit'));
 
     $form['#prefix'] = '<p>' . t('Enter your e-mailadres in the form below so we can send you a link to login with. Then you will be able to set a new password.') . '</p>';
-    $form['actions']['submit']['#prefix'] = '<span class="gbutton rounded noshadow left gbutton_small">';
-    $form['actions']['submit']['#suffix'] = '</span>';
+
     $form['name']['#title'] = t('E-mailaddress');
-//    $form['#validate'][] = 'gojira_validate_password_reset';
-//    $form['#submit'][] = '_password_recovermail_submit';
+
+    $form['actions']['submit']['#attributes'] = array('class' => array('btn btn-danger'));
 
     return $form;
 }

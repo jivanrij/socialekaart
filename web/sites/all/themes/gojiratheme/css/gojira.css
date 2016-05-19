@@ -203,7 +203,7 @@ a.help_link_content:hover {
 #header {
   background-color: #b7072a;
   overflow: hidden;
-  color: #ffffff !important;
+  color: #fff !important;
   border-bottom: #4d4d4d solid 1px;
 }
 @media (max-width: 710px) {
@@ -214,7 +214,7 @@ a.help_link_content:hover {
 #header a,
 #header a.active {
   text-decoration: none;
-  color: #ffffff;
+  color: #fff;
   font-weight: bold;
 }
 #header #header_options {
@@ -252,7 +252,7 @@ a.help_link_content:hover {
   display: inline-block;
 }
 #header #header_options .maplist > li > a:after {
-  color: #ffffff;
+  color: #fff;
   font: normal normal normal 14px/1 FontAwesome;
   display: inline-block;
   content: "\f278";
@@ -553,7 +553,7 @@ div.password-confirm {
   }
 }
 a.gbutton:hover {
-  color: #ffffff;
+  color: #fff;
 }
 .self_popup_link {
   color: #4d4d4d;
@@ -701,7 +701,7 @@ a.gbutton:hover {
 }
 #crud_holder table th {
   background-color: #b7072a;
-  color: #ffffff;
+  color: #fff;
   text-align: left;
   border: 0;
 }
@@ -812,7 +812,7 @@ a.gbutton:hover {
   }
 }
 #search_form {
-  background-color: #ffffff;
+  background-color: #fff;
   height: 25px;
   left: 10px;
   position: absolute;
@@ -844,7 +844,7 @@ a.gbutton:hover {
   margin: 0;
   border: 0;
   background-color: #b7072a;
-  color: #ffffff;
+  color: #fff;
   font-size: 14px;
   padding-left: 0px !important;
   /*            &:before{
@@ -976,7 +976,7 @@ body.questions a.active.topic {
 #selected_location_info .search_result_wrapper span.fav_row button {
   border: none;
   display: inline;
-  color: #ffffff;
+  color: #fff;
   background-color: #dbdbdb;
 }
 #selected_location_info .search_result_wrapper span.fav_row button.fav_yes {
@@ -1117,7 +1117,7 @@ body.questions a.active.topic {
   text-align: center;
   line-height: 25px;
   cursor: pointer;
-  color: #ffffff;
+  color: #fff;
   background-color: #b7072a !important;
 }
 #selected_location_info .search_result_wrapper div.labels div.label .labelremovebutton span {
@@ -1158,7 +1158,7 @@ body.questions a.active.topic {
   overflow: hidden;
   height: 20px;
   padding: 5px 5px 0 5px;
-  color: #ffffff;
+  color: #fff;
 }
 #selected_location_info .search_result_wrapper .mobile_labels > div.score_0 {
   background-color: #fcb1bf;
@@ -1310,13 +1310,13 @@ ul.ui-autocomplete li a {
 }
 #mobileheader {
   overflow: hidden;
-  color: #ffffff !important;
+  color: #fff !important;
   position: fixed;
   width: 100%;
   top: 0px;
   display: block;
   z-index: 100;
-  background-color: #ffffff;
+  background-color: #fff;
 }
 @media (min-width: 711px) {
   #mobileheader {
@@ -1390,7 +1390,7 @@ ul.ui-autocomplete li a {
   width: 100%;
   top: 36px;
   z-index: 300;
-  background-color: #ffffff;
+  background-color: #fff;
   right: 100%;
 }
 #mobilemenu > div {
@@ -1439,7 +1439,7 @@ ul.ui-autocomplete li a {
 #mobilemenu > div ul li a:hover {
   border-color: #b7072a;
   color: #b7072a;
-  background-color: #ffffff;
+  background-color: #fff;
 }
 #mobilemenu > div.options {
   margin-top: 5px;
@@ -1583,7 +1583,7 @@ ul.ui-autocomplete li a {
   display: block;
   background-color: #b7072a;
   border-width: 0px;
-  color: #ffffff;
+  color: #fff;
   -moz-border-radius-bottomright: 3px;
   -webkit-border-bottom-right-radius: 3px;
   border-bottom-right-radius: 3px;
@@ -1639,7 +1639,7 @@ button.close_box {
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
   border: none;
-  background-color: #ffffff;
+  background-color: #fff;
   color: #dbdbdb;
   padding: 0;
 }
@@ -1692,6 +1692,19 @@ button.close_box:hover {
   -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
   overflow: hidden;
+}
+/* bootstrap buttons */
+.btn-danger {
+  background-image: -webkit-linear-gradient(top, #b7072a 0, #b7072a 100%);
+  background-image: -o-linear-gradient(top, #b7072a 0, #b7072a 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#b7072a), to(#b7072a));
+  background-image: linear-gradient(to bottom, #b7072a 0, #b7072a 100%);
+  background-position: 0px;
+}
+.btn-danger:hover,
+.btn-danger:focus {
+  background-position: 0px;
+  color: #dbdbdb;
 }
 /* hide something */
 .hidden {

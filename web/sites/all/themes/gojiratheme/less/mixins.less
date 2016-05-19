@@ -4,7 +4,7 @@
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     border-radius: 3px;
-    -webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 1.3); 
+    -webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 1.3);
     -moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 1.3);
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 1.3);
     overflow:hidden;
@@ -18,7 +18,7 @@
 
 .unshadow{
     box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
-    -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0); 
+    -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
     -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
 }
 
@@ -33,6 +33,19 @@
     overflow:hidden;
 }
 
+/* bootstrap buttons */
+.btn-danger{
+    //@color-main
+    background-image: -webkit-linear-gradient(top,@color-main 0,@color-main 100%);
+    background-image: -o-linear-gradient(top,@color-main 0,@color-main 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(@color-main),to(@color-main));
+    background-image: linear-gradient(to bottom,@color-main 0,@color-main 100%);
+    background-position: 0px;
+    &:hover, &:focus{
+        background-position: 0px;
+        color:@color-light;
+    }
+}
 /* hide something */
 .hidden{
     display:none;

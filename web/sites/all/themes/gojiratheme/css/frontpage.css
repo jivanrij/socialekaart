@@ -124,6 +124,9 @@ body.front div.header_small {
 body.front a {
   text-decoration: underline;
 }
+body.front a.btn {
+  text-decoration: none;
+}
 body.front h1,
 body.front h2 {
   font-weight: bold;

@@ -15,6 +15,7 @@ function gojira_theme() {
         'linkhaweb' => array('template' => 'templates/linkhaweb'),
         'editnote' => array('template' => 'templates/editnote'),
         'inform' => array('template' => 'templates/inform'),
+        'introduction' => array('template' => 'templates/introduction'),
         'informthanks' => array('template' => 'templates/informthanks'),
         'activateuser' => array('template' => 'templates/activateuser'),
         'locationlist' => array('template' => 'templates/locationlist'),
@@ -83,6 +84,7 @@ function gojira_menu() {
     $items['paymentconditions'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'paymentconditions', 'title' => t('Payment terms & conditions'), 'description' => t('Payment terms & conditions page.'));
     $items['locationcheck'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'locationcheck', 'title' => t('Check location'), 'description' => t('Check the availibility of a location.'));
     $items['welcome'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'welcome', 'title' => t('Welcome'), 'type' => MENU_NORMAL_ITEM);
+    $items['introduction'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'introduction', 'title' => t('Introduction'), 'type' => MENU_NORMAL_ITEM);
     $items['registered'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'registered', 'title' => t('Registered thanks page'), 'type' => MENU_NORMAL_ITEM);
     $items['passwordreset'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'passwordreset', 'title' => t('Password reset page'), 'type' => MENU_NORMAL_ITEM);
     $items['passwordmailsend'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'passwordmailsend', 'title' => t('Thanks page after password rest mail is send'), 'type' => MENU_NORMAL_ITEM);

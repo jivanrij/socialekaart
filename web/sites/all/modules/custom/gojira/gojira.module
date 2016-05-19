@@ -79,6 +79,7 @@ include ('php/actions/suggestlocation.php');
 include ('php/actions/suggestlocationthanks.php');
 include ('php/actions/singlesearchresult.php');
 include ('php/actions/switchglobalsearch.php');
+include ('php/actions/introduction.php');
 include ('php/actions/unlikelabel.php');
 include ('php/actions/passwordreset.php');
 include ('php/actions/welcome.php');
