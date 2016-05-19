@@ -229,3 +229,4 @@ class GojiraSettings
 // MAART 2016 - implementatie van mollie
 // ALTER TABLE `gojira_payments` DROP `ideal_code`;
 // ALTER TABLE `gojira_payments` CHANGE `status` `status` VARCHAR(11)  NULL  DEFAULT NULL;
+// ALTER TABLE `gojira_payments` CHANGE `bank` `method` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'Method of payment';

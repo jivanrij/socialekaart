@@ -22,7 +22,9 @@ function idealcallback() {
         $payment  = $mollie->payments->get($_POST["id"]);
     	$order_id = $payment->metadata->order_id;
 
-        db_query("UPDATE {gojira_payments} SET `status`=:status  WHERE `ideal_id`=:id", array(':id' => $order_id,':status' => $payment->status));
+// watchdog(GojiraSettings::WATCHDOG_IDEAL, json_encode($payment));
+
+        db_query("UPDATE {gojira_payments} SET `status`=:status, `method`=:method  WHERE `ideal_id`=:id", array(':id' => $order_id,':status' => $payment->status, ':method'=>$payment->method));
 
         if ($payment->isPaid() == true) {
             // success, let's register this user as payed one
@@ -33,7 +35,7 @@ function idealcallback() {
             } else {
                 $iIncrement++; // increase the increment: 201500009 to 201500010
             }
-            db_query("UPDATE {gojira_payments} SET `increment`=:increment WHERE `ideal_id`=:id", array(':id' => $oInfo->ideal_id, ':increment' => $iIncrement));
+            db_query("UPDATE {gojira_payments} SET `increment`=:increment WHERE `ideal_id`=:id", array(':id' => $order_id, ':increment' => $iIncrement));
             Subscriptions::subscribe($order_id);
         } elseif ($payment->isOpen() == false) {
             watchdog(GojiraSettings::WATCHDOG_IDEAL, "Payment {$order_id} has gone wrong.");

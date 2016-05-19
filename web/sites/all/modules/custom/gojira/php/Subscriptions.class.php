@@ -7,7 +7,7 @@ class Subscriptions {
      */
     public static function subscribe($ideal_id) {
 
-        $info = db_query("SELECT ideal_id, ideal_code, gid, uid FROM {gojira_payments} WHERE ideal_id = :id", array(':id' => $ideal_id))->fetchObject();
+        $info = db_query("SELECT ideal_id, gid, uid FROM {gojira_payments} WHERE ideal_id = :id", array(':id' => $ideal_id))->fetchObject();
         if ($info) {
             $group = node_load($info->gid);
 
@@ -33,7 +33,7 @@ class Subscriptions {
      */
     public static function subscribeByGroupId($gid) {
 
-        $info = db_query("SELECT ideal_id, ideal_code, gid, uid, ideal_id FROM {gojira_payments} WHERE gid = :gid", array(':gid' => $gid))->fetchObject();
+        $info = db_query("SELECT ideal_id, gid, uid, ideal_id FROM {gojira_payments} WHERE gid = :gid", array(':gid' => $gid))->fetchObject();
         if ($info) {
             return self::subscribe($info->ideal_id);
         }
@@ -56,7 +56,7 @@ class Subscriptions {
      * @return stdClass
      */
     public static function getPaymentInfo($ideal_id) {
-        return db_query("SELECT ideal_id, ideal_code, gid, uid, increment, period_start, period_end, amount, discount, tax, payed FROM {gojira_payments} WHERE ideal_id = :id", array(':id' => $ideal_id))->fetchObject();
+        return db_query("SELECT ideal_id, gid, uid, increment, period_start, period_end, amount, discount, tax, payed FROM {gojira_payments} WHERE ideal_id = :id", array(':id' => $ideal_id))->fetchObject();
     }
 
     /**
@@ -396,7 +396,7 @@ EOT;
     /**
      * Adds the payment to the payment log of gojira
      */
-    public static function addPaymentLog($uid, $amount, $description, $ideal_id, $start_date, $end_date, $discount, $tax, $payed, $status = 0, $method) {
+    public static function addPaymentLog($uid, $amount, $description, $ideal_id, $start_date, $end_date, $discount, $tax, $payed, $status = 0) {
 
         foreach (func_get_args() as $sValue) {
             if (is_null($sValue)) {
@@ -406,7 +406,7 @@ EOT;
         }
 
         $user = user_load($uid);
-        $sql = "INSERT INTO `gojira_payments` (`uid`, `name`, `description`, `amount`, `gid`, `ideal_id`, `period_start`, `status`, `period_end`,`discount`,`tax`,`payed`,`method`) VALUES ({$uid}, '{$user->name}', '{$description}', " . str_replace(',', '.', $amount) . ", " . Group::getGroupId($uid) . ", '{$ideal_id}', {$start_date}, $status, {$end_date},{$discount},{$tax},{$payed},'{$method}')";
+        $sql = "INSERT INTO `gojira_payments` (`uid`, `name`, `description`, `amount`, `gid`, `ideal_id`, `period_start`, `status`, `period_end`,`discount`,`tax`,`payed`) VALUES ({$uid}, '{$user->name}', '{$description}', " . str_replace(',', '.', $amount) . ", " . Group::getGroupId($uid) . ", '{$ideal_id}', {$start_date}, '$status', {$end_date},{$discount},{$tax},{$payed})";
         db_query($sql);
     }
 
@@ -478,7 +478,7 @@ EOT;
         }
 
         // get the lates payment row thas is payed for of a specified groep
-        $period_end = db_query("SELECT period_end FROM gojira_payments WHERE gid = {$gid} AND status = 1 ORDER BY period_end DESC")->fetchField();
+        $period_end = db_query("SELECT period_end FROM gojira_payments WHERE gid = {$gid} AND status = 'paid' ORDER BY period_end DESC")->fetchField();
 
         if (!$period_end) {
             return false;
@@ -500,7 +500,7 @@ EOT;
         if (is_null($gid)) {
             $gid = Group::getGroupId();
         }
-        $payment = db_query("SELECT * FROM gojira_payments WHERE gid = {$gid} AND status = 1 ORDER BY period_end DESC limit 1")->fetchObject();
+        $payment = db_query("SELECT * FROM gojira_payments WHERE gid = {$gid} AND status = 'paid' ORDER BY period_end DESC limit 1")->fetchObject();
         if (!$payment) {
             return false;
         }
@@ -516,7 +516,7 @@ EOT;
 
         $group_id = Group::getGroupId();
 
-        $payment = db_query("SELECT period_end FROM {gojira_payments} WHERE gid = :gid AND status = 1 ORDER BY increment DESC", array(':gid' => $group_id))->fetchObject();
+        $payment = db_query("SELECT period_end FROM {gojira_payments} WHERE gid = :gid AND status = 'paid' ORDER BY increment DESC", array(':gid' => $group_id))->fetchObject();
 
         if ($payment) {
             $endYear = date('Y', $payment->period_end);
@@ -600,7 +600,7 @@ EOT;
 
         Subscriptions::setRolesForPayed($group, false);
         // add a payment log so the group will have a payed period of 3 months
-        $sql = "INSERT INTO `gojira_payments` (`uid`, `name`, `description`, `amount`, `gid`, `ideal_id`, `ideal_code`, `period_start`, `status`, `period_end`,`discount`,`tax`,`payed`) VALUES ({$account->uid}, '{$account->name}', '" . GojiraSettings::IDEAL_FREE_PERIOD_DESCRIPTION . "', 0, " . $group->nid . ", '0', '0', " . helper::getTime() . ", 1, " . strtotime("+3 months", helper::getTime()) . ",0,0,0)";
+        $sql = "INSERT INTO `gojira_payments` (`uid`, `name`, `description`, `amount`, `gid`, `ideal_id`, `period_start`, `status`, `period_end`,`discount`,`tax`,`payed`) VALUES ({$account->uid}, '{$account->name}', '" . GojiraSettings::IDEAL_FREE_PERIOD_DESCRIPTION . "', 0, " . $group->nid . ", '0', '0', " . helper::getTime() . ", 1, " . strtotime("+3 months", helper::getTime()) . ",0,0,0)";
 
         db_query($sql);
     }

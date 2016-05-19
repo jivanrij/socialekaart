@@ -9,30 +9,30 @@ function gojira_idealpay_form($form, &$form_state) {
     //     '#markup' => '<p>' . t('Select the bank to do your payment with and push the pay button. You will then be redirected to an iDeal page to complete the transaction.') . '</p>',
     // );
 
-    $methods = array();
+    // $methods = array();
+    //
+    // try{
+    //     $mollie = new Mollie_API_Client;
+    //     $mollie->setApiKey(variable_get('MOLLIE_API_KEY'));
+    //
+    //     $methodobjects = $mollie->methods->all();
+    //
+    //     foreach ($methodobjects->data as $method)
+    //     {
+    //         $methods[$method->id] = $method->description;
+    // 	}
+    // } catch (Mollie_API_Exception $e) {
+    //     watchdog(GojiraSettings::WATCHDOG_IDEAL, $e->getMessage());
+    //     drupal_goto('idealfail');
+    // }
 
-    try{
-        $mollie = new Mollie_API_Client;
-        $mollie->setApiKey(variable_get('MOLLIE_API_KEY'));
-
-        $methods = $mollie->methods->all();
-
-        foreach ($methods->data as $method)
-        {
-            $methods[$method->id] = $method->description;
-    	}
-    } catch (Mollie_API_Exception $e) {
-        watchdog(GojiraSettings::WATCHDOG_IDEAL, $e->getMessage());
-        drupal_goto('idealfail');
-    }
-
-    $form['method'] = array(
-        '#title' => t('Select method'),
-        '#type' => 'select',
-        '#required' => true,
-        '#options' => $methods,
-        '#default_value' => 0,
-    );
+    // $form['method'] = array(
+    //     '#title' => t('Select method'),
+    //     '#type' => 'select',
+    //     '#required' => true,
+    //     '#options' => $methods,
+    //     '#default_value' => 0,
+    // );
 
     $paymentConditions = t('Payment conditions');
     $form['agree_terms_conditions'] = array(
@@ -47,7 +47,6 @@ function gojira_idealpay_form($form, &$form_state) {
         '#value' => t('Pay'),
         '#suffix' => '</span></div>'
     );
-
     return $form;
 }
 
@@ -60,10 +59,11 @@ function gojira_idealpay_form_validate($form, &$form_state) {
 function gojira_idealpay_form_submit($form, &$form_state) {
 
     $order_id = time();
+    global $user;
 
     $protocol = isset($_SERVER['HTTPS']) && strcasecmp('off', $_SERVER['HTTPS']) !== 0 ? "https" : "http";
     $hostname = $_SERVER['HTTP_HOST'];
-    $path     = dirname(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['PHP_SELF']);
+    //$path     = dirname(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['PHP_SELF']);
 
     $info = Subscriptions::getNewPaymentInfo();
 
@@ -71,19 +71,22 @@ function gojira_idealpay_form_submit($form, &$form_state) {
         $mollie = new Mollie_API_Client;
         $mollie->setApiKey(variable_get('MOLLIE_API_KEY'));
 
-        // creats a payment @ mollie and returns the $payment to generate the
-        // url for the user & to store it in the database
-        $payment = $mollie->payments->create(array(
+        $paymentInfo = array(
             "amount"       => $info['amount'],
             "description"  => $info['description'],
-            "redirectUrl"  => "{$protocol}://{$hostname}{$path}/03-return-page.php?order_id={$order_id}",
-            "webhookUrl"   => "{$protocol}://{$hostname}{$path}/idealcallback",
+            "redirectUrl"  => "{$protocol}://{$hostname}/idealreturn?order_id={$order_id}",
+            "webhookUrl"   => "{$protocol}://{$hostname}/idealcallback",
             "metadata"     => array(
                 "order_id" => $order_id,
             ),
-        ));
+        );
 
-        Subscriptions::addPaymentLog($user->uid, $info['amount'], $info['description'], $order_id, $info['new_start'], $info['new_end'], 0, $info['tax'], $info['total'], $payment->status, $_POST['method']);
+
+        // creats a payment @ mollie and returns the $payment to generate the
+        // url for the user & to store it in the database
+        $payment = $mollie->payments->create($paymentInfo);
+
+        Subscriptions::addPaymentLog($user->uid, $info['amount'], $info['description'], $order_id, $info['new_start'], $info['new_end'], 0, $info['tax'], $info['total'], $payment->status);
 
         header('location: ' . $payment->getPaymentUrl());
         exit;
