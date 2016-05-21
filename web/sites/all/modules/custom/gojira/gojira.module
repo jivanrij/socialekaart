@@ -47,6 +47,8 @@ include ('php/actions/reportdouble.php');
 include ('php/actions/informthanks.php');
 include ('php/actions/activateuser.php');
 include ('php/actions/showlocation.php');
+include ('php/actions/grouplist.php');
+include ('php/actions/groupdetail.php');
 include ('php/actions/likelabel.php');
 include ('php/actions/locationcheck.php');
 include ('php/actions/locationdelete.php');

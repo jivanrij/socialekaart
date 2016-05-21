@@ -35,7 +35,7 @@ class helper {
     const SEARCH_TYPE_REGION = 'region';
     const SEARCH_TYPE_OWNLIST = 'ownlist';
     const SEARCH_TYPE_LOCATIONSET = 'locationset';
-    
+
     public static function redirectTo404() {
         header('Location: /404');
         exit;
@@ -43,7 +43,7 @@ class helper {
 
     /**
      * Gives you the title of the current node
-     * 
+     *
      * @return string
      */
     public static function getTitleCurrentNode() {
@@ -57,7 +57,7 @@ class helper {
 
     /**
      * Get's you the type of the current node
-     * 
+     *
      * @return string
      */
     public static function getCurrentNodeType() {
@@ -84,17 +84,17 @@ class helper {
             exit;
         }
     }
-    
+
     /**
      * Get's a array with words and removes all the blacklisted words
-     * 
-     * @param type $words 
+     *
+     * @param type $words
      * @return type
      */
     public static function cleanArrayWithBlacklist($words) {
         $blacklist = explode(',', variable_get('gojira_blacklist_search_words'));
         $clean = array();
-        
+
         foreach ($words as $word) {
             if (!in_array($word, $blacklist)) {
                 $clean[] = $word;
@@ -106,8 +106,8 @@ class helper {
 
     /**
      * Tells you if a string is on the blacklist
-     * 
-     * @param String $sString 
+     *
+     * @param String $sString
      * @return boolean
      */
     public static function inBlacklist($sString) {
@@ -121,7 +121,7 @@ class helper {
 
     /**
      * Get's you the IE version is IE is used
-     * 
+     *
      * @return int
      */
     public static function getIEVersion() {
@@ -152,7 +152,7 @@ class helper {
 
     /**
      * Talls you if the user has subscribe && master docter privileges
-     * 
+     *
      * @global stdClass $user
      * @return boolean
      */
@@ -171,7 +171,7 @@ class helper {
 
     /**
      * Get's you the available terms or city's that are like $term
-     * 
+     *
      * @param string $term
      * @return array
      */
@@ -192,7 +192,7 @@ class helper {
 
     /**
      * Get's you the terms connected to the node
-     * 
+     *
      * @param integer $nid
      * @return array
      */
@@ -209,7 +209,7 @@ class helper {
 
     /**
      * Tell's you if the current user has agreed with the conditions
-     * 
+     *
      * @global stdClass $user
      * @return boolean
      */
@@ -221,11 +221,11 @@ class helper {
 //    }
         return (bool) helper::value($user, GojiraSettings::CONTENT_TYPE_CONDITIONS_AGREE_FIELD);
     }
-    
-    
+
+
     /**
      * Tell's you if the current user has seen the tutorial
-     * 
+     *
      * @global stdClass $user
      * @return boolean
      */
@@ -237,7 +237,7 @@ class helper {
 
     /**
      * Tells you if a location that needs to be changed by a user is connected to the same location and has employer rights and has a moderator
-     * 
+     *
      * @param integer uid of the so called admin user
      * @param integer nid of the location that is going to be changed
      * @return boolean
@@ -273,7 +273,7 @@ class helper {
 
     /**
      * Tells you if a user that needs to be changed by an other user is connected to the same location and has employer rights
-     * 
+     *
      * @param integer uid of the so called admin user
      * @param integer uid of the user that is going to be changed
      * @return boolean
@@ -304,7 +304,7 @@ class helper {
 
     /**
      * Returns the gojira role of the given user
-     * 
+     *
      * @param integer $iUser
      * @return string
      */
@@ -339,7 +339,7 @@ class helper {
 
     /**
      * Get's you the text of the text field of the text node found by the given code.
-     * 
+     *
      * @param string $code
      * @return string
      */
@@ -378,7 +378,7 @@ class helper {
 
     /**
      * A field value wrapper because i got sick of those array's
-     * 
+     *
      * @param stdClass $node
      * @param string $field
      * @return string
@@ -395,12 +395,12 @@ class helper {
 
     /**
      * Adds the addressfields to the given form
-     * 
+     *
      * @param array $form
      * @param stdClass $node
      */
     public static function addAddressFormPart(&$form, $node = false) {
-        
+
         $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD] = array(
             '#title' => t('Street'),
             '#type' => 'textfield',
@@ -414,7 +414,7 @@ class helper {
             '#default_value' => ($node ? helper::value($node, GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD) : ''),
             '#required' => false,
         );
-        
+
         $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD] = array(
             '#title' => t('Postcode'),
             '#type' => 'textfield',
@@ -428,7 +428,7 @@ class helper {
             '#default_value' => ($node ? helper::value($node, GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD) : ''),
             '#required' => false,
         );
-        
+
         // this field is used as an validation error wrapper for the location
         $form['location'] = array(
             '#type' => 'hidden'
@@ -463,7 +463,7 @@ class helper {
 
     /**
      * Get's you all the Faq pages.
-     * 
+     *
      * @return type
      */
     public static function getAllFaqPages() {
@@ -479,7 +479,7 @@ class helper {
 
     /**
      * Get current user
-     * 
+     *
      * @global stdClass $user
      * @return stdClass;
      */
@@ -487,10 +487,10 @@ class helper {
         global $user;
         return user_load($user->uid);
     }
-    
+
     /**
      * Gives true if the global search is turned on, else false
-     * 
+     *
      * @global stdClass $user
      * @return boolean
      */
@@ -501,19 +501,19 @@ class helper {
         }
         return false;
     }
-    
+
     /**
      * Get's the tags from the query string
-     * 
+     *
      * return Array
      */
     public static function getTagsFromQuery(){
         return explode(' ', urldecode($_GET['s']));
     }
-    
+
     /**
      * Tells you if a user has subscribed based on his/her role
-     * 
+     *
      * @global stdClass $user
      * @return boolean
      */

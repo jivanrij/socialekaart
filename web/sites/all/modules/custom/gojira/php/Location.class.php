@@ -214,9 +214,6 @@ class Location {
      * @return string
      */
     public static function getAddressString($node) {
-        //array(4) { [0]=> string(18) "field_address_city" [1]=> string(20) "field_address_street" [2]=> string(26) "field_address_streetnumber" [3]=> string(22) "field_address_postcode" }
-//        var_dump(self::getAddressFields(), $node);
-//        die;
 
         foreach (self::getAddressFields() as $field) {
             $thisField = $node->$field;

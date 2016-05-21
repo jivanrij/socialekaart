@@ -10,6 +10,8 @@ function gojira_theme() {
 
 
     return array('welcome' => array('template' => 'templates/welcome'),
+        'grouplist' => array('template' => 'templates/grouplist'),
+        'groupdetail' => array('template' => 'templates/groupdetail'),
         'locationedit' => array('template' => 'templates/locationedit'),
         'locationcorrect' => array('template' => 'templates/locationcorrect'),
         'linkhaweb' => array('template' => 'templates/linkhaweb'),
@@ -130,5 +132,7 @@ function gojira_menu() {
     $items['admin/config/system/gojiratools'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'tools', 'title' => t('SocialeKaart.care tools'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Several tools for Gojira.'));
     $items['admin/config/system/gojiraconfiguration'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'configuration', 'title' => t('SocialeKaart.care configuratie'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Several configurations for Gojira.'));
     $items['admin/config/system/gojiraactivateuser'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'activateuser', 'title' => t('Gojira activate user'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Activate a user trough this form.'));
+    $items['admin/config/system/grouplist'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'grouplist', 'title' => t('Gojira group info'), 'type' => MENU_NORMAL_ITEM, 'description' => t('A list of groupes with a link to a detail page.'));
+    $items['admin/config/system/groupdetail'] = array('access arguments' => array('administer site configuration'), 'page callback' => 'groupdetail', 'title' => t('Gojira group detail'), 'type' => MENU_NORMAL_ITEM, 'description' => t('Detail page of a group.'));
     return $items;
 }
