@@ -5,35 +5,6 @@
  */
 function gojira_idealpay_form($form, &$form_state) {
 
-    // $form['info'] = array(
-    //     '#markup' => '<p>' . t('Select the bank to do your payment with and push the pay button. You will then be redirected to an iDeal page to complete the transaction.') . '</p>',
-    // );
-
-    // $methods = array();
-    //
-    // try{
-    //     $mollie = new Mollie_API_Client;
-    //     $mollie->setApiKey(variable_get('MOLLIE_API_KEY'));
-    //
-    //     $methodobjects = $mollie->methods->all();
-    //
-    //     foreach ($methodobjects->data as $method)
-    //     {
-    //         $methods[$method->id] = $method->description;
-    // 	}
-    // } catch (Mollie_API_Exception $e) {
-    //     watchdog(GojiraSettings::WATCHDOG_IDEAL, $e->getMessage());
-    //     drupal_goto('idealfail');
-    // }
-
-    // $form['method'] = array(
-    //     '#title' => t('Select method'),
-    //     '#type' => 'select',
-    //     '#required' => true,
-    //     '#options' => $methods,
-    //     '#default_value' => 0,
-    // );
-
     $paymentConditions = t('Payment conditions');
     $form['agree_terms_conditions'] = array(
         '#type' => 'checkbox',
@@ -72,7 +43,7 @@ function gojira_idealpay_form_submit($form, &$form_state) {
         $mollie->setApiKey(variable_get('MOLLIE_API_KEY'));
 
         $paymentInfo = array(
-            "amount"       => $info['amount'],
+            "amount"       => $info['total'],
             "description"  => $info['description'],
             "redirectUrl"  => "{$protocol}://{$hostname}/idealreturn?order_id={$order_id}",
             "webhookUrl"   => "{$protocol}://{$hostname}/idealcallback",

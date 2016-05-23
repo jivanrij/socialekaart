@@ -4,7 +4,7 @@
             <div>
                 <h1><?php echo helper::getText('FRONTPAGE_LOGIN', true); ?></h1>
                 <p><?php echo helper::getText('FRONTPAGE_LOGIN'); ?></p>
-                <a href="/introduction" type="button" class="intro btn btn-danger"><?php echo t('More information please'); ?> <i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                <!-- <a href="<?php echo url('introduction'); ?>" type="button" class="intro btn btn-danger"><?php echo t('More information please'); ?> <i class="fa fa-info-circle" aria-hidden="true"></i></a> -->
             </div>
         </div>
 
