@@ -24,20 +24,56 @@ body.front{
         font-size: @font-text-size-borderarea;
     }
 
+    div.equal_background{
+        background-color:@block-color;
+    }
+
     .frontpage_block{
+        background-color:@block-color;
+        margin-bottom:10px;
         > div{
             padding:30px;
             overflow:hidden;
-            background-color:@block-color;
+            margin-bottom:30px;
             @media (max-width: @screen-xs-max) {
                 padding-top: 30px;
             }
-
+        }
+        &.text{
+            > div{
+                @media (min-width: @screen-xs-max) {
+                    height: 228px;
+                }
+                p{
+                    margin: 6px 0 6px 0;
+                }
+            }
         }
         &.login{
             > div{
+                height: 228px;
+                div.errormessage {
+                    margin:0 0 10px 0;
+                    padding:0;
+                }
+                div#edit-actions{
+                    margin:0;
+                    padding:0;
+                }
+                padding-top:0;
+                padding-bottom:0;
                 @media (max-width: @screen-xs-max) {
                     padding-top: 0px;
+                }
+                input{
+                    padding: 5px;
+                }
+                h3{
+                    // form title
+                    position: absolute;
+                    right: 75px;
+                    top: 20px;
+                    font-style: italic;
                 }
             }
         }
@@ -57,9 +93,6 @@ body.front{
             width:250px;
             margin-bottom:20px;
         }
-    }
-    .frontpage_block.text{
-
     }
     .form-block{
         h1{

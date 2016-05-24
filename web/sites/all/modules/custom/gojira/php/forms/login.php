@@ -13,12 +13,14 @@ function gojira_login_form($form, &$form_state) {
     '#size' => 60,
     '#maxlength' => USERNAME_MAX_LENGTH,
     '#required' => TRUE,
+    '#attributes' =>array('placeholder' => t('Username')),
   );
 
   $form['pass'] = array('#type' => 'password',
     '#title' => t('Password'),
     '#description' => t('Enter the password that accompanies your username.'),
     '#required' => TRUE,
+    '#attributes' =>array('placeholder' => t('Password')),
     '#description' => '<a href="/wachtwoord-reset" title="'.t('Click here if you forgot your password.').'">'.t('Click here if you forgot your password.').'</a>',
   );
 

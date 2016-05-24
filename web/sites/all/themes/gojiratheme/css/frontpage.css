@@ -20,20 +20,57 @@ body.front #frontpage_footer {
   text-align: right;
   font-size: 12px;
 }
+body.front div.equal_background {
+  background-color: #f8f8f8;
+}
+body.front .frontpage_block {
+  background-color: #f8f8f8;
+  margin-bottom: 10px;
+}
 body.front .frontpage_block > div {
   padding: 30px;
   overflow: hidden;
-  background-color: #f8f8f8;
+  margin-bottom: 30px;
 }
 @media (max-width: 710px) {
   body.front .frontpage_block > div {
     padding-top: 30px;
   }
 }
+@media (min-width: 710px) {
+  body.front .frontpage_block.text > div {
+    height: 228px;
+  }
+}
+body.front .frontpage_block.text > div p {
+  margin: 6px 0 6px 0;
+}
+body.front .frontpage_block.login > div {
+  height: 228px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+body.front .frontpage_block.login > div div.errormessage {
+  margin: 0 0 10px 0;
+  padding: 0;
+}
+body.front .frontpage_block.login > div div#edit-actions {
+  margin: 0;
+  padding: 0;
+}
 @media (max-width: 710px) {
   body.front .frontpage_block.login > div {
     padding-top: 0px;
   }
+}
+body.front .frontpage_block.login > div input {
+  padding: 5px;
+}
+body.front .frontpage_block.login > div h3 {
+  position: absolute;
+  right: 75px;
+  top: 20px;
+  font-style: italic;
 }
 body.front .frontpage_block p {
   padding: 0;
