@@ -1,4 +1,4 @@
-<script type="text/javascript" src="http://socialekaart.dev/sites/all/modules/custom/gojira/js/jquery.elevateZoom-3.0.8.min.js"></script>
+<script type="text/javascript" src="/sites/all/modules/custom/gojira/js/jquery.elevateZoom-3.0.8.min.js"></script>
 <script>
     jQuery(document).ready(function(){
         jQuery("img.zoom").elevateZoom({zoomWindowWidth:300, zoomWindowHeight:200});
@@ -6,28 +6,26 @@
 </script>
 <div class="container">
     <div class="row">
-        <div class="col-sm-8 frontpage_block text">
+        <div class="col-sm-12 frontpage_block introduction">
             <div>
-                <h1><?php echo helper::getText('FRONTPAGE_LOGIN', true); ?></h1>
-                <p><?php echo helper::getText('FRONTPAGE_LOGIN'); ?></p>
-                <a class="btn btn-danger" title="<?php echo t('Register'); ?>" href="/registreer" id="splash_register"><?php echo t('Register a new account'); ?></a>
-                <!-- <a href="<?php echo url('introduction'); ?>" type="button" class="intro btn btn-danger"><?php echo t('More information please'); ?> <i class="fa fa-info-circle" aria-hidden="true"></i></a> -->
-            </div>
-        </div>
 
-        <div class="col-sm-4 frontpage_block form-block login">
-            <div>
-                <h3><?php echo t('login form'); ?></h3>
-                <?php print @drupal_render(drupal_get_form('gojira_login_form')); ?>
-                <?php include(drupal_get_path('theme', 'gojiratheme') . '/_messages.tpl.php'); ?>
+                    <h1>De interactieve sociale kaart met landelijke dekking voor Nederlandse huiartsen.</h1>
+                    <p>
+                        Lees verder om de grootste voordelen voor uw praktijk te ontdekken, of registreer u als gebruiker.
+                    </p>
+                    <div id="arrows">
+                        <img id="arrow_left" src="/<?php echo drupal_get_path('theme', 'gojiratheme') . '/img/arrow_left.png'; ?>" alt="read more" />
+                        <img id="arrow_right" src="/<?php echo drupal_get_path('theme', 'gojiratheme') . '/img/arrow_right.png'; ?>" alt="register" />
+                    </div>
+                    <div id="buttons_intro">
+                        <a id="register_intro" class="btn btn-danger" title="<?php echo t('Register'); ?>" href="/registreer">Registreer <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                        <a id="read_more_intro" class="btn btn-danger" title="<?php echo t('Read more'); ?>" href="#more">Lees meer <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                    </div>
             </div>
         </div>
     </div>
-
+    <a name="more"></a>
             <div class="introduction_wrapper">
-                <!-- <button type="button" id="introduction_func" class="intro btn btn-danger">Functionaliteiten</button>
-                <button type="button" id="introduction_abon" class="intro btn btn-secondary">Abonnement</button>
-                <button type="button" id="introduction_price" class="intro btn btn-secondary">Pricing</button> -->
                 <div class="row frontpage_block first">
                     <div class="col-sm-5">
                         <div>

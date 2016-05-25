@@ -183,7 +183,7 @@ function gojira_init() {
 
   if(!user_is_logged_in()){
     drupal_add_js(drupal_get_path('module', 'gojira') . '/js/frontpage.js');
-    drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/frontpage.css');
+    drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/frontpage2.css');
   }
 
   if($_GET['q'] == 'welcome' && !user_is_logged_in()){

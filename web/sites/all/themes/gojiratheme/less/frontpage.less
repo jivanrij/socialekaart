@@ -49,34 +49,34 @@ body.front{
                 }
             }
         }
-        &.login{
-            > div{
-                height: 228px;
-                div.errormessage {
-                    margin:0 0 10px 0;
-                    padding:0;
-                }
-                div#edit-actions{
-                    margin:0;
-                    padding:0;
-                }
-                padding-top:0;
-                padding-bottom:0;
-                @media (max-width: @screen-xs-max) {
-                    padding-top: 0px;
-                }
-                input{
-                    padding: 5px;
-                }
-                h3{
-                    // form title
-                    position: absolute;
-                    right: 75px;
-                    top: 20px;
-                    font-style: italic;
-                }
-            }
-        }
+        // &.login{
+        //     > div{
+        //         height: 228px;
+        //         div.errormessage {
+        //             margin:0 0 10px 0;
+        //             padding:0;
+        //         }
+        //         div#edit-actions{
+        //             margin:0;
+        //             padding:0;
+        //         }
+        //         padding-top:0;
+        //         padding-bottom:0;
+        //         @media (max-width: @screen-xs-max) {
+        //             padding-top: 0px;
+        //         }
+        //         input{
+        //             padding: 5px;
+        //         }
+        //         h3{
+        //             // form title
+        //             position: absolute;
+        //             right: 75px;
+        //             top: 20px;
+        //             font-style: italic;
+        //         }
+        //     }
+        // }
 
         p{
             padding:0;
@@ -157,16 +157,9 @@ body.front{
     }
     div.header{
         font-size: @font-text-size-borderarea;
-        height:80px;
         position:relative;
         margin-top:10px;
         margin-bottom:20px;
-        span.subtitle{
-            position:absolute;
-            bottom:0;
-            right:15px;
-            padding-bottom:13px;
-        }
     }
     div.header_small{
         height:45px !important;
@@ -179,5 +172,94 @@ body.front{
     }
     h1, h2{
         font-weight: bold;
+    }
+
+    div.container{
+
+        div.introduction{
+            #arrows{
+                display:block;
+                width:30%;
+                margin-left: auto;
+                margin-right: auto;
+                position: relative;
+                #arrow_down{
+                    float:left;
+                }
+                #arrow_right{
+                    float:right;
+                }
+            }
+            #buttons_intro{
+                display:block;
+                width:25%;
+                margin-left: auto;
+                margin-right: auto;
+                position: relative;
+                #register_intro{
+                    float:right;
+                }
+                #read_more_intro{
+                    float:left;
+                }
+            }
+
+            h1{
+                text-align: center;
+            }
+            p{
+                text-align: center;
+                margin-bottom:0;
+            }
+        }
+
+        div.header{
+            font-size: 10px;
+            margin-bottom:0;
+            #gojira-login-form{
+                margin-top:28px;
+                div.form-item{
+                    overflow:hidden;
+                    display:inline;
+                    label{
+                        display: none;
+                    }
+                    input{
+                        margin-right:5px;
+                        font-size: 14px;
+                        width:130px;
+                        float:left;
+                        padding: 8px;
+                        border-radius: 3px;
+                    }
+                    div.description{
+                        display: none;
+                    }
+                }
+                div.form-actions{
+                    overflow:hidden;
+                    display:inline;
+                    margin-bottom:0;
+                    input{
+                        padding:6px 12px !important;
+                    }
+                }
+            }
+            div.errormessage{
+                font-size:10px;
+                margin:5px 0 5px 0;
+                padding:0;
+                min-height:18px;
+                a{
+                    color:@color-main;
+                    &.grey_password_reset{
+                        color:@color-light;
+                        &:hover{
+                            color:@color-main;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

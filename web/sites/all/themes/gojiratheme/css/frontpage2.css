@@ -45,33 +45,6 @@ body.front .frontpage_block > div {
 body.front .frontpage_block.text > div p {
   margin: 6px 0 6px 0;
 }
-body.front .frontpage_block.login > div {
-  height: 228px;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-body.front .frontpage_block.login > div div.errormessage {
-  margin: 0 0 10px 0;
-  padding: 0;
-}
-body.front .frontpage_block.login > div div#edit-actions {
-  margin: 0;
-  padding: 0;
-}
-@media (max-width: 710px) {
-  body.front .frontpage_block.login > div {
-    padding-top: 0px;
-  }
-}
-body.front .frontpage_block.login > div input {
-  padding: 5px;
-}
-body.front .frontpage_block.login > div h3 {
-  position: absolute;
-  right: 75px;
-  top: 20px;
-  font-style: italic;
-}
 body.front .frontpage_block p {
   padding: 0;
 }
@@ -144,16 +117,9 @@ body.front div.errormessage {
 }
 body.front div.header {
   font-size: 12px;
-  height: 80px;
   position: relative;
   margin-top: 10px;
   margin-bottom: 20px;
-}
-body.front div.header span.subtitle {
-  position: absolute;
-  bottom: 0;
-  right: 15px;
-  padding-bottom: 13px;
 }
 body.front div.header_small {
   height: 45px !important;
@@ -167,4 +133,85 @@ body.front a.btn {
 body.front h1,
 body.front h2 {
   font-weight: bold;
+}
+body.front div.container div.introduction #arrows {
+  display: block;
+  width: 30%;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+body.front div.container div.introduction #arrows #arrow_down {
+  float: left;
+}
+body.front div.container div.introduction #arrows #arrow_right {
+  float: right;
+}
+body.front div.container div.introduction #buttons_intro {
+  display: block;
+  width: 25%;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+body.front div.container div.introduction #buttons_intro #register_intro {
+  float: right;
+}
+body.front div.container div.introduction #buttons_intro #read_more_intro {
+  float: left;
+}
+body.front div.container div.introduction h1 {
+  text-align: center;
+}
+body.front div.container div.introduction p {
+  text-align: center;
+  margin-bottom: 0;
+}
+body.front div.container div.header {
+  font-size: 10px;
+  margin-bottom: 0;
+}
+body.front div.container div.header #gojira-login-form {
+  margin-top: 28px;
+}
+body.front div.container div.header #gojira-login-form div.form-item {
+  overflow: hidden;
+  display: inline;
+}
+body.front div.container div.header #gojira-login-form div.form-item label {
+  display: none;
+}
+body.front div.container div.header #gojira-login-form div.form-item input {
+  margin-right: 5px;
+  font-size: 14px;
+  width: 130px;
+  float: left;
+  padding: 8px;
+  border-radius: 3px;
+}
+body.front div.container div.header #gojira-login-form div.form-item div.description {
+  display: none;
+}
+body.front div.container div.header #gojira-login-form div.form-actions {
+  overflow: hidden;
+  display: inline;
+  margin-bottom: 0;
+}
+body.front div.container div.header #gojira-login-form div.form-actions input {
+  padding: 6px 12px !important;
+}
+body.front div.container div.header div.errormessage {
+  font-size: 10px;
+  margin: 5px 0 5px 0;
+  padding: 0;
+  min-height: 18px;
+}
+body.front div.container div.header div.errormessage a {
+  color: #b7072a;
+}
+body.front div.container div.header div.errormessage a.grey_password_reset {
+  color: #dbdbdb;
+}
+body.front div.container div.header div.errormessage a.grey_password_reset:hover {
+  color: #b7072a;
 }

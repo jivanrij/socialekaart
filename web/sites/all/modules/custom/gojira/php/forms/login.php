@@ -21,7 +21,7 @@ function gojira_login_form($form, &$form_state) {
     '#description' => t('Enter the password that accompanies your username.'),
     '#required' => TRUE,
     '#attributes' =>array('placeholder' => t('Password')),
-    '#description' => '<a href="/wachtwoord-reset" title="'.t('Click here if you forgot your password.').'">'.t('Click here if you forgot your password.').'</a>',
+    //'#description' => '<a href="/wachtwoord-reset" title="'.t('Click here if you forgot your password.').'">'.t('Click here if you forgot your password.').'</a>',
   );
 
   $form['#validate'] = user_login_default_validators();
@@ -31,6 +31,9 @@ function gojira_login_form($form, &$form_state) {
   $form['actions']['submit'] = array('#type' => 'submit', '#value' => t('Log in'));
 
   $form['actions']['submit']['#attributes'] = array('class' => array('btn btn-danger'));
+  
+  $form['name']['#attributes'] = array('placeholder' =>  t('Username'), 'class' => array('unshadow rounded'));
+  $form['pass']['#attributes'] = array('placeholder' =>  t('Password'), 'class' => array('unshadow rounded'));
 
   return $form;
 }
