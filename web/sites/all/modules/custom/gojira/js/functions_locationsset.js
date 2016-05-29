@@ -1,4 +1,4 @@
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -211,11 +211,11 @@ function getCategoryLocations(locationsset_id, cat_id) {
 function bindLocationsetSearch() {
     jQuery("form#search_ownmap_form").on('submit', function(e){
         e.preventDefault();
-        
+
         var s = encodeURIComponent(jQuery('#search_ownmap').val());
         url = window.location.pathname + '?filter=' + s;
 
-        url = '/?q=ownlist&filter=' + s; // TODO remove
+        //url = '/?q=ownlist&filter=' + s; // TODO remove
 
         window.location = url;
     });
