@@ -420,6 +420,10 @@ EOT;
             $sql_max_distance = " (X(point) BETWEEN {$iMinLongitude} AND {$iMaxLongitude} AND Y(point) BETWEEN {$iMinLatitude} AND {$iMaxLatitude}) ";
         }
 
+        if(count($labels) == 0) {
+            return array();
+        }
+
         // define the sql part for the labels
         $matchAgainsts = array();
         foreach($labels as $label)

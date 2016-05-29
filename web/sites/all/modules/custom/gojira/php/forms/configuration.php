@@ -38,6 +38,14 @@ function gojira_configuration_form($form, &$form_state) {
         '#description' => t('Schakel bepaalde CRON mogelijkheden aan of uit.'),
     );
 
+    $form['algemene_instellingen']['gojira_show_error_page'] = array(
+        '#title' => t('Show error page'),
+        '#type' => 'select',
+        '#options' => array(0 => 'no', 1 => 'yes'),
+        '#default_value' => variable_get('gojira_show_error_page', 1),
+        '#description' => t('Force a custom error page. /error.php'),
+    );
+
     $form['cron']['cron_remove_unlinked_tax_terms'] = array(
         '#title' => t('Remove all the unused taxonomy terms (labels).'),
         '#type' => 'select',
@@ -349,5 +357,6 @@ function gojira_configuration_form_submit($form, &$form_state) {
     variable_set('gojira_subscription_year_tax', $_POST['gojira_subscription_year_tax']);
     variable_set('gojira_subscription_year_price', $_POST['gojira_subscription_year_price']);
     variable_set('gojira_subscription_month_price', $_POST['gojira_subscription_month_price']);
+    variable_set('gojira_show_error_page', $_POST['gojira_show_error_page']);
     drupal_set_message(t('Saved all the settings.'), 'status');
 }
