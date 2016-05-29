@@ -1,5 +1,11 @@
 <?php
 
+function gojiratheme_preprocess_maintenance_page(&$variables) {
+    header("HTTP/1.1 500 Internal Server Error");
+    header('Location: /error.php');
+    exit;
+}
+
 function gojiratheme_preprocess_page(&$vars) {
     $messages = drupal_get_messages(NULL, TRUE);
     $vars['messages_list'] = $messages;
@@ -12,8 +18,8 @@ function gojiratheme_form_element($vars) {
     $required = '';
     if($vars['element']['#required']){
         $required = 'required';
-    }    
-    
+    }
+
     if (!in_array($vars['element']['#name'], $aNotAllowed)) {
         // put the description of a field in the title of the label
         if (isset($vars['element']) && isset($vars['element']['#description'])) {

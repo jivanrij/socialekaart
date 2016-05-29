@@ -18,6 +18,7 @@ class Template {
      */
 
     public static function getView() {
+
         global $user;
 
         if (self::statusNotFound() || self::statusForbidden()) {
@@ -142,6 +143,8 @@ class Template {
         if (strstr($_GET['q'], 'user/') && $_GET['q'] != 'user/logout' && !strstr($_GET['q'], 'admin/')) {
             helper::redirectTo404();
         }
+
+
 
         return Template::VIEWTYPE_SEARCH;
 
