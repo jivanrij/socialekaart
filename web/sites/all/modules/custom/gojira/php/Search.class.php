@@ -429,7 +429,6 @@ EOT;
         foreach($labels as $label)
         {
             $matchAgainsts[] =  "MATCH(node.search) AGAINST('{$label}*' IN BOOLEAN MODE)"; // is nog een optie als het veel in tijd uitmaakt
-            //$matchAgainsts[] =  "MATCH(node.search) AGAINST('{$label}*' IN BOOLEAN MODE) AND MATCH(node.search) AGAINST('*{$label}' IN BOOLEAN MODE)";
         }
         $matchAgainsts = '('.implode(' AND ', $matchAgainsts).')';
 

@@ -16,6 +16,7 @@ function gojira_theme() {
         'locationcorrect' => array('template' => 'templates/locationcorrect'),
         'linkhaweb' => array('template' => 'templates/linkhaweb'),
         'editnote' => array('template' => 'templates/editnote'),
+        'error' => array('template' => 'templates/error'),
         'inform' => array('template' => 'templates/inform'),
         'introduction' => array('template' => 'templates/introduction'),
         'informthanks' => array('template' => 'templates/informthanks'),
@@ -101,6 +102,7 @@ function gojira_menu() {
     $items['settings_thanks'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'settings_thanks', 'title' => t('Settings thanks'), 'type' => MENU_NORMAL_ITEM);
     $items['questions'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'questions', 'title' => t('Questions'), 'type' => MENU_NORMAL_ITEM);
     $items['editnote'] = array('access arguments' => array(helper::PERMISSION_MODERATE_LOCATION_CONTENT), 'page callback' => 'editnote', 'title' => t('Edit note'), 'type' => MENU_NORMAL_ITEM);
+    $items['error'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'error', 'title' => t('Error page'), 'type' => MENU_NORMAL_ITEM);
 
     // AJAX
     $items['ajax/search'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'search', 'title' => t('Search'), 'type' => MENU_NORMAL_ITEM);

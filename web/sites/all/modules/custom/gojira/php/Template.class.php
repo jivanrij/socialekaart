@@ -3,6 +3,7 @@
 class Template {
 
     const VIEWTYPE_AJAX = 'ajax';
+    const VIEWTYPE_ERROR = 'error';
     const VIEWTYPE_FRONT = 'front';
     const VIEWTYPE_CRUD = 'crud'; // shows no title on global level
     const VIEWTYPE_CRUD_TITLE = 'crud_title'; // shows title on global level
@@ -20,6 +21,10 @@ class Template {
     public static function getView() {
 
         global $user;
+
+        if ($_GET['q'] == 'error') {
+            return Template::VIEWTYPE_FRONT;
+        }
 
         if (self::statusNotFound() || self::statusForbidden()) {
             if ($user->uid == 0) {
@@ -164,6 +169,10 @@ class Template {
 
         if ($_GET['q'] == 'passwordmailsend') {
             return 'front/passwordmailsend.tpl.php';
+        }
+
+        if ($_GET['q'] == 'error') {
+            return 'front/error.tpl.php';
         }
 
         if ($_GET['q'] == 'passwordreset') {

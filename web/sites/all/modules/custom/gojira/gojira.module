@@ -61,6 +61,7 @@ include ('php/actions/passwordthanks.php');
 include ('php/actions/picklocation.php');
 include ('php/actions/postcodesuggest.php');
 include ('php/actions/register.php');
+include ('php/actions/error.php');
 include ('php/actions/registered.php');
 include ('php/actions/passwordmailsend.php');
 include ('php/actions/removelabel.php');
@@ -181,7 +182,7 @@ function gojira_init() {
 
   drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/normalize.css');
 
-  if(!user_is_logged_in()){
+  if(!user_is_logged_in() || $_GET['q'] == 'error'){
     drupal_add_js(drupal_get_path('module', 'gojira') . '/js/frontpage.js');
     drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/frontpage2.css');
   }

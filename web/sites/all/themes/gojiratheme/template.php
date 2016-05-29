@@ -4,7 +4,7 @@ function gojiratheme_preprocess_maintenance_page(&$variables) {
     if (variable_get('gojira_show_error_page', 1))
     {
         header("HTTP/1.1 500 Internal Server Error");
-        header('Location: /error.php');
+        header('Location: ' . url('error'));
         exit;
     }
 }
