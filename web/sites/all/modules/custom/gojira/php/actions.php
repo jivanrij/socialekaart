@@ -11,6 +11,7 @@ function gojira_theme() {
 
     return array('welcome' => array('template' => 'templates/welcome'),
         'grouplist' => array('template' => 'templates/grouplist'),
+        'conditions' => array('template' => 'templates/conditions'),
         'groupdetail' => array('template' => 'templates/groupdetail'),
         'locationedit' => array('template' => 'templates/locationedit'),
         'locationcorrect' => array('template' => 'templates/locationcorrect'),
@@ -103,6 +104,7 @@ function gojira_menu() {
     $items['questions'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'questions', 'title' => t('Questions'), 'type' => MENU_NORMAL_ITEM);
     $items['editnote'] = array('access arguments' => array(helper::PERMISSION_MODERATE_LOCATION_CONTENT), 'page callback' => 'editnote', 'title' => t('Edit note'), 'type' => MENU_NORMAL_ITEM);
     $items['error'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'error', 'title' => t('Error page'), 'type' => MENU_NORMAL_ITEM);
+    $items['conditions'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'conditions', 'title' => t('Algemene voorwaarden Blijnder'), 'type' => MENU_NORMAL_ITEM);
 
     // AJAX
     $items['ajax/search'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'search', 'title' => t('Search'), 'type' => MENU_NORMAL_ITEM);

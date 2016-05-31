@@ -47,7 +47,7 @@ function gojira_register_form($form, &$form_state) {
       '#required' => true,
   );
   $form[GojiraSettings::CONTENT_TYPE_CONDITIONS_AGREE_FIELD] = array(
-      '#title' => 'Ik ga akkoord met de <a target="_new" href="https://socialekaart.care/sites/default/skfiles/Algemene_Voorwaarden.pdf" title="Algemene voorwaarden">algemene voorwaarden</a>',
+      '#title' => 'Ik ga akkoord met de <a target="_new" href="/AlgemeneVoorwaarden" title="Algemene voorwaarden">algemene voorwaarden</a>',
       '#type' => 'checkbox',
       '#required' => true,
   );

@@ -9,7 +9,7 @@ function gojira_idealpay_form($form, &$form_state) {
     $form['agree_terms_conditions'] = array(
         '#type' => 'checkbox',
         '#required' => true,
-        '#title' => 'Ik ga akkoord met de <a href="https://socialekaart.care/sites/default/skfiles/Algemene_Voorwaarden.pdf" title="algemene voorwaarden" target="_new">algemene voorwaarden</a>.',
+        '#title' => 'Ik ga akkoord met de <a href="/AlgemeneVoorwaarden" title="algemene voorwaarden" target="_new">algemene voorwaarden</a>.',
     );
 
     $form['submit'] = array(

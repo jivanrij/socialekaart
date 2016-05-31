@@ -38,6 +38,7 @@ include ('php/actions/employeelist.php');
 include ('php/actions/questions.php');
 include ('php/actions/favorites.php');
 include ('php/actions/practicecheck.php');
+include ('php/actions/conditions.php');
 include ('php/actions/locationinfo.php');
 include ('php/actions/editnote.php');
 include ('php/actions/doublelocations.php');
@@ -82,7 +83,6 @@ include ('php/actions/suggestlocation.php');
 include ('php/actions/suggestlocationthanks.php');
 include ('php/actions/singlesearchresult.php');
 include ('php/actions/switchglobalsearch.php');
-include ('php/actions/introduction.php');
 include ('php/actions/unlikelabel.php');
 include ('php/actions/passwordreset.php');
 include ('php/actions/welcome.php');
@@ -182,7 +182,7 @@ function gojira_init() {
 
   drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/normalize.css');
 
-  if(!user_is_logged_in() || $_GET['q'] == 'error'){
+  if(!user_is_logged_in() || $_GET['q'] == 'error' || $_GET['q'] == 'conditions'){
     drupal_add_js(drupal_get_path('module', 'gojira') . '/js/frontpage.js');
     drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/frontpage2.css');
   }

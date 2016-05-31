@@ -5,7 +5,7 @@
 
                     <h1>Helaas is er iets verkeerd gegaan.</h1>
                     <p>
-                        Ga terug naar de beginpagina om verder te gaan. Als dit zich vaker voordoet kunt u met ons <a href="mailto:info@socialekaart.care?subject=Fout op SocialeKaart.care">contact openen via een e-mail</a>.
+                        Ga terug naar de beginpagina om verder te gaan. Als dit zich vaker voordoet kunt u met ons <a href="mailto:info@socialekaart.care?subject=Fout op SocialeKaart.care">contact opnemen via een e-mail</a>.
                     </p>
                     <p>
                         <center><a class="btn btn-danger" title="Beginpagina" href="/">Beginpagina</a></center>

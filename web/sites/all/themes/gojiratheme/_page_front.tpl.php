@@ -25,7 +25,7 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-12">
-      <div id="frontpage_footer"><?php echo t('SocialeKaart.care is an initiative of Blijnder'); ?></div>
+      <div id="frontpage_footer"><a href="/AlgemeneVoorwaarden">Algemene voorwaarden</a> - SocialeKaart.care is een intiatief van Blijnder VOF - <a href="/contact" title="Contacteer">Contact</a></div>
     </div>
   </div>
 </div>

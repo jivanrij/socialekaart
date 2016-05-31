@@ -39,6 +39,7 @@ class Template {
         $front_pages[] = 'user/blank';
         $front_pages[] = 'user';
         $front_pages[] = 'register';
+        $front_pages[] = 'conditions';
         $front_pages[] = '/user';
         $front_pages[] = 'practicecheck';
         foreach ($front_pages as $url) {
@@ -182,6 +183,9 @@ class Template {
             return 'front/register.tpl.php';
         }
         if ($_GET['q'] == 'practicecheck') {
+            return 'front/page.tpl.php';
+        }
+        if ($_GET['q'] == 'conditions') {
             return 'front/page.tpl.php';
         }
 

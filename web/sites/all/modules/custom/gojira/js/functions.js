@@ -352,7 +352,7 @@ function setupMapDefault() {
         accessToken: Drupal.settings.gojira.mapbox_accesstoken
     }).addTo(window.map);
 
-    window.map.attributionControl.setPrefix("<a href='https://socialekaart.care/sites/default/skfiles/Algemene_Voorwaarden.pdf'>Algemene Voorwaarden</a> <a href='/user/logout'>Uitloggen</a>");
+    window.map.attributionControl.setPrefix("<a target='_new' href='/AlgemeneVoorwaarden'>Algemene Voorwaarden</a> <a href='/user/logout'>Uitloggen</a>");
 
     window.markers = new L.FeatureGroup();
     window.map.addLayer(window.markers);
