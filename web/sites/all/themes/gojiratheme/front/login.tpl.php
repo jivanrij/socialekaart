@@ -49,21 +49,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row frontpage_block first">
-                    <div class="col-sm-5">
-                        <div>
-                            <img style="max-height:200px;margin: 0 auto;" class="img-responsive img-rounded" src="sites/all/modules/custom/gojira/img/introduction/person.png" />
-                        </div>
-                    </div>
-                    <div class="col-sm-7">
-                        <div style="vertical-align: middle;">
-                            <h2>Voor wie is SocialeKaart.care?</h2>
-                            <p>
-                                Huisartsen met een BIG-registratie kunnen gratis gebruik maken van SocialeKaart.care. De verwijsinformatie wordt alleen gedeeld met huisartsen die zich hebben aangemeld. SocialeKaart.care is een Nederlands product en een initatief van Blijnder VOF.
-                            </p>
-                        </div>
-                    </div>
-                </div>
                 <div class="row frontpage_block">
                     <div class="col-sm-5">
                         <div>
@@ -108,6 +93,21 @@
                             </p>
                             <p>
                                 U vindt SocialeKaart.care ook op de startpagina van HAweb, het online platform voor huisartsen.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row frontpage_block first">
+                    <div class="col-sm-5">
+                        <div>
+                            <img style="max-height:200px;margin: 0 auto;" class="img-responsive img-rounded" src="sites/all/modules/custom/gojira/img/introduction/person.png" />
+                        </div>
+                    </div>
+                    <div class="col-sm-7">
+                        <div style="vertical-align: middle;">
+                            <h2>Voor wie is SocialeKaart.care?</h2>
+                            <p>
+                                Huisartsen met een BIG-registratie kunnen gratis gebruik maken van SocialeKaart.care. De verwijsinformatie wordt alleen gedeeld met huisartsen die zich hebben aangemeld. SocialeKaart.care is een Nederlands product en een initatief van Blijnder VOF.
                             </p>
                         </div>
                     </div>
