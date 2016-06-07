@@ -90,7 +90,7 @@ class Mailer {
 
     /**
      * Overwrites default settings for the mail if needed
-     * 
+     *
      * @param string $sKey
      * @param array $aInfo
      */
@@ -102,7 +102,7 @@ class Mailer {
 
     /**
      * Sends the e-mail
-     * 
+     *
      * @param array $aInfo
      * @throws Mandrill_Error
      */
@@ -660,25 +660,23 @@ EOT;
             $aInfo['from_name'] = 'SocialeKaart.care';
             $aInfo['subject'] = 'Gefeliciteerd!';
             $aInfo['text'] = <<<EOT
-U krijgt u van ons een gratis proefabonnement voor de duur van 3 maanden!
+U krijgt u van ons een gratis proefabonnement op de plus versie voor de duur van 3 maanden!
 
-Met de standaard versie van Sociale Kaart kunt u eenvoudig en snel verwijzen naar zorgverleners in uw regio. Door kenmerken toe te voegen aan zorgverleners worden de zoekresultaten steeds relevanter.
+Met de standaard versie van SocialeKaart.care kunt u eenvoudig en snel verwijzen naar zorgverleners in uw regio. Door kenmerken toe te voegen aan zorgverleners worden de zoekresultaten steeds relevanter.
 
-Een (proef-)abonnement op de volledige versie geeft u daarnaast nog de volgende extra functionaliteiten:
+Een (proef-)abonnement op de plus versie geeft u daarnaast nog de volgende extra functionaliteiten:
 - eenvoudig uw eigen sociale kaart samenstellen waarbinnen u kunt zoeken;
-- zoeken naar verwijsgegevens specifiek in bepaalde steden of dorpen;
-- zoeken in heel Nederland;
 - uw collega's en medewerkers laten werken met dezelfde informatie;
 - meerdere praktijken toevoegen zodat u ook vanuit andere praktijken kunt zoeken.
 
-Mocht u na de proefperiode besluiten een abonnement af te sluiten kunt u dit simpel via de website doen. Een abonnement is 2 euro per maand en kan per jaar afgerekend worden.
+Mocht u na de proefperiode besluiten een abonnement af te sluiten kunt u dit simpel via de website doen. Een abonnement is 5 euro per maand en kan per jaar afgerekend worden.
 
 Als laatste willen we u op de hoogte stellen dat we standaard beschikken over meer dan 115.000 zorgverleners verspreid over het gehele land. Mocht u toch zorgaanbieders kennen die ontbreken in SocialeKaart.care dan kunt u deze gemakkelijk en snel toevoegen via de link 'Zorgaanbieder toevoegen' in het menu. Op deze manier kunt u uw eigen sociale kaart compleet krijgen en hebben uw collega's hier direct profijt van.
 
-We wensen u veel plezier in het werken met Sociale Kaart!
+We wensen u veel plezier in het werken met SocialeKaart.care!
 
 Met vriendelijke groet,
-Het team van Sociale Kaart
+Het team van SocialeKaart.care
 EOT;
             $aInfo['to'][] = array(
                 'email' => $sEmail,
@@ -814,7 +812,7 @@ EOT;
         $aInfo['from_email'] = 'no-reply@socialekaart.care';
         $aInfo['from_name'] = 'SocialeKaart.care';
         $aInfo['subject'] = 'SocialeKaart.care ISSUE - group ' . $iGroup . ' has no payment information';
-        $aInfo['text'] = 'SocialeKaart.care ISSUE - group ' . $iGroup . ' has no payment information, but is flagged as a group with a payed account.';
+        $aInfo['text'] = 'SocialeKaart.care ISSUE - group ' . $iGroup . ' has no payment information, but is flagged as a group with a payed account. Perhaps this group is in it\'s free intro period.';
         $aInfo['to'][] = array(
             'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
             'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),

@@ -4,7 +4,7 @@ description = Skin for gojira
 
 core = 7.x
 
-stylesheets[all][] = css/gojira.css
+stylesheets[all][] = css/gojira1.css
 
 regions[content] = Content
 regions[header_menu] = The main menu

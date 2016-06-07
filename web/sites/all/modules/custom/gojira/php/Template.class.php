@@ -165,47 +165,59 @@ class Template {
     public static function getFrontPage() {
 
         if (self::statusNotFound() || self::statusForbidden()) {
+            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'Not found or Forbidden page load.');
             return 'front/page.tpl.php';
         }
 
         if ($_GET['q'] == 'passwordmailsend') {
+            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'passwordmailsend');
             return 'front/passwordmailsend.tpl.php';
         }
 
         if ($_GET['q'] == 'error') {
+            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'error');
             return 'front/error.tpl.php';
         }
 
         if ($_GET['q'] == 'passwordreset') {
+            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'passwordreset');
             return 'front/passwordreset.tpl.php';
         }
         if ($_GET['q'] == 'register') {
+            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'register');
             return 'front/register.tpl.php';
         }
         if ($_GET['q'] == 'practicecheck') {
+            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'practicecheck');
             return 'front/page.tpl.php';
         }
         if ($_GET['q'] == 'conditions') {
+            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'conditions');
             return 'front/page.tpl.php';
         }
 
         if ($_GET['q'] == 'registered') {
+            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'registered');
             return 'front/registered.tpl.php';
         }
 
         if (strstr($_GET['q'], 'user/reset/')) {
+            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'user/reset/');
             return 'front/resetlink.tpl.php';
         }
 
         if (strstr($_GET['q'], 'user/login')) {
+            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'user/login');
             return 'front/user_login.tpl.php';
         }
 
         if ($_GET['q'] == 'user' || $_GET['q'] == '/user') {
+            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'user');
             return 'front/page.tpl.php';
         }
 
         if (strstr($_GET['q'], 'introduction')) {
+            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'introduction');
             return 'front/introduction.tpl.php';
         }
 
@@ -213,10 +225,12 @@ class Template {
             $nid = arg(1);
             $node = node_load($nid);
             if ($node->type == GojiraSettings::CONTENT_TYPE_PAGE_PUBLIC) {
+                watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'front page content page');
                 return 'front/page.tpl.php';
             }
         }
 
+        watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'login');
         return 'front/login.tpl.php';
     }
 

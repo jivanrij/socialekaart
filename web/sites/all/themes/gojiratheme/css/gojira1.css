@@ -1711,3 +1711,62 @@ button.close_box:hover {
   display: none;
 }
 /* handle 3 stages, xs/md/lg */
+@media print {
+  #search_form {
+    display: none;
+  }
+  #locationset_wrapper {
+    display: none;
+  }
+  div.labels {
+    display: none;
+  }
+  div.note {
+    display: none;
+  }
+  div.add_label {
+    display: none;
+  }
+  div.inform {
+    display: none;
+  }
+  div.favorites_switch {
+    display: none;
+  }
+  div.labeltxt {
+    display: none;
+  }
+  #header {
+    display: none;
+  }
+  #mobileheader {
+    display: none;
+  }
+  button.close_box {
+    display: none;
+  }
+  #map {
+    display: none;
+    width: 460px;
+    height: 400px;
+  }
+  div.leaflet-control-container {
+    display: none;
+  }
+  #search_result_info {
+    left: 0;
+    width: 510px;
+    top: 0;
+  }
+  #selected_location_info {
+    width: 510px;
+    display: block;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    overflow: hidden;
+  }
+}

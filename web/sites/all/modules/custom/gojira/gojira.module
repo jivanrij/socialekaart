@@ -184,7 +184,7 @@ function gojira_init() {
 
   if(!user_is_logged_in() || $_GET['q'] == 'error' || $_GET['q'] == 'conditions'){
     drupal_add_js(drupal_get_path('module', 'gojira') . '/js/frontpage.js');
-    drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/frontpage2.css');
+    drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/frontpage1.css');
   }
 
   if($_GET['q'] == 'welcome' && !user_is_logged_in()){
