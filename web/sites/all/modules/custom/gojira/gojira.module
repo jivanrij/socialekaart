@@ -11,6 +11,7 @@ include ('php/actions.php');
 include ('php/api/api.php');
 include ('php/Postcode.class.php');
 include ('php/Subscriptions.class.php');
+include ('php/Reporter.class.php');
 include ('php/Template.class.php');
 include ('php/Category.class.php');
 include ('php/Labels.class.php');
@@ -174,6 +175,8 @@ function gojira_css_alter(&$css) {
 function gojira_init() {
 
   global $user;
+
+  Reporter::reportThis();
 
   if(!user_is_logged_in() && (helper::getIEVersion() == 8 OR helper::getIEVersion() == 9))
   {

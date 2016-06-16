@@ -232,3 +232,17 @@ class GojiraSettings
 // ALTER TABLE `gojira_payments` DROP `ideal_code`;
 // ALTER TABLE `gojira_payments` CHANGE `status` `status` VARCHAR(11)  NULL  DEFAULT NULL;
 // ALTER TABLE `gojira_payments` CHANGE `bank` `method` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'Method of payment';
+
+// JUNI 2016 - ADDING REPORTING
+// CREATE TABLE `gojira_reporter` (
+//   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+//   `user` int(11) DEFAULT NULL,
+//   `datetime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+//   `url` varchar(255) DEFAULT NULL,
+//   `ip` varchar(18) DEFAULT NULL,
+//   `agent` varchar(512) DEFAULT NULL,
+//   `note` varchar(255) DEFAULT NULL,
+//   `mobile` int(1) DEFAULT NULL,
+//   `params` text,
+//   PRIMARY KEY (`id`)
+// ) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4;
