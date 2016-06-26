@@ -9,10 +9,20 @@ class Reporter{
         $url = base_path().current_path();
         $ip = ip_address();
 
-        $params = '';
-        if (count($_POST) > 0) {
-            $params .= 'POST: '.json_encode($_POST);
+        if($userId == 1) {
+            return;
         }
+        
+        $params = '';
+
+        $post = $_POST;
+        if (count($post) > 0) {
+            if(isset($post['pass'])) {
+                unset($post['pass']);
+            }
+            $params .= 'POST: '.json_encode($post);
+        }
+
         if (count($_GET) > 0) {
             $params .= 'GET:'.json_encode($_GET);
         }
