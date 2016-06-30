@@ -11,6 +11,7 @@ class Template {
     const VIEWTYPE_SEARCH = 'search';
     const VIEWTYPE_BIG_TITLE = 'big_title'; // random content on a wide page without a global title
     const VIEWTYPE_LOCATIONSSET = 'locationsset'; // just content, with a title
+    const VIEWTYPE_NOMAP = 'nomap'; // logged in but no map
 
     /**
      * Gives you the type of rendering needed for the page
@@ -31,6 +32,13 @@ class Template {
                 return Template::VIEWTYPE_FRONT;
             } else {
                 return Template::VIEWTYPE_CRUD_TITLE;
+            }
+        }
+
+        $nomap_pages[] = 'crudtest';
+        foreach ($nomap_pages as $url) {
+            if ($_GET['q'] == $url) {
+                return Template::VIEWTYPE_NOMAP;
             }
         }
 
@@ -244,6 +252,9 @@ class Template {
             return true;
         }
         if (Template::getView() == Template::VIEWTYPE_FRONT) {
+            return false;
+        }
+        if (Template::getView() == Template::VIEWTYPE_NOMAP) {
             return false;
         }
         if (path_is_admin(current_path())) {

@@ -49,6 +49,7 @@ function gojira_theme() {
         'idealfail' => array('template' => 'templates/idealfail'),
         'idealsuccess' => array('template' => 'templates/idealsuccess'),
         'register' => array('template' => 'templates/register'),
+        'crudtest' => array('template' => 'templates/crudtest'),
         'passwordreset' => array('template' => 'templates/passwordreset')
     );
 }
@@ -76,6 +77,8 @@ function gojira_menu() {
     $items['employee/edit'] = array('access arguments' => array(helper::PERMISSION_MANAGE_USERS), 'page callback' => 'employeeedit', 'title' => t('Edit/Add employee'), 'type' => MENU_NORMAL_ITEM);
     $items['linkhaweb'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'linkhaweb', 'title' => t('Links a Haweb user to this account'), 'type' => MENU_NORMAL_ITEM);
 
+    // crud pages
+    $items['crudtest'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'crudtest', 'title' => t('Crud test'), 'type' => MENU_NORMAL_ITEM);
 
     $items['inform'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'inform', 'title' => t('Inform us about some information that needs changing.'), 'type' => MENU_NORMAL_ITEM);
     $items['informthanks'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'informthanks', 'title' => t('Thank you for informing us.'), 'type' => MENU_NORMAL_ITEM);

@@ -4,7 +4,7 @@
   <!DOCTYPE html>
   <html lang="nl">
   <head profile="<?php print $grddl_profile; ?>">
-    <?php if(Template::getView() == Template::VIEWTYPE_FRONT): ?>
+    <?php if(Template::getView() == Template::VIEWTYPE_FRONT || Template::getView() == Template::VIEWTYPE_NOMAP): ?>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
     <?php endif; ?>

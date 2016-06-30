@@ -11,6 +11,10 @@ switch(Template::getView()){
     echo $overlay;
     include(drupal_get_path('theme', 'gojiratheme') . '/_page_crud.tpl.php');
     break;
+    case Template::VIEWTYPE_NOMAP:
+      echo $overlay;
+      include(drupal_get_path('theme', 'gojiratheme') . '/_page_nomap.tpl.php');
+      break;
   case Template::VIEWTYPE_CRUD_TITLE:
     echo $overlay;
     include(drupal_get_path('theme', 'gojiratheme') . '/_page_crud_title.tpl.php');
