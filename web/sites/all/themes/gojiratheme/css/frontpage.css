@@ -1,0 +1,217 @@
+/* handle 3 stages, xs/md/lg */
+.rounded_border {
+  display: block;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  overflow: hidden;
+}
+body.front {
+  font-weight: normal;
+  height: auto;
+  font-size: 16px;
+}
+body.front #frontpage_footer {
+  margin-top: 5px;
+  margin-bottom: 15px;
+  text-align: right;
+  font-size: 12px;
+}
+body.front div.equal_background {
+  background-color: #f8f8f8;
+}
+body.front .frontpage_block {
+  background-color: #f8f8f8;
+  margin-bottom: 10px;
+}
+body.front .frontpage_block > div {
+  padding: 30px;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+@media (max-width: 710px) {
+  body.front .frontpage_block > div {
+    padding-top: 30px;
+  }
+}
+@media (min-width: 710px) {
+  body.front .frontpage_block.text > div {
+    height: 228px;
+  }
+}
+body.front .frontpage_block.text > div p {
+  margin: 6px 0 6px 0;
+}
+body.front .frontpage_block p {
+  padding: 0;
+}
+body.front .frontpage_block h1 {
+  padding: 0;
+  font-size: 20px;
+}
+body.front .frontpage_block h2 {
+  padding: 0;
+  font-size: 16px;
+}
+body.front .frontpage_block a.register {
+  width: 250px;
+  margin-bottom: 20px;
+}
+body.front .form-block h1 {
+  padding: 0 0 0 0;
+}
+body.front .form-block p {
+  padding: 0;
+}
+body.front .form-block form {
+  overflow: hidden;
+  margin-bottom: 5px;
+  border-width: 0px;
+}
+body.front .form-block form div.form-item label {
+  margin-bottom: 0;
+  font-size: 12px;
+}
+body.front .form-block form div.form-item div.description {
+  margin-left: 0;
+  margin-top: 5px;
+}
+body.front .form-block form input {
+  width: 90%;
+}
+body.front .form-block form input[type=checkbox] {
+  width: auto;
+}
+body.front .form-block form input[type=submit] {
+  font-size: 12px;
+}
+body.front .form-block form div.form-type-checkbox {
+  overflow: hidden;
+  width: 100%;
+}
+body.front .form-block form div.form-type-checkbox input {
+  float: left;
+  width: 10%;
+  margin-top: 2px;
+}
+body.front .form-block form div.form-type-checkbox label {
+  float: right;
+  width: 90%;
+}
+body.front .col-sm-9.frontpage_block {
+  padding-right: 10px;
+}
+body.front .col-sm-3.frontpage_block.hidden-xs {
+  padding-left: 0px;
+}
+body.front .col-sm-3.frontpage_block.hidden-sm {
+  padding-left: 15px;
+  padding-right: 10px;
+}
+body.front div.errormessage {
+  font-size: 12px;
+  margin: 0 0 10px 10px;
+}
+body.front div.header {
+  font-size: 12px;
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+body.front div.header_small {
+  height: 45px !important;
+}
+body.front a {
+  text-decoration: underline;
+}
+body.front a.btn {
+  text-decoration: none;
+}
+body.front h1,
+body.front h2 {
+  font-weight: bold;
+}
+body.front div.container div.introduction #arrows {
+  display: block;
+  width: 30%;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+body.front div.container div.introduction #arrows #arrow_down {
+  float: left;
+}
+body.front div.container div.introduction #arrows #arrow_right {
+  float: right;
+}
+body.front div.container div.introduction #buttons_intro {
+  display: block;
+  width: 25%;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+body.front div.container div.introduction #buttons_intro #register_intro {
+  float: right;
+}
+body.front div.container div.introduction #buttons_intro #read_more_intro {
+  float: left;
+}
+body.front div.container div.introduction h1 {
+  text-align: center;
+}
+body.front div.container div.introduction p {
+  text-align: center;
+  margin-bottom: 0;
+}
+body.front div.container div.header {
+  font-size: 10px;
+  margin-bottom: 0;
+}
+body.front div.container div.header #gojira-login-form {
+  margin-top: 28px;
+}
+body.front div.container div.header #gojira-login-form div.form-item {
+  overflow: hidden;
+  display: inline;
+}
+body.front div.container div.header #gojira-login-form div.form-item label {
+  display: none;
+}
+body.front div.container div.header #gojira-login-form div.form-item input {
+  margin-right: 5px;
+  font-size: 14px;
+  width: 130px;
+  float: left;
+  padding: 8px;
+  border-radius: 3px;
+}
+body.front div.container div.header #gojira-login-form div.form-item div.description {
+  display: none;
+}
+body.front div.container div.header #gojira-login-form div.form-actions {
+  overflow: hidden;
+  display: inline;
+  margin-bottom: 0;
+}
+body.front div.container div.header #gojira-login-form div.form-actions input {
+  padding: 6px 12px !important;
+}
+body.front div.container div.header div.errormessage {
+  font-size: 10px;
+  margin: 5px 0 5px 0;
+  padding: 0;
+  min-height: 18px;
+}
+body.front div.container div.header div.errormessage a {
+  color: #b7072a;
+}
+body.front div.container div.header div.errormessage a.grey_password_reset {
+  color: #dbdbdb;
+}
+body.front div.container div.header div.errormessage a.grey_password_reset:hover {
+  color: #b7072a;
+}
