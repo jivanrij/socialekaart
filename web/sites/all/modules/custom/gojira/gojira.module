@@ -76,6 +76,7 @@ include ('php/actions/idealcallback.php');
 include ('php/actions/idealsuccess.php');
 include ('php/actions/idealfail.php');
 include ('php/actions/idealreport.php');
+include ('php/actions/crudtest.php');
 include ('php/actions/setfavorite.php');
 include ('php/actions/settings.php');
 include ('php/actions/settings_thanks.php');
@@ -103,6 +104,7 @@ include ('php/forms/help.php');
 include ('php/forms/passwordreset.php');
 include ('php/forms/configuration.php');
 include ('php/forms/register.php');
+include ('php/forms/crudtest.php');
 include ('php/mails/mails.php');
 
 function gojira_permission() {
@@ -171,7 +173,7 @@ function gojira_css_alter(&$css) {
     }
 }
 
-// boodstrap shizzle
+
 function gojira_init() {
 
   global $user;
@@ -324,7 +326,11 @@ function gojira_init() {
     }
 
     Map::setMapInfo($_GET['q']);
-  }
+
+    drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/gojira.css');
+}else{
+    drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/gojira_bootstrap.css');
+}
 
   // add meta tags and description if it's a public page
     if (arg(0) == 'node' && is_numeric(arg(1))) {

@@ -90,6 +90,7 @@ class Locationsets {
 
     /**
      * Get's the locations belonging to the current locationset page.
+
      * Only works on a locationset page node
      *
      * @param integer set id | optional, default is the current set

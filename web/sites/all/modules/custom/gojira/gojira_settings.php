@@ -20,8 +20,8 @@ class GojiraSettings
     const CONTENT_TYPE_PAGE = 'page'; // a content page
     const CONTENT_TYPE_PAGE_BIG = 'page_big'; // a content page with a wide text area
     const CONTENT_TYPE_FAQ = 'faq'; // a content page with a wide text area
-    const CONTENT_TYPE_POSTCODEAREA = 'postcodearea'; // postcode area to link locationsets with
     const CONTENT_TYPE_SET_OF_LOCATIONS = 'locationset'; // set of locations
+
 
     // LOCATION FIELDS
     const CONTENT_TYPE_TEXT_FIELD = 'field_text';
@@ -53,7 +53,6 @@ class GojiraSettings
     const CONTENT_TYPE_ADD_URL_FIELD = 'field_url'; // url to link to
 
     // zorgverlenersset FIELDS
-    const CONTENT_TYPE_LOCATIONSET_POSTCODES = 'field_postcodeareas';
     const CONTENT_TYPE_LOCATIONSET_LOCATIONS = 'field_setlocations';
     const CONTENT_TYPE_LOCATIONSET_SUBTITLE = 'field_subtitel';
 
@@ -246,3 +245,6 @@ class GojiraSettings
 //   `params` text,
 //   PRIMARY KEY (`id`)
 // ) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4;
+
+// JULI 2016 REMOVE POSTCODE FIELD FROM LOCATIONSSET & REMOVE POSTCODEGEBIED NODE TYPE
+// JULI 2016 RENAME locationsset TO locationset
