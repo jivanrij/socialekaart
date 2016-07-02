@@ -12,7 +12,7 @@ class Reporter{
         if($userId == 1) {
             return;
         }
-        
+
         $params = '';
 
         $post = $_POST;
@@ -34,6 +34,6 @@ class Reporter{
 
         $thirtyDaysBack = date('Y-m-d H:m:s', strtotime('-30 days'));
         db_query("DELETE FROM `gojira_reporter` WHERE datetime < '{$thirtyDaysBack}'");
-        db_query("INSERT INTO `gojira_reporter` (`params`, `mobile`, `user`, `url`, `ip`, `agent`, `note`) VALUES ('{$params}',{$isMobile}, {$userId}, '{$url}', '{$ip}', '{$agent}', '{$note}')");
+        db_query("INSERT INTO `gojira_reporter` (`params`, `mobile`, `user`, `url`, `ip`, `agent`, `note`) VALUES (:params,:isMobile, :userId, :url, :ip, :agent, :note)",array('params'=>$params,'isMobile'=>$isMobile,'userId'=>$userId,'url'=>$url,'ip'=>$ip, 'agent'=>$agent, 'note'=>$note));
     }
 }

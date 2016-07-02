@@ -4,7 +4,7 @@
     if ($user->uid):
         ?>
         <div id="header_options">
-            
+
             <?php if (Subscriptions::currentGroupHasPayed() && Location::userHasMultipleLocationsStored()): ?>
                 <div class="header_select">
                     <label for="location_selector"><?php echo t('select practice'); ?></label>
@@ -16,11 +16,11 @@
                     </select>
                 </div>
             <?php endif; ?>
-            
-            
+
+
             <ul class="maplist">
                 <li>
-                    <?php if(Locationsets::getInstance()->userHasRightToLocationssets() && count(Locationsets::getInstance()->getMapSetsForCurrentUser())>0): ?>
+                    <?php if(Locationsets::getInstance()->userHasRightToLocationsets() && count(Locationsets::getInstance()->getMapSetsForCurrentUser())>0): ?>
                         <a id="maps_hover_icon" title="<?php echo t('Your maps'); ?>" href="<?php echo url('ownlist'); ?>"><?php echo t('Your maps'); ?></a>
                         <ul>
                             <li><a href="<?php echo url('ownlist'); ?>">Mijn kaart</a></li>
@@ -37,13 +37,13 @@
                     <?php endif; ?>
                 </li>
             </ul>
-                
+
         <?php if (user_access(helper::PERMISSION_MODERATE_LOCATION_CONTENT)): ?>
             <div class="menu_bar_icon">
                 <a href="/suggestlocation" title="<?php echo t('Add location if you are missing one.'); ?>"><?php echo t('Add location'); ?><i class="fa fa-plus-square"></i></a>
             </div>
         <?php endif; ?>
-                
+
         </div>
     <?php endif; ?>
 <?php print render($page['header_menu']); ?>

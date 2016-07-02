@@ -848,7 +848,7 @@ a.gbutton:hover {
   font-size: 14px;
   padding-left: 0px !important;
   /*            &:before{
-              content: '\f002';   
+              content: '\f002';
             }*/
 }
 body.questions #questions_content section {
@@ -1516,44 +1516,44 @@ ul.ui-autocomplete li a {
 #locationset_wrapper div > p {
   font-weight: 100;
 }
-#locationset_wrapper div #locationsset_categories {
+#locationset_wrapper div #locationset_categories {
   margin: 0 0 10px 0;
   list-style: none;
   padding: 0;
   overflow: hidden;
   cursor: pointer;
 }
-#locationset_wrapper div #locationsset_categories li {
+#locationset_wrapper div #locationset_categories li {
   display: block;
   float: left;
   margin-right: 10px;
 }
-#locationset_wrapper div #locationsset_categories li.active a {
+#locationset_wrapper div #locationset_categories li.active a {
   color: #b7072a;
 }
-#locationset_wrapper div #locationsset_categories li:hover {
+#locationset_wrapper div #locationset_categories li:hover {
   text-decoration: underline;
 }
 #locationset_wrapper div label#locations {
   color: #dbdbdb;
 }
-#locationset_wrapper div #locationsset_locations {
+#locationset_wrapper div #locationset_locations {
   padding: 0;
   margin: 0;
   overflow: hidden;
   cursor: pointer;
 }
-#locationset_wrapper div #locationsset_locations li {
+#locationset_wrapper div #locationset_locations li {
   margin-right: 10px;
   margin-top: 5px;
 }
-#locationset_wrapper div #locationsset_locations li a {
+#locationset_wrapper div #locationset_locations li a {
   text-decoration: none;
 }
-#locationset_wrapper div #locationsset_locations li.active a {
+#locationset_wrapper div #locationset_locations li.active a {
   color: #b7072a;
 }
-#locationset_wrapper div #locationsset_locations li:hover {
+#locationset_wrapper div #locationset_locations li:hover {
   text-decoration: underline;
 }
 #locationset_wrapper div form {

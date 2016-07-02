@@ -40,7 +40,7 @@ function getHeightPx() {
             has_crud_holder_element = true;
         }
 
-        if (Drupal.settings.gojira.page == 'locationsset') {
+        if (Drupal.settings.gojira.page == 'locationset') {
             var selected_location_info = 0;
             if (typeof jQuery('#selected_location_info').css('height') !== 'undefined') {
                 selected_location_info = parseInt(jQuery('#selected_location_info').css('height').replace('px', ''));
@@ -378,7 +378,7 @@ function setupMapDefault() {
 function bindGojirasearch() {
     jQuery("#search_form form").submit(function (e) {
         e.preventDefault();
-        if(Drupal.settings.gojira.page !== 'locationsset'){
+        if(Drupal.settings.gojira.page !== 'locationset'){
             // not on my map
            doSearchCall(encodeURIComponent(jQuery('#gojirasearch_search_term').val()));
         }else{
@@ -398,7 +398,7 @@ function doSearchCall(searchFor) {
     } else {
         jQuery('#crud_holder').hide();
     }
-    if (searchFor !== 'locationsset') {
+    if (searchFor !== 'locationset') {
         jQuery('#locationset_wrapper').remove();
         jQuery('#search_result_info').hide();
     }
@@ -536,8 +536,8 @@ function focusLocation(nid) {
 
     openOverlay();
 
-    if (Drupal.settings.gojira.page != 'showlocation' && Drupal.settings.gojira.page != 'locationsset') {
-        //do some paging in the list, not if we are in the showlocation/locationsset
+    if (Drupal.settings.gojira.page != 'showlocation' && Drupal.settings.gojira.page != 'locationset') {
+        //do some paging in the list, not if we are in the showlocation/locationset
         jQuery('li.active').removeClass('active');
         jQuery('a#loc_' + nid).closest('li').addClass('active');
         var page_number = jQuery('a#loc_' + nid).closest('ul').attr('class').replace('page_', '').replace(' rl', '');
@@ -561,8 +561,8 @@ function focusLocation(nid) {
             if (jQuery("#content_holder #locationset_wrapper").length == 1) {
                 // and when we are on a locationset page, let's add some stuff for that....
                 correctHeightForLocationsetSearchResult();
-                jQuery('#locationsset_locations li').removeClass('active');
-                jQuery('#locationsset_locations li a[href=#' + nid + ']').closest('li').addClass('active');
+                jQuery('#locationset_locations li').removeClass('active');
+                jQuery('#locationset_locations li a[href=#' + nid + ']').closest('li').addClass('active');
             }
 
 
@@ -742,7 +742,7 @@ function bindGlobal() {
         jQuery(this).closest('form').submit();
     });
 
-    if (Drupal.settings.gojira.page != 'locationsset') {
+    if (Drupal.settings.gojira.page != 'locationset') {
         bindGojirasearch();
     }
 

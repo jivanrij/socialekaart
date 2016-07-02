@@ -263,7 +263,7 @@ function gojira_init() {
     drupal_add_js(drupal_get_path('module', 'gojira') . '/js/leaflet.smoothmarkerbouncing.js');
     drupal_add_js(drupal_get_path('module', 'gojira') . '/js/leaflet-google.js');
     drupal_add_js(drupal_get_path('module', 'gojira') . '/js/functions.js');
-    drupal_add_js(drupal_get_path('module', 'gojira') . '/js/functions_locationsset.js');
+    drupal_add_js(drupal_get_path('module', 'gojira') . '/js/functions_locationset.js');
     drupal_add_js(drupal_get_path('module', 'gojira') . '/js/gojira.js');
 
 

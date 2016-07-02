@@ -1,20 +1,23 @@
 <?php
-drupal_add_js(array('gojira' => array('locationsset_has_filter' => 0)), 'setting');
+drupal_add_js(array('gojira' => array('locationset_has_filter' => 0)), 'setting');
 $oLocationset = Locationsets::getInstance()->getCurrentLocationset();
 if ($oLocationset) {
     $filter = null;
     if(isset($_GET['filter'])){
         $filter = $_GET['filter'];
     }
-    $aLocations = Locationsets::getInstance()->getLocations(null,null,$filter);
+    $oLocations = Locationsets::getInstance()->getLocations(null,null,$filter);
+
+    $aCategories = Locationsets::getInstance()->getCategoriesFromLocationsArray($oLocations);
+
     $sBody = $oLocationset->body[LANGUAGE_NONE][0]['value'];
     $sTitle = $oLocationset->title;
-    drupal_add_js(array('gojira' => array('locationsset_title' => $sTitle)), 'setting');
-    drupal_add_js(array('gojira' => array('locationsset_id' => $oLocationset->nid)), 'setting');
+    drupal_add_js(array('gojira' => array('locationset_title' => $sTitle)), 'setting');
+    drupal_add_js(array('gojira' => array('locationset_id' => $oLocationset->nid)), 'setting');
 } else {
     $currentPractice = Location::getCurrentLocationNodeObjectOfUser();
     if (isset($_GET['filter'])) {
-        
+
         $aLocations = Search::searchInOwnMap($_GET['filter']);
 
         $plotInfo = array();
@@ -28,9 +31,9 @@ if ($oLocationset) {
                     'la' => $aLocation['latitude']
             );
         }
-        drupal_add_js(array('gojira' => array('locationsset_filter_results_count' => count($plotInfo))), 'setting');
-        drupal_add_js(array('gojira' => array('locationsset_filter_results' => $plotInfo)), 'setting');
-        drupal_add_js(array('gojira' => array('locationsset_has_filter' => 1)), 'setting');
+        drupal_add_js(array('gojira' => array('locationset_filter_results_count' => count($plotInfo))), 'setting');
+        drupal_add_js(array('gojira' => array('locationset_filter_results' => $plotInfo)), 'setting');
+        drupal_add_js(array('gojira' => array('locationset_has_filter' => 1)), 'setting');
 
         $oLocations = array();
         foreach($aLocations as $aLocation){
@@ -48,8 +51,6 @@ if ($oLocationset) {
             $aLocations[$oLocation->nid]['node'] = $oLocation;
             $aLocations[$oLocation->nid]['title'] = $oLocation->title;
             $aLocations[$oLocation->nid]['nid'] = $oLocation->nid;
-//            $aLocations[$oLocation->nid]['longitude'] = $oLocation->longitude;
-//            $aLocations[$oLocation->nid]['latitude'] = $oLocation->latitude;
         }
 
         $aCategories = Locationsets::getInstance()->getCategoriesFromLocationsArray($oLocations);
@@ -57,7 +58,7 @@ if ($oLocationset) {
 
     $sBody = t('Your own personal map\'s decription.');
     $sTitle = 'Sociale kaart ' . $currentPractice->title;
-    drupal_add_js(array('gojira' => array('locationsset_id' => "favorites")), 'setting');
+    drupal_add_js(array('gojira' => array('locationset_id' => "favorites")), 'setting');
 }
 
 
@@ -68,22 +69,23 @@ foreach ($aCategories as $aCategorie) {
 ksort($aCategoriesSorted);
 $aCategories = $aCategoriesSorted;
 
-drupal_add_js(array('gojira' => array('page' => 'locationsset')), 'setting');
+
+drupal_add_js(array('gojira' => array('page' => 'locationset')), 'setting');
 ?>
 <div id="locationset_wrapper" class="rounded">
     <div>
         <button class="close_box" title="Sluiten"></button>
         <h2><?php echo $sTitle; ?></h2>
-        
+
         <form id="search_ownmap_form">
             <input class="rounded unshadow" placeholder="Zoek in uw sociale kaart" name="search_ownmap" id="search_ownmap" />
             <button class="fa"></button>
         </form>
-        
+
         <p><?php echo $sBody; ?></p>
         <?php if (count($aCategories) > 0): ?>
             <label id="locations"><?php echo t("Show locations of specific category:"); ?></label>
-            <ul id="locationsset_categories">
+            <ul id="locationset_categories">
                 <?php foreach ($aCategories as $aCategorie): ?>
                     <li rel="<?php echo $aCategorie->nid; ?>"><a class="locationset_show_cat"><?php echo $aCategorie->title; ?></a></li>
                 <?php endforeach; ?>
@@ -94,12 +96,13 @@ drupal_add_js(array('gojira' => array('page' => 'locationsset')), 'setting');
             <p><i><?php echo t("No locations found with this specific search term."); ?></i></p>
         <?php endif; ?>
 
-        <?php if (count($aLocations) > 0): ?>
+        <?php if (count($oLocations) > 0): ?>
             <label id="locations"><?php echo t("Select a location:"); ?></label>
-            <ul id="locationsset_locations">
-                <?php foreach ($aLocations as $aLocation): $oCategory = Category::getCategoryOfLocation($aLocation['node']); ?>
+            <ul id="locationset_locations">
+                <?php foreach ($oLocations as $location): ?>
+                    <?php $oCategory = Category::getCategoryOfLocation($location); ?>
                     <li rel="<?php echo $oCategory->nid; ?>">
-                        <a class="locationset_show_loc" href="#<?php echo $aLocation['nid']; ?>"><?php echo $aLocation['title']; ?></a>
+                        <a class="locationset_show_loc" href="#<?php echo $location->nid; ?>"><?php echo $location->title; ?></a>
                     </li>
                 <?php endforeach; ?>
             </ul>

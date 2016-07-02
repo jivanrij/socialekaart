@@ -17,7 +17,7 @@ class Locationsets {
      *
      * @return boolean
      */
-    public function userHasRightToLocationssets() {
+    public function userHasRightToLocationsets() {
         if (user_access(helper::PERMISSION_LOCATIONSETS)) {
             return true;
         }
@@ -44,7 +44,7 @@ class Locationsets {
 
     /**
      * Tells you if you are on your own map
-     * 
+     *
      * @return boolean
      */
     public static function onOwnMap() {
@@ -56,7 +56,7 @@ class Locationsets {
 
     /**
      * Tells you if you are on a locationset
-     * 
+     *
      * @return boolean
      */
     public static function onLocationset() {
@@ -74,7 +74,7 @@ class Locationsets {
 
     /**
      * Gives you the current locationset title of false if you are not on a locationset
-     * 
+     *
      * @return boolean
      */
     public function getCurrentLocationsetTitle() {
@@ -90,8 +90,8 @@ class Locationsets {
 
     /**
      * Get's the locations belonging to the current locationset page.
-     * Only works on a locationsset page node
-     * 
+     * Only works on a locationset page node
+     *
      * @param integer set id | optional, default is the current set
      * @param integer category to filter on | optional
      * @return type
@@ -122,6 +122,7 @@ class Locationsets {
         if ($oSet) {
             $sFieldname = GojiraSettings::CONTENT_TYPE_LOCATIONSET_LOCATIONS;
             $aField = $oSet->$sFieldname;
+
             foreach ($aField[LANGUAGE_NONE] as $location) {
                 $oNode = node_load($location['nid']);
                 if ($oNode) {
@@ -131,7 +132,6 @@ class Locationsets {
                             $aReturn[] = $oNode;
                         }
                     } else {
-
                         if ($iFilterCategoryId) { // filter on category
                             $iThisCategoryId = helper::value($oNode, GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD, 'nid');
                             if ($iFilterCategoryId == $iThisCategoryId) {
@@ -150,24 +150,24 @@ class Locationsets {
     /**
      * Get's a set of maps to use for the user
      */
-    public function getMapSetsForCurrentUser() {
+    public function getMapSetsForCurrentUser($uid = false) {
+
+        if (!$uid) {
+            global $user;
+            $uid = $user->uid;
+        }
 
         if (is_null($this->mapsAvailable)) {
             $return = array();
             $rLocationsets = array();
-            if ($this->userHasRightToLocationssets()) {
+            if ($this->userHasRightToLocationsets()) {
                 $oLocation = Location::getCurrentLocationNodeObjectOfUser();
 
-                $sPostcodeNumber = substr(trim(helper::value($oLocation, GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD)), 0, 2);
-                if (is_numeric($sPostcodeNumber)) {
-                    $iPostcodearea = db_query("select field_data_field_postcodenumber.entity_id as nid from node join field_data_field_postcodenumber on (field_data_field_postcodenumber.entity_id = node.nid) where node.type = 'postcodearea' and field_data_field_postcodenumber.bundle = 'postcodearea' and field_data_field_postcodenumber.field_postcodenumber_value = {$sPostcodeNumber}")->fetchField();
-                    if (is_numeric($iPostcodearea)) {
-                        $rLocationsets = db_query("select entity_id as nid from field_data_field_postcodeareas where bundle = 'locationsset' and field_postcodeareas_nid = {$iPostcodearea}")->fetchAll();
-                    }
-                }
-                foreach ($rLocationsets as $oLocationset) {
-                    if (self::userCanAssessLocationset($oLocationset->nid)) {
-                        $return[] = node_load($oLocationset->nid);
+                $locationsets = db_query("select entity_id as nid from field_data_field_setusers where bundle = 'locationset' and field_setusers_uid = :uid", array('uid'=>$uid))->fetchAll();
+
+                foreach ($locationsets as $locationset) {
+                    if (self::userCanAssessLocationset($locationset->nid)) {
+                        $return[] = node_load($locationset->nid);
                     }
                 }
             }
@@ -200,7 +200,7 @@ class Locationsets {
 
     /**
      * Get's the locations on the current practice based own map
-     * 
+     *
      * @return array
      */
     public function getOwnMapLocations() {

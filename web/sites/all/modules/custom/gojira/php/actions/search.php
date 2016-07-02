@@ -18,8 +18,8 @@ function search() {
     $output['has_tags'] = true;
     $output['by_id'] = false;
 
-    if (isset($_GET['s']) && ($_GET['s'] == 'locationsset')) {
-        // SHOW OWN LIST ON THE LOCATIONSSET TEMPLATE
+    if (isset($_GET['s']) && ($_GET['s'] == 'locationset')) {
+        // SHOW OWN LIST ON THE LOCATIONSET TEMPLATE
         if (isset($_GET['cat_id']) && is_numeric($_GET['cat_id'])) {
             if ($_GET['id'] == 'favorites') { // display own list
                 $foundNodes = Favorite::getInstance()->getAllFavoritesInCategory($_GET['cat_id']);
@@ -165,7 +165,7 @@ function search() {
         $output['zoom'] = GojiraSettings::MAP_ZOOMLEVEL_STREET; // show street level
     }
 
-    if (isset($_GET['s']) && ($_GET['s'] == 'locationsset')) {
+    if (isset($_GET['s']) && ($_GET['s'] == 'locationset')) {
         $output['results_html'] = '';
     } else {
         $output['results_html'] = Search::getInstance()->getResultListHtml($output);

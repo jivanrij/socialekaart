@@ -21,8 +21,8 @@ jQuery(function () {
             bindInformForm();
         }
 
-        if (Drupal.settings.gojira.page == 'locationsset') {
-            bindLocationsset();
+        if (Drupal.settings.gojira.page == 'locationset') {
+            bindLocationset();
             bindGojirasearch();
         }
 

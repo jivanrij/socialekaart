@@ -5,7 +5,7 @@
  */
 
 
-function focusLocationsset(nid) {
+function focusLocationset(nid) {
     L.Marker.stopAllBouncingMarkers();
 
     if (typeof nid == 'undefined') {
@@ -15,8 +15,8 @@ function focusLocationsset(nid) {
 
     openOverlay();
 
-    if (Drupal.settings.gojira.page != 'showlocation' && Drupal.settings.gojira.page != 'locationsset') {
-        //do some paging in the list, not if we are in the showlocation/locationsset
+    if (Drupal.settings.gojira.page != 'showlocation' && Drupal.settings.gojira.page != 'locationset') {
+        //do some paging in the list, not if we are in the showlocation/locationset
         jQuery('li.active').removeClass('active');
         jQuery('a#loc_' + nid).closest('li').addClass('active');
         var page_number = jQuery('a#loc_' + nid).closest('ul').attr('class').replace('page_', '').replace(' rl', '');
@@ -40,8 +40,8 @@ function focusLocationsset(nid) {
             if (jQuery("#content_holder #locationset_wrapper").length == 1) {
                 // and when we are on a locationset page, let's add some stuff for that....
                 correctHeightForLocationsetSearchResult();
-                jQuery('#locationsset_locations li').removeClass('active');
-                jQuery('#locationsset_locations li a[href=#' + nid + ']').closest('li').addClass('active');
+                jQuery('#locationset_locations li').removeClass('active');
+                jQuery('#locationset_locations li a[href=#' + nid + ']').closest('li').addClass('active');
             }
 
             // move to it
@@ -64,19 +64,19 @@ function focusLocationsset(nid) {
     });
 }
 
-function bindLocationsset() {
+function bindLocationset() {
 
     bindLocationsetSearch();
 
     jQuery(".locationset_show_cat").click(function (e) {
         e.preventDefault();
         jQuery("#ajax_search_results").html("");
-        jQuery("#locationsset_categories li").removeClass("active");
+        jQuery("#locationset_categories li").removeClass("active");
         jQuery(this).closest("li").addClass("active");
         var cat_id = jQuery(this).closest("li").attr("rel");
 
-        if (Drupal.settings.gojira.locationsset_has_filter == 0) {
-            getCategoryLocations(Drupal.settings.gojira.locationsset_id, cat_id);
+        if (Drupal.settings.gojira.locationset_has_filter == 0) {
+            getCategoryLocations(Drupal.settings.gojira.locationset_id, cat_id);
         }
 
         if (cat_id == "all") {
@@ -108,7 +108,7 @@ function bindLocationsset() {
 
                 correctHeightForLocationsetSearchResult();
 
-                jQuery('#locationsset_locations li').removeClass('active');
+                jQuery('#locationset_locations li').removeClass('active');
                 jQuery(button).closest("li").addClass('active');
 
                 if (typeof data.latitude == 'string') {
@@ -133,10 +133,10 @@ function bindLocationsset() {
         });
     });
 
-    if (Drupal.settings.gojira.locationsset_has_filter == 0) {
-        jQuery("#locationsset_categories li:first-child a").trigger('click');
+    if (Drupal.settings.gojira.locationset_has_filter == 0) {
+        jQuery("#locationset_categories li:first-child a").trigger('click');
     } else {
-        populateMap(Drupal.settings.gojira.locationsset_filter_results, Drupal.settings.gojira.locationsset_filter_results_count);
+        populateMap(Drupal.settings.gojira.locationset_filter_results, Drupal.settings.gojira.locationset_filter_results_count);
     }
 
     bindCloseButtons();
@@ -151,7 +151,7 @@ function correctHeightForLocationsetSearchResult() {
     jQuery("#search_result_info").css("top", top + "px");
 }
 
-function getCategoryLocations(locationsset_id, cat_id) {
+function getCategoryLocations(locationset_id, cat_id) {
     openOverlay();
 
     jQuery('#crud_holder').hide();
@@ -163,7 +163,7 @@ function getCategoryLocations(locationsset_id, cat_id) {
 
 
     jQuery.ajax({
-        url: '/?q=ajax/search&s=locationsset&id=' + locationsset_id + '&cat_id=' + cat_id,
+        url: '/?q=ajax/search&s=locationset&id=' + locationset_id + '&cat_id=' + cat_id,
         type: 'GET',
         dataType: 'json',
         success: function (data) {

@@ -74,7 +74,7 @@
 <hr/>
 <h2>E-mails die verzonden worden</h2>
 <p>
-    <b>sendInvoiceOfNewSubscription</b> heeft de titel 'Invoice SocialeKaart.care - [INVOICE_NUMBER]'. Bij het aanmaken van een nieuwe abonnementsperiode door een huisarts 
+    <b>sendInvoiceOfNewSubscription</b> heeft de titel 'Invoice SocialeKaart.care - [INVOICE_NUMBER]'. Bij het aanmaken van een nieuwe abonnementsperiode door een huisarts
     wordt deze e-mail verzonden. Hier bij krijgt de huisarts ook direct de factuur. Deze e-mail wordt verzonden door de actie subscribe in de tools page & op de return page van iDeal als er een geslaagde betaling is geweest.
 </p>
 <p>
@@ -200,7 +200,7 @@ Een doctor met abonnement zonder verlenging (een extra betaalde periode die nog 
     Locatiesets - Aparte kaarten instellen voor postcodegebieden
 </h2>
 <p>
-    Het is voor de admin mogelijk om aparte sets aan kaarten in te stellen. Dit kan hij doen via een locationsset node. Hier kunnen verschillende locaties aan gelinkt worden. Een locationsset kan gelinkt worden aan een postcodegebied. Als het postcodegebied van de geselecteerde praktijk van de gebruiker overeenkomt met de het postcodegebied waar de locationsset aan hangt zal de gebruiker (als hij de <a href="/admin/people/permissions">rechten</a> heeft) deze weergegeven krijgen in een lijstje onder de kaart knop in de header.
+    Het is voor de admin mogelijk om aparte sets aan kaarten in te stellen. Dit kan hij doen via een locationset node. Hier kunnen verschillende locaties aan gelinkt worden. Een locationset kan gelinkt worden aan een postcodegebied. Als het postcodegebied van de geselecteerde praktijk van de gebruiker overeenkomt met de het postcodegebied waar de locationset aan hangt zal de gebruiker (als hij de <a href="/admin/people/permissions">rechten</a> heeft) deze weergegeven krijgen in een lijstje onder de kaart knop in de header.
 </p>
 <style>
     h2{
