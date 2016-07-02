@@ -44,7 +44,7 @@ class Locationsets {
 
     /**
      * Tells you if you are on your own map
-     * 
+     *
      * @return boolean
      */
     public static function onOwnMap() {
@@ -56,7 +56,7 @@ class Locationsets {
 
     /**
      * Tells you if you are on a locationset
-     * 
+     *
      * @return boolean
      */
     public static function onLocationset() {
@@ -74,7 +74,7 @@ class Locationsets {
 
     /**
      * Gives you the current locationset title of false if you are not on a locationset
-     * 
+     *
      * @return boolean
      */
     public function getCurrentLocationsetTitle() {
@@ -91,7 +91,7 @@ class Locationsets {
     /**
      * Get's the locations belonging to the current locationset page.
      * Only works on a locationsset page node
-     * 
+     *
      * @param integer set id | optional, default is the current set
      * @param integer category to filter on | optional
      * @return type
@@ -160,10 +160,11 @@ class Locationsets {
 
                 $sPostcodeNumber = substr(trim(helper::value($oLocation, GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD)), 0, 2);
                 if (is_numeric($sPostcodeNumber)) {
-                    $iPostcodearea = db_query("select field_data_field_postcodenumber.entity_id as nid from node join field_data_field_postcodenumber on (field_data_field_postcodenumber.entity_id = node.nid) where node.type = 'postcodearea' and field_data_field_postcodenumber.bundle = 'postcodearea' and field_data_field_postcodenumber.field_postcodenumber_value = {$sPostcodeNumber}")->fetchField();
-                    if (is_numeric($iPostcodearea)) {
-                        $rLocationsets = db_query("select entity_id as nid from field_data_field_postcodeareas where bundle = 'locationsset' and field_postcodeareas_nid = {$iPostcodearea}")->fetchAll();
-                    }
+                    //$iPostcodearea = db_query("select field_data_field_postcodenumber.entity_id as nid from node join field_data_field_postcodenumber on (field_data_field_postcodenumber.entity_id = node.nid) where node.type = 'postcodearea' and field_data_field_postcodenumber.bundle = 'postcodearea' and field_data_field_postcodenumber.field_postcodenumber_value = {$sPostcodeNumber}")->fetchField();
+                    //if (is_numeric($iPostcodearea)) {
+                    //    $rLocationsets = db_query("select entity_id as nid from field_data_field_postcodeareas where bundle = 'locationsset' and field_postcodeareas_nid = {$iPostcodearea}")->fetchAll();
+                    //}
+                    
                 }
                 foreach ($rLocationsets as $oLocationset) {
                     if (self::userCanAssessLocationset($oLocationset->nid)) {
@@ -200,7 +201,7 @@ class Locationsets {
 
     /**
      * Get's the locations on the current practice based own map
-     * 
+     *
      * @return array
      */
     public function getOwnMapLocations() {
