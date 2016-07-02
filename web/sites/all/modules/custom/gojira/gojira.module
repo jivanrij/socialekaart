@@ -41,6 +41,7 @@ include ('php/actions/favorites.php');
 include ('php/actions/practicecheck.php');
 include ('php/actions/conditions.php');
 include ('php/actions/locationinfo.php');
+include ('php/actions/locationsetlist.php');
 include ('php/actions/editnote.php');
 include ('php/actions/doublelocations.php');
 include ('php/actions/gojirasearch.php');
@@ -167,9 +168,9 @@ function gojira_js_alter(&$javascript) {
 
 function gojira_css_alter(&$css) {
     if (!path_is_admin(current_path())) {
-//        unset(
-            //$css['modules/system/system.theme.css']
-//        );
+       unset(
+            $css['modules/system/system.theme.css']
+       );
     }
 }
 

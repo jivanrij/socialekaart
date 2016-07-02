@@ -12,6 +12,7 @@ function gojira_theme() {
     return array('welcome' => array('template' => 'templates/welcome'),
         'grouplist' => array('template' => 'templates/grouplist'),
         'conditions' => array('template' => 'templates/conditions'),
+        'locationsetlist' => array('template' => 'templates/locationsetlist'),
         'groupdetail' => array('template' => 'templates/groupdetail'),
         'locationedit' => array('template' => 'templates/locationedit'),
         'locationcorrect' => array('template' => 'templates/locationcorrect'),
@@ -79,6 +80,10 @@ function gojira_menu() {
 
     // crud pages
     $items['crudtest'] = array('access arguments' => array(helper::PERMISSION_ACCESS_CONTENT), 'page callback' => 'crudtest', 'title' => t('Crud test'), 'type' => MENU_NORMAL_ITEM);
+
+    // locationset
+    $items['locationsetlist'] = array('access arguments' => array(helper::PERMISSION_LOCATIONSET_MANAGE), 'page callback' => 'locationsetlist', 'title' => t('List of locationsets managed by the current user'), 'type' => MENU_NORMAL_ITEM);
+
 
     $items['inform'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'inform', 'title' => t('Inform us about some information that needs changing.'), 'type' => MENU_NORMAL_ITEM);
     $items['informthanks'] = array('access arguments' => array(helper::PERMISSION_ACCESS_LOCATION_CONTENT), 'page callback' => 'informthanks', 'title' => t('Thank you for informing us.'), 'type' => MENU_NORMAL_ITEM);

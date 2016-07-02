@@ -19,6 +19,8 @@ class helper {
     const PERMISSION_PERSONAL_LIST = 'has personal list';
     const PERMISSION_SEARCH_GLOBAL = 'can search global';
     const PERMISSION_LOCATIONSETS = 'can see locationsets';
+    const PERMISSION_LOCATIONSET_MANAGE = 'can manage locationsets';
+
     // we have 3 types of users:
     // 1. the original master of the group, the practitioner
     // 2. a user added by the practitioner that can change data
@@ -524,6 +526,31 @@ class helper {
             return true;
         }
         return false;
+    }
+
+    /**
+    * Takes a drupal from title and renders it as a bootstrap form
+    **/
+    public static function renderFormAsBootstrap($form)
+    {
+        $form = drupal_get_form($form);
+
+        $originalClasses = array(
+            'form-submit',
+            'form-item',
+            'form-select',
+            'form-text',
+            'form-controlarea',
+        );
+        $newClasses = array(
+            'btn btn-default',
+            'form-group',
+            'form-control',
+            'form-control',
+            'form-control',
+        );
+
+        echo str_replace($originalClasses,$newClasses,render($form));
     }
 }
 

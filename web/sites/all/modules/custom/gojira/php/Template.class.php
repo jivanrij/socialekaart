@@ -36,6 +36,7 @@ class Template {
         }
 
         $nomap_pages[] = 'crudtest';
+        $nomap_pages[] = 'locationsetlist';
         foreach ($nomap_pages as $url) {
             if ($_GET['q'] == $url) {
                 return Template::VIEWTYPE_NOMAP;

@@ -22,6 +22,21 @@ function gojira_crudtest_form($form, &$form_state) {
         '#default_value' => 0,
     );
 
+    $form[GojiraSettings::CONTENT_TYPE_HAS_MULTIPLE_LOCATIONS_FIELD] = array(
+        '#title' => t('Multiple locations'),
+        '#type' => 'checkbox',
+        '#disabled' => false,
+        '#description' => 'a checkbox fiels',
+        '#default_value' => 1,
+    );
+
+    $form['cron']['cron_check_subscriptions'] = array(
+        '#title' => t('Check subscriptions and disable account who are passed there payed period.'),
+        '#type' => 'select',
+        '#options' => array(0 => 'no', 1 => 'yes'),
+        '#default_value' => variable_get('cron_check_subscriptions', 1),
+    );
+
     $form['nid'] = array(
         '#type' => 'hidden',
         '#value' => $_GET['nid'],

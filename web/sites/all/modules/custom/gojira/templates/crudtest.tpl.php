@@ -1,7 +1,9 @@
 <section>
     <div class="row">
         <div class="col-md-offset-3 col-md-6">
-            <h1><?php echo drupal_get_title(); ?></h1>
+            <br />
+            <h1>Dit is een voorbeeld van een nieuw formulier voor op een pagina zonder kaart.</h1>
+            <br /><br />
         </div>
     </div>
     <div class="row">
@@ -11,7 +13,9 @@
     </div>
     <div class="row">
         <div class="col-md-offset-3 col-md-6">
-            <?php $f = drupal_get_form('gojira_crudtest_form'); echo render($f); ?>
+            <div class="col-md-offset-3 col-md-6">
+                <?php helper::renderFormAsBootstrap('gojira_crudtest_form'); ?>
+            </div>
         </div>
     </div>
 </section>
