@@ -13,7 +13,7 @@ function gojira_login_form($form, &$form_state) {
     '#size' => 60,
     '#maxlength' => USERNAME_MAX_LENGTH,
     '#required' => TRUE,
-    '#attributes' =>array('placeholder' => t('Username')),
+    '#attributes' =>array('placeholder' => 'E-mailadres'),
   );
 
   $form['pass'] = array('#type' => 'password',
@@ -31,7 +31,7 @@ function gojira_login_form($form, &$form_state) {
   $form['actions']['submit'] = array('#type' => 'submit', '#value' => t('Log in'));
 
   $form['actions']['submit']['#attributes'] = array('class' => array('btn btn-danger'));
-  
+
   $form['name']['#attributes'] = array('placeholder' =>  t('Username'), 'class' => array('unshadow rounded'));
   $form['pass']['#attributes'] = array('placeholder' =>  t('Password'), 'class' => array('unshadow rounded'));
 

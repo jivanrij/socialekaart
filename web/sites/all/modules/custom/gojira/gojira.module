@@ -176,7 +176,6 @@ function gojira_css_alter(&$css) {
 
 
 function gojira_init() {
-
   global $user;
 
   Reporter::reportThis();
