@@ -327,9 +327,9 @@ function gojira_init() {
 
     Map::setMapInfo($_GET['q']);
 
-    drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/gojira.css');
+    drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/gojira4.css');
 }else{
-    drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/gojira_bootstrap.css');
+    drupal_add_css(drupal_get_path('theme', 'gojiratheme') . '/css/gojira_bootstrap4.css');
 }
 
   // add meta tags and description if it's a public page

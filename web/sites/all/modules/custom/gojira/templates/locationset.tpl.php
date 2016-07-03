@@ -37,7 +37,7 @@ if ($oLocationset) {
 
         $oLocations = array();
         foreach($aLocations as $aLocation){
-            $oLocations = node_load($aLocation['nid']);
+            $oLocations[] = node_load($aLocation['nid']);
         }
 
         $aCategories = Locationsets::getInstance()->getCategoriesFromLocationsArray($oLocations);
