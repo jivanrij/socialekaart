@@ -848,7 +848,7 @@ a.gbutton:hover {
   font-size: 14px;
   padding-left: 0px !important;
   /*            &:before{
-              content: '\f002';
+              content: '\f002';   
             }*/
 }
 body.questions #questions_content section {
