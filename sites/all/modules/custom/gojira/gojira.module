@@ -296,6 +296,7 @@ function gojira_init() {
           // D) not on the conditionscheck page
           // E) we are no admin
           // F) not on the pass_reset_page
+            die('1');
           header('Location: /locationcheck');
           exit;
         }
