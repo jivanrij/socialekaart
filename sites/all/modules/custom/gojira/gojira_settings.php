@@ -23,7 +23,7 @@ class GojiraSettings
     const CONTENT_TYPE_SET_OF_LOCATIONS = 'locationset'; // set of locations
 
 
-    // LOCATION FIELDS
+    // LOCATION FIELDS (THESE NEED TO BE DEPRICATED, REPLACED BY THE MODEL
     const CONTENT_TYPE_TEXT_FIELD = 'field_text';
     const CONTENT_TYPE_ADDRESS_CITY_FIELD = 'field_address_city';
     const CONTENT_TYPE_EMAIL_FIELD = 'field_email';
@@ -52,26 +52,24 @@ class GojiraSettings
     const CONTENT_TYPE_ADD_SHOWUNTILL_FIELD = 'field_showuntill'; // timestamp
     const CONTENT_TYPE_ADD_URL_FIELD = 'field_url'; // url to link to
 
-    // zorgverlenersset FIELDS
+    // locationset FIELDS
     const CONTENT_TYPE_LOCATIONSET_LOCATIONS = 'field_setlocations';
+    const CONTENT_TYPE_LOCATIONSET_USERS = 'field_setusers';
+    const CONTENT_TYPE_LOCATIONSET_MODERATORS = 'field_setmoderators';
     const CONTENT_TYPE_LOCATIONSET_SUBTITLE = 'field_subtitel';
-
-    // postcodearea FIELDS
-    const CONTENT_TYPE_POSTCODE_NUMBER = 'field_postcodenumber';
 
     // vocabulairy related fields
     const VOCABULARY_LOCATION = 'gojira_labels';
 
     // USER FIELDS
-    const CONTENT_TYPE_USER_TITLE = 'field_user_title'; // the user is a doctor
-    const CONTENT_TYPE_IS_DOCTOR_FIELD = 'field_is_doctor'; // the user is a doctor
+    const CONTENT_TYPE_USER_TITLE = 'field_user_title';
     const CONTENT_TYPE_CONDITIONS_AGREE_FIELD = 'field_agree_conditions'; // the user has agreed to the conditions
     const CONTENT_TYPE_SEARCH_GLOBAL_FIELD = 'field_search_global'; // user want's to search on a global level
     const CONTENT_TYPE_HAS_MULTIPLE_LOCATIONS_FIELD = 'field_has_multiple_locations'; // user want's to handle multiple locations on his account
     const CONTENT_TYPE_BIG_FIELD = 'field_big'; // users big number
     const CONTENT_TYPE_TUTORIAL_FIELD = 'field_seen_tutorial'; // the user has seen the tutorial
-    const CONTENT_TYPE_USER_NOT_IMPORTED = 'field_user_not_imported';
     const CONTENT_TYPE_USER_LAST_SELECTED_LOCATION = 'field_selected_location'; // the last selected location of the user
+    const CONTENT_TYPE_USER_LAST_SELECTED_MAP = 'field_selected_map'; // the last selected map of the user
 
     // GROUP FIELDS
     const CONTENT_TYPE_ORIGINAL_DOCTOR = 'field_original_doctor'; // the original doctor who used this group, when the payed period is over, this is the only person who can have access
@@ -249,3 +247,20 @@ class GojiraSettings
 // JULI 2016 REMOVE POSTCODE FIELD FROM LOCATIONSSET & REMOVE POSTCODEGEBIED NODE TYPE
 // JULI 2016 RENAME locationsset TO locationset
 // JULI 2016 field_setusers USERS REFERENCE TOEVOEGEN AAN LOCATIONSET
+// JULI 2016 field_setmoderators USERS REFERENCE TOEVOEGEN AAN LOCATIONSET
+
+//JULI 2016 gojira employee & gojire employer rollen verwijderen
+//JULI 2016 gojira map builder rol toevoegen
+//JULI 2016 remove field field_user_not_imported & changes description of field_agree_conditions field
+//JULI 2016 removes the is_doctor field
+//JULI 2016 field_selected_map added to user
+//JULI 2016 field_own_labels added to the locationset
+//JULI 2016 change description of the labels field
+//JULI 2016 add entity reference module
+//JULI 2016 add field_map_specific_labels to location
+//JULI 2016 group is niet meer verplicht op de user en wordt niet weergegeven bij registratie form
+//JULI 2016 de cron moet om het uur gezet worden tbv de zoek index
+
+// ALL UP TO DATE
+
+// AUG 2016 field_user_city, street, housenumber & postcode added to the user

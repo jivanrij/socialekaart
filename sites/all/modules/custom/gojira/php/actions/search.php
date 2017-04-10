@@ -4,13 +4,21 @@
 function search() {
     global $user;
     $user = user_load($user->uid);
+    $single_location = false;
 
     $user_is_admin = false;
     if (in_array('administrator', array_values($user->roles))) {
         $user_is_admin = true;
     }
 
-    $single_location = (isset($_GET['s']) && is_numeric($_GET['s']));
+    // check if the search tag is an nid let's load a node
+    // then check the type
+    if (isset($_GET['s']) && is_numeric($_GET['s'])) {
+        $single_location = node_load($_GET['s']);
+        if ($single_location->type !== 'location') {
+            $single_location = false;
+        }
+    }
 
     $output['s'] = '';
     $searchResults = array();
@@ -29,11 +37,9 @@ function search() {
         }
     } else if ($single_location) {
         // we have been given a nid as a tag, let's show a single location
-        $output['by_id'] = $_GET['s'];
-        $node = node_load($_GET['s']);
-        $foundNodes[$_GET['s']] = $node;
+        $foundNodes[$single_location->nid] = $single_location;
+        $output['by_id'] = $single_location->nid;
     } else if (isset($_GET['s']) && $_GET['s'] != '') {
-
         // NORMAL SEARCH
 
         $tags = explode(' ', urldecode($_GET['s']));

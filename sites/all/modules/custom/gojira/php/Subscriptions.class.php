@@ -16,7 +16,7 @@ class Subscriptions {
                 $group->field_payed_status[LANGUAGE_NONE][0]['value'] = 1;
                 node_save($group);
                 self::sendSubscribeEmail($info->uid, $info->ideal_id);
-                self::setRolesForPayed($group);
+                self::addRoleToUser($info->uid, helper::ROLE_HUISARTS_PLUS);
                 return true;
             }else{
                 // group is allready subscribed, no need to do enything except for the invoice mail to the admin
@@ -46,7 +46,7 @@ class Subscriptions {
     public static function sendSubscribeEmail($uid, $ideal_id) {
         $user = user_load($uid);
         $file = self::generateSubscribePDF($ideal_id);
-        Mailer::sendInvoiceOfNewSubscription($user->mail, $file, $ideal_id);
+        MailerHtml::sendUserInvoiceOfNewSubscription($user->mail, $file, $ideal_id);
     }
 
     /**
@@ -303,10 +303,10 @@ EOT;
                 if ($groupuser->uid != 1) {
                     if (helper::value($group, GojiraSettings::CONTENT_TYPE_ORIGINAL_DOCTOR, 'uid') == $groupuser->uid) {
                         // master user
-                        self::removeRoleFromUser($groupuser->uid, helper::ROLE_SUBSCRIBED_MASTER);
+                        self::removeRoleFromUser($groupuser->uid, helper::ROLE_HUISARTS_PLUS);
                         // only send this mail if it has never been send for this payment
                         if ($payment->warning_ended !== 0) {
-                            Mailer::sendSubscriptionEnded($groupuser);
+                            MailerHtml::sendUserSubscriptionEnded($groupuser);
                             db_query("UPDATE `gojira_payments` SET `warning_ended`=1 WHERE  `id`={$payment->id}");
                         }
                     } else {
@@ -358,7 +358,7 @@ EOT;
                         $groups_main_doctor_uid = helper::value($group, GojiraSettings::CONTENT_TYPE_ORIGINAL_DOCTOR, 'uid');
                         $main_doctor = user_load($groups_main_doctor_uid);
 
-                        Mailer::sendSubscriptionEndWarning($main_doctor);
+                        MailerHtml::sendUserSubscriptionEndWarning($main_doctor);
                         db_query("UPDATE `gojira_payments` SET `warning_send`=1 WHERE  `id`={$payment->id}");
                     }
                 }
@@ -366,32 +366,6 @@ EOT;
         }
     }
 
-    /**
-     * Gives all the payed subscription roles to the users of a group, sends activation mails and makes users active. Can be used after payment is done.
-     */
-    public static function setRolesForPayed($group, $bSendMails = true) {
-        if (is_numeric($group)) {
-            $group = node_load($group);
-        }
-        if ($group->type == GojiraSettings::CONTENT_TYPE_GROUP) {
-            $users = Group::getAllUsers($group->nid);
-            foreach ($users as $groupuser) {
-                $groupuser->status = 1;
-                user_save($groupuser);
-
-                if (helper::value($group, GojiraSettings::CONTENT_TYPE_ORIGINAL_DOCTOR, 'uid') == $groupuser->uid) {
-                    // is master user
-                    self::addRoleToUser($groupuser->uid, helper::ROLE_SUBSCRIBED_MASTER);
-                } else {
-                    // is not the master user
-                    // don't need to assign a role, we only need to activate them
-                    if ($bSendMails) {
-                        Mailer::sendSubscribeActivationMail($groupuser);
-                    }
-                }
-            }
-        }
-    }
 
     /**
      * Adds the payment to the payment log of gojira
@@ -467,6 +441,7 @@ EOT;
         $oGroup = node_load($iGid);
         return (bool) helper::value($oGroup, GojiraSettings::CONTENT_TYPE_PAYED_STATUS);
     }
+
 
     /**
      * Get's the end of the current/last period the user has payed for.
@@ -598,7 +573,8 @@ EOT;
         $group->field_payed_status[LANGUAGE_NONE][0]['value'] = 1;
         node_save($group);
 
-        Subscriptions::setRolesForPayed($group, false);
+        self::addRoleToUser($account->uid, helper::ROLE_HUISARTS_PLUS);
+
         // add a payment log so the group will have a payed period of 3 months
         $sql = "INSERT INTO `gojira_payments` (`uid`, `name`, `description`, `amount`, `gid`, `ideal_id`, `period_start`, `status`, `period_end`,`discount`,`tax`,`payed`) VALUES ({$account->uid}, '{$account->name}', '" . GojiraSettings::IDEAL_FREE_PERIOD_DESCRIPTION . "', 0, " . $group->nid . ", '0', " . helper::getTime() . ", 'paid', " . strtotime("+3 months", helper::getTime()) . ",0,0,0)";
 

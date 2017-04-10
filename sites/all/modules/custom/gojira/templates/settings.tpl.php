@@ -1,30 +1,32 @@
 <h1><?php echo drupal_get_title(); ?></h1>
 
-<?php if(helper::getSystemnameRole() == helper::ROLE_EMPLOYER_MASTER && $output['subscribed']): ?>
+<?php if($output['subscribed']): ?>
     <div id="settings_payment_info">
         <hr />
         <h2><?php echo t('Payment information'); ?></h2>
-        <?php if($output['subscribed']): ?>
+        <?php if($output['subscribed'] && Subscriptions::getEndCurrentPeriod('d-m-Y')): ?>
             <p><?php echo t('You have a payed account.'); ?></p>
             <p><?php echo t('The period you payed for will end on: '); ?><?php echo Subscriptions::getEndCurrentPeriod('d-m-Y'); ?></p>
             <?php if(Subscriptions::canExtend()): ?>
                 <p><?php echo helper::getText('PAYED_TEXT_SETTINGS_PAGE'); ?></p>
                 <?php $f = drupal_get_form('gojira_to_subscribe_page_form'); echo render($f); ?>
             <?php endif; ?>
+        <?php else: ?>
+            <p>Er zijn geen betalingsgegevens gevonden.</p>
         <?php endif; ?>
         <hr />
         <h2><?php echo t('Settings & Location'); ?></h2>
     </div>
     <a href="" id="settings_payment_info_switch"><?php echo t('Show payment information'); ?></a>
 <?php endif; ?>
-    
+
 <?php echo render($output['gojira_settings_form']); ?>
-    
-<?php if(helper::getSystemnameRole() == helper::ROLE_EMPLOYER_MASTER && !$output['subscribed']): ?>
+
+<?php if(!$output['subscribed']): ?>
     <p><?php echo helper::getText('NOT_PAYED_TEXT_SETTINGS_PAGE'); ?></p>
     <?php $f = drupal_get_form('gojira_to_subscribe_page_form'); echo render($f); ?>
 <?php endif; ?>
-    
+
   <p class="show_intro">
       Klik <a rel="1" onClick="showTutorial();" title="introductie bekijken">hier</a> als u de introductie nog een keer wilt zien.
   </p>

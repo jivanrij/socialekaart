@@ -15,11 +15,11 @@ function activateuser() {
         $oUser = user_load($_GET['uid']);
         $oUser->status = 1;
         user_save($oUser);
-        Mailer::accountActivatedByAdmin($oUser);
+        MailerHtml::sendUserAccountActivatedByAdmin($oUser);
 
         Subscriptions::giveNewUserDiscount($oUser); // Adds information/roles/stuff to give the user a 3 months period for free
-        Mailer::newAccountWithFreePeriod($oUser); // sends email to inform the user he/she has got a free period
-        
+        MailerHtml::sendUserNewAccountWithFreePeriod($oUser); // sends email to inform the user he/she has got a free period
+
         drupal_set_message(t('Just activated user ' . $oUser->name), 'status');
         drupal_goto('admin/config/system/gojiraactivateuser');
         exit;

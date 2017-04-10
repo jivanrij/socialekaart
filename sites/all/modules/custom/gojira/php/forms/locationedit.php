@@ -8,11 +8,6 @@ function gojira_locationedit_form($form, &$form_state) {
     $id = 'new';
     if (isset($_GET['id'])) {
         $node = node_load($_GET['id']);
-        global $user;
-        if (!helper::canChangeLocation($user->uid, $node->nid)) {
-            form_set_error('not_allowed', t('You are not allowed to do this.'));
-            drupal_goto('settings');
-        }
     }
 
     if ($node) {
@@ -39,7 +34,7 @@ function gojira_locationedit_form($form, &$form_state) {
 
 /**
  * This part of the form is put in a function to be used in gojira_locationedit_form & gojira_settings_form
- * 
+ *
  * @param array $form
  * @param array $form_state
  * @param stdClass $node
@@ -107,7 +102,7 @@ function gojira_locationedit_form_validate($form, &$form_state) {
 
 /**
  * This part of the form is put in a function to be used in gojira_locationedit_form & gojira_settings_form
- * 
+ *
  * @param array $form
  * @param array $form_state
  * @param integer $id
@@ -120,6 +115,21 @@ function gojira_get_core_location_form_validate($form, &$form_state, $id) {
     }
     if ($knownTitle) {
         form_set_error('title', t('There is already a location with this title known in the system. Please pick another.'));
+    }
+
+    $location = null;
+    if((trim($form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#value']) !== '') &&
+        (trim($form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#value']) !== '') &&
+        (trim($form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#value']) !== '') &&
+        (trim($form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#value']) !== '')){
+        $location = Location::getLocationForAddress(
+                    Location::formatAddress(
+                            $form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#value'], $form[GojiraSettings::CONTENT_TYPE_ADDRESS_POSTCODE_FIELD]['#value']
+                    )
+        );
+    }
+    if(!$location) {
+        form_set_error('coordinates', 'Voor het opgegeven adres hebben we geen coördinaten kunnen vinden.');
     }
 }
 
@@ -177,9 +187,6 @@ function gojira_locationedit_form_submit($form, &$form_state) {
 
     $faxfield = GojiraSettings::CONTENT_TYPE_FAX_FIELD;
     $node->$faxfield = array(LANGUAGE_NONE => array(0 => array('value' => $form[GojiraSettings::CONTENT_TYPE_FAX_FIELD]['#value'])));
-
-//  $employeesfield = GojiraSettings::CONTENT_TYPE_NOTE_FIELD;
-//  $node->$employeesfield = array(LANGUAGE_NONE => array(0 => array('value' => $form[GojiraSettings::CONTENT_TYPE_NOTE_FIELD]['#value'])));
 
     foreach (Location::getAddressFields() as $field) {
         $node->$field = array(LANGUAGE_NONE => array(0 => array('value' => $form[$field]['#value'])));

@@ -54,6 +54,6 @@ function gojira_passwordreset_form_validate($form, &$form_state) {
 }
 
 function gojira_passwordreset_form_submit($form, &$form_state) {
-    _user_mail_notify('password_reset', user_load($form_state['uid']));
+    MailerHtml::sendUserAccountPasswordReset(user_load($form_state['uid']));
     drupal_goto('passwordmailsend');
 }

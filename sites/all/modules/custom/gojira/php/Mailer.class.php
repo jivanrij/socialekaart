@@ -124,354 +124,6 @@ class Mailer {
     }
 
     /**
-     * This email get's send when a invoice needs to be send after a payment
-     *
-     * @param string $send_to_address
-     * @param string $invoice_file
-     * @param integer $ideal_id
-     * @return boolean
-     */
-    public static function sendInvoiceOfNewSubscription($send_to_address, $invoice_file = null, $ideal_id) {
-
-        $payment = Subscriptions::getPaymentInfo($ideal_id);
-
-        $group = node_load($payment->gid);
-        $groups_main_doctor_uid = helper::value($group, GojiraSettings::CONTENT_TYPE_ORIGINAL_DOCTOR, 'uid');
-        $main_doctor = user_load($groups_main_doctor_uid);
-
-        $sBody = variable_get('gojira_invoice_email', '');
-        $sBody = str_replace(array('%invoice_id%', '%doctor%'), array($payment->increment, helper::value($main_doctor, GojiraSettings::CONTENT_TYPE_USER_TITLE)), $sBody);
-
-
-        if (false && $invoice_file) { // let's skip mandril for now
-            $attachment = file_get_contents($invoice_file);
-            $attachment_encoded = base64_encode($attachment);
-            $aInfo['attachments'] = array(
-                array(
-                    'content' => $attachment_encoded,
-                    'type' => "application/pdf",
-                    'name' => 'Factuur_Socialekaart_' . $payment->increment . '.pdf',
-            ));
-        }
-        $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
-        $aInfo['from_name'] = 'SocialeKaart.care';
-        $aInfo['subject'] = t('Invoice SocialeKaart.care').' '.$payment->increment;
-        $aInfo['text'] = $sBody;
-        $aInfo['to'][] = array(
-            'email' => $send_to_address,
-            'name' => $send_to_address,
-            'type' => 'to'
-        );
-        $aInfo['to'][] = array(
-            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'type' => 'bcc'
-        );
-
-
-        if (true) { // let's skip mandril for now dont forget the file_get_contents mandril check
-            $attachment['path'] = $invoice_file;
-            $attachment['name'] = 'Factuur_Socialekaart_' . $payment->increment . '.pdf';
-            Mailer::sendMail(
-                    $send_to_address, // to
-                    variable_get('site_mail', 'info@socialekaart.care'), // from
-                    t('Invoice SocialeKaart.care').' '.$payment->increment, // subject
-                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
-                    $sBody, // content
-                    $attachment,
-                    variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'), // bcc
-                    false // html
-                    );
-        } else {
-            $oMailer = new Mailer();
-            $oMailer->send($aInfo);
-        }
-
-    }
-
-    /**
-     * This email will be send after a new employee user is made by the main doctor
-     *
-     * @param stdClass $account
-     */
-    public static function sendWelcomeMailToEmployee($account) {
-        $url = user_pass_reset_url($account);
-
-        $group = Group::getGroupId($account->uid);
-        $group = node_load($group);
-        $groups_main_doctor_uid = helper::value($group, GojiraSettings::CONTENT_TYPE_ORIGINAL_DOCTOR, 'uid');
-
-        $main_doctor = user_load($groups_main_doctor_uid);
-
-        $body = variable_get('gojira_new_employee_email', '');
-        $body = str_replace(array('%url%', '%doctor%', '%name%'), array($url, helper::value($main_doctor, GojiraSettings::CONTENT_TYPE_USER_TITLE), helper::value($account, GojiraSettings::CONTENT_TYPE_USER_TITLE)), $body);
-
-        $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
-        $aInfo['from_name'] = 'SocialeKaart.care';
-        $aInfo['subject'] = t('SocialeKaart.care account created by @main_doctor', array('@main_doctor' => helper::value($main_doctor, GojiraSettings::CONTENT_TYPE_USER_TITLE)));
-        $aInfo['text'] = $body;
-        $aInfo['to'][] = array(
-            'email' => $account->mail,
-            'name' => $account->mail,
-            'type' => 'to'
-        );
-        $aInfo['to'][] = array(
-            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'type' => 'bcc'
-        );
-
-
-        if (true) { // let's skip mandril for now
-            Mailer::sendMail(
-                    $aInfo['to'][0]['email'], // to
-                    $aInfo['from_email'], // from
-                    $aInfo['subject'], // subject
-                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
-                    $aInfo['text'], // content
-                    false,
-                    $aInfo['to'][1]['email'], // bcc
-                    false // html
-                    );
-        } else {
-            $oMailer = new Mailer();
-            $oMailer->send($aInfo);
-        }
-    }
-
-    /**
-     * This email will be send after a new employer user is made by the main doctor
-     *
-     * @param stdClass $account
-     */
-    public static function sendWelcomeMailToEmployer($account) {
-        $url = user_pass_reset_url($account);
-
-        $group = Group::getGroupId($account->uid);
-        $group = node_load($group);
-        $groups_main_doctor_uid = helper::value($group, GojiraSettings::CONTENT_TYPE_ORIGINAL_DOCTOR, 'uid');
-
-        $main_doctor = user_load($groups_main_doctor_uid);
-
-        $body = variable_get('gojira_new_employer_email', '');
-        $body = str_replace(array('%url%', '%doctor%', '%name%'), array($url, helper::value($main_doctor, GojiraSettings::CONTENT_TYPE_USER_TITLE), helper::value($account, GojiraSettings::CONTENT_TYPE_USER_TITLE)), $body);
-
-        $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
-        $aInfo['from_name'] = 'SocialeKaart.care';
-        $aInfo['subject'] = t('SocialeKaart.care account created by @main_doctor', array('@main_doctor' => helper::value($main_doctor, GojiraSettings::CONTENT_TYPE_USER_TITLE)));
-        $aInfo['text'] = $body;
-        $aInfo['to'][] = array(
-            'email' => $account->mail,
-            'name' => $account->mail,
-            'type' => 'to'
-        );
-
-        $aInfo['to'][] = array(
-            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'type' => 'bcc'
-        );
-
-        if (true) { // let's skip mandril for now dont forget the file_get_contents mandril check
-            Mailer::sendMail(
-                    $aInfo['to'][0]['email'], // to
-                    $aInfo['from_email'], // from
-                    $aInfo['subject'], // subject
-                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
-                    $aInfo['text'], // content
-                    false,
-                    $aInfo['to'][1]['email'], // bcc
-                    false // html
-                    );
-        } else {
-            $oMailer = new Mailer();
-            $oMailer->send($aInfo);
-        }
-    }
-
-    /**
-     * Thie e-mail will be send when a user get's disabled due to a unsubscription
-     *
-     * @param stdClass $user
-     */
-    public static function sendUnsubscribeMail($user) {
-
-        $group = Group::getGroupId($user->uid);
-        $group = node_load($group);
-        $groups_main_doctor_uid = helper::value($group, GojiraSettings::CONTENT_TYPE_ORIGINAL_DOCTOR, 'uid');
-
-        $main_doctor = user_load($groups_main_doctor_uid);
-
-        $body = variable_get('gojira_unsubscribe_user', '');
-        $body = str_replace(array('%doctor%', '%name%'), array(helper::value($main_doctor, GojiraSettings::CONTENT_TYPE_USER_TITLE), helper::value($user, GojiraSettings::CONTENT_TYPE_USER_TITLE)), $body);
-
-        $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
-        $aInfo['from_name'] = 'SocialeKaart.care';
-        $aInfo['subject'] = t('Your account on SocialeKaart.care is deactivated');
-        $aInfo['text'] = $body;
-        $aInfo['to'][] = array(
-            'email' => $user->mail,
-            'name' => $user->mail,
-            'type' => 'to'
-        );
-        $aInfo['to'][] = array(
-            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'type' => 'bcc'
-        );
-
-        if (true) { // let's skip mandril for now
-            Mailer::sendMail(
-                    $aInfo['to'][0]['email'], // to
-                    $aInfo['from_email'], // from
-                    $aInfo['subject'], // subject
-                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
-                    $aInfo['text'], // content
-                    false,
-                    $aInfo['to'][1]['email'], // bcc
-                    false // html
-                    );
-        } else {
-            $oMailer = new Mailer();
-            $oMailer->send($aInfo);
-        }
-    }
-
-    /**
-     * Thie e-mail will be send when a user get's enabled due to a subscription
-     *
-     * @param stdClass $user
-     */
-    public static function sendSubscribeActivationMail($user) {
-
-        $group = Group::getGroupId($user->uid);
-        $group = node_load($group);
-        $groups_main_doctor_uid = helper::value($group, GojiraSettings::CONTENT_TYPE_ORIGINAL_DOCTOR, 'uid');
-
-        $main_doctor = user_load($groups_main_doctor_uid);
-
-        $body = variable_get('gojira_subscribe_activate_user', '');
-        $body = str_replace(array('%doctor%', '%name%'), array(helper::value($main_doctor, GojiraSettings::CONTENT_TYPE_USER_TITLE), helper::value($user, GojiraSettings::CONTENT_TYPE_USER_TITLE)), $body);
-
-        $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
-        $aInfo['from_name'] = 'SocialeKaart.care';
-        $aInfo['subject'] = t('Your account on SocialeKaart.care is activated');
-        $aInfo['text'] = $body;
-        $aInfo['to'][] = array(
-            'email' => $user->mail,
-            'name' => $user->mail,
-            'type' => 'to'
-        );
-        $aInfo['to'][] = array(
-            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'type' => 'bcc'
-        );
-
-
-        if (true) { // let's skip mandril for now
-            Mailer::sendMail(
-                    $aInfo['to'][0]['email'], // to
-                    $aInfo['from_email'], // from
-                    $aInfo['subject'], // subject
-                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
-                    $aInfo['text'], // content
-                    false, // attachment
-                    $aInfo['to'][1]['email'], // bcc
-                    false // html
-                    );
-        } else {
-            $oMailer = new Mailer();
-            $oMailer->send($aInfo);
-        }
-    }
-
-    /**
-     * Thie e-mail will be send when a group's subscription is going to end in 30 days from now
-     *
-     * @param stdClass $user
-     */
-    public static function sendSubscriptionEndWarning($main_doctor) {
-
-        $title = helper::value($main_doctor, GojiraSettings::CONTENT_TYPE_USER_TITLE);
-
-        $body = variable_get('gojira_subscription_expire_warning', '');
-        $body = str_replace(array('%title%'), array($title), $body);
-
-        $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
-        $aInfo['from_name'] = 'SocialeKaart.care';
-        $aInfo['subject'] = t('Your subscription on SocialeKaart.care is going to expire within 30 days');
-        $aInfo['html'] = $body;
-        $aInfo['to'][] = array(
-            'email' => $main_doctor->mail,
-            'name' => $title,
-            'type' => 'to'
-        );
-        $aInfo['to'][] = array(
-            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'type' => 'bcc'
-        );
-
-        if (true) { // let's skip mandril for now
-            Mailer::sendMail(
-                    $aInfo['to'][0]['email'], // to
-                    $aInfo['from_email'], // from
-                    $aInfo['subject'], // subject
-                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
-                    $aInfo['html'], // content
-                    false, // attachment
-                    $aInfo['to'][1]['email'], // bcc
-                    true // html
-                    );
-        } else {
-            $oMailer = new Mailer();
-            $oMailer->send($aInfo);
-        }
-    }
-
-    /**
-     * Sends the e-mail for a doctor to tell him the subscription is ended
-     *
-     * @param stdClass $main_doctor
-     * @return boolean
-     */
-    public static function sendSubscriptionEnded($main_doctor) {
-        $body = variable_get('gojira_subscription_ended', '');
-        $body = str_replace(array('%doctor%', '%url%'), array(helper::value($main_doctor, GojiraSettings::CONTENT_TYPE_USER_TITLE), '<a href="https://www.socialekaart.care/idealpay" title="Verleng uw abonnement.">Verleng uw abonnement.</a>'), $body);
-
-        $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
-        $aInfo['from_name'] = 'SocialeKaart.care';
-        $aInfo['subject'] = t('Your subscription on SocialeKaart.care is expired');
-        $aInfo['html'] = $body;
-        $aInfo['to'][] = array(
-            'email' => $main_doctor->mail,
-            'name' => $main_doctor->mail,
-            'type' => 'to'
-        );
-        $aInfo['to'][] = array(
-            'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-            'type' => 'bcc'
-        );
-        if (true) { // let's skip mandril for now
-            Mailer::sendMail(
-                    $aInfo['to'][0]['email'], // to
-                    $aInfo['from_email'], // from
-                    $aInfo['subject'], // subject
-                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
-                    $aInfo['html'], // content
-                    false, // attachment
-                    $aInfo['to'][1]['email'], // bcc
-                    true // html
-                    );
-        } else {
-            $oMailer = new Mailer();
-            $oMailer->send($aInfo);
-        }
-    }
-
-    /**
      * Sends a e-mail to the admins of the site with a question of the user
      *
      * @param stdClass $main_doctor
@@ -566,10 +218,10 @@ EOT;
 
   $sBody = <<<EOT
 {$oLocation->title}
-https://www.socialekaart.care/node/{$oLocation->nid}/edit
+https://socialekaart.care/node/{$oLocation->nid}/edit
 
 Aangemaakt door gebruiker {$oUser->name}
-https://www.socialekaart.care/user/{$oUser->uid}/edit
+https://socialekaart.care/user/{$oUser->uid}/edit
 EOT;
 
         $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
@@ -606,9 +258,9 @@ EOT;
         $sTitle = helper::value($oUser, GojiraSettings::CONTENT_TYPE_USER_TITLE);
         $sEmail = $oUser->mail;
         $sBig = helper::value($oUser, GojiraSettings::CONTENT_TYPE_BIG_FIELD);
-        $sAccount = 'https://www.socialekaart.care/user/' . $oUser->uid . '/edit';
+        $sAccount = 'https://socialekaart.care/user/' . $oUser->uid . '/edit';
 
-        $sUrl = "https://www.socialekaart.care/admin/config/system/gojiraactivateuser";
+        $sUrl = "https://socialekaart.care/admin/config/system/gojiraactivateuser";
 
         $sBody = <<<EOT
 Er is een account aangemaakt door {$sTitle}.<br />
@@ -647,102 +299,6 @@ EOT;
         }
     }
 
-
-    /**
-     * Informs the user he has logged on to SocialeKaart for the first time and had has given a free period
-     *
-     */
-    public static function newAccountWithFreePeriod($oUser) {
-
-            $sEmail = $oUser->mail;
-
-            $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
-            $aInfo['from_name'] = 'SocialeKaart.care';
-            $aInfo['subject'] = 'Gefeliciteerd!';
-            $aInfo['text'] = <<<EOT
-U krijgt u van ons een gratis proefabonnement op de plus versie voor de duur van 3 maanden!
-
-Met de standaard versie van SocialeKaart.care kunt u eenvoudig en snel verwijzen naar zorgverleners in uw regio. Door kenmerken toe te voegen aan zorgverleners worden de zoekresultaten steeds relevanter.
-
-Een (proef-)abonnement op de plus versie geeft u daarnaast nog de volgende extra functionaliteiten:
-- eenvoudig uw eigen sociale kaart samenstellen waarbinnen u kunt zoeken;
-- uw collega's en medewerkers laten werken met dezelfde informatie;
-- meerdere praktijken toevoegen zodat u ook vanuit andere praktijken kunt zoeken.
-
-Mocht u na de proefperiode besluiten een abonnement af te sluiten kunt u dit simpel via de website doen. Een abonnement is 5 euro per maand en kan per jaar afgerekend worden.
-
-Als laatste willen we u op de hoogte stellen dat we standaard beschikken over meer dan 115.000 zorgverleners verspreid over het gehele land. Mocht u toch zorgaanbieders kennen die ontbreken in SocialeKaart.care dan kunt u deze gemakkelijk en snel toevoegen via de link 'Zorgaanbieder toevoegen' in het menu. Op deze manier kunt u uw eigen sociale kaart compleet krijgen en hebben uw collega's hier direct profijt van.
-
-We wensen u veel plezier in het werken met SocialeKaart.care!
-
-Met vriendelijke groet,
-Het team van SocialeKaart.care
-EOT;
-            $aInfo['to'][] = array(
-                'email' => $sEmail,
-                'name' => $sEmail,
-                'type' => 'to'
-            );
-            $aInfo['to'][] = array(
-                'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-                'name' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
-                'type' => 'bcc'
-            );
-
-        if (true) { // let's skip mandril for now
-            Mailer::sendMail(
-                    $aInfo['to'][0]['email'], // to
-                    $aInfo['from_email'], // from
-                    $aInfo['subject'], // subject
-                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
-                    $aInfo['text'], // content text/html
-                    false, // attachment
-                    $aInfo['to'][1]['email'], // bcc
-                    false // html
-                    );
-        } else {
-            $oMailer = new Mailer();
-            $oMailer->send($aInfo);
-        }
-
-    }
-
-    /**
-     * get's send to an account that has been activated by the admin through the backend tools page. Mosly used for users who register through the frontend, not HAweb.
-     *
-     */
-    public static function accountActivatedByAdmin($oUser) {
-
-        $sUrl = user_pass_reset_url($oUser);
-        $sBody = variable_get('account_activated_by_admin', '');
-
-        $aInfo['from_email'] = variable_get('site_mail', 'info@socialekaart.care');
-        $aInfo['from_name'] = 'SocialeKaart.care';
-        $aInfo['subject'] = t('SocialeKaart.care account activated');
-        $aInfo['html'] = str_replace('%url%', '<a href="'.$sUrl.'">'.$sUrl.'</a>', $sBody);
-        $aInfo['to'][] = array(
-            'email' => $oUser->mail,
-            'name' => $oUser->mail,
-            'type' => 'to'
-        );
-
-        if (true) { // let's skip mandril for now
-            Mailer::sendMail(
-                    $aInfo['to'][0]['email'], // to
-                    $aInfo['from_email'], // from
-                    $aInfo['subject'], // subject
-                    variable_get('site_mail', 'info@socialekaart.care'), // reply to
-                    $aInfo['html'], // content text/html
-                    false, // attachment
-                    false, // bcc
-                    true // html
-                    );
-        } else {
-            $oMailer = new Mailer();
-            $oMailer->send($aInfo);
-        }
-    }
-
     /**
      * Informs the admin that there is a location added without coordinates
      *
@@ -761,9 +317,9 @@ Deze moeten opgezocht worden en toegevoegd worden.<br />
 Deze locatie is van het type <b>{$sCategory}</b>.<br />
 Let op! Praktijken van huisartsen moeten snel voorzien worden van coordinaten.<br />
 <br />
-<a href="https://www.socialekaart.care/?q=node/572388/edit&destination=admin/content">socialekaart.care/?q=node/572388/edit&destination=admin/content</a><br />
+<a href="https://socialekaart.care/?q=node/572388/edit&destination=admin/content">socialekaart.care/?q=node/572388/edit&destination=admin/content</a><br />
 <br />
-<a href="https://www.socialekaart.care/?q=admin/config/system/gojiratools&location_id={$iLocation}">socialekaart.care/?q=admin/config/system/gojiratools</a><br />
+<a href="https://socialekaart.care/?q=admin/config/system/gojiratools&location_id={$iLocation}">socialekaart.care/?q=admin/config/system/gojiratools</a><br />
 Address:<br />
 {$sAddress}<br />
 <br />
@@ -849,7 +405,7 @@ EOT;
         foreach($aLocations as $iLocation){
             if(is_numeric($iLocation)){
                 $oLocation = node_load($iLocation);
-                $sHtmlLinks .= '<a href="https://www.socialekaart.care/?loc='.$iLocation.'">'.$oLocation->title.' '.$oLocation->nid.'</a><br />';
+                $sHtmlLinks .= '<a href="https://socialekaart.care/?loc='.$iLocation.'">'.$oLocation->title.' '.$oLocation->nid.'</a><br />';
                 $ids[] = $iLocation;
             }
         }
@@ -871,7 +427,7 @@ User {$oUser->name} ({$oUser->uid}) thinks the following locations are double.<b
 {$sHtmlLinks}<br />
 TODO: check them out and if they are double, optionally merge them.<br />
 <br />
-<a href="https://www.socialekaart.care/admin/config/system/doublelocations/?ids_from_mail={$ids}">Double location merge page</a>
+<a href="https://socialekaart.care/admin/config/system/doublelocations/?ids_from_mail={$ids}">Double location merge page</a>
 EOT;
         $aInfo['to'][] = array(
             'email' => variable_get('mailadres_information_inform_admin', 'blijnder@gmail.com'),
@@ -922,11 +478,6 @@ EOT;
      * @return boolean
      */
     public static function sendMail($to, $from, $subject, $replyto, $message, $attachment = false, $bcc = false, $html = true) {
-
-// if(user_access('administer')) {
-//     var_dump(func_get_args());
-//     die('exit');
-// }
 
         require_once getcwd().'/'.drupal_get_path('module', 'gojira').'/inc/PHPMailer/class.phpmailer.php';
 

@@ -22,21 +22,6 @@ function gojira_crudtest_form($form, &$form_state) {
         '#default_value' => 0,
     );
 
-    $form[GojiraSettings::CONTENT_TYPE_HAS_MULTIPLE_LOCATIONS_FIELD] = array(
-        '#title' => t('Multiple locations'),
-        '#type' => 'checkbox',
-        '#disabled' => false,
-        '#description' => 'a checkbox fiels',
-        '#default_value' => 1,
-    );
-
-    $form['cron']['cron_check_subscriptions'] = array(
-        '#title' => t('Check subscriptions and disable account who are passed there payed period.'),
-        '#type' => 'select',
-        '#options' => array(0 => 'no', 1 => 'yes'),
-        '#default_value' => variable_get('cron_check_subscriptions', 1),
-    );
-
     $form['nid'] = array(
         '#type' => 'hidden',
         '#value' => $_GET['nid'],
@@ -56,12 +41,10 @@ function gojira_crudtest_form($form, &$form_state) {
 
     $form['submit'] = array(
         '#type' => 'submit',
-        // '#prefix' => '<div class="gbutton_wrapper"><a class="gbutton rounded noshadow left" onclick="window.history.back();" title="' . t('Back') . '"><span>' . t('Back') . '</span></a><span class="gbutton rounded noshadow right">',
-        '#value' => t('Submit1212'),
-        // ['#attributes'] => array('class' => 'btn btn-primary'),
-        // '#suffix' => '</span></div>'
+        '#prefix' => '<div class="gbutton_wrapper"><a class="gbutton rounded noshadow left" onclick="window.history.back();" title="' . t('Back') . '"><span>' . t('Back') . '</span></a><span class="gbutton rounded noshadow right">',
+        '#value' => t('Submit'),
+        '#suffix' => '</span></div>'
     );
-    // $form['actions']['submit']['#attributes'] = array('class' => 'btn btn-primary');
 
     return $form;
 }
@@ -80,27 +63,6 @@ function gojira_crudtest_form_submit($form, &$form_state) {
     $nid = false;
     $title = false;
     $node = false;
-
-    // $sTitleChanged = '';
-    //
-    // if (isset($_GET['nid'])) {
-    //     $node = node_load($_GET['nid']);
-    //     $old_title = $node->title;
-    //     $nid = $node->nid;
-    //     if(helper::canChangeLocation($user->uid, $node->nid) ){
-    //         if (trim($form['type_of_problem']['#value']) == 'wrong_title' && trim($form['title']['#value']) != '') {
-    //             $node->title = trim($form['title']['#value']);
-    //             node_save($node);
-    //         }
-    //         $sTitleChanged = 'Title changed to: ';
-    //     }else{
-    //         $sTitleChanged = 'Title is not changed: ';
-    //     }
-    // }
-
-    //drupal_set_message(t('Thank you for giving us the improvement suggestion for location <i>%location_name%</i>', array('%location_name%' => $title)), 'status');
-
-    // Mailer::sendImproveSuggestion($old_title, $base_url . '/node/' . $nid . '/edit', $user->name, $base_url . '/user/' . $user->uid . '/edit', $form['type_of_problem']['#value'], $form['info']['#value'], $sTitleChanged.$form['title']['#value']);
 
     drupal_goto('crudtest');
 }

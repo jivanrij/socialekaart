@@ -1,7 +1,12 @@
 <?php
 drupal_add_js(array('gojira' => array('locationset_has_filter' => 0)), 'setting');
 $oLocationset = Locationsets::getInstance()->getCurrentLocationset();
+//$userModel = \Models\User::loadCurrent();
+
 if ($oLocationset) {
+
+    drupal_add_js(array('gojira' => array('selected_map' => $oLocationset->nid)), 'setting');
+
     $filter = null;
     if(isset($_GET['filter'])){
         $filter = $_GET['filter'];
@@ -12,9 +17,13 @@ if ($oLocationset) {
 
     $sBody = $oLocationset->body[LANGUAGE_NONE][0]['value'];
     $sTitle = $oLocationset->title;
+
     drupal_add_js(array('gojira' => array('locationset_title' => $sTitle)), 'setting');
     drupal_add_js(array('gojira' => array('locationset_id' => $oLocationset->nid)), 'setting');
 } else {
+
+    drupal_add_js(array('gojira' => array('selected_map' => -1)), 'setting');
+
     $currentPractice = Location::getCurrentLocationNodeObjectOfUser();
     if (isset($_GET['filter'])) {
 
@@ -56,8 +65,8 @@ if ($oLocationset) {
         $aCategories = Locationsets::getInstance()->getCategoriesFromLocationsArray($oLocations);
     }
 
-    $sBody = t('Your own personal map\'s decription.');
-    $sTitle = 'Sociale kaart ' . $currentPractice->title;
+    $sBody = 'Dit is uw eigen sociale kaart. Via de zoekresultaten kunt u zorgverleners toevoegen aan deze kaart.';
+    $sTitle = 'Mijn Sociale kaart';
     drupal_add_js(array('gojira' => array('locationset_id' => "favorites")), 'setting');
 }
 
@@ -78,7 +87,7 @@ drupal_add_js(array('gojira' => array('page' => 'locationset')), 'setting');
         <h2><?php echo $sTitle; ?></h2>
 
         <form id="search_ownmap_form">
-            <input class="rounded unshadow" placeholder="Zoek in uw sociale kaart" name="search_ownmap" id="search_ownmap" />
+            <input class="rounded unshadow" placeholder="Zoek in <?php echo $sTitle; ?>" name="search_ownmap" id="search_ownmap" />
             <button class="fa"></button>
         </form>
 
@@ -91,9 +100,10 @@ drupal_add_js(array('gojira' => array('page' => 'locationset')), 'setting');
                 <?php endforeach; ?>
             </ul>
         <?php elseif (!isset($_GET['filter'])): ?>
-            <img style="border:1px #4d4d4d inset;" src="sites/all/modules/custom/gojira/img/search_result.png" alt="Zorgverlener" />
+            <img src="sites/all/modules/custom/gojira/img/search_result.png" alt="Zorgverlener" />
         <?php elseif (isset($_GET['filter'])): ?>
             <p><i><?php echo t("No locations found with this specific search term."); ?></i></p>
+            <p>Vindt u het niet in uw eigen sociale kaart? <a href="/?s=<?php echo $_GET['filter']; ?>&search_type=region">Zoek door in uw regio <i class="fa fa-search-plus" aria-hidden="true"></i></a> en voeg deze zorgverleners eventueel toe aan uw eigen kaart.</p>
         <?php endif; ?>
 
         <?php if (count($oLocations) > 0): ?>

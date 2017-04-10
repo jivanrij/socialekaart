@@ -58,7 +58,7 @@ function gojira_idealpay_form_submit($form, &$form_state) {
         $payment = $mollie->payments->create($paymentInfo);
 
         Subscriptions::addPaymentLog($user->uid, $info['amount'], $info['description'], $order_id, $info['new_start'], $info['new_end'], 0, $info['tax'], $info['total'], $payment->status);
-die('e');
+
         header('location: ' . $payment->getPaymentUrl());
         exit;
     } catch (Mollie_API_Exception $e) {

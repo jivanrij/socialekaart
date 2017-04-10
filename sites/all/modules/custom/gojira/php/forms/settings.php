@@ -12,31 +12,24 @@ function gojira_settings_form($form, &$form_state) {
         '#default_value' => helper::value($user, GojiraSettings::CONTENT_TYPE_USER_TITLE),
     );
 
-    if (helper::value($user, GojiraSettings::CONTENT_TYPE_USER_NOT_IMPORTED)) {
-        $disabled = false;
-        $description = t('Your e-mailadres is also your username.');
-    } else {
-        $disabled = true;
-        $description = t('Your e-mailadres is also your username. You cannot change it because your account is being managed from HAweb.');
-    }
+    $description = t('Your e-mailadres is also your username.');
 
     $form['email'] = array(
         '#title' => t('E-mailadres'),
         '#type' => 'textfield',
         '#required' => true,
-        '#disabled' => $disabled,
         '#description' => $description,
         '#default_value' => ($user ? $user->mail : '')
     );
 
-    if (user_access(helper::PERMISSION_MODERATE_LOCATION_CONTENT) && in_array(helper::ROLE_EMPLOYER_MASTER, $user->roles)) {
+    if (user_access(helper::PERM_BASIC_ACCESS)) {
 
         $form['line'] = array(
             '#markup' => '<hr /><h2>'.t('Your practice').'</h2>',
         );
 
         // the user has only one location to manage or no master/subscribed privileges
-        if (!has_multiple_locations($user) || !helper::hasSubscribedMasterPrivileges()) {
+        if (!has_multiple_locations($user) || !user_access(helper::PERM_HUISARTS_MORE_PRACTICES)) {
             $locations = Location::getUsersLocations(false);
             $locationNode = array_shift($locations);
             $form = gojira_get_core_location_form($form, $form_state, $locationNode, 'settings');
@@ -47,7 +40,7 @@ function gojira_settings_form($form, &$form_state) {
         }
 
         // user is allowed to manage multiple locations yes/no
-        if (helper::hasSubscribedMasterPrivileges()) {
+        if (user_access(helper::PERM_HUISARTS_MORE_PRACTICES)) {
 
             $disabled = ((count(Location::getUsersLocations(false)) > 1) ? true : false);
 
@@ -89,13 +82,6 @@ function gojira_settings_form_validate($form, &$form_state) {
     $email = $form['email']['#value'];
     $uid = $user->uid;
 
-//  if (trim($form['email']['#value']) == '') {
-//    form_set_error('email', t('You have not filled in all the needed form fields.'));
-//  }
-//  if (trim($form[GojiraSettings::CONTENT_TYPE_USER_TITLE]['#value']) == '') {
-//    form_set_error(GojiraSettings::CONTENT_TYPE_USER_TITLE, t('You have not filled in all the needed form fields.'));
-//  }
-
     if ($error = user_validate_mail($email)) {
         form_set_error('email', $error);
     } else {
@@ -108,10 +94,10 @@ function gojira_settings_form_validate($form, &$form_state) {
         }
     }
     // to save location info, you need to be a master doctor, have the permission & not have multiple locations
-    if (user_access(helper::PERMISSION_MODERATE_LOCATION_CONTENT) && in_array(helper::ROLE_EMPLOYER_MASTER, $user->roles)) {
+    if (user_access(helper::PERM_BASIC_ACCESS) && in_array(helper::ROLE_HUISARTS, $user->roles)) {
         if (!has_multiple_locations($user)) { // if we do not have multiple locations, we need to validate the form values for one location
             $locations = Location::getUsersLocations(false);
-            
+
             if (count($locations) == 1) {
                 $locationNode = array_pop($locations);
                 gojira_get_core_location_form_validate($form, $form_state, $locationNode->nid);
@@ -131,10 +117,8 @@ function gojira_settings_form_submit($form, &$form_state) {
 
     $hasMultipleLocations = has_multiple_locations($user);
 
-    if (helper::value($user, GojiraSettings::CONTENT_TYPE_USER_NOT_IMPORTED)) {
-        $user->mail = $form['email']['#value'];
-        $user->name = $form['email']['#value'];
-    }
+    $user->mail = $form['email']['#value'];
+    $user->name = $form['email']['#value'];
 
     if ($user->uid == 1) {
         $user->name = 'admin';
@@ -152,7 +136,7 @@ function gojira_settings_form_submit($form, &$form_state) {
     user_save($user);
 
 // to save location info, you need to be a master doctor, have the permission & not have multiple locations
-    if (user_access(helper::PERMISSION_MODERATE_LOCATION_CONTENT) && in_array(helper::ROLE_EMPLOYER_MASTER, $user->roles)) {
+    if (user_access(helper::PERM_BASIC_ACCESS)) {
         if (!$hasMultipleLocations) {
             // if we do not have multiple locations, we need to save the form values for one location
             // if we have multiple locations, we don't have a location form here
@@ -166,7 +150,7 @@ function gojira_settings_form_submit($form, &$form_state) {
             }
 
             if ($id == 'new') {
-                // no existing location found, let's creat one 
+                // no existing location found, let's creat one
                 $node = new stdClass();
                 $node->type = GojiraSettings::CONTENT_TYPE_LOCATION;
                 node_object_prepare($node);
@@ -181,7 +165,18 @@ function gojira_settings_form_submit($form, &$form_state) {
                 // get the group the user is linked to and link the new location to it
                 $groupField = GojiraSettings::CONTENT_TYPE_GROUP_FIELD;
                 $groupFieldUser = $user->$groupField;
-                $node->$groupField = array(LANGUAGE_NONE => array(0 => array('nid' => $groupFieldUser[LANGUAGE_NONE][0]['nid'])));
+
+                if(count($groupFieldUser) == 0) {
+                    $group = Group::createNewGroup($user);
+                    $groupField = GojiraSettings::CONTENT_TYPE_GROUP_FIELD;
+
+                    $user->$groupField = array(LANGUAGE_NONE => array(0 => array('nid' => $group->nid)));
+                    user_save($user);
+
+                    $node->$groupField = array(LANGUAGE_NONE => array(0 => array('nid' => $group->nid)));
+                } else {
+                    $node->$groupField = array(LANGUAGE_NONE => array(0 => array('nid' => $groupFieldUser[LANGUAGE_NONE][0]['nid'])));
+                }
 
                 $node = node_submit($node); // Prepare node for saving
 
@@ -220,15 +215,10 @@ function gojira_settings_form_submit($form, &$form_state) {
             node_save($node);
         }
     }
-    
-    // saving the coordinates is done in gojira_entity_update
 
-    if (helper::getSystemnameRole() == helper::ROLE_EMPLOYEE) {
-        drupal_set_message(t('Your settings are succesfully changed.'), 'status');
-    } else {
-        drupal_set_message(t('Your settings and location information is succesfully changed.'), 'status');
-    }
-    
+    // saving the coordinates is done in gojira_entity_update
+    drupal_set_message(t('Your settings and location information is succesfully changed.'), 'status');
+
     if(variable_get('gojira_check_coordinates_on_update_node', 1) == 0 && user_access('administer')){
         drupal_set_message('gojira_check_coordinates_on_update_node is turned off', 'status');
     }
@@ -238,12 +228,12 @@ function gojira_settings_form_submit($form, &$form_state) {
 
 /**
  * Tells you if the user uses the multiple locations option
- * 
+ *
  * @param stdClass $user
  * @return boolean
  */
 function has_multiple_locations($user) {
-    if (helper::hasSubscribedMasterPrivileges()) {
+    if (user_access(helper::PERM_HUISARTS_MORE_PRACTICES)) {
         if (helper::value($user, GojiraSettings::CONTENT_TYPE_HAS_MULTIPLE_LOCATIONS_FIELD) || (isset($_POST[GojiraSettings::CONTENT_TYPE_HAS_MULTIPLE_LOCATIONS_FIELD]) && $_POST[GojiraSettings::CONTENT_TYPE_HAS_MULTIPLE_LOCATIONS_FIELD])) {
             return true;
         }

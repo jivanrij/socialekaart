@@ -1,8 +1,8 @@
-<section>
+<section class="container">
     <div class="row">
         <div class="col-md-offset-3 col-md-6">
             <br />
-            <h1>Dit is een voorbeeld van een nieuw formulier voor op een pagina zonder kaart.</h1>
+            <h1>Dit is een voorbeeld van een nieuw formulier. Doet verder niets.</h1>
             <br /><br />
         </div>
     </div>

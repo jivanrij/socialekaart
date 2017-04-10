@@ -118,7 +118,7 @@ class Location {
             }
         }
 
-        // let's just return one if ther is just one found or no known preference for one
+        // let's just return one if there is just one found or no known preference for one
         $oLocationNode = array_shift($aLocations);
         $oLocation = Location::getLocationObjectOfNode($oLocationNode->nid);
         if($oLocation){
@@ -136,7 +136,8 @@ class Location {
      */
     public static function getCurrentLocationNodeObjectOfUser() {
         $nid = self::getCurrentLocationObjectOfUser();
-        return node_load($nid->nid);
+        $locationModel = \Models\Location::load($nid->nid);
+        return $locationModel->object;
     }
 
     /**
@@ -154,19 +155,18 @@ class Location {
         if ($coords) {
             return new Location($coords->x, $coords->y);
         } else {
-            $point = geocoder('google', $address);
-            if ($point) {
-                try {
-                    $address_std = json_decode($point->out('json'));
-                    $location = new Location($address_std->coordinates[0], $address_std->coordinates[1]);
-                    db_query("INSERT INTO `address_cache` (`address`, `coordinates_x`, `coordinates_y`) VALUES (:address, :x, :y)", array(':address' => $address, ':x' => $location->longitude, ':y' => $location->latitude));
-                } catch (Exception $e) {
-                    return false;
+
+            $coordinates = self::getCoordinatesCustom($address);
+
+            if (is_array($coordinates)) {
+                $locationObject = new Location($coordinates['latitude'], $coordinates['longitude']);
+                if ($locationObject) {
+                    db_query("INSERT INTO `address_cache` (`address`, `coordinates_x`, `coordinates_y`) VALUES (:address, :x, :y)", array(':address' => $address, ':x' => $locationObject->longitude, ':y' => $locationObject->latitude));
+                    return $locationObject;
                 }
-            } else {
-                return false;
             }
-            return $location;
+            watchdog(GojiraSettings::WATCHDOG_LOCATION, sprintf('Unable to find coords for location %s', $address));
+            return false;
         }
     }
 
@@ -179,7 +179,7 @@ class Location {
         $json = json_decode($response, TRUE); //generate array object from the response from the web
 
         if(($json['status'] !== 'ZERO_RESULTS') && isset($json['results'][0])){
-            return array('latitude'=>$json['results'][0]['geometry']['location']['lat'], 'longitude'=>$json['results'][0]['geometry']['location']['lng']);
+            return array('latitude'=>$json['results'][0]['geometry']['location']['lng'], 'longitude'=>$json['results'][0]['geometry']['location']['lat']);
         }
         return false;
 
@@ -218,7 +218,6 @@ class Location {
         foreach (self::getAddressFields() as $field) {
             $thisField = $node->$field;
             if (!array_key_exists('und', $thisField) || !array_key_exists(0, $thisField['und']) || !array_key_exists('value', $thisField['und'][0])) {
-                watchdog('location', 'The node with nid ' . $node->nid . ' passed to GojiraFunctions::getAddressString() has no correct address.');
                 return false;
             }
         }
@@ -271,6 +270,10 @@ class Location {
      * @return array|Locations
      */
     public static function getUsersLocations($bCheckPublished = true) {
+
+//        $userModel = \Models\User::loadCurrent();
+//        $userModel->assureLocation();
+        
         if (self::$_userLocations === null && self::$_userLocationsWithCheck === null) {
 
             self::$_userLocations = array();
@@ -320,10 +323,9 @@ class Location {
      */
     public static function removeUserLocation($nid) {
         global $user;
-        if (helper::canChangeLocation($user->uid, $nid)) {
-            node_delete($nid);
-            unset(self::$_userLocations[$nid]);
-        }
+        node_delete($nid);
+        unset(self::$_userLocations[$nid]);
+        db_query("delete from group_location_favorite where pid = :nid",array(':nid'=>$nid));
     }
 
     /**
@@ -341,22 +343,6 @@ class Location {
             return true;
         }
         return false;
-
-//        $differance = 0.0001;
-//
-//        $diff_long = abs($a_long - $b_long);
-//        $diff_lat = abs($a_lat - $b_lat);
-//
-//        if ($diff_long == 0 && $diff_lat == 0) {
-//            return true;
-//        }
-//
-//        if (is_numeric($diff_lat) && is_numeric($diff_long) && $diff_lat != 0 && $diff_long != 0) {
-//            if (($diff_long < $differance) && ($diff_lat < $differance)) {
-//                return true;
-//            }
-//        }
-//        return false;
     }
 
     /**

@@ -5,33 +5,21 @@
  * Also defines the names of the permissions and roles in gojira.
  */
 class helper {
+    // permissions
+    const PERM_HUISARTS_LABELS = 'work with the global huisarts labels';
+    const PERM_HUISARTS_PAYMENT = 'do payments';
+    const PERM_BASIC_ACCESS = 'basic access to the system';
+    const PERM_MANAGE_MAPS = 'manage locationsets';
+    const PERM_CORRECT_LOCATION = 'correct known locations';
+    const PERM_ADD_LOCATION = 'add locations';
+    const PERM_MY_MAP = 'manage there own personal favorites';
+    const PERM_HUISARTS_MORE_PRACTICES = 'can have more practices';
 
-    // Permissions
-    const PERMISSION_ACCESS_CONTENT = 'access content';
-    const PERMISSION_ACCESS_LOCATION_CONTENT = 'gojira access location info';
-    const PERMISSION_MODERATE_LOCATION_CONTENT = 'gojira moderate location info';
-    const PERMISSION_MANAGE_USERS = 'manage gojira group users';
-    const PERMISSION_DO_PAYMENTS = 'do payments for a gojira group';
-    const PERMISSION_MULTIPLE_LOCATIONS = 'multiple locations';
-    const PERMISSION_MANAGE_MULTIPLE_LOCATIONS = 'manage multiple locations';
-    const PERMISSION_CORRECT_EXISTING_LOCATIONS = 'correct existing locations';
-    const PERMISSION_SHOW_DEBUG = 'show debug data';
-    const PERMISSION_PERSONAL_LIST = 'has personal list';
-    const PERMISSION_SEARCH_GLOBAL = 'can search global';
-    const PERMISSION_LOCATIONSETS = 'can see locationsets';
-    const PERMISSION_LOCATIONSET_MANAGE = 'can manage locationsets';
-
-    // we have 3 types of users:
-    // 1. the original master of the group, the practitioner
-    // 2. a user added by the practitioner that can change data
-    // 3. a user added by the practitioner that can not change data
-    // all types of users can also have the subscribed role, this role gives the users the subscribed functionality
     // Roles
     const ROLE_AUTHENTICATED = 'authenticated user';
-    const ROLE_EMPLOYEE = 'gojira employee (subscribed)';
-    const ROLE_EMPLOYER = 'gojira employer (subscribed)';
-    const ROLE_EMPLOYER_MASTER = 'gojira master employer';
-    const ROLE_SUBSCRIBED_MASTER = 'gojira master employer (subscribed)';
+    const ROLE_HUISARTS = 'huisarts';
+    const ROLE_HUISARTS_PLUS = 'huisarts plus';
+    const ROLE_MAP_BUILDER = 'kaartenmaker';
 
     const SEARCH_TYPE_COUNTRY = 'country';
     const SEARCH_TYPE_REGION = 'region';
@@ -39,9 +27,34 @@ class helper {
     const SEARCH_TYPE_LOCATIONSET = 'locationset';
 
     public static function redirectTo404() {
-        die('f');
         header('Location: /404');
         exit;
+    }
+
+
+    /**
+     * Creates a perfect ascii string
+     * http://cubiq.org/the-perfect-php-clean-url-generator
+     *
+     * @param $str
+     * @param array $replace
+     * @param string $delimiter
+     * @return mixed|string
+     */
+    public static function toAscii($str, $replace=array(), $delimiter='-') {
+
+        setlocale(LC_ALL, 'en_US.UTF8');
+
+        if( !empty($replace) ) {
+            $str = str_replace((array)$replace, ' ', $str);
+        }
+
+        $clean = iconv('UTF-8', 'ASCII//TRANSLIT', $str);
+        $clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
+        $clean = strtolower(trim($clean, '-'));
+        $clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
+
+        return $clean;
     }
 
     /**
@@ -83,7 +96,6 @@ class helper {
         }
         if(!$cron){
             drupal_set_message(t('Restored some locations!'), 'status');
-            die('g');
             header('Location: /?q=admin/config/system/gojiratools');
             exit;
         }
@@ -155,25 +167,6 @@ class helper {
     }
 
     /**
-     * Talls you if the user has subscribe && master docter privileges
-     *
-     * @global stdClass $user
-     * @return boolean
-     */
-    public static function hasSubscribedMasterPrivileges() {
-        if (user_access('administer')) {
-            return true;
-        }
-
-        global $user;
-        $user = user_load($user->uid);
-        if (Subscriptions::currentGroupHasPayed() && in_array(helper::ROLE_EMPLOYER_MASTER, array_values($user->roles))) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Get's you the available terms or city's that are like $term
      *
      * @param string $term
@@ -220,9 +213,6 @@ class helper {
     public static function agreedToConditions() {
         global $user;
         $user = user_load($user->uid);
-//    if (in_array('administrator', array_values($user->roles))) {
-//      return true;
-//    }
         return (bool) helper::value($user, GojiraSettings::CONTENT_TYPE_CONDITIONS_AGREE_FIELD);
     }
 
@@ -237,108 +227,6 @@ class helper {
         global $user;
         $user = user_load($user->uid);
         return (bool) helper::value($user, GojiraSettings::CONTENT_TYPE_TUTORIAL_FIELD);
-    }
-
-    /**
-     * Tells you if a location that needs to be changed by a user is connected to the same location and has employer rights and has a moderator
-     *
-     * @param integer uid of the so called admin user
-     * @param integer nid of the location that is going to be changed
-     * @return boolean
-     */
-    public static function canChangeLocation($uidSoCalledAdmin, $nidToChange) {
-        global $user;
-        $user = user_load($user->uid);
-        if (in_array('administrator', array_values($user->roles))) {
-            return true;
-        }
-
-        $employer = user_load($uidSoCalledAdmin);
-        $location = node_load($nidToChange);
-
-//    if(helper::value($location, GojiraSettings::CONTENT_TYPE_LOCATION_HAS_MODERATOR) != 1){
-//      return false;
-//    }
-
-        if (!user_access(helper::PERMISSION_MODERATE_LOCATION_CONTENT)) {
-            return false;
-        }
-
-        // check the same group id
-        $employerGroupId = helper::value($employer, GojiraSettings::CONTENT_TYPE_GROUP_FIELD, 'nid');
-        $locationGroupId = helper::value($location, GojiraSettings::CONTENT_TYPE_GROUP_FIELD, 'nid');
-
-        if (!is_numeric($employerGroupId) || !is_numeric($locationGroupId) || ($employerGroupId !== $locationGroupId)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Tells you if a user that needs to be changed by an other user is connected to the same location and has employer rights
-     *
-     * @param integer uid of the so called admin user
-     * @param integer uid of the user that is going to be changed
-     * @return boolean
-     */
-    public static function canChangeOtherUser($uidSoCalledAdmin, $uidToChange) {
-        // editing my self
-        if ($uidSoCalledAdmin == $uidToChange) {
-            return true;
-        }
-
-        $admin = user_load($uidSoCalledAdmin);
-        $employee = user_load($uidToChange);
-
-        if (!user_access(helper::PERMISSION_MODERATE_LOCATION_CONTENT)) {
-            return false;
-        }
-
-        // check the same group id
-        $employerGroupId = helper::value($admin, GojiraSettings::CONTENT_TYPE_GROUP_FIELD, 'nid');
-        $employeeGroupId = helper::value($employee, GojiraSettings::CONTENT_TYPE_GROUP_FIELD, 'nid');
-
-        if (!is_numeric($employerGroupId) || !is_numeric($employeeGroupId) || ($employerGroupId !== $employeeGroupId)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Returns the gojira role of the given user
-     *
-     * @param integer $iUser
-     * @return string
-     */
-    public static function getGojiraRole($iUser) {
-        $oUser = user_load($iUser);
-        if (in_array(helper::ROLE_EMPLOYER, $oUser->roles)){
-            return 'Employer';
-        }else if (in_array(helper::ROLE_EMPLOYER_MASTER, $oUser->roles)){
-            return 'Main employer';
-        }else if (in_array('administrator', $oUser->roles)){
-            return 'Administrator';
-        }else{
-            return 'Employee';
-        }
-    }
-
-    public static function getSystemnameRole() {
-        global $user;
-        $user = user_load($user->uid);
-        $role = helper::ROLE_EMPLOYEE;
-        if (in_array(helper::ROLE_EMPLOYER, $user->roles)) {
-            $role = helper::ROLE_EMPLOYER;
-        }
-        if (in_array(helper::ROLE_EMPLOYER_MASTER, $user->roles)) {
-            $role = helper::ROLE_EMPLOYER_MASTER;
-        }
-        if (in_array('administrator', $user->roles)) {
-            $role = helper::ROLE_EMPLOYER_MASTER;
-        }
-        return $role;
     }
 
     /**
@@ -524,7 +412,7 @@ class helper {
     public static function userHasSubscribedRole(){
         global $user;
         $user = user_load($user->uid);
-        if(in_array(helper::ROLE_SUBSCRIBED_MASTER, array_values($user->roles)) || in_array(helper::ROLE_EMPLOYEE, array_values($user->roles)) || in_array(helper::ROLE_EMPLOYER, array_values($user->roles))){
+        if(in_array(helper::ROLE_HUISARTS_PLUS, array_values($user->roles))){
             return true;
         }
         return false;

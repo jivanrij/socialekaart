@@ -8,11 +8,6 @@ function gojira_locationcorrect_form($form, &$form_state) {
     $node = false;
     if (isset($_GET['nid'])) {
         $node = node_load($_GET['nid']);
-//        global $user;
-//        if (!helper::canChangeLocation($user->uid, $node->nid)) {
-//            form_set_error('not_allowed', t('You are not allowed to do this.'));
-//            drupal_goto('settings');
-//        }
     }
 
     if ($node) {
@@ -88,9 +83,6 @@ function gojira_locationcorrect_form_submit($form, &$form_state) {
     $faxfield = GojiraSettings::CONTENT_TYPE_URL_FIELD;
     $node->$faxfield = array('und' => array(0 => array('value' => $form[GojiraSettings::CONTENT_TYPE_URL_FIELD]['#value'])));
 
-//  $employeesfield = GojiraSettings::CONTENT_TYPE_NOTE_FIELD;
-//  $node->$employeesfield = array(LANGUAGE_NONE => array(0 => array('value' => $form[GojiraSettings::CONTENT_TYPE_NOTE_FIELD]['#value'])));
-
     foreach (Location::getAddressFields() as $field) {
         $node->$field = array(LANGUAGE_NONE => array(0 => array('value' => $form[$field]['#value'])));
     }
@@ -114,7 +106,7 @@ function gojira_locationcorrect_form_submit($form, &$form_state) {
         Location::storeLocatioInNode($location, $node->nid);
         drupal_set_message(t('Location information successfully stored.'), 'status');
     }
-die('d');
-    header('Location: /location/correct&nid=' . $id);
+
+    header('Location: /location/correct?nid=' . $id);
     exit;
 }

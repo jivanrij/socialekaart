@@ -3,11 +3,13 @@
 /**
  * This class acts as a function wrapper for all kinds of favorite related tasks.
  */
-class Favorite {
+class Favorite
+{
 
     public static $instance = null;
 
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (is_null(self::$instance)) {
             self::$instance = new Favorite();
         }
@@ -21,7 +23,8 @@ class Favorite {
      * @param integer optional practice to filter on
      * @return boolean
      */
-    public static function isFavorite($nid, $iLocationPractice = null) {
+    public static function isFavorite($nid, $iLocationPractice = null)
+    {
         $favorites = Favorite::getInstance()->getAllFavoriteLocations($iLocationPractice);
 
         if (array_key_exists($nid, $favorites)) {
@@ -39,7 +42,8 @@ class Favorite {
      * @param integer Practice id
      * @return Array
      */
-    public function getAllFavoriteLocations($iLocationPractice = null) {
+    public function getAllFavoriteLocations($iLocationPractice = null)
+    {
         $favorites = array();
 
         if (count($this->favoriteLocations) == 0) {
@@ -65,16 +69,16 @@ class Favorite {
      * @param integer $filter_category_nid
      * @return array
      */
-    public function getAllFavoritesInCategory($filter_category_nid){
-
+    public function getAllFavoritesInCategory($filter_category_nid)
+    {
         $loc = Location::getCurrentLocationNodeObjectOfUser();
 
         $favorites = self::getAllFavoriteLocations($loc->nid);
 
         $return = array();
-        foreach($favorites as $favorite){
+        foreach ($favorites as $favorite) {
             $category_nid = helper::value($favorite, GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD, 'nid');
-            if($category_nid == $filter_category_nid){
+            if ($category_nid == $filter_category_nid) {
                 $return[] = $favorite;
             }
         }
@@ -87,9 +91,9 @@ class Favorite {
      * @param integer $nid
      * @param boolean $favorite
      */
-    public function setFavorite($nid, $gid = null, $pid = null) {
-
-        if($gid === null){
+    public function setFavorite($nid, $gid = null, $pid = null)
+    {
+        if ($gid === null) {
             $gid = Group::getGroupId();
         }
 
@@ -98,7 +102,7 @@ class Favorite {
         if (array_key_exists($nid, $favoriteLocations)) {
             return;
         } else {
-            if($pid === null){
+            if ($pid === null) {
                 $oCurrentLocation = Location::getCurrentLocationObjectOfUser();
                 $pid = $oCurrentLocation->nid;
             }
@@ -112,7 +116,8 @@ class Favorite {
      *
      * @param integer $nid
      */
-    public function removeFromFavorite($nid) {
+    public function removeFromFavorite($nid)
+    {
         $params = array(':nid' => $nid, ':gid' => Group::getGroupId());
         db_query("DELETE FROM `group_location_favorite` WHERE `nid`=:nid AND `gid`=:gid;", $params);
     }
@@ -122,10 +127,11 @@ class Favorite {
      *
      * returns array with combined gid & pid
      */
-    public function getAllFaviritedGroupsByPractices($nid) {
+    public function getAllFaviritedGroupsByPractices($nid)
+    {
         $return = array();
         $results = db_query('select gid, pid from group_location_favorite where nid = :nid', array(':nid' => $nid));
-        foreach($results as $result) {
+        foreach ($results as $result) {
             $return[$result->gid.$result->pid] = array(
                 'gid'=>$result->gid,
                 'pid'=>$result->pid
@@ -133,5 +139,4 @@ class Favorite {
         }
         return $return;
     }
-
 }

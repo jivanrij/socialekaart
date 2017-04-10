@@ -60,8 +60,8 @@ function gojira_suggestlocation_form($form, &$form_state) {
         '#type' => 'textfield',
         '#required' => false,
     );
-    
-    if (user_access(helper::PERMISSION_PERSONAL_LIST)){
+
+    if (user_access(helper::PERM_MY_MAP)){
         $form['add_to_favorites'] = array(
             '#title' => t('Add to favorites'),
             '#type' => 'checkbox',
@@ -97,6 +97,7 @@ function gojira_suggestlocation_form_validate($form, &$form_state) {
         }
     }
 
+    $location = null;
     if((trim($form[GojiraSettings::CONTENT_TYPE_ADDRESS_CITY_FIELD]['#value']) !== '') &&
         (trim($form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREET_FIELD]['#value']) !== '') &&
         (trim($form[GojiraSettings::CONTENT_TYPE_ADDRESS_STREETNUMBER_FIELD]['#value']) !== '') &&
@@ -107,7 +108,10 @@ function gojira_suggestlocation_form_validate($form, &$form_state) {
                     )
         );
     }
-    
+    if(!$location) {
+        form_set_error('coordinates', 'Voor het opgegeven adres hebben we geen coördinaten kunnen vinden.');
+    }
+
     $aPossibleDoubles = array();
     if ($location) {
         $rResults = db_query("select nid, title, X(point) as x, Y(point) as y from {node} where type = 'location' and status = 1 and X(point) = :longitude and Y(point) = :latitude", array(':longitude' => $location->longitude, ':latitude' => $location->latitude))->fetchAll();
@@ -134,7 +138,7 @@ function gojira_suggestlocation_form_submit($form, &$form_state) {
 
     global $user;
 
-    // no existing location found, let's creat one 
+    // no existing location found, let's creat one
     $node = new stdClass();
     $node->type = GojiraSettings::CONTENT_TYPE_LOCATION;
     node_object_prepare($node);
@@ -201,7 +205,7 @@ function gojira_suggestlocation_form_submit($form, &$form_state) {
     $iNode = $node->nid;
 
     // if the user want's we add this location to his personal list
-    if (user_access(helper::PERMISSION_PERSONAL_LIST) && $form['add_to_favorites']['#value'] == 1) {
+    if (user_access(helper::PERM_MY_MAP) && $form['add_to_favorites']['#value'] == 1) {
         Favorite::getInstance()->setFavorite($iNode);
     }
 

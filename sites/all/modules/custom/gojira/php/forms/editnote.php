@@ -44,7 +44,6 @@ function gojira_editnote_form_submit($form, &$form_state) {
     
 //    drupal_set_message(t('Note added succesfully.'), 'status');
 
-    die('a');
     header('Location: /?loc='.$nid);
     exit;
 }

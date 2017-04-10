@@ -9,18 +9,16 @@
 function gojira_login_form($form, &$form_state) {
   // Display login form:
   $form['name'] = array('#type' => 'textfield',
-    '#title' => t('Username'),
+    '#title' => 'E-mailadres',
     '#size' => 60,
     '#maxlength' => USERNAME_MAX_LENGTH,
     '#required' => TRUE,
-    '#attributes' =>array('placeholder' => 'E-mailadres'),
   );
 
   $form['pass'] = array('#type' => 'password',
-    '#title' => t('Password'),
+    '#title' => 'Wachtwoord',
     '#description' => t('Enter the password that accompanies your username.'),
     '#required' => TRUE,
-    '#attributes' =>array('placeholder' => t('Password')),
     //'#description' => '<a href="/wachtwoord-reset" title="'.t('Click here if you forgot your password.').'">'.t('Click here if you forgot your password.').'</a>',
   );
 
@@ -32,8 +30,8 @@ function gojira_login_form($form, &$form_state) {
 
   $form['actions']['submit']['#attributes'] = array('class' => array('btn btn-danger'));
 
-  $form['name']['#attributes'] = array('placeholder' =>  t('Username'), 'class' => array('unshadow rounded'));
-  $form['pass']['#attributes'] = array('placeholder' =>  t('Password'), 'class' => array('unshadow rounded'));
+  $form['name']['#attributes'] = array('placeholder' =>  'E-mailadres', 'class' => array('unshadow rounded'), 'required' => 'required');
+  $form['pass']['#attributes'] = array('placeholder' =>  'Wachtwoord', 'class' => array('unshadow rounded'), 'required' => 'required');
 
   return $form;
 }

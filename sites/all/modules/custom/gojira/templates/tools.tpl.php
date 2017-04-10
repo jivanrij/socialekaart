@@ -334,15 +334,10 @@ You can find the cron url <a href="/admin/config/system/cron" title="cron page">
 </p>
 <form id="gojira_send_mail" method="POST" action="/?q=admin/config/system/gojiratools">
     <select name="gojira_send_mail" style='border:1px; border-style: solid;'>
-        <option value="sendAccountMergeRequest">Send a account merge request to a user.</option>
-        <option value="sendSubscriptionEnded">Send the e-mail that a doctor get's when the subscription is ended.</option>
-        <option value="sendSubscriptionEndWarning">Send the e-mail that a doctor get's when the subscription is going to end in 30 days.</option>
-        <option value="sendInvoiceOfNewSubscription">Send the e-mail that a customer get's after a subscription is payed for.</option>
-        <option value="sendWelcomeMailToEmployee">Send the welcome e-mail that get's send to a new employee</option>
-        <option value="sendWelcomeMailToEmployer">Send the welcome e-mail that get's send to a new employer</option>
-        <option value="sendUnsubscribeMail">Send the e-mail a employer & employee recieve when unsubscribed</option>
-        <option value="sendSubscribeActivationMail">Send the e-mail a employee & employer recieves when the account get's activated after it's unsubscribed</option>
-        <option value="accountActivatedByAdmin">Send the mail that gets send when an admin activates the account</option>
+        <option value="sendUserSubscriptionEnded">Send the e-mail that a doctor get's when the subscription is ended.</option>
+        <option value="sendUserSubscriptionEndWarning">Send the e-mail that a doctor get's when the subscription is going to end in 30 days.</option>
+        <option value="sendUserInvoiceOfNewSubscription">Send the e-mail that a customer get's after a subscription is payed for.</option>
+        <option value="sendUserAccountActivatedByAdmin">Send the mail that gets send when an admin activates the account</option>
         <option value="sendAccountNeedsValidation">Sends the e-mail to the admin to tell hem an account needs activation</option>
     </select>
     <input type="text" id="email" value="<?php echo (isset($_POST['email']) ? $_POST['email'] : ''); ?>" name="email" style='border:1px; border-style: solid;' />

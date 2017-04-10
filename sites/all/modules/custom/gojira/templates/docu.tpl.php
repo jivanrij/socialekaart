@@ -62,8 +62,6 @@
 <p>
     Verschillende rollen (naast de standaard) zijn:
     <ul>
-        <li>gojira employee (subscribed) - gebruiker aangemaakt door huisarts met weinig rechten;</li>
-        <li>gojira employer (subscribed) - gebruiker aangemaakt door huisarts met veel rechten;</li>
         <li>gojira master employer - de huisarts;</li>
         <li>gojira master employer (subscribed) - de huisarts met abonnement.</li>
     </ul>
@@ -74,11 +72,8 @@
 <hr/>
 <h2>E-mails die verzonden worden</h2>
 <p>
-    <b>sendInvoiceOfNewSubscription</b> heeft de titel 'Invoice SocialeKaart.care - [INVOICE_NUMBER]'. Bij het aanmaken van een nieuwe abonnementsperiode door een huisarts
+    <b>sendUserInvoiceOfNewSubscription</b> heeft de titel 'Invoice SocialeKaart.care - [INVOICE_NUMBER]'. Bij het aanmaken van een nieuwe abonnementsperiode door een huisarts
     wordt deze e-mail verzonden. Hier bij krijgt de huisarts ook direct de factuur. Deze e-mail wordt verzonden door de actie subscribe in de tools page & op de return page van iDeal als er een geslaagde betaling is geweest.
-</p>
-<p>
-    <b>sendWelcomeMailToEmployee</b> en <b>sendWelcomeMailToEmployer</b> hebben de titel 'SocialeKaart.care account created by [DOCTOR_NAAM]' en worden verzonden aan de nieuw aangemaakte gebruikers door de ingelogde huisarts.
 </p>
 <p>
     <b>sendUnsubscribeMail</b> verstuurd een e-mail met de titel 'Your account on SocialeKaart.care is deactivated' wanneer een account van een gebruiker (tenzij het de huisarts zelf is) wordt ge-deactiveerd.
@@ -87,10 +82,10 @@
     <b>sendSubscribeActivationMail</b> heeft de titel 'Your account on SocialeKaart.care is activated' en wordt verstuurd naar de gebruikers van een groep, exclusief de huisarts, bij het aanmaken van een nieuw abonnements periode.
 </p>
 <p>
-    <b>sendSubscriptionEndWarning</b> wordt verstuurd naar de huisarts 30 dagen voor de huisarts zijn laatst genomen abonnement vervalt. Deze e-mail heeft de titel 'Your subscription on SocialeKaart.care is going to expire within 30 days'. Deze e-mail wordt verzonden vanuit de cron.
+    <b>sendUserSubscriptionEndWarning</b> wordt verstuurd naar de huisarts 30 dagen voor de huisarts zijn laatst genomen abonnement vervalt. Deze e-mail heeft de titel 'Your subscription on SocialeKaart.care is going to expire within 30 days'. Deze e-mail wordt verzonden vanuit de cron.
 </p>
 <p>
-    <b>sendSubscriptionEnded</b> deze e-mail word verstuurd naar een huisarts als zijn laatst genomen abonnement afgelopen is. Deze e-mail heeft de titel 'Your subscription on SocialeKaart.care is expired' en wordt verzonden vanuit de cron.
+    <b>sendUserSubscriptionEnded</b> deze e-mail word verstuurd naar een huisarts als zijn laatst genomen abonnement afgelopen is. Deze e-mail heeft de titel 'Your subscription on SocialeKaart.care is expired' en wordt verzonden vanuit de cron.
 </p>
 <p>
     <b>sendQuestion</b> deze e-mail wordt verzonden naar de admin van het systeem als er een gebruiker een vraag heeft gesteld via de help pagina. Het e-mailadres van de admin is in de settings pagina in te stellen.
@@ -105,7 +100,7 @@
     Na een handmatige registratie van een nieuwe gebruiker/doctor zal de e-mail <b>sendAccountNeedsValidation</b> worden verzonden naar de admin. Hierin staat wat de admin moet doen om de account te activeren/controlleren.
 </p>
 <p>
-    <b>accountActivatedByAdmin</b> wordt verstuurd naar een account die geactiveerd is door de admin via de tools pagina. Wordt meestal gebruikt voor accounts die zich handmatig hebben geregistreerd.
+    <b>sendUserAccountActivatedByAdmin</b> wordt verstuurd naar een account die geactiveerd is door de admin via de tools pagina. Wordt meestal gebruikt voor accounts die zich handmatig hebben geregistreerd.
 </p>
 <p>
     <b>locationWithoutCoordinatesAdded</b> wordt verstuurd naar de admin van het systeem als er een gebruiker is geweest die een locatie of praktijk heeft toegevoegd waar geen coordinaten van zijn gevonden.
@@ -127,7 +122,7 @@
     Vanuit een zoekresultaat kan een gebruiker ervoor kiezen om naar het 'verbetersuggestie' formulier te gaan. Vanaf dit formulier kan de gebruiker een verbetersuggestie sturen naar de admin's van het systeem. Deze suggesties kunnen van verschillende soorten zijn, een daarvan is het corrigeren van de titel van een locatie. Als de gebruiker hiervoor kiest zal de titel ook direct vervangen worden.
 </p>
 <p>
-    Via het formulier 'Voeg een zorgverlener toe' kan een gebruiker met genoeg rechten (doctor & employee) een locatie van een zorgverlener toevoegen. Er wordt dan wel een check gedaan of er niets wordt toegevoegd op een bekende plaats (gebaseerd op de coordinaten). Als dit het geval is wordt er gevraagd of de gebruiker het zeker weet en wordt de locatie(s) die al bekend zijn weergegeven. Daarbij krijgt de gebruiker ook een directe link naar het verbetersuggestie formulier van de al bestaande locaties.
+    Via het formulier 'Voeg een zorgverlener toe' kan een gebruiker met genoeg rechten een locatie van een zorgverlener toevoegen. Er wordt dan wel een check gedaan of er niets wordt toegevoegd op een bekende plaats (gebaseerd op de coordinaten). Als dit het geval is wordt er gevraagd of de gebruiker het zeker weet en wordt de locatie(s) die al bekend zijn weergegeven. Daarbij krijgt de gebruiker ook een directe link naar het verbetersuggestie formulier van de al bestaande locaties.
 </p>
 <hr/>
 <h2>Abonnement</h2>

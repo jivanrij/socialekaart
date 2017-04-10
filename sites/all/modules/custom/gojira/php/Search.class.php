@@ -39,7 +39,8 @@ class Search {
     /**
      * Gives you the searchresults html output
      *
-     * @param type $output
+     * @param $output
+     * @return string
      */
     public function getResultListHtml($output) {
 
@@ -56,12 +57,12 @@ class Search {
 
         if ($output['has_tags'] || isset($output['loc'])) {
             $h .= '<div id="search_results" class="rounded"><div>';
-//            $h .= '<button class="close_box" title="Sluiten"></button>';
             if ($output['resultcounttotal'] >= 1) {
                 $h .= '<p>';
                 $h .= t("Found the following locations with").' <span class="display_query">'.$output['s'].'</span> :';
                 $h .= '</p>';
                 $h .= '<ul class="page_0 rl">';
+
                 foreach ($output['searchResults'] as $result) {
 
                     // used array keys, made them shorter for load speed
@@ -160,15 +161,11 @@ class Search {
     public function getResultItemTableHtml($foundNode) {
 
         $add_label = '';
-        if (user_access(helper::PERMISSION_MODERATE_LOCATION_CONTENT)) {
-            $add_label = '<form id="new_label_form_%nid%" class="new_label_form"><div class="new_label_wrapper"><input class="new_label" value="label toevoegen" name="new_label_%nid%" id="new_label_%nid%" /><button class="add_new_label"><span>' . t('+') . '</span></button></div></form>';
+        if (user_access(helper::PERM_HUISARTS_LABELS)) {
+            $add_label = '<div class="add_label"><form id="new_label_form_%nid%" class="new_label_form"><div class="new_label_wrapper"><input class="new_label" value="label toevoegen" name="new_label_%nid%" id="new_label_%nid%" /><button class="add_new_label"><span>' . t('+') . '</span></button></div></form></div>';
         }
 
-        if (user_access(helper::PERMISSION_CORRECT_EXISTING_LOCATIONS)) {
-            $inform = '<i class="fa fa-wrench"></i> Gegevens onjuist/onvolledig? <a href="/inform&nid=%nid%" title="Informeer ons">Informeer ons</a> of <a href="/location/correct&nid=%nid%" title="wijzig hier">wijzig hier</a>.';
-        } else {
-            $inform = '<i class="fa fa-envelope-o"></i> Gegevens onjuist/onvolledig? <a href="/inform&nid=%nid%" title="Informeer ons">Informeer ons</a>.';
-        }
+        $inform = '<i class="fa fa-wrench"></i> Gegevens onjuist/onvolledig? <a href="/inform?nid=%nid%" title="Informeer ons">Informeer ons</a> of <a href="/locationcrud?nid=%nid%" title="wijzig hier">wijzig hier</a>.';
 
         $yournote = t('Your note:') . '<br />';
         $popupHtml = <<<EAT
@@ -182,10 +179,10 @@ class Search {
       %category%
     </div>
   </div>
-  %favorites%
   <div class="adres">
     %adres%
   </div>
+  %favorites%
   <div class="note">
     <i>{$yournote}</i>
     %note%
@@ -193,9 +190,7 @@ class Search {
   <br />
   %url%
   %labels%
-  <div class="add_label">
-    {$add_label}
-  </div>
+  {$add_label}
   <div class="inform">
     {$inform}
   </div>
@@ -207,10 +202,6 @@ EAT;
 
         $vocabulairyLoaded = null;
 
-        $favoriteClass = "no";
-        if (Favorite::getInstance()->isFavorite($foundNode->nid)) {
-            $favoriteClass = "yes";
-        }
 
         $url = helper::value($foundNode, GojiraSettings::CONTENT_TYPE_URL_FIELD);
         $email = helper::value($foundNode, GojiraSettings::CONTENT_TYPE_EMAIL_FIELD);
@@ -225,16 +216,24 @@ EAT;
             $email = '<a href="mailto:' . $email . '" id="mailto">' . $email . '</a>';
         }
 
-        $oCurrentLocation = Location::getCurrentLocationObjectOfUser();
+        $locationsetsHtml = '';
+        if (user_access(helper::PERM_MY_MAP)) {
+            $locationsetsHtml = '<li><a class="mymap"><i class="fa" aria-hidden="true"></i><span>In <i>Mijn kaart</i></span></a></li>';
+            $oCurrentLocation = Location::getCurrentLocationObjectOfUser();
 
-        $sFavorites = '';
-        if (user_access(helper::PERMISSION_PERSONAL_LIST)) {
-            $sOnList = 'false';
             if (Favorite::getInstance()->isFavorite($foundNode->nid, $oCurrentLocation->nid)) {
-                $sOnList = 'true';
+                $locationsetsHtml = '<li><a class="mymap checked"><i class="fa" aria-hidden="true"></i><span>In <i>Mijn kaart</i></span></a></li>';
             }
-            $sFavorites = '<div class="favorites_switch"><a class="in_favorites ' . $sOnList . '" title="Bepaal of deze zorgverlener in uw kaart zit.">In <i>Mijn kaart</i></a></div>';
         }
+        foreach(Locationsets::getInstance()->getViewableOrModeratedLocationsets() as $locationset) {
+            if ($locationset->hasLocation($foundNode->nid)) {
+                $locationsetsHtml .= sprintf('<li><a class="checked" ref="%s"><i class="fa" aria-hidden="true"></i><span>Weergeven in: <i>%s</i></span></a></li>', $locationset->nid, $locationset->title);
+            } else {
+                $locationsetsHtml .= sprintf('<li><a ref="%s"><i class="fa" aria-hidden="true"></i><span>Weergeven in:  <i>%s</i></span></a></li>', $locationset->nid, $locationset->title);
+            }
+        }
+        $locationsetsHtml = sprintf('<ul class="locationset_selector">%s</ul>', $locationsetsHtml);
+
 
         $category_txt = '';
         $category_nid = helper::value($foundNode, GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD, 'nid');
@@ -247,7 +246,10 @@ EAT;
             $category_txt = '<p>' . t('This locations has no category.') . '</p>';
         }
 
-        $labels = Labels::draw($foundNode) . Labels::drawMobileLabels($foundNode);
+        $labels = '';
+        if (user_access(helper::PERM_HUISARTS_LABELS)) {
+            $labels = Labels::draw($foundNode) . Labels::drawMobileLabels($foundNode);
+        }
 
         // format the adres
         $adres = '';
@@ -286,7 +288,7 @@ EAT;
             $url,
             $labels,
             $foundNode->nid,
-            $sFavorites,
+            $locationsetsHtml,
             $category_txt,
             nl2br(Location::getNote($foundNode->nid, ' <a title="' . t('Edit note') . '" class="fa fa-pencil" href="/editnote?nid=' . $foundNode->nid . '"></a>', t('Empty'))),
                 ), $popupHtml);
@@ -297,9 +299,12 @@ EAT;
     /**
      * Does the tags search
      *
-     * @param array $labels
+     * @param $labels
+     * @param null $search_type
+     * @param bool $onlyIds
+     * @return array
      */
-    public function doSearch($labels, $search_type = null) {
+    public function doSearch($labels, $search_type = null, $onlyIds = false) {
 
         // Clean up the labels
         // make from jantje, piet en klaas -=> jantje, piet, en, klaas
@@ -337,7 +342,12 @@ EAT;
             }
         }
 
-        $locations = self::findLocations($labels, variable_get('SEARCH_MAX_RESULT_AMOUNT'), $location, $limitToRegion, false);
+        // we only want node id's to compare, don't load the node & return all
+        if ($onlyIds) {
+            $locations = self::findLocations($labels, 99999999, $location, $limitToRegion, false);
+        } else {
+            $locations = self::findLocations($labels, variable_get('SEARCH_MAX_RESULT_AMOUNT'), $location, $limitToRegion, false);
+        }
 
         $locationNids = '0';
         foreach($locations as $location)
@@ -348,29 +358,39 @@ EAT;
         $foundNodes = array();
         foreach ($labels as $label) {
             $sql = <<<EOT
-SELECT searchword_nid.node_nid AS nid, searchword_nid.score AS score, searchword.word FROM searchword JOIN searchword_nid on (searchword.id = searchword_nid.searchword_id)
+SELECT node.title as title, searchword_nid.node_nid AS nid, searchword_nid.score AS score, searchword.word FROM searchword JOIN searchword_nid on (searchword.id = searchword_nid.searchword_id) JOIN node on (node.nid = searchword_nid.node_nid) 
 WHERE (word LIKE :label1 OR word LIKE :label2) AND searchword_nid.node_nid in ({$locationNids})
 EOT;
             $result = db_query($sql, array(':label1' => $label . '%', ':label2' => '%' . $label))->fetchAll();
             foreach ($result as $found) {
                 if (array_key_exists($found->nid, $foundNodes)) {
-                    $foundNodes[$found->nid]['score'] = (int) ($found->score + $foundNodes[$found->nid]['score']);
+                    if (!$onlyIds) {
+                        $foundNodes[$found->nid]['score'] = (int) ($found->score + $foundNodes[$found->nid]['score']);
+                    }
                 } else {
-                    $node = node_load($found->nid);
-                    $node->longitude = $locations[$found->nid]['longitude'];
-                    $node->latitude = $locations[$found->nid]['latitude'];
-                    $node->score = (int) $found->score;
-                    $node->distance = $locations[$found->nid]['distance'];
+                    if($onlyIds){
+                        $foundNodes[$found->nid] = $found->nid;
+                    } else {
+                        $node = new stdClass();
+                        $node->nid = $found->nid;
+                        $node->title = $found->title;
+                        $node->longitude = $locations[$found->nid]['longitude'];
+                        $node->latitude = $locations[$found->nid]['latitude'];
+                        $node->score = (int) $found->score;
+                        $node->distance = $locations[$found->nid]['distance'];
 
-                    $foundNodes[$found->nid] = $locations[$found->nid];
-                    $foundNodes[$found->nid]['score'] = $node->score;
-                    $foundNodes[$found->nid]['distance'] = $node->distance;
-                    $foundNodes[$found->nid]['node'] = $node;
+                        $foundNodes[$found->nid] = $locations[$found->nid];
+                        $foundNodes[$found->nid]['score'] = $node->score;
+                        $foundNodes[$found->nid]['distance'] = $node->distance;
+                        $foundNodes[$found->nid]['node'] = $node;
+                    }
                 }
             }
         }
 
-        usort($foundNodes,"sort_locations");
+        if(!$onlyIds) {
+            usort($foundNodes,"sort_locations");
+        }
 
         return $foundNodes;
     }
@@ -386,6 +406,7 @@ EOT;
      */
     public function findLocations($labels, $limit, $centerLocation = false, $limitByRadius = false, $filterFavorites = false)
     {
+
         if(!is_array($labels))
         {
             return array();
@@ -438,8 +459,10 @@ EOT;
         if($filterFavorites)
         {
             $gid = Group::getGroupId();
+            $currentLocation = Location::getCurrentLocationObjectOfUser();
+            $pid = $currentLocation->nid;
             $favJoin = "join group_location_favorite on (group_location_favorite.nid = node.nid)";
-            $favWhere = "group_location_favorite.gid = {$gid}";
+            $favWhere = " group_location_favorite.gid = {$gid} AND group_location_favorite.pid = {$pid} ";
         }
 
         $sql = <<<EOT
@@ -449,6 +472,7 @@ join field_data_field_visible_to_other_user on (node.nid = field_data_field_visi
 {$favJoin}
 WHERE {$matchAgainsts}
 AND {$sql_max_distance}
+AND node.status = 1 
 AND field_data_field_visible_to_other_user.field_visible_to_other_user_value = 1
 AND field_data_field_visible_to_other_user.bundle = 'location'
 AND field_data_field_visible_to_other_user.delta = 0
@@ -457,11 +481,6 @@ LIMIT {$limit}
 EOT;
 
         $result = db_query($sql);
-
-        // if (user_access('administer site configuration')) {
-        //     var_dump($result);
-        //     die;
-        // }
 
         $results = array();
         foreach($result as $loc)
@@ -607,7 +626,7 @@ EOT;
     /**
      * Get's you the text that needs to be put in the search index for the given node
      *
-     * @param stClass $node
+     * @param $oNode
      * @return array
      */
     public function getSearchNodeText($oNode) {
@@ -635,6 +654,13 @@ EOT;
                                 $aText[$sTerm] = $iLikes + 1;
                             }
                         }
+
+                        // get synonym, and add it with the same amount of likes
+                        $synonyms = taxonomy_get_children($aLabel['tid']);
+                        foreach($synonyms as $synonym){
+                            $aText[$synonym->name] = $aText[$sTerm];
+                        }
+
                     }
                 }
             }
@@ -767,21 +793,17 @@ EOT;
     public static function searchTypeIsSelected($type) {
         switch ($type) {
             case helper::SEARCH_TYPE_COUNTRY:
-                if (user_access(helper::PERMISSION_SEARCH_GLOBAL)) {
-                    if (self::getSearchTypeBasedOnQuery() == helper::SEARCH_TYPE_COUNTRY) {
-                        return true;
-                    }
+                if (self::getSearchTypeBasedOnQuery() == helper::SEARCH_TYPE_COUNTRY) {
+                    return true;
                 }
                 break;
             case helper::SEARCH_TYPE_LOCATIONSET:
-                if (user_access(helper::PERMISSION_LOCATIONSETS)) {
-                    if (self::getSearchTypeBasedOnQuery() == helper::SEARCH_TYPE_LOCATIONSET || Locationsets::onLocationset()) {
-                        return true;
-                    }
+                if (self::getSearchTypeBasedOnQuery() == helper::SEARCH_TYPE_LOCATIONSET || Locationsets::onLocationset()) {
+                    return true;
                 }
                 break;
             case helper::SEARCH_TYPE_OWNLIST:
-                if (user_access(helper::PERMISSION_PERSONAL_LIST)) {
+                if (user_access(helper::PERM_MY_MAP)) {
                     if (self::getSearchTypeBasedOnQuery() == helper::SEARCH_TYPE_OWNLIST && Locationsets::onOwnMap() && !Locationsets::onLocationset()) {
                         return true;
                     }
@@ -797,12 +819,6 @@ EOT;
     }
 
     public static function searchInOwnMap($tags) {
-//        $currentPractice = Location::getCurrentLocationNodeObjectOfUser();
-//        $ownlistLocations = Favorite::getInstance()->getAllFavoriteLocations($currentPractice->nid);
-//
-//        $foundNodes = array();
-//        $nidsSql = '0';
-//
         if (!is_array($tags)) {
             $tags = explode(' ', $tags);
         }
@@ -815,56 +831,63 @@ EOT;
             }
         }
 
-        $foundLocations = Search::getInstance()->findLocations($cleanTags, 1000, false, false, true);
+        $filteredCleanTags = helper::cleanArrayWithBlacklist($cleanTags);
+
+        $foundLocations = Search::getInstance()->findLocations($filteredCleanTags, 1000, false, false, true);
 
         foreach ($foundLocations as $foundLocation) {
             $foundLocation['node'] = node_load($foundLocation['nid']);
         }
 
-//        foreach ($ownlistLocations as $ownlistLocation) {
-//            if (array_key_exists($ownlistLocation->nid, $foundLocations)) {
-//                $return[$ownlistLocation->nid] = $foundLocations;
-//            }
-//        }
-
-//        // get an array with all the nids related to the searchwords based on the labels
-//        $nodeCounter = array();
-//        $foundNodes = array();
-//        foreach ($cleanTags as $tag) {
-//            $sql = "SELECT searchword_nid.node_nid AS nid, searchword.word AS word, searchword_nid.score AS score FROM {searchword} JOIN {searchword_nid} on (searchword.id = searchword_nid.searchword_id) WHERE word LIKE :label1 OR word LIKE :label2";
-//            $result = db_query($sql, array(':label1' => $tag . '%', ':label2' => '%' . $tag))->fetchAll();
-//            foreach ($result as $found) {
-//                $nodeCounter[$tag . $found->nid] = true;
-//                $foundNodes[$found->nid] = $found->nid;
-//            }
-//        }
-//
-//        // clean the resultset of all nodes that do not have hits on all the labels
-//        // this part makes a AND function of the search
-//        foreach ($foundNodes as $nid => $foundNode) {
-//            foreach ($cleanTags as $tag) {
-//                if (!isset($nodeCounter[$tag . $nid])) {
-//                    // node has no hits on one of the labels, remove it
-//                    if (isset($foundNodes[$nid])) {
-//                        unset($foundNodes[$nid]);
-//                    }
-//                }
-//            }
-//        }
-//
-//        $return = array();
-//        foreach ($ownlistLocations as $ownlistLocation) {
-//            if (array_key_exists($ownlistLocation->nid, $foundNodes)) {
-//                $loc = Location::getLocationObjectOfNode($ownlistLocation->nid);
-//                if ($loc) {
-//                    $ownlistLocation->latitude = $loc->latitude;
-//                    $ownlistLocation->longitude = $loc->longitude;
-//                }
-//                $return[$ownlistLocation->nid] = $ownlistLocation;
-//            }
-//        }
-
         return $foundLocations;
+    }
+
+    /**
+     * Changes all the synonyms in the given array with the main terms (depricated)
+     *
+     * @param $terms
+     * @return array
+     */
+    private function syncTermsWithSynonyms($terms)
+    {
+        exit;
+        $return = array();
+
+        foreach($terms as $key=>$text) {
+            $replaceWithParent = array();
+
+            // get all the tid's of all terms with this text
+            $allTermsWithBasename = taxonomy_get_term_by_name($text, \GojiraSettings::VOCABULARY_LOCATION);
+            $allTermsWithBasenameTids = array_keys($allTermsWithBasename);
+
+            // for each term with the given text
+            foreach($allTermsWithBasenameTids as $allTermsWithBasenameTid) {
+                // get all the parents (main terms, so text is a synonym)
+                $parentTerms = taxonomy_get_parents($allTermsWithBasenameTid);
+
+                // store these main terms
+                foreach($parentTerms as $parentTerm) {
+                    $replaceWithParent[$text][] = $parentTerm->name;
+                }
+            }
+
+            if(count($replaceWithParent[$text]) > 1) {
+                watchdog(WATCHDOG_WARNING, sprintf('Taxonomyterm %s is a synonym, but is used under multiple main terms. Only one is used in the search because of the AND query.', $text));
+            }
+
+            if (array_key_exists($text, $replaceWithParent)) {
+                // this text is a synonym, let's add one main text
+                // only add ONE main text, because this array is going to be used in a AND query
+                foreach($replaceWithParent[$text] as $name) {
+                    $return[$text] = $name;
+                }
+            } else {
+                // this text is no synonym
+                $return[$text] = $text;
+            }
+        }
+
+        return $return;
     }
 }
 

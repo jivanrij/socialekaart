@@ -1,11 +1,13 @@
 <?php
 
-class Locationsets {
+class Locationsets
+{
 
     public static $instance = null;
     public $mapsAvailable = null;
 
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (is_null(self::$instance)) {
             self::$instance = new Locationsets();
         }
@@ -13,23 +15,12 @@ class Locationsets {
     }
 
     /**
-     * Tells you if a user can access predefined maps
+     * Get's you the current Locationset node
      *
-     * @return boolean
+     * @return stdClass
      */
-    public function userHasRightToLocationsets() {
-        if (user_access(helper::PERMISSION_LOCATIONSETS)) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Get's you the current node
-     *
-     * @return node
-     */
-    public function getCurrentLocationset() {
+    public function getCurrentLocationset()
+    {
         if (arg(0) == 'node' && is_numeric(arg(1))) {
             $nid = arg(1);
             $node = node_load($nid);
@@ -47,7 +38,8 @@ class Locationsets {
      *
      * @return boolean
      */
-    public static function onOwnMap() {
+    public static function onOwnMap()
+    {
         if (arg(0) == 'ownlist') {
             return true;
         }
@@ -59,7 +51,8 @@ class Locationsets {
      *
      * @return boolean
      */
-    public static function onLocationset() {
+    public static function onLocationset()
+    {
         if (arg(0) == 'node' && is_numeric(arg(1))) {
             $nid = arg(1);
             $node = node_load($nid);
@@ -77,7 +70,8 @@ class Locationsets {
      *
      * @return boolean
      */
-    public function getCurrentLocationsetTitle() {
+    public function getCurrentLocationsetTitle()
+    {
         if (self::onLocationset()) {
             if (arg(0) == 'node' && is_numeric(arg(1))) {
                 $nid = arg(1);
@@ -97,19 +91,20 @@ class Locationsets {
      * @param integer category to filter on | optional
      * @return type
      */
-    public function getLocations($nid = null, $iFilterCategoryId = null, $sFilterWithTags = '') {
-
+    public function getLocations($nid = null, $iFilterCategoryId = null, $sFilterWithTags = '')
+    {
         $filteredNodes = array();
-        if (trim($sFilterWithTags) != '') {
+        if (trim($sFilterWithTags) !== '') {
             $tags = explode(' ', urldecode($sFilterWithTags));
             $filteredTags = array();
             foreach ($tags as $tag) {
                 $tag = trim($tag);
-                if ($tag != "") {
+                if ($tag !== '') {
                     $filteredTags[] = $tag;
                 }
             }
-            $filteredNodes = Search::getInstance()->doSearch($filteredTags, helper::SEARCH_TYPE_COUNTRY);
+
+            $filteredNodes = Search::getInstance()->doSearch($filteredTags, helper::SEARCH_TYPE_COUNTRY, true);
         }
 
         if (is_null($nid)) {
@@ -127,31 +122,32 @@ class Locationsets {
             foreach ($aField[LANGUAGE_NONE] as $location) {
                 $oNode = node_load($location['nid']);
                 if ($oNode) {
-
                     if ($sFilterWithTags) {
                         if (array_key_exists($oNode->nid, $filteredNodes)) {
-                            $aReturn[] = $oNode;
+                            $aReturn[$oNode->nid] = $oNode;
                         }
                     } else {
                         if ($iFilterCategoryId) { // filter on category
                             $iThisCategoryId = helper::value($oNode, GojiraSettings::CONTENT_TYPE_CATEGORY_FIELD, 'nid');
                             if ($iFilterCategoryId == $iThisCategoryId) {
-                                $aReturn[] = $oNode;
+                                $aReturn[$oNode->nid] = $oNode;
                             }
                         } else {
-                            $aReturn[] = $oNode;
+                            $aReturn[$oNode->nid] = $oNode;
                         }
                     }
                 }
             }
         }
+
         return $aReturn;
     }
 
     /**
      * Get's a set of maps to use for the user
      */
-    public function getMapSetsForCurrentUser($uid = false) {
+    public function getMapSetsForCurrentUser($uid = false)
+    {
 
         if (!$uid) {
             global $user;
@@ -160,18 +156,23 @@ class Locationsets {
 
         if (is_null($this->mapsAvailable)) {
             $return = array();
-            $rLocationsets = array();
-            if ($this->userHasRightToLocationsets()) {
-                $oLocation = Location::getCurrentLocationNodeObjectOfUser();
 
-                $locationsets = db_query("select entity_id as nid from field_data_field_setusers where bundle = 'locationset' and field_setusers_uid = :uid", array('uid'=>$uid))->fetchAll();
+            $locationsets = db_query("select entity_id as nid from field_data_field_setusers where bundle = 'locationset' and field_setusers_uid = :uid", array('uid'=>$uid))->fetchAll();
+            foreach ($locationsets as $locationset) {
 
-                foreach ($locationsets as $locationset) {
-                    if (self::userCanAssessLocationset($locationset->nid)) {
-                        $return[] = node_load($locationset->nid);
-                    }
+                if (self::userCanAssessLocationset($locationset->nid)) {
+                    $return[$locationset->nid] = node_load($locationset->nid);
                 }
             }
+
+            $locationsets = db_query("select entity_id as nid from field_data_field_setmoderators where bundle = 'locationset' and field_setmoderators_uid = :uid", array('uid'=>$uid))->fetchAll();
+            foreach ($locationsets as $locationset) {
+
+                if (self::userCanAssessLocationset($locationset->nid)) {
+                    $return[$locationset->nid] = node_load($locationset->nid);
+                }
+            }
+
             $this->mapsAvailable = $return;
         }
 
@@ -183,14 +184,16 @@ class Locationsets {
      *
      * @param type $nid
      */
-    public function userCanAssessLocationset($nid) {
+    public function userCanAssessLocationset($nid)
+    {
         return true;
     }
 
     /**
      * Get's the categories from an set of locations in an array
      */
-    public function getCategoriesFromLocationsArray($aLocations) {
+    public function getCategoriesFromLocationsArray($aLocations)
+    {
         $aCategories = array();
         foreach ($aLocations as $oLocation) {
             $oCatagory = Category::getCategoryOfLocation($oLocation);
@@ -204,7 +207,8 @@ class Locationsets {
      *
      * @return array
      */
-    public function getOwnMapLocations() {
+    public function getOwnMapLocations()
+    {
         if (is_null($this->ownMapLocations)) {
             $ownMapLocations = array();
             $currentPractice = Location::getCurrentLocationNodeObjectOfUser();
@@ -228,4 +232,49 @@ class Locationsets {
         return $this->ownMapLocations;
     }
 
+    /*
+    * Returns a resultset of all locationsets the user can manage
+    */
+    public function getModeratedLocationsets()
+    {
+        global $user;
+
+        $locationsets = array();
+
+        $resultset = db_query("select node.nid from node join field_data_field_setmoderators on (field_data_field_setmoderators.entity_id = node.nid) where field_setmoderators_uid = :uid and node.status = 1", array(':uid'=>$user->uid));
+        foreach ($resultset as $result) {
+            $locationsets[] = \Models\Locationset::load($result->nid);
+        }
+        return $locationsets;
+    }
+
+    /*
+    * Returns a resultset of all locationsets the user can view
+    */
+    public function getViewableLocationsets()
+    {
+        global $user;
+        $resultset = db_query("select node.nid, node.title from node join field_data_field_setusers on (field_data_field_setusers.entity_id = node.nid) where field_setusers_uid = :uid", array(':uid'=>$user->uid));
+        foreach ($resultset as $result) {
+            $locationsets[] = \Models\Locationset::load($result->nid);
+        }
+        return $locationsets;
+    }
+
+    /*
+    * Returns all the locationsets the current user is moderator or viewer of
+    */
+    public function getViewableOrModeratedLocationsets()
+    {
+        $return = array();
+        $viewable = $this->getViewableLocationsets();
+        $moderatable = $this->getModeratedLocationsets();
+        foreach ($viewable as $view) {
+            $return[$view->nid] = $view;
+        }
+        foreach ($moderatable as $moderate) {
+            $return[$moderate->nid] = $moderate;
+        }
+        return $return;
+    }
 }

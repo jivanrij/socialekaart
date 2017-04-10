@@ -6,15 +6,15 @@ function showtutorial() {
   global $user;
   $user = user_load($user->uid);
   $master = false;
-  if(in_array(helper::ROLE_EMPLOYER_MASTER, $user->roles) || in_array('administrator', $user->roles)){
+  if(in_array(helper::ROLE_HUISARTS, $user->roles) || in_array('administrator', $user->roles)){
     $master = true;
   }
-    
+
   $iStep = 1;
   if(isset($_GET['step'])){
     $iStep = $_GET['step'];
   }
-  
+
   // setting the defaults for the buttons
   $back_button = '<a class="gbutton rounded noshadow" ref="%back_ref%" id="back_tutorial_button" title="'.t('Step back').'"><span>'.t('Step back').'</span></a>';
   $close_button = '<a class="add_margin_left gbutton rounded noshadow left" id="close_tutorial_button" ref="quit" title="'.t('Stop tutorial').'"><span>'.t('Stop tutorial').'</span></a>';
@@ -68,15 +68,15 @@ function showtutorial() {
   // combine the ref's on the defaults
   $back_button = str_replace('%back_ref%', $back_ref, $back_button);
   $forward_button = str_replace('%forward_ref%', $forward_ref, $forward_button);
-  
+
   //$text = helper::getText('TUTORIAL_TEXT_STEP_'.strtoupper($iStep));
-  
+
   //include getcwd().'/sites/all/modules/custom/gojira/templates/questiontopics/'.$sCurrentUrl.'.html';
 
   $text = file_get_contents ( getcwd().'/sites/all/modules/custom/gojira/templates/tutorial/step_'.$iStep.'.html', true);
-  
+
   $text .= '<div class="gbutton_wrapper">'.$back_button.$close_button.$forward_button.'</div>';
-          
+
   echo $text;
   exit;
 }

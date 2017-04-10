@@ -1,4 +1,4 @@
-name = Gojira
+name = SocialeKaart.care
 description = A glue module for creating the gojira system
 package = Other
 core = 7.x
@@ -16,3 +16,4 @@ dependencies[] = phpmailer
 dependencies[] = user_reference
 dependencies[] = mailchimp
 dependencies[] = auto_login_url
+dependencies[] = entityreference

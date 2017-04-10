@@ -6,18 +6,6 @@
     <hr />
     <div id="faq_sections">
         <section>
-            <h1>Hoe kan ik mijn assistent of waarnemer toevoegen? *</h1>
-            <p class="accordion_content">
-                Via het menu <i>Account/Gebruikers</i> kunt u deze (en andere gebruikers binnen uw praktijk) toevoegen. U kunt lees- en/of schrijfrechten toekennen. Leesrechten geeft de gebruiker de mogelijkheid zorgverleners te zoeken en gebruik te maken van <i>mijn kaart</i>. Met schrijfrechten heeft de gebruiker de mogelijkheid de gegevens te beheren. Dit houdt in: zorgverleners toevoegen, het toekennen van kenmerken aan de zorgverleners en punten hieraan toekennen.
-            </p>
-        </section>
-        <section>
-            <h1>Wat kunnen de gebruikers die ik aanmaak?</h1>
-            <p class="accordion_content">
-                Zij kunnen dezelfde gegevens als u inzien en eventueel aanpassen (afhankelijk van de rechten die u toekent). Deze gegevens zijn: A) uw sociale kaart(en) B) uw notities op de zorgverleners C) algemeen zoeken in het systeem.
-            </p>
-        </section>
-        <section>
             <h1>Hoe zoek ik naar zorgverleners?</h1>
             <p class="accordion_content">
                 Typ één of meerdere zoektermen in de zoekbalk en klik op het vergrootglas (of druk op Enter). Standaard wordt er gezocht binnen een straal van enkele kilometers vanaf uw praktijk.<br />
@@ -73,15 +61,12 @@
             <h1>Waar worden e-mailadressen voor gebruikt?</h1>
             <p class="accordion_content">
                 E-mailadressen die u op een zorgverlener opslaat worden weergegeven bij de zoekresultaten.
-                <br />
-                <br />
-                E-mailadressen die u opgeeft voor nieuwe gebruikers zullen alleen gebruikt worden om deze nieuwe gebruikers informatie te sturen over hun account.
             </p>
         </section>
         <section>
             <h1>Wie kan de notitie zien die ik toevoeg aan een zorgverlener?</h1>
             <p class="accordion_content">
-                Alleen u en de gebruikers die u eventueel aanmaakt.
+                Alleen u.
             </p>
         </section>
         <section>
@@ -104,7 +89,6 @@
                 Met een abonnement kunt u:
             </p>
             <ul class="accordion_content">
-                <li>uw assistent en/of waarnemend huisarts toegang geven tot socialekaart.care</li>
                 <li>meerdere praktijken opvoeren om vanuit te werken</li>
                 <li>uw eigen sociale kaart beheren</li>
             </ul>

@@ -46,12 +46,6 @@ function gojira_configuration_form($form, &$form_state) {
         '#description' => t('Force a custom error page. /error.php'),
     );
 
-    $form['cron']['cron_remove_unlinked_tax_terms'] = array(
-        '#title' => t('Remove all the unused taxonomy terms (labels).'),
-        '#type' => 'select',
-        '#options' => array(0 => 'no', 1 => 'yes'),
-        '#default_value' => variable_get('cron_remove_unlinked_tax_terms', 1),
-    );
     $form['cron']['cron_update_search_index_where_needed'] = array(
         '#title' => t('Updates the search index of changed nodes.'),
         '#type' => 'select',
@@ -130,6 +124,12 @@ function gojira_configuration_form($form, &$form_state) {
         '#default_value' => variable_get('SUBSCRIPTION_PERIOD', 365),
         '#description' => 'Het aantal dagen van de lengte van een abonnement.'
     );
+    $form['algemene_instellingen']['mail_prefix'] = array(
+        '#title' => 'Mail subject prefix',
+        '#type' => 'textfield',
+        '#default_value' => variable_get('mail_prefix', ''),
+        '#description' => 'Prefix voor de HTML e-mail templates. Gebruik in demo & test omgevingen.'
+    );
     $form['teksten']['meta_global_description'] = array(
         '#title' => t('Meta description on the homepage'),
         '#type' => 'textfield',
@@ -173,21 +173,6 @@ function gojira_configuration_form($form, &$form_state) {
         '#type' => 'textfield',
         '#default_value' => variable_get('MOLLIE_API_KEY', ''),
     );
-    // $form['api']['IDEAL_MERCHANT_ID'] = array(
-    //     '#title' => t('iDeal merchant ID'),
-    //     '#type' => 'textfield',
-    //     '#default_value' => variable_get('IDEAL_MERCHANT_ID', '2836'),
-    // );
-    // $form['api']['IDEAL_MERCHANT_KEY'] = array(
-    //     '#title' => t('iDeal merchant key'),
-    //     '#type' => 'textfield',
-    //     '#default_value' => variable_get('IDEAL_MERCHANT_KEY', 'aOEUoPH'),
-    // );
-    // $form['api']['IDEAL_MERCHANT_SECRET'] = array(
-    //     '#title' => t('iDeal merchant secret'),
-    //     '#type' => 'textfield',
-    //     '#default_value' => variable_get('IDEAL_MERCHANT_SECRET', 'wt0OZLRYHkZiln4dmftgker3k'),
-    // );
     $form['api']['mapbox_accesstoken'] = array(
         '#title' => t('Mapbox access token'),
         '#type' => 'textfield',
@@ -215,100 +200,6 @@ function gojira_configuration_form($form, &$form_state) {
         '#default_value' => variable_get('CENTER_COUNTRY_LONGITUDE', 5.6300203),
         '#description' => 'Deze longitude wordt gebruikt als er geen bekend is. Voorbeeld: <i>5.6300203</i>.'
     );
-    $form['email']['gojira_invoice_email'] = array(
-        '#title' => t('Invoice e-mail template'),
-        '#type' => 'textarea',
-        '#default_value' => variable_get('gojira_invoice_email'),
-        '#description' => 'TEXT e-mail<br />Invoice e-mail template.<br />
-  You can use the following replacement tags:<br />
-  %doctor% <- The name of the doctor.<br />
-  %invoice_id% <- Invoice id.'
-    );
-    $form['email']['gojira_new_employee_email'] = array(
-        '#title' => t('New Employee e-mail template'),
-        '#type' => 'textarea',
-        '#default_value' => variable_get('gojira_new_employee_email'),
-        '#description' => 'TEXT e-mail<br />You can use the following replacement tags:<br />
-  %url% <- login link for the passwordreset<br />
-  %doctor% <- name of the doctor<br />
-  %name% <- name of new user<br />'
-    );
-    $form['email']['gojira_subscription_expire_warning'] = array(
-        '#title' => t('Subscription is about to expire warning'),
-        '#type' => 'textarea',
-        '#default_value' => variable_get('gojira_subscription_expire_warning'),
-        '#description' => 'HTML e-mail<br />This is the template of the e-mail that get\'s send when the subscription is going to expire in 30 days from now. This template it HTML.<br />
-        %title% <- name of the doctor'
-    );
-    $form['email']['gojira_subscription_ended'] = array(
-        '#title' => t('Subscription is ended'),
-        '#type' => 'textarea',
-        '#default_value' => variable_get('gojira_subscription_ended'),
-        '#description' => 'TEXT e-mail<br />This is the template of the e-mail that get\'s send to a doctor when the subscription ended. This template it HTML.<br />
-  %doctor% <- name of the doctor<br />'
-    );
-    $form['email']['gojira_new_employer_email'] = array(
-        '#title' => t('New Employer e-mail template'),
-        '#type' => 'textarea',
-        '#default_value' => variable_get('gojira_new_employer_email'),
-        '#description' => 'TEXT e-mail<br />You can use the following replacement tags:<br />
-  %url% <- login link for the passwordreset<br />
-  %doctor% <- name of the doctor<br />
-  %name% <- name of new user<br />'
-    );
-    $form['email']['gojira_unsubscribe_user'] = array(
-        '#title' => t('Unsbscribe user e-mail template'),
-        '#type' => 'textarea',
-        '#default_value' => variable_get('gojira_unsubscribe_user'),
-        '#description' => 'TEXT e-mail<br />E-mail template of the e-mail that get\'s send when a user get\'s unsubscribed.<br />
-  You can use the following replacement tags:<br />
-  %doctor% <- name of the doctor<br />
-  %name% <- name of new user<br />'
-    );
-    $form['email']['gojira_subscribe_activate_user'] = array(
-        '#title' => t('Activate subscribed user'),
-        '#type' => 'textarea',
-        '#default_value' => variable_get('gojira_subscribe_activate_user'),
-        '#description' => 'TEXT e-mail<br />E-mail template of the e-mail that get\'s send when a user get\'s activated after a subscription after the account got downgraded.<br />
-  You can use the following replacement tags:<br />
-  %doctor% <- name of the doctor<br />
-  %name% <- name of new user<br />'
-    );
-
-//    $sBody = <<<EOT
-//Beste,
-//
-//Deze e-mail ontvangt u omdat wij denken dat u zojuist heeft geprobeerd in te loggen op SocialeKaart.care vanuit uw Haweb.nl omgeving.
-//
-//We hebben alleen geconstateerd dat u voor beide omgevingen 2 losse accounts heeft met hetzelfde e-mailadres. Wilt u toch graag met 1 en hetzelfde account inloggen op beide omgevingen? Dan kunt u het volgende doen:
-//1. Pas uw e-mailadres aan van uw SocialeKaart.care account.
-//2. Log daarna uit uit SocialeKaart.care en log in in Haweb.nl.
-//3. Klik nu in Haweb.nl op de link naar SocialeKaart.care, er zal nu een nieuwe gekoppelde account in SocialeKaart.care aangemaakt worden.
-//4. Wij kunnen dan als u wilt alle gegevens van uw originele SocialeKaart.care account overzetten naar uw nieuwe account. Als u ons een e-mail stuurd met dit verzoek zetten wij voor u graag deze gegevens over. U kunt ons met dit verzoek e-mailen op info@socialekaart.care.
-//
-//We hopen u hiermee voldoende te hebben ingelicht. Als u hier nog vragen over hebt horen wij dit graag.
-//
-//Met vriendelijke groet,
-//Het team van SocialeKaart.care
-//info@socialekaart.care
-//EOT;
-
-    $form['email']['gojira_double_account_login_warning'] = array(
-        '#title' => t('Double account warning'),
-        '#type' => 'textarea',
-        '#default_value' => variable_get('gojira_double_account_login_warning', ''),
-        '#description' => 'TEXT e-mail<br />This e-mail get\'s send to a user when he try\'s to login from Haweb and there is allready an account with that e-mailadres in SocialeKaart.care<br />'
-    );
-
-    $form['email']['account_activated_by_admin'] = array(
-        '#title' => t('Account activated by admin'),
-        '#type' => 'textarea',
-        '#default_value' => variable_get('account_activated_by_admin', 'Your account has been activated'),
-        '#description' => 'HTML e-mail<br />This mail is send to a user when the admin activates his/her account.<br />
-          You can use the following replacement tags:<br />
-          %url% <- the url of the password reset link.<br />'
-    );
-
     $form['submit_down_under'] = array(
         '#type' => 'submit',
         '#value' => t('Submit'),
@@ -318,23 +209,13 @@ function gojira_configuration_form($form, &$form_state) {
 }
 
 function gojira_configuration_form_submit($form, &$form_state) {
-    variable_set('gojira_unsubscribe_user', $_POST['gojira_unsubscribe_user']);
-    variable_set('gojira_subscribe_activate_user', $_POST['gojira_subscribe_activate_user']);
-    variable_set('gojira_new_employer_email', $_POST['gojira_new_employer_email']);
-    variable_set('gojira_new_employee_email', $_POST['gojira_new_employee_email']);
-    variable_set('gojira_invoice_email', $_POST['gojira_invoice_email']);
     variable_set('gojira_blacklist_search_words', $_POST['gojira_blacklist_search_words']);
     variable_set('MOLLIE_API_KEY', $_POST['MOLLIE_API_KEY']);
-    // variable_set('IDEAL_MERCHANT_ID', $_POST['IDEAL_MERCHANT_ID']);
-    // variable_set('IDEAL_MERCHANT_KEY', $_POST['IDEAL_MERCHANT_KEY']);
-    // variable_set('IDEAL_MERCHANT_SECRET', $_POST['IDEAL_MERCHANT_SECRET']);
     variable_set('SUBSCRIPTION_PERIOD', $_POST['SUBSCRIPTION_PERIOD']);
     variable_set('CENTER_COUNTRY_LATITUDE', $_POST['CENTER_COUNTRY_LATITUDE']);
     variable_set('CENTER_COUNTRY_LONGITUDE', $_POST['CENTER_COUNTRY_LONGITUDE']);
     variable_set('SEARCH_MAX_RESULT_AMOUNT', $_POST['SEARCH_MAX_RESULT_AMOUNT']);
     variable_set('gojira_amount_calls_to_google', $_POST['gojira_amount_calls_to_google']);
-    variable_set('gojira_subscription_expire_warning', $_POST['gojira_subscription_expire_warning']);
-    variable_set('gojira_subscription_ended', $_POST['gojira_subscription_ended']);
     variable_set('gojira_check_coordinates_on_update_node', $_POST['gojira_check_coordinates_on_update_node']);
     variable_set('gojira_mailchimp_list_key', $_POST['gojira_mailchimp_list_key']);
     variable_set('mandrill_api_key', $_POST['mandrill_api_key']);
@@ -344,11 +225,9 @@ function gojira_configuration_form_submit($form, &$form_state) {
     variable_set('meta_global_tags', $_POST['meta_global_tags']);
     variable_set('mapbox_accesstoken', $_POST['mapbox_accesstoken']);
     variable_set('mapbox_projectid', $_POST['mapbox_projectid']);
-    variable_set('account_activated_by_admin', $_POST['account_activated_by_admin']);
-    variable_set('gojira_double_account_login_warning', $_POST['gojira_double_account_login_warning']);
+    variable_set('mail_prefix', $_POST['mail_prefix']);
     variable_set('mailadres_information_inform_admin', $_POST['mailadres_information_inform_admin']);
     variable_set('mailadres_helpdesk', $_POST['mailadres_helpdesk']);
-    variable_set('cron_remove_unlinked_tax_terms', $_POST['cron_remove_unlinked_tax_terms']);
     variable_set('cron_update_search_index_where_needed', $_POST['cron_update_search_index_where_needed']);
     variable_set('cron_check_subscriptions', $_POST['cron_check_subscriptions']);
     variable_set('cron_restore_backup_locations', $_POST['cron_restore_backup_locations']);

@@ -47,10 +47,6 @@ jQuery(function () {
             bindLocationlist();
         }
 
-        if (Drupal.settings.gojira.page == 'employeelist') {
-            bindEmployeelist();
-        }
-
         if (Drupal.settings.gojira.page == 'settings') {
             bindLocationFinder();
             bindSettings();

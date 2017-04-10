@@ -10,4 +10,6 @@ function setfavorite() {
   } else {
     Favorite::getInstance()->setFavorite($_GET['nid']);
   }
+  echo 'success';
+  exit;
 }

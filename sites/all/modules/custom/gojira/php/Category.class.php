@@ -63,6 +63,19 @@ class Category {
     return $nid;
   }
 
+    /**
+    *  Get's all the catagories titles by nid's
+    **/
+  public static function getCategoryTitles()
+  {
+      $cat_options = array();
+      $categorys = db_query("select title, nid from node where type = 'category' and status = 1 and title != 'Huisarts' order by title");
+      foreach ($categorys as $category) {
+          $cat_options[$category->nid] = $category->title;
+      }
+      return $cat_options;
+  }
+
 
 
   /**

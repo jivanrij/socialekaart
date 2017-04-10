@@ -156,7 +156,7 @@ function bindLabelRemoveButtons(selector) {
         var nid = jQuery(element).closest('div.search_result_wrapper').attr('id').replace('location_', '');
 
         jQuery.ajax({
-            url: '/?q=ajax/removelabel&nid=' + nid + '&tid=' + tid,
+            url: '/?q=ajax/removelabel&nid=' + nid + '&tid=' + tid + '&mid=' + Drupal.settings.gojira.selected_map,
             type: 'POST',
             success: function (data) {
                 jQuery(element).closest('div.label_wrapper').remove();
@@ -202,8 +202,11 @@ function bindLabelButtons(selector) {
                 bindLabelRemoveButtons('#label_' + tid + ' button.labelremovebutton', '#location_' + nid);
             }
 
+            // 0 i'm viewing the global map, -1 my map, and > 0 means viewing a locationset
+            //Drupal.settings.gojira.selected_map
+
             jQuery.ajax({
-                url: '/?q=ajax/unlikelabel&nid=' + nid + '&tid=' + tid,
+                url: '/?q=ajax/unlikelabel&nid=' + nid + '&tid=' + tid + '&mid=' + Drupal.settings.gojira.selected_map,
                 type: 'POST',
                 success: function (data) {
                     focusLocation(nid);
@@ -225,8 +228,11 @@ function bindLabelButtons(selector) {
                 jQuery(' #label_' + tid + ' button.labelremovebutton', '#location_' + nid).remove();
             }
 
+            // 0 i'm viewing the global map, -1 my map, and > 0 means viewing a locationset
+            //Drupal.settings.gojira.selected_map
+
             jQuery.ajax({
-                url: '/?q=ajax/likelabel&nid=' + nid + '&tid=' + tid,
+                url: '/?q=ajax/likelabel&nid=' + nid + '&tid=' + tid + '&mid=' + Drupal.settings.gojira.selected_map,
                 type: 'POST',
                 success: function (data) {
                 },
@@ -242,38 +248,46 @@ function bindLabelButtons(selector) {
  * This is the favorite switch on the location detail form
  */
 function bindFavoriteSwitch() {
-    jQuery(".in_favorites").click(function (e) {
-        e.preventDefault();
-        var button = this;
-        var nid = jQuery(this).closest('div.search_result_wrapper').attr('id').replace('location_', '');
 
-        if (jQuery(this).hasClass('true')) {
-            // turn it off
-            jQuery.ajax({
-                url: '/?q=ajax/setfavorite&turn=off&nid=' + nid,
-                type: 'POST',
-                success: function (data) {
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    somethingWrongMessage();
-                }
-            });
-            jQuery(button).removeClass('true');
-            jQuery(button).addClass('false');
-        } else {
-            // turn it on
-            jQuery.ajax({
-                url: '/?q=ajax/setfavorite&turn=on&nid=' + nid,
-                type: 'POST',
-                success: function (data) {
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    somethingWrongMessage();
-                }
-            });
-            jQuery(button).removeClass('false');
-            jQuery(button).addClass('true');
+    jQuery('ul.locationset_selector a').on('click', function(e){
+        e.preventDefault();
+        var element = this;
+        var locationNid = jQuery(element).closest('div.search_result_wrapper').attr('id').replace('location_', '');
+        var locationsetNid = jQuery(element).attr('ref');
+
+        var url = '';
+
+        if (jQuery(element).hasClass('checked')) {
+            if(jQuery(element).hasClass('mymap')) {
+                // set favorite off
+                url = '/?q=ajax/setfavorite&turn=off&nid=' + locationNid;
+            }else{
+                url = '/?q=ajax/setonlocationset&turn=off&location=' + locationNid + '&locationset=' + locationsetNid;
+                // set locationset off
+            }
+        }else{
+            if(jQuery(element).hasClass('mymap')) {
+                // set favorite on
+                url = '/?q=ajax/setfavorite&turn=on&nid=' + locationNid;
+            }else{
+                // set locationset on
+                url = '/?q=ajax/setonlocationset&turn=on&location=' + locationNid + '&locationset=' + locationsetNid;
+            }
         }
+        jQuery(element).toggleClass('checked');
+        jQuery.ajax({
+            url: url,
+            type: 'POST',
+            success: function (data) {
+                if(data != 'success'){
+                    jQuery(element).toggleClass('checked');
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                jQuery(element).toggleClass('checked');
+            }
+        });
+
     });
 }
 
@@ -285,8 +299,11 @@ function addNewLabel(element) {
         return;
     }
 
+    // 0 i'm viewing the global map, -1 my map, and > 0 means viewing a locationset
+    //Drupal.settings.gojira.selected_map
+
     jQuery.ajax({
-        url: '/?q=ajax/savenewlabel&nid=' + nid + '&label=' + label,
+        url: '/?q=ajax/savenewlabel&nid=' + nid + '&label=' + label + '&mid=' + Drupal.settings.gojira.selected_map,
         type: 'POST',
         dataType: 'json',
         success: function (data) {
@@ -306,6 +323,10 @@ function addNewLabel(element) {
 
 // draws the default map with the self location on it
 function setupMapDefault() {
+
+    if (jQuery('#map').length == 0) {
+        return;
+    }
 
     window.blackIcon = L.icon({
         iconUrl: '/sites/all/modules/custom/gojira/js/images/gojira_marker_self.png',
@@ -408,7 +429,7 @@ function doSearchCall(searchFor) {
     window.map.addLayer(window.markers);
 
     jQuery.ajax({
-        url: '/?q=ajax/search&s=' + searchFor,
+        url: '/?q=ajax/search&s=' + searchFor + '&mid=' + Drupal.settings.gojira.selected_map,
         type: 'GET',
         dataType: 'json',
         success: function (data) {
@@ -510,7 +531,6 @@ function bindAfterSearch(bind_list, bind_details, query) {
         if (jQuery(this).val() == 'label toevoegen') {
             jQuery(this).val('');
             jQuery(this).css('color', '#b7072a');
-//            jQuery(this).css('font-weight','bold');
         }
     });
 }
@@ -590,18 +610,6 @@ function focusLocation(nid) {
 
 
 
-
-function bindEmployeelist() {
-    jQuery("a.delete_employee").click(function (e) {
-        e.preventDefault();
-        if (confirm(Drupal.settings.gojira.delete_warning))
-        {
-            window.location = jQuery(this).attr('href');
-            return;
-        }
-    });
-}
-
 function bindSettings() {
     jQuery("a.delete_location").click(function (e) {
         e.preventDefault();
@@ -669,7 +677,7 @@ function bindAutocompleteAllTags(element_selector) {
                 }
             }).autocomplete({
         source: function (request, response) {
-            $.getJSON('/?q=ajax/locationtags', {
+            $.getJSON('/?q=ajax/locationtags' + '&mid=' + Drupal.settings.gojira.selected_map, {
                 term: extractLast(request.term)
             }, response);
         },
@@ -751,7 +759,7 @@ function bindGlobal() {
 
         jQuery.ajax({
             type: "POST",
-            url: '/?q=ajax/picklocation&nid=' + jQuery(this).val(),
+            url: '/?q=ajax/picklocation&nid=' + jQuery(this).val() + '&mid=' + Drupal.settings.gojira.selected_map,
             dataType: 'json',
             success: function (data) {
                 if (Drupal.settings.gojira.page == 'ownlist' || jQuery("#gojirasearch_search_term").val().trim().length <= 0) {
@@ -792,7 +800,7 @@ function bindSuggestlocation() {
     jQuery('a.double_locs').click(function () {
         var nid = jQuery(this).attr('id').replace('double_loc_', '');
         jQuery.ajax({
-            url: '/?q=ajax/locationinfo&nid=' + nid,
+            url: '/?q=ajax/locationinfo&nid=' + nid + '&mid=' + Drupal.settings.gojira.selected_map,
             type: 'POST',
             dataType: 'json',
             success: function (data) {
@@ -876,7 +884,7 @@ function postcodeLookup() {
 function addressLookup() {
     jQuery.ajax({
         type: 'POST',
-        url: '/?q=ajax/checklocation',
+        url: '/?q=ajax/checklocation' + '&mid=' + Drupal.settings.gojira.selected_map,
         dataType: 'json',
         data: {
             pc: jQuery('#edit-field-address-postcode').val(),

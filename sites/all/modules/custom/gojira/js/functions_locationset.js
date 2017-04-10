@@ -24,7 +24,7 @@ function focusLocationset(nid) {
     }
 
     jQuery.ajax({
-        url: '/?q=ajax/singlesearchresult&nid=' + nid,
+        url: '/?q=ajax/singlesearchresult&nid=' + nid + '&mid=' + Drupal.settings.gojira.selected_map,
         type: 'POST',
         dataType: 'json',
         success: function (data) {
@@ -99,7 +99,7 @@ function bindLocationset() {
         openOverlay();
 
         jQuery.ajax({
-            url: '/?q=ajax/singlesearchresult&wrap_it=1&nid=' + location_id,
+            url: '/?q=ajax/singlesearchresult&wrap_it=1&nid=' + location_id + '&mid=' + Drupal.settings.gojira.selected_map,
             type: 'POST',
             dataType: 'json',
             success: function (data) {
@@ -163,7 +163,7 @@ function getCategoryLocations(locationset_id, cat_id) {
 
 
     jQuery.ajax({
-        url: '/?q=ajax/search&s=locationset&id=' + locationset_id + '&cat_id=' + cat_id,
+        url: '/?q=ajax/search&s=locationset&id=' + locationset_id + '&cat_id=' + cat_id + '&mid=' + Drupal.settings.gojira.selected_map,
         type: 'GET',
         dataType: 'json',
         success: function (data) {
@@ -175,15 +175,6 @@ function getCategoryLocations(locationset_id, cat_id) {
                 somethingWrongMessage();
             }
 
-//            if (searchFor != 'ownlist') {
-//                jQuery('#ajax_search_results').html(data.results_html);
-//            }
-
-//            if (data.mapSearchResultsCount == 1) {
-//                // no results, only our own practice
-//                closeOverlay();
-//                return;
-//            }
 
             populateMap(data.mapSearchResults, data.mapSearchResultsCount);
 
@@ -214,8 +205,6 @@ function bindLocationsetSearch() {
 
         var s = encodeURIComponent(jQuery('#search_ownmap').val());
         url = window.location.pathname + '?filter=' + s;
-
-        //url = '/?q=ownlist&filter=' + s; // TODO remove
 
         window.location = url;
     });

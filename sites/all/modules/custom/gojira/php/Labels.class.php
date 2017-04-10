@@ -3,6 +3,21 @@
 class Labels {
 
     /**
+    *   Get's all the labels
+    **/
+    public static function getAllLabels()
+    {
+        $return = array();
+        $sql = "select taxonomy_term_data.name as term, taxonomy_term_data.tid as tid from taxonomy_term_data where vid in (select vid from taxonomy_vocabulary where machine_name in ('" . GojiraSettings::VOCABULARY_LOCATION . "')) order by taxonomy_term_data.name";
+        $results = db_query($sql);
+        foreach ($results as $result) {
+            $return[$result->tid] = $result->term;
+        }
+
+        return $return;
+    }
+
+    /**
      * Prepairs a label to be saved
      *
      * @param string $labelToBe
@@ -15,7 +30,7 @@ class Labels {
     /**
      * Get's you all the labels of the given node
      *
-     * @param stdClass $node
+     * @param $node
      * @return array
      */
     public static function getLabels($node) {
@@ -36,7 +51,8 @@ class Labels {
     /**
      * Draws all the labels
      *
-     * @param type $node
+     * @param $node
+     * @return string
      */
     public static function drawMobileLabels($node) {
 
@@ -83,7 +99,7 @@ class Labels {
 
         $label_button = '';
         $remove_label = '';
-        if (user_access(helper::PERMISSION_MODERATE_LOCATION_CONTENT)) {
+        if (user_access(helper::PERM_HUISARTS_LABELS)) {
             $label_button = '<button class="labelbutton"><span class="tooltip_not" title="%sign_title%">%button%</span></button>';
             $remove_label_button = '<button class="labelremovebutton"><span class="tooltip_not" title="' . t('Remove') . '">' . t('Remove') . '</span></button>';
         }
@@ -158,7 +174,7 @@ EAT;
      * @return integer
      */
     public static function getLikes($tid, $nid) {
-        return db_query("SELECT count(id) AS count FROM group_location_term where tid = {$tid} AND nid = {$nid}")->fetchField();
+        return db_query("SELECT count(id) AS count FROM group_location_term where tid = :tid AND nid = :nid", array(':tid'=>$tid, ':nid'=>$nid))->fetchField();
     }
 
     /**

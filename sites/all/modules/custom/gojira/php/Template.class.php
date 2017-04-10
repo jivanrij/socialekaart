@@ -36,6 +36,7 @@ class Template {
         }
 
         $nomap_pages[] = 'crudtest';
+        $nomap_pages[] = 'locationcrud';
         $nomap_pages[] = 'locationsetlist';
         foreach ($nomap_pages as $url) {
             if ($_GET['q'] == $url) {
@@ -59,7 +60,7 @@ class Template {
         if (strstr($_GET['q'], 'user/reset/')) { //$_GET['q'] == 'user/reset/83/1426884583/45N9962GK4v-9OKxhSVSIrYF_FY_Zeh3i5yrKatcU9w'){
             return Template::VIEWTYPE_FRONT;
         }
-        if (!user_access(helper::PERMISSION_ACCESS_CONTENT)) {
+        if (!user_access(helper::PERM_BASIC_ACCESS)) {
             return Template::VIEWTYPE_FRONT;
         }
 
@@ -70,13 +71,19 @@ class Template {
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             return Template::VIEWTYPE_AJAX;
         }
-        if ($_GET['q'] == 'idealcallback') {
-            return Template::VIEWTYPE_AJAX;
+
+        $ajax_pages[] = 'idealcallback';
+//        $ajax_pages[] = 'api/locations';
+//        $ajax_pages[] = 'api/mapsearch';
+        foreach ($ajax_pages as $url) {
+            if ($_GET['q'] == $url) {
+                return Template::VIEWTYPE_AJAX;
+            }
         }
 
         // Check to see if $user has the administrator role.
         if (strstr($_GET['q'], 'user') && isset($_GET['pass-reset-token']) && in_array('authenticated user', array_values($user->roles))) {
-            drupal_add_js(array('gojira' => array('page' => 'passwordresetform')), 'setting');
+            drupal_add_js(array('gojira' => array('page' => 'passwordreorm')), 'setting');
             return Template::VIEWTYPE_CRUD;
         }
         $crud_pages = array();
@@ -88,8 +95,6 @@ class Template {
         $crud_pages[] = 'passwordthanks';
         $crud_pages[] = 'unownedlocation/list';
         $crud_pages[] = 'unownedlocation/edit';
-        $crud_pages[] = 'employee/list';
-        $crud_pages[] = 'employee/edit';
         $crud_pages[] = 'change';
         $crud_pages[] = 'suggestlocation';
         $crud_pages[] = 'suggestlocationthanks';
@@ -103,6 +108,7 @@ class Template {
         $crud_pages[] = 'idealfail';
         $crud_pages[] = 'linkhaweb';
         $crud_pages[] = 'idealsuccess';
+        $crud_pages[] = 'locationcheck';
 
         foreach ($crud_pages as $url) {
             if ($_GET['q'] == $url) {
@@ -145,7 +151,6 @@ class Template {
         }
 
         // custom pages that need to be rendered like the page big nodes
-        $big_pages[] = 'locationcheck';
         $big_pages[] = 'conditions';
         $big_pages[] = 'paymentconditions';
         $big_pages[] = 'questions';
@@ -174,59 +179,47 @@ class Template {
     public static function getFrontPage() {
 
         if (self::statusNotFound() || self::statusForbidden()) {
-            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'Not found or Forbidden page load.');
             return 'front/page.tpl.php';
         }
 
         if ($_GET['q'] == 'passwordmailsend') {
-            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'passwordmailsend');
             return 'front/passwordmailsend.tpl.php';
         }
 
         if ($_GET['q'] == 'error') {
-            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'error');
             return 'front/error.tpl.php';
         }
 
         if ($_GET['q'] == 'passwordreset') {
-            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'passwordreset');
             return 'front/passwordreset.tpl.php';
         }
         if ($_GET['q'] == 'register') {
-            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'register');
             return 'front/register.tpl.php';
         }
         if ($_GET['q'] == 'practicecheck') {
-            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'practicecheck');
             return 'front/page.tpl.php';
         }
         if ($_GET['q'] == 'conditions') {
-            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'conditions');
             return 'front/page.tpl.php';
         }
 
         if ($_GET['q'] == 'registered') {
-            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'registered');
             return 'front/registered.tpl.php';
         }
 
         if (strstr($_GET['q'], 'user/reset/')) {
-            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'user/reset/');
             return 'front/resetlink.tpl.php';
         }
 
         if (strstr($_GET['q'], 'user/login')) {
-            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'user/login');
             return 'front/user_login.tpl.php';
         }
 
         if ($_GET['q'] == 'user' || $_GET['q'] == '/user') {
-            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'user');
             return 'front/page.tpl.php';
         }
 
         if (strstr($_GET['q'], 'introduction')) {
-            watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'introduction');
             return 'front/introduction.tpl.php';
         }
 
@@ -234,12 +227,10 @@ class Template {
             $nid = arg(1);
             $node = node_load($nid);
             if ($node->type == GojiraSettings::CONTENT_TYPE_PAGE_PUBLIC) {
-                watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'front page content page');
                 return 'front/page.tpl.php';
             }
         }
 
-        watchdog(GojiraSettings::WATCHDOG_PAGELOAD, 'login');
         return 'front/login.tpl.php';
     }
 
@@ -256,7 +247,7 @@ class Template {
             return false;
         }
         if (Template::getView() == Template::VIEWTYPE_NOMAP) {
-            return false;
+            return true;
         }
         if (path_is_admin(current_path())) {
             return false;
@@ -305,8 +296,6 @@ class Template {
         if ($_GET['q'] == 'conditions') {
             return 'mobile-form';
         }
-
-
 
         // default return values
         switch (Template::getView()) {

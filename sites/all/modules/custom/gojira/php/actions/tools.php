@@ -66,16 +66,16 @@ function tools() {
 //        }
 
 //        if (isset($_GET['set_not_payed_group'])) {
-//            
+//
 //            $payment = db_query("SELECT * FROM gojira_payments WHERE gid = ".$_GET['set_not_payed_group']." ORDER BY period_end DESC limit 1")->fetchObject();
-//            
+//
 //            if($payment){
 //                Subscriptions::unsubscribe($_GET['set_not_payed_group'], $payment);
 //                drupal_set_message(t('Unsubscribed group ' . $_GET['set_not_payed_group']), 'status');
 //            }else{
 //                drupal_set_message('No payment info found for this group', 'status');
 //            }
-//            
+//
 //            header('Location: /?q=admin/config/system/gojiratools');
 //            exit;
 //        }
@@ -127,9 +127,9 @@ function tools() {
                 $sLabels = implode('|', Labels::getLabels($oNode));
 
                 $sql = <<<EOT
-INSERT INTO `practices_backup` 
-    (`import_it`, `title`, `email`, `city`, `street`, `number`, `postcode`, `telephone`, `fax`, `url`, `labels`, `category`, `note`, `latitude`, `longitude`, `group_id`, `visible`, `nid`, `source`) 
-        VALUES 
+INSERT INTO `practices_backup`
+    (`import_it`, `title`, `email`, `city`, `street`, `number`, `postcode`, `telephone`, `fax`, `url`, `labels`, `category`, `note`, `latitude`, `longitude`, `group_id`, `visible`, `nid`, `source`)
+        VALUES
     (0, :title, '{$sMail}', :city, :street, :number, '{$sPostcode}', '{$sTelephone}', '{$sFax}', '{$sUrl}', '{$sLabels}', :category, :note, '{$oLocation->latitude}', '{$oLocation->longitude}', '{$iGroup}', '{$oNode->status}', '{$oNode->nid}','{$oLocation->source}')
 EOT;
 
@@ -150,7 +150,7 @@ EOT;
             header('Location: /?q=admin/config/system/gojiratools&activate_id='.$_POST['location_id']);
             exit;
         }
-        
+
         if (isset($_POST['activate_a_node_id'])) {
             $oNode = node_load($_POST['activate_a_node_id']);
             $oNode->status = 1;
@@ -162,7 +162,7 @@ EOT;
             drupal_set_message(t('Node is indexed for search'), 'status');
             header('Location: /?q=admin/config/system/gojiratools');
             exit;
-        }        
+        }
 
         if (isset($_POST['gojira_send_mail'])) {
             global $user;
@@ -173,46 +173,30 @@ EOT;
             }
 
             switch ($_POST['gojira_send_mail']) {
-                case 'sendInvoiceOfNewSubscription':
+                case 'sendUserInvoiceOfNewSubscription':
                     $ideal_id = db_query("select ideal_id from gojira_payments order by id DESC limit 1 ")->fetchField();
                     if ($ideal_id && isset($_POST['email'])) {
                         $file = Subscriptions::generateSubscribePDF($ideal_id);
-                        Mailer::sendInvoiceOfNewSubscription($_POST['email'], $file, $ideal_id);
+                        MailerHtml::sendUserInvoiceOfNewSubscription($_POST['email'], $file, $ideal_id);
                         drupal_set_message(t('Just send a test Invoice Of New Subscription e-mail to ' . $_POST['email'] . '.'), 'status');
                     } else {
                         drupal_set_message(t('Just failed to send a test Invoice Of New Subscription e-mail. No Ideal Id found or false e-mail.'), 'error');
                     }
                     break;
-                case 'sendWelcomeMailToEmployee':
-                    Mailer::sendWelcomeMailToEmployee($user);
-                    drupal_set_message(t('Just send the welcome e-mail that get\'s send to a new employee: ' . $user->mail . '.'), 'status');
-                    break;
-                case 'sendWelcomeMailToEmployer':
-                    Mailer::sendWelcomeMailToEmployer($user);
-                    drupal_set_message(t('Just send the welcome e-mail that get\'s send to a new employer: ' . $user->mail . '.'), 'status');
-                    break;
-                case 'sendUnsubscribeMail':
-                    Mailer::sendUnsubscribeMail($user);
-                    drupal_set_message(t('Just send the e-mail a employer & employee recieve when unsubscribed to ' . $user->mail . '.'), 'status');
-                    break;
-                case 'sendSubscriptionEndWarning':
-                    Mailer::sendSubscriptionEndWarning($user);
+                case 'sendUserSubscriptionEndWarning':
+                    MailerHtml::sendUserSubscriptionEndWarning($user);
                     drupal_set_message(t('Just send the e-mail a doctor get\'s when the subscription is going to end in 30 days from now, to: ' . $user->mail . '.'), 'status');
                     break;
-                case 'sendSubscriptionEnded':
-                    Mailer::sendSubscriptionEnded($user);
+                case 'sendUserSubscriptionEnded':
+                    MailerHtml::sendUserSubscriptionEnded($user);
                     drupal_set_message(t('Just send the e-mail a doctor get\'s when the subscription is ended, to: ' . $user->mail . '.'), 'status');
                     break;
                 case 'sendAccountMergeRequest':
                     Mailer::sendAccountMergeRequest($user, auto_login_url_create($user->uid, '/?q=loginlink/but/fake', true));
                     drupal_set_message(t('Just send the e-mail a doctor get\'s when the subscription is ended, to: ' . $user->mail . '.'), 'status');
                     break;
-                case 'sendSubscribeActivationMail':
-                    Mailer::sendSubscribeActivationMail($user);
-                    drupal_set_message(t('Just send the e-mail a employee & employer recieves when the account get\'s activated after it\'s unsubscribed to ' . $user->mail . '.'), 'status');
-                    break;
-                case 'accountActivatedByAdmin':
-                    Mailer::accountActivatedByAdmin($user);
+                case 'sendUserAccountActivatedByAdmin':
+                    MailerHtml::sendUserAccountActivatedByAdmin($user);
                     drupal_set_message(t('Just send the mail to the user that gets send when an admin activates the account.'), 'status');
                     break;
                 case 'sendAccountNeedsValidation':
@@ -258,8 +242,8 @@ EOT;
     $backupped_no_coordinates = db_query("select count(id) from practices_backup where latitude = ''")->fetchField();
     $backupped_to_import = db_query("select count(id) from practices_backup where import_it = 1")->fetchField();
     $backupped_not_to_import = db_query("select count(id) from practices_backup where import_it = 0")->fetchField();
-    
-    
+
+
 
     return theme('tools', array(
         'groups' => $groups,

@@ -68,25 +68,21 @@ function gojira_inform_form_submit($form, &$form_state) {
     $nid = false;
     $title = false;
     $node = false;
-    
+
     $sTitleChanged = '';
-    
+
     if (isset($_GET['nid'])) {
         $node = node_load($_GET['nid']);
         $old_title = $node->title;
         $nid = $node->nid;
-        if(helper::canChangeLocation($user->uid, $node->nid) ){
-            if (trim($form['type_of_problem']['#value']) == 'wrong_title' && trim($form['title']['#value']) != '') {
-                $node->title = trim($form['title']['#value']);
-                node_save($node);
-            }
-            $sTitleChanged = 'Title changed to: ';
-        }else{
-            $sTitleChanged = 'Title is not changed: ';
-        }
-    }
 
-    //drupal_set_message(t('Thank you for giving us the improvement suggestion for location <i>%location_name%</i>', array('%location_name%' => $title)), 'status');
+        if (trim($form['type_of_problem']['#value']) == 'wrong_title' && trim($form['title']['#value']) != '') {
+            $node->title = trim($form['title']['#value']);
+            node_save($node);
+        }
+        $sTitleChanged = 'Title changed to: ';
+
+    }
 
     Mailer::sendImproveSuggestion($old_title, $base_url . '/node/' . $nid . '/edit', $user->name, $base_url . '/user/' . $user->uid . '/edit', $form['type_of_problem']['#value'], $form['info']['#value'], $sTitleChanged.$form['title']['#value']);
 

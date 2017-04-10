@@ -1,4 +1,5 @@
 <?php
-function conditions() {
+function conditions()
+{
     return theme('conditions', array());
 }

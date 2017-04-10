@@ -1,11 +1,12 @@
 <?php
 /**
- * This page generates a list of employees
+ * This page generates the list of own locations/my map
  *
  * @return string
  */
-function ownlist() {
-  // the template does nothing, it's all done in a template in the theme, same
-  // one as the locastionsset uses
-  return theme('ownlist');
+function ownlist()
+{
+    // the template does nothing, it's all done in a template in the theme, same
+    // one as the locastionset uses
+    return theme('ownlist');
 }

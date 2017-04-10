@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This page generates a form to crud a employee
+ * This page generates the ideal success page
  *
  * @return string
  */
