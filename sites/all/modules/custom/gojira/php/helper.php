@@ -39,6 +39,7 @@ class helper {
     const SEARCH_TYPE_LOCATIONSET = 'locationset';
 
     public static function redirectTo404() {
+        die('f');
         header('Location: /404');
         exit;
     }
@@ -82,6 +83,7 @@ class helper {
         }
         if(!$cron){
             drupal_set_message(t('Restored some locations!'), 'status');
+            die('g');
             header('Location: /?q=admin/config/system/gojiratools');
             exit;
         }

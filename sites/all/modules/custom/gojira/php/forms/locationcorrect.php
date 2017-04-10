@@ -114,7 +114,7 @@ function gojira_locationcorrect_form_submit($form, &$form_state) {
         Location::storeLocatioInNode($location, $node->nid);
         drupal_set_message(t('Location information successfully stored.'), 'status');
     }
-
+die('d');
     header('Location: /location/correct&nid=' . $id);
     exit;
 }

@@ -15,9 +15,11 @@ function idealreturn() {
 
     if (in_array($status, $paidStatusses)) {
         // success!
+        die('b');
         header('Location: /idealsuccess?id=' . $_GET['id']);
         exit;
     } else {
+        die('c');
         drupal_goto('idealfail');
         exit;
     }
