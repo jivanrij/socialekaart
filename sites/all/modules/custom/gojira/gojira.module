@@ -416,6 +416,7 @@ function gojira_user_login(&$edit, $account) {
 //      if(count(Locationsets::getInstance()->getOwnMapLocations()) > 0){
 //          drupal_goto('ownlist');
 //      }else{
+      die('4');
           drupal_goto('/');
 //      }
   }
@@ -534,45 +535,3 @@ function gojira_validate_login($form, &$form_state) {
     }
   }
 }
-
-
-    //SOCIALEKAART.CARE CHANGE START
-    // on creating a new master user, add a group and connect to it, and give the user the master role
-//    if($new_account && module_exists('gojira')){
-//        // make a group for the new user, and set it as payed group
-//        $group = Group::createNewGroup($account);
-//        $groupPayed = GojiraSettings::CONTENT_TYPE_PAYED_STATUS;
-//        $group->$groupPayed = array(LANGUAGE_NONE => array(0 => array('value' => 1)));
-//        node_save($group);
-//
-//        // save the group nid on the user
-//        $groupField = GojiraSettings::CONTENT_TYPE_GROUP_FIELD;
-//        $account->$groupField = array(LANGUAGE_NONE => array(0 => array('nid' => $group->nid)));
-//
-//        // give the user the correct roles for a subscribed user
-//        $roles = array();
-//        $activeRoles = user_roles(true);
-//        foreach($activeRoles as $key=>$role){
-//          if($role == helper::ROLE_AUTHENTICATED || $role == helper::ROLE_EMPLOYER_MASTER || $role == helper::ROLE_SUBSCRIBED_MASTER){
-//            $roles[$key] = $role;
-//          }
-//        }
-//        $account->roles = $roles;
-//        user_save($account);
-//
-//        //add a payment log with amount 0 and for a period of 60 days
-//        $info = Subscriptions::getNewPaymentInfo();
-//        $info['period_days'] = 60;
-//        $new_end = strtotime("+60 day", time());
-//        $info['new_end'] = $new_end;
-//        $info['new_start'] = time();
-//        $info['description'] = 'Original free period of AHWeb member.';
-//        $info['amount'] = 0;
-//        $info['discount'] = 0;
-//        $info['tax'] = 0;
-//        $info['total'] = 0;
-//        Subscriptions::addPaymentLog($account->uid, $info['amount'], $info['description'], 0, 0, $info['new_start'], $info['new_end'], $info['discount'], $info['tax'], $info['total']);
-//
-//        Mailer::subscribeToMailchimp($account->mail);
-//      }
-    //SOCIALEKAART.CARE CHANGE END
