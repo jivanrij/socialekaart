@@ -9,7 +9,7 @@
         <div class="col-sm-12 frontpage_block introduction">
             <div>
 
-                    <h1>De interactieve sociale kaart met landelijke dekking voor Nederlandse huiartsen.</h1>
+                    <h1>De interactieve sociale kaart met landelijke dekking voor Nederlandse huisartsen.</h1>
                     <p>
                         Lees verder om de grootste voordelen voor uw praktijk te ontdekken, of registreer u als gebruiker.
                     </p>

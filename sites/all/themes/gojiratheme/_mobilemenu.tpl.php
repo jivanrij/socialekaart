@@ -7,10 +7,10 @@
                 <i class="fa fa-search" id="search_submit_mobile" title="Zoeken"></i>
             </form>
         <?php endif; ?>
-        <?php if (user_access(helper::PERMISSION_PERSONAL_LIST)): ?>
+        <?php if (user_access(helper::PERM_MY_MAP)): ?>
             <button class="mymap" title="Naar mijn kaart" />
         <?php endif; ?>
-        <button class="suggestlocation" title="Zorgverlener toevoegen" />    
+        <button class="suggestlocation" title="Zorgverlener toevoegen" />
         <button class="tomobilemenu" title="Menu" />
     </div>
 </div>
@@ -26,19 +26,6 @@
                     <?php endforeach; ?>
                 </select>
             </div>
-        
-        <?php if(false): ?>
-            <div class="select">
-                <label>Zoeken in:</label>
-                <select id="search_type_select_mobile">
-                    <?php if (false && ser_access(helper::PERMISSION_LOCATIONSETS) && Locationsets::onLocationset()): ?><option <?php echo (Locationsets::onLocationset() ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_LOCATIONSET; ?>"><?php echo Locationsets::getCurrentLocationsetTitle(); ?></option><?php endif; ?>
-                    <option <?php echo ((Search::getSearchTypeBasedOnQuery()==helper::SEARCH_TYPE_REGION) ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_REGION; ?>">praktijk regio</option>
-                    <?php if (false && user_access(helper::PERMISSION_PERSONAL_LIST)): ?><option <?php echo ((Locationsets::onOwnMap() && !Locationsets::onLocationset()) ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_OWNLIST; ?>">uw kaart</option><?php endif; ?>
-                    <?php if (user_access(helper::PERMISSION_SEARCH_GLOBAL)): ?><option <?php echo ((Search::getSearchTypeBasedOnQuery()==helper::SEARCH_TYPE_COUNTRY) ? 'selected="selected" ' : ''); ?>value="<?php echo helper::SEARCH_TYPE_COUNTRY; ?>">het hele land</option><?php endif; ?>
-                </select>
-            </div>
-        <?php endif; ?>
-        
         <?php endif; ?>
 
     </div>

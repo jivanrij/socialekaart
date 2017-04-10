@@ -368,6 +368,174 @@ a.help_link_content:hover {
   width: 100px;
   text-align: right;
 }
+form span.form-required {
+  margin-right: 2px;
+}
+form label[for=edit-favorite] {
+  height: 35px;
+}
+form .form-required {
+  color: #b7072a;
+}
+form input,
+form textarea,
+form select {
+  color: #b7072a;
+}
+form .error {
+  border: 1px solid #b7072a !important;
+}
+form input.error,
+form textarea.error {
+  border-width: 1px !important;
+}
+form button,
+form input,
+form select,
+form textarea {
+  padding-left: 5px !important;
+}
+form .form-item .description {
+  font-size: 11px;
+}
+form .form-item label {
+  display: block;
+  float: left;
+  font-weight: bold;
+  width: 160px;
+}
+form .form-item textarea {
+  resize: none;
+}
+form .form-item label {
+  /*height:15px;*/
+  line-height: 18px;
+}
+form .form-item input[type=text],
+form .form-item textarea,
+form .form-item input[type=password],
+form .form-item select {
+  border-color: #dbdbdb;
+  border-style: solid;
+  border-width: 1px;
+}
+form .form-item input[type='text'] {
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+form .form-item .form-type-radios > label {
+  margin-bottom: 10px;
+  display: block;
+}
+form .form-item .form-type-radio input {
+  margin-right: 105px;
+}
+form div.password-suggestions {
+  width: 360px !important;
+}
+form .has_help {
+  cursor: help;
+}
+form .has_help:after {
+  content: '\f059';
+  color: #b7072a;
+  font: normal normal normal 14px/1 FontAwesome;
+  display: inline-block;
+  width: 15px;
+}
+div.wide_form_label label {
+  width: 260px !important;
+}
+/* register form */
+form#user-pass {
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+form#user-pass div.form-item {
+  overflow: hidden;
+}
+form#user-pass div.form-item label {
+  float: left;
+  width: 150px;
+}
+form#user-pass div.form-item input[type=text] {
+  float: right;
+  width: 220px;
+}
+/* user profile form */
+#user-profile-form input.password-field {
+  width: 130px !important;
+}
+#user-profile-form .password-strength {
+  margin-top: 0;
+}
+#user-profile-form input.password-confirm {
+  width: 130px !important;
+}
+#gojira-to-subscribe-page-form div.form-wrapper {
+  overflow: hidden;
+}
+#gojira-to-subscribe-page-form div.form-wrapper input[type=submit] {
+  width: 210px;
+}
+#gojira-to-subscribe-page-form div.form-wrapper span {
+  width: 215px;
+}
+#gojira-editnote-form #edit-note {
+  height: 400px;
+  width: 100%;
+}
+div.password-strength,
+div.password-confirm {
+  margin-top: 0;
+  width: 220px;
+}
+#mobileheader form {
+  width: 80%;
+}
+#mobileheader form input[type=text] {
+  border: 0;
+  -webkit-box-shadow: 0px 0px 8px #000000;
+  -moz-box-shadow: 0px 0px 8px #000000;
+  box-shadow: 0px 0px 8px #000000;
+  display: block;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  overflow: hidden;
+  width: 50%;
+  height: 18px;
+  float: left;
+  margin: 6px 10px 0 7px;
+  padding: 0;
+}
+#mobileheader form > i {
+  padding: 7px 0 0 0;
+  font-size: 16px;
+  color: #b7072a;
+  cursor: pointer;
+}
+#crud_holder #gojira-idealpay-form div.form-item-agree-terms-conditions input {
+  float: left;
+}
+#crud_holder #gojira-idealpay-form div.form-item-agree-terms-conditions label {
+  float: right;
+  width: 95%;
+}
+@media (max-width: 710px) {
+  body.mobile-form #map {
+    display: none;
+  }
+  p.show_intro {
+    display: none;
+  }
+}
+a.gbutton:hover {
+  color: #fff;
+}
 .self_popup_link {
   color: #4d4d4d;
   font-weight: bold;
@@ -436,6 +604,7 @@ a.help_link_content:hover {
   width: 100%;
   clear: both;
   overflow: hidden;
+  padding: 5px 0;
 }
 #crud_holder form div.form-item input.form-text {
   width: 240px;
@@ -731,7 +900,7 @@ body.questions a.active.topic {
   max-width: 350px;
 }
 #selected_location_info .search_result_wrapper > div.adres {
-  width: 90%;
+  width: 100%;
   float: left;
   font-weight: normal;
 }
@@ -767,24 +936,28 @@ body.questions a.active.topic {
   padding-top: 5px;
   font-size: 10px;
 }
-#selected_location_info .search_result_wrapper .favorites_switch {
-  cursor: pointer;
-  width: 100px;
-}
-#selected_location_info .search_result_wrapper .favorites_switch .in_favorites {
+#selected_location_info .search_result_wrapper ul.locationset_selector {
   display: block;
+  padding-left: 15px;
 }
-#selected_location_info .search_result_wrapper .favorites_switch .in_favorites:before {
+#selected_location_info .search_result_wrapper ul.locationset_selector li {
+  list-style: none;
+}
+#selected_location_info .search_result_wrapper ul.locationset_selector li a {
+  cursor: pointer;
+}
+#selected_location_info .search_result_wrapper ul.locationset_selector li a:hover {
   color: #b7072a;
-  font: normal normal normal 14px/1 FontAwesome;
-  display: inline-block;
-  width: 15px;
 }
-#selected_location_info .search_result_wrapper .favorites_switch .in_favorites.true:before {
-  content: "\f046";
+#selected_location_info .search_result_wrapper ul.locationset_selector li a i.fa {
+  margin-right: 5px;
+  color: #b7072a;
 }
-#selected_location_info .search_result_wrapper .favorites_switch .in_favorites.false:before {
+#selected_location_info .search_result_wrapper ul.locationset_selector li a i.fa:before {
   content: "\f096";
+}
+#selected_location_info .search_result_wrapper ul.locationset_selector li a.checked i.fa:before {
+  content: "\f046";
 }
 #selected_location_info .search_result_wrapper span.fav_row button {
   border: none;
@@ -1329,6 +1502,13 @@ ul.ui-autocomplete li a {
 #locationset_wrapper div > p {
   font-weight: 100;
 }
+#locationset_wrapper div > p > a {
+  color: #b7072a;
+  cursor: pointer;
+}
+#locationset_wrapper div > p > a:hover {
+  text-decoration: underline;
+}
 #locationset_wrapper div #locationset_categories {
   margin: 0 0 10px 0;
   list-style: none;
@@ -1453,7 +1633,7 @@ button.close_box {
   -webkit-font-smoothing: antialiased;
   border: none;
   background-color: #fff;
-  color: #dbdbdb;
+  color: #b7072a;
   padding: 0;
 }
 button.close_box:before {
@@ -1474,6 +1654,60 @@ button.close_box:hover {
     right: 10px;
     top: 10px;
   }
+}
+body section.bootstrapform div.alert {
+  color: #b7072a;
+}
+body section.bootstrapform div.alert ul.doubleLocations {
+  margin: 0;
+  padding: 0 0 0 15px;
+}
+body section.bootstrapform div.alert ul.doubleLocations li {
+  list-style: decimal;
+}
+body section.bootstrapform div.alert ul.doubleLocations li a {
+  cursor: pointer;
+  color: #b7072a;
+}
+body section.bootstrapform form.bootstrap input {
+  font-size: 12px;
+  font-weight: 100;
+}
+body section.bootstrapform form.bootstrap select {
+  font-size: 12px;
+  font-weight: 100;
+}
+body section.bootstrapform div.controls {
+  margin-top: 5px;
+}
+body section.bootstrapform div.controls a {
+  cursor: pointer;
+  font-weight: 300;
+  font-size: 10px;
+  color: #b7072a;
+}
+body section.bootstrapform div.controls a:hover {
+  font-color: red;
+  text-decoration: none;
+}
+div.Tokenize {
+  display: block;
+}
+.crudmap-group {
+  padding-top: 10px;
+}
+fieldset.address .postcode-group,
+fieldset.address .housenumber-group {
+  width: 35%;
+}
+section.bootstrapform div.header h1 {
+  padding-top: 8px;
+}
+section.bootstrapform div.header p {
+  font-weight: 100;
+}
+body.locationsetlist table.table-hover a {
+  color: #b7072a;
 }
 /* buttons */
 .rounded {

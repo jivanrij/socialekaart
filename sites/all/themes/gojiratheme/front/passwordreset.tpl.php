@@ -9,7 +9,7 @@
         <div class="col-sm-4 frontpage_block form-block">
             <div>
                 <h1><?php echo t('Request new password'); ?></h1>
-                <?php print @drupal_render(drupal_get_form('gojira_passwordreset_form')); ?>
+                <?php helper::renderFormAsBootstrap('gojira_passwordreset_form'); ?>
                 <?php include(drupal_get_path('theme', 'gojiratheme') . '/_messages.tpl.php'); ?>
             </div>
         </div>

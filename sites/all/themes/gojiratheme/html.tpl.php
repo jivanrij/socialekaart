@@ -5,8 +5,8 @@
   <html lang="nl">
   <head profile="<?php print $grddl_profile; ?>">
     <?php if(Template::getView() == Template::VIEWTYPE_FRONT || Template::getView() == Template::VIEWTYPE_NOMAP): ?>
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+      <link rel="stylesheet" href="/<?php echo drupal_get_path('theme', 'gojiratheme'); ?>/css/bootstrap.min.css">
+      <link rel="stylesheet" href="/<?php echo drupal_get_path('theme', 'gojiratheme'); ?>/css/bootstrap-theme.min.css">
     <?php endif; ?>
     <?php print $head; ?>
     <title><?php print $head_title; ?></title>
@@ -30,7 +30,7 @@
   ?>
   <body class="<?php echo $class; ?> <?php echo Template::getMobileType(); ?>">
       <?php print $page; ?>
-      <?php if(Template::getView() == Template::VIEWTYPE_FRONT && helper::getIEVersion() != 8): ?><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><?php endif; ?>
+      <?php if(Template::getView() == Template::VIEWTYPE_FRONT && helper::getIEVersion() != 8): ?><script src="/<?php echo drupal_get_path('theme', 'gojiratheme'); ?>/js/bootstrap.min.js"></script><?php endif; ?>
         <script>
         var $buoop = {c:2};
         function $buo_f(){

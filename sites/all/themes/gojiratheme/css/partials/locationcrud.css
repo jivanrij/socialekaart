@@ -1,0 +1,33 @@
+div.Tokenize {
+  display: block;
+}
+form.bootstrap input,
+form.bootstrap select {
+  font-size: 12px;
+  font-weight: 100;
+}
+.crudmap-group {
+  padding-top: 10px;
+}
+fieldset.address .postcode-group,
+fieldset.address .housenumber-group {
+  width: 35%;
+}
+section.bootstrapform div.controls {
+  margin-top: 5px;
+}
+section.bootstrapform div.controls a {
+  cursor: pointer;
+  font-weight: 300;
+  font-size: 10px;
+}
+section.bootstrapform div.controls a:hover {
+  font-color: red;
+  text-decoration: none;
+}
+section.bootstrapform div.header h1 {
+  padding-top: 8px;
+}
+section.bootstrapform div.header p {
+  font-weight: 100;
+}

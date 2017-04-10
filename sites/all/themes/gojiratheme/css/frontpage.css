@@ -188,6 +188,9 @@ body.front div.container div.header #gojira-login-form div.form-item input {
   float: left;
   padding: 8px;
   border-radius: 3px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #dbdbdb;
 }
 body.front div.container div.header #gojira-login-form div.form-item div.description {
   display: none;
