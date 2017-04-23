@@ -184,7 +184,7 @@ function gojira_init()
 
     global $user;
 
-    Reporter::reportThis();
+    //Reporter::reportThis();
 
     if (!user_is_logged_in() && (helper::getIEVersion() == 8 or helper::getIEVersion() == 9)) {
         drupal_add_js(array('gojira' => array('browserwarning' => 1)), 'setting');
