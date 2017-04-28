@@ -37,11 +37,11 @@ function api_mapsearch() {
         $search = null;
     }
 
-    //header('Access-Control-Allow-Credentials:true');
-    //header('Access-Control-Allow-Origin:*');
-    //header('Cache-Control:no-cache');
-    //header('Connection:keep-alive');
-    //header('Content-Length:0');
+    header('Access-Control-Allow-Credentials:true');
+    header('Access-Control-Allow-Origin:*');
+    header('Cache-Control:no-cache');
+    header('Connection:keep-alive');
+    header('Content-Length:0');
 
 
     $values = array();
