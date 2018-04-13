@@ -1,3 +1,4 @@
+<?php if (false) : ?>
 <script type="text/javascript" src="/sites/all/modules/custom/gojira/js/jquery.elevateZoom-3.0.8.min.js"></script>
 <script>
     jQuery(document).ready(function(){
@@ -143,3 +144,18 @@
 
 
 </div>
+<?php else: ?>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 frontpage_block introduction">
+            <div>
+
+                <h1>De interactieve sociale kaart met landelijke dekking voor Nederlandse huisartsen gaat er mee stoppen.</h1>
+                <p>
+                    Tot 30 april zal de website online blijven zodat u waar nodig de kaart kan raadplegen. Heeft u vragen hierover dan kunt u ons gerust <a href="/contact">contacteren</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
